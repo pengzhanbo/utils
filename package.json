@@ -1,6 +1,6 @@
 {
   "name": "@pengzhanbo/utils",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "keywords": [
     "utils"
   ],
@@ -32,8 +32,8 @@
     "build": "tsup",
     "lint": "eslint .",
     "prepublishOnly": "pnpm run build",
-    "test": "vitest --reporter verbose",
-    "release": "bumpp --commit --push --tag && npm publish --access public"
+    "test": "vitest run --reporter verbose",
+    "release": "bumpp package.json --commit --push --tag && npm publish --access public"
   },
   "prettier": "@pengzhanbo/prettier-config",
   "dependencies": {
