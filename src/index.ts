@@ -7,6 +7,8 @@ export * from './promise'
 export * from './time'
 export * from './math'
 export * from './equal'
+export * from './url'
+
 export * from './types'
 
 export * from 'throttle-debounce'
