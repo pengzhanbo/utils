@@ -17,9 +17,9 @@ export function isUrl(url: string) {
   }
 }
 
-const RE_SCHEMA = /^([a-z][a-z\d+\-.]*:)?\/\//i
+const RE_PROTOCOL = /^([a-z][a-z\d+\-.]*:)?\/\//i
 export function isAbsoluteUrl(url: string) {
-  return RE_SCHEMA.test(url)
+  return RE_PROTOCOL.test(url)
 }
 
 export function combineURLs(baseUrl: string, ...urls: string[]) {
@@ -27,4 +27,10 @@ export function combineURLs(baseUrl: string, ...urls: string[]) {
   const url = urls.join('/').replace(/\/+/g, '').replace(/^\/+/, '')
   baseUrl = baseUrl.replace(/\/+$/, '')
   return `${baseUrl}/${url}`
+}
+
+const RE_PROTOCOL_MATCH = /^([-+\w]{1,25})(:?\/\/|:)/
+export default function parseProtocol(url: string) {
+  const match = RE_PROTOCOL_MATCH.exec(url)
+  return (match && match[1]) || ''
 }
