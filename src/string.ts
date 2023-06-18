@@ -21,6 +21,21 @@ export const ensurePrefix = (prefix: string, str: string) => {
 }
 
 export const ensureSuffix = (suffix: string, str: string) => {
-  if (str.startsWith(suffix)) return str
+  if (str.endsWith(suffix)) return str
   return str + suffix
+}
+
+/**
+ * @category String
+ * @example
+ * ```ts
+ * kebabCase('a b c') // => a-b-c
+ * kebabCase('orderBy') // => order-by
+ * ```
+ */
+export function kebabCase(str: string) {
+  return str
+    .replace(/\s+/g, '-')
+    .replace(/([a-z])([A-Z])/g, '$1-$2')
+    .toLowerCase()
 }
