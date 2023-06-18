@@ -8,6 +8,7 @@ export * from './time'
 export * from './math'
 export * from './equal'
 export * from './url'
+export * from './function'
 
 export * from './types'
 
