@@ -14,11 +14,11 @@ export function simpleClone<T = any>(source: T): T {
  */
 export function shallowClone<T = any>(source: T): T {
   if (isObject(source)) {
-    const target = {} as Record<string, any>
-    for (const key in [
+    const target = {} as Record<PropertyKey, any>
+    for (const [, key] of [
       ...Object.keys(source),
       ...Object.getOwnPropertySymbols(source),
-    ]) {
+    ].entries()) {
       target[key] = source[key]
     }
     return target as T
