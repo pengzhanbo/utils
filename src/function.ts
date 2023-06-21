@@ -42,3 +42,25 @@ export function invoke<T>(fns: Nullable<Fn>[] | Fn<T>) {
     return fns()
   }
 }
+
+type ComposeFn = (...args: any[]) => any
+type LastArray<T extends any[]> = T extends [...any[], infer U] ? U : Fn
+type FirstArray<T extends any[]> = T extends [infer U, ...any[]] ? U : Fn
+
+export function compose<T extends ComposeFn[] = ComposeFn[]>(
+  ...fns: T
+): (...args: Parameters<LastArray<T>>) => ReturnType<FirstArray<T>> {
+  return function (...args: Parameters<LastArray<T>>) {
+    const len = fns.length
+    if (len === 0) return args
+    if (len === 1) return fns[0](...args)
+    return fns
+      .slice(0, -1)
+      .reduceRight((acc, fn) => fn(acc), fns[len - 1](...args))
+  }
+}
+
+compose(
+  (a: number) => String(a),
+  (a: number, b: number) => a + b,
+)(1, 2)
