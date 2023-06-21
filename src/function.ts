@@ -59,8 +59,3 @@ export function compose<T extends ComposeFn[] = ComposeFn[]>(
       .reduceRight((acc, fn) => fn(acc), fns[len - 1](...args))
   }
 }
-
-compose(
-  (a: number) => String(a),
-  (a: number, b: number) => a + b,
-)(1, 2)
