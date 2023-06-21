@@ -150,3 +150,14 @@ export function chunk<T>(input: T[], size = 1) {
   }
   return chunks
 }
+
+/**
+ * Union two arrays
+ * @category Array
+ * ```ts
+ * union([1, 2, 3], [2, 4, 5, 6]) // => [1, 2, 3, 4, 5, 6]
+ * ```
+ */
+export function union<T>(a: T[], b: T[]) {
+  return [...new Set([...a, ...b])]
+}
