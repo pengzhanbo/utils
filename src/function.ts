@@ -47,6 +47,10 @@ type ComposeFn = (...args: any[]) => any
 type LastArray<T extends any[]> = T extends [...any[], infer U] ? U : Fn
 type FirstArray<T extends any[]> = T extends [infer U, ...any[]] ? U : Fn
 
+/**
+ * compose multiple functions
+ * @category Function
+ */
 export function compose<T extends ComposeFn[] = ComposeFn[]>(
   ...fns: T
 ): (...args: Parameters<LastArray<T>>) => ReturnType<FirstArray<T>> {
