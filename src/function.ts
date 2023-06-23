@@ -7,6 +7,24 @@ import type { Fn, Nullable } from './types'
 export function noop() {}
 
 /**
+ * Create a function that can only be called once,
+ * and repeated calls return the result of the first call
+ * @category Function
+ */
+export function once(func: Fn): Fn {
+  let called = false
+  let res: any
+  return (...args) => {
+    if (!called) {
+      called = true
+      res = func(...args)
+      return res
+    }
+    return res
+  }
+}
+
+/**
  * guard function that returns if val is truthy
  * @category Function
  * @example
