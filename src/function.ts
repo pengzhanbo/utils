@@ -66,8 +66,15 @@ type LastArray<T extends any[]> = T extends [...any[], infer U] ? U : Fn
 type FirstArray<T extends any[]> = T extends [infer U, ...any[]] ? U : Fn
 
 /**
- * compose multiple functions
+ * compose multiple functions, right to left
  * @category Function
+ * @example
+ * ```ts
+ * const add = (a) => a + 1
+ * const subtract = (a) => a - 2
+ * const multiply = (a, b) => a * b
+ * compose(add, subtract, multiply)(1, 2) => (1 * 2) - 2 + 1 = 1
+ * ```
  */
 export function compose<T extends ComposeFn[] = ComposeFn[]>(
   ...fns: T
