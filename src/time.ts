@@ -1,5 +1,11 @@
 /**
- *
+ * @category Time
+ * 时间类的工具库， 推荐使用：
+ * - [dayjs](https://day.js.org/)
+ * - [date-fns](https://date-fns.org)
+ */
+
+/**
  * @category Time
  */
 export const timestamp = () => +Date.now()
