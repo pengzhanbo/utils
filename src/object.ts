@@ -1,5 +1,5 @@
-import { isArray, isObject } from './is.js'
-import type { DeepMerge, ObjectGet, ObjectKeyPaths } from './types.js'
+import { isArray, isObject } from './is'
+import type { DeepMerge, ObjectGet, ObjectKeyPaths } from './types'
 
 /**
  *

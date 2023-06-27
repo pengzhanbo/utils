@@ -1,4 +1,4 @@
-import type { Fn, Nullable } from './types.js'
+import type { Fn, Nullable } from './types'
 
 /**
  * noop function
