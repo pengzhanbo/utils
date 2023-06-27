@@ -50,5 +50,5 @@ export function random(...args: any[]): number {
     }
   }
   const num = Math.random() * (max - min) + min
-  return float ? Math.floor(num) : num
+  return float ? num : Math.floor(num)
 }
