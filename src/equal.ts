@@ -1,4 +1,4 @@
-import { getTypeName } from './common'
+import { getTypeName } from './common.js'
 
 /**
  * Deep equality two values,

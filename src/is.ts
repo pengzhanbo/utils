@@ -1,4 +1,4 @@
-import { getTypeName } from './common'
+import { getTypeName } from './common.js'
 
 export const isDef = <T = any>(v?: T): v is T => typeof v !== 'undefined'
 

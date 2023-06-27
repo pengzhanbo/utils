@@ -1,5 +1,5 @@
-import { isFunction } from './is'
-import type { Fn } from './types'
+import { isFunction } from './is.js'
+import type { Fn } from './types.js'
 
 export async function sleep(ms: number, callback?: Fn<any>) {
   return new Promise<void>((resolve) =>

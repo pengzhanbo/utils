@@ -1,4 +1,4 @@
-import { isArray, isObject } from './is'
+import { isArray, isObject } from './is.js'
 
 /**
  * simple clone, use JSON.parse and JSON.stringify
