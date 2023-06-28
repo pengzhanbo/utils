@@ -5,7 +5,7 @@ import type { DeepMerge, ObjectGet, ObjectKeyPaths } from './types'
  *
  * @category Object
  */
-export function hasOwn<T>(obj: T, key: string) {
+export function hasOwn<T>(obj: T, key: keyof any): key is keyof T {
   return obj === null ? false : Object.prototype.hasOwnProperty.call(obj, key)
 }
 

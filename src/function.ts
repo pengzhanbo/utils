@@ -43,7 +43,7 @@ export function isTruthy(val: unknown) {
  * [1, '', false, undefined].filter(NotUndefined) // => [1, '', false]
  * ```
  */
-export function NotUndefined(val: unknown) {
+export function NotUndefined(val: unknown): boolean {
   return typeof val !== 'undefined'
 }
 

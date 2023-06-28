@@ -126,7 +126,7 @@ export function shuffle<T>(array: T[]): T[] {
  * sortBy(arr, (item) => item.age) // => [ { name: 'John', age: 18 }, { name: 'Tom', age: 18 }, { name: 'Mark', age: 20 }, { name: 'Jack', age: 21 } ]
  * ```
  */
-export function sortBy<T>(array: T[], cb: (item: T) => number) {
+export function sortBy<T>(array: T[], cb: (item: T) => number): T[] {
   if (array.length === 0) return []
   return array.sort((a, b) => {
     const s1 = cb(a)
@@ -143,7 +143,7 @@ export function sortBy<T>(array: T[], cb: (item: T) => number) {
  * chunk([1, 2, 3, 4, 5], 2) // => [[1, 2], [3, 4], [5]]
  * ```
  */
-export function chunk<T>(input: T[], size = 1) {
+export function chunk<T>(input: T[], size = 1): T[][] {
   const chunks: T[][] = []
   for (let i = 0; i < input.length; i += size) {
     chunks.push(input.slice(i, i + size))
@@ -158,6 +158,6 @@ export function chunk<T>(input: T[], size = 1) {
  * union([1, 2, 3], [2, 4, 5, 6]) // => [1, 2, 3, 4, 5, 6]
  * ```
  */
-export function union<T>(a: T[], b: T[]) {
+export function union<T>(a: T[], b: T[]): T[] {
   return [...new Set([...a, ...b])]
 }
