@@ -15,10 +15,11 @@ export function hasOwn<T>(obj: T, key: keyof any): key is keyof T {
  */
 export function deepFreeze<T>(obj: T): T {
   if (isArray(obj)) {
-    obj.forEach((item) => deepFreeze(item))
-  } else if (isObject(obj)) {
+    obj.forEach(item => deepFreeze(item))
+  }
+  else if (isObject(obj)) {
     Object.freeze(obj)
-    Object.keys(obj).forEach((key) => deepFreeze(obj[key] as any))
+    Object.keys(obj).forEach(key => deepFreeze(obj[key] as any))
   }
   return obj
 }
@@ -49,9 +50,9 @@ export function objectGet<
 >(source: T, path: P): ObjectGet<T, P> {
   const keys = path.replace(/\[['"]?(.+?)['"]?\]/g, '.$1').split('.')
   let res: any = source
-  for (const k of keys) {
+  for (const k of keys)
     res = res?.[k]
-  }
+
   return res
 }
 
@@ -67,27 +68,30 @@ export function deepMerge<T extends object = object, S extends object = T>(
   target: T,
   ...sources: S[]
 ): DeepMerge<T, S> {
-  if (!sources.length) return target as any
+  if (!sources.length)
+    return target as any
 
   const source = sources.shift()
-  if (source === undefined) return target as any
+  if (source === undefined)
+    return target as any
 
   if (isMergableObject(target) && isMergableObject(source)) {
     Object.keys(source).forEach((key) => {
       if (key === '__proto__' || key === 'constructor' || key === 'prototype')
         return
 
-      // @ts-expect-error
+      // @ts-expect-error source[key] can be any
       if (isMergableObject(source[key])) {
-        // @ts-expect-error
+        // @ts-expect-error target[key] can be any
         if (!target[key])
-          // @ts-expect-error
+          // @ts-expect-error target[key] can be any
           target[key] = {}
 
-        // @ts-expect-error
+        // @ts-expect-error target[key] can be any
         deepMerge(target[key], source[key])
-      } else {
-        // @ts-expect-error
+      }
+      else {
+        // @ts-expect-error target[key] can be any
         target[key] = source[key]
       }
     })
@@ -110,41 +114,44 @@ export function deepMergeWithArray<
   T extends object = object,
   S extends object = T,
 >(target: T, ...sources: S[]): DeepMerge<T, S> {
-  if (!sources.length) return target as any
+  if (!sources.length)
+    return target as any
 
   const source = sources.shift()
-  if (source === undefined) return target as any
+  if (source === undefined)
+    return target as any
 
-  if (Array.isArray(target) && Array.isArray(source)) target.push(...source)
+  if (Array.isArray(target) && Array.isArray(source))
+    target.push(...source)
 
   if (isMergableObject(target) && isMergableObject(source)) {
     Object.keys(source).forEach((key) => {
       if (key === '__proto__' || key === 'constructor' || key === 'prototype')
         return
 
-      // @ts-expect-error
+      // @ts-expect-error source[key] can be any
       if (Array.isArray(source[key])) {
-        // @ts-expect-error
+        // @ts-expect-error source[key] can be any
         if (!target[key])
-          // @ts-expect-error
+          // @ts-expect-error source[key] can be any
           target[key] = []
 
-        // @ts-expect-error
+        // @ts-expect-error source[key] can be any
         deepMergeWithArray(target[key], source[key])
-        // eslint-disable-next-line @typescript-eslint/brace-style
       }
 
-      // @ts-expect-error
+      // @ts-expect-error source[key] can be any
       else if (isMergableObject(source[key])) {
-        // @ts-expect-error
+        // @ts-expect-error source[key] can be any
         if (!target[key])
-          // @ts-expect-error
+          // @ts-expect-error source[key] can be any
           target[key] = {}
 
-        // @ts-expect-error
+        // @ts-expect-error source[key] can be any
         deepMergeWithArray(target[key], source[key])
-      } else {
-        // @ts-expect-error
+      }
+      else {
+        // @ts-expect-error source[key] can be any
         target[key] = source[key]
       }
     })
@@ -153,6 +160,6 @@ export function deepMergeWithArray<
   return deepMergeWithArray(target, ...sources)
 }
 
-function isMergableObject(item: any): item is Object {
+function isMergableObject(item: any): item is object {
   return isObject(item) && !Array.isArray(item)
 }

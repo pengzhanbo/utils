@@ -36,10 +36,10 @@ export type ObjectKeyPaths<
   K extends keyof T = keyof T,
 > = K extends string | number
   ?
-      | GenNode<K, IsRoot>
-      | (T[K] extends object
-          ? `${GenNode<K, IsRoot>}${ObjectKeyPaths<T[K], false>}`
-          : never)
+  | GenNode<K, IsRoot>
+  | (T[K] extends object
+    ? `${GenNode<K, IsRoot>}${ObjectKeyPaths<T[K], false>}`
+    : never)
   : never
 
 type KeysPaths<
@@ -48,12 +48,12 @@ type KeysPaths<
 > = T extends `${infer R}['${infer K}']${infer Rest}`
   ? KeysPaths<Rest, `${O extends '' ? O : `${O}.`}${R}.${K}`>
   : T extends `${infer R}["${infer K}"]${infer Rest}`
-  ? KeysPaths<Rest, `${O extends '' ? O : `${O}.`}${R}.${K}`>
-  : T extends `${infer R}[${infer K}]${infer Rest}`
-  ? KeysPaths<Rest, `${O extends '' ? O : `${O}.`}${R}.${K}`>
-  : T extends ''
-  ? O
-  : `${O extends '' ? O : `${O}.`}${T}`
+    ? KeysPaths<Rest, `${O extends '' ? O : `${O}.`}${R}.${K}`>
+    : T extends `${infer R}[${infer K}]${infer Rest}`
+      ? KeysPaths<Rest, `${O extends '' ? O : `${O}.`}${R}.${K}`>
+      : T extends ''
+        ? O
+        : `${O extends '' ? O : `${O}.`}${T}`
 
 export type ObjectGet<
   T extends Record<PropertyKey, any>,
@@ -70,8 +70,8 @@ export type DeepMerge<F, S> = MergeInsertions<{
   [K in keyof F | keyof S]: K extends keyof S & keyof F
     ? DeepMerge<F[K], S[K]>
     : K extends keyof S
-    ? S[K]
-    : K extends keyof F
-    ? F[K]
-    : never
+      ? S[K]
+      : K extends keyof F
+        ? F[K]
+        : never
 }>

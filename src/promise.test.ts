@@ -6,7 +6,7 @@ import { promiseParallel, sleep } from './promise'
 it('promise parallel', async () => {
   await expect(
     promiseParallel(
-      new Array(5).fill(0).map((_, i) => async () => {
+      Array.from({ length: 5 }).fill(0).map((_, i) => async () => {
         // console.log(i)
         await sleep(range(100, 1000, 100)[random(9)])
         return i

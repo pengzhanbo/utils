@@ -42,8 +42,8 @@ it('range', () => {
 })
 
 it(sortBy, () => {
-  expect(sortBy([3, 4, 2, 5], (v) => v)).toEqual([2, 3, 4, 5])
-  expect(sortBy([], (v) => v)).toEqual([])
+  expect(sortBy([3, 4, 2, 5], v => v)).toEqual([2, 3, 4, 5])
+  expect(sortBy([], v => v)).toEqual([])
   expect(
     sortBy(
       [
@@ -52,7 +52,7 @@ it(sortBy, () => {
         { name: 'Jack', age: 21 },
         { name: 'Tom', age: 18 },
       ],
-      (v) => v.age,
+      v => v.age,
     ),
   ).toEqual([
     { name: 'John', age: 18 },

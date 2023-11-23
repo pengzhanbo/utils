@@ -38,12 +38,14 @@ export function random(...args: any[]): number {
     min = 0
     max = args[0]
     float = false
-  } else {
+  }
+  else {
     if (typeof args[1] === 'number') {
       min = args[0]
       max = args[1]
       float = !!args[2]
-    } else {
+    }
+    else {
       min = 0
       max = args[0]
       float = !!args[1]

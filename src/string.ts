@@ -12,16 +12,19 @@ export const slash = (s: string) => s.replace(/\\/g, '/')
  * capitalize('hello') // 'Hello'
  * ```
  */
-export const capitalize = (s: string) =>
-  s[0].toUpperCase() + s.slice(1).toLowerCase()
+export function capitalize(s: string) {
+  return s[0].toUpperCase() + s.slice(1).toLowerCase()
+}
 
-export const ensurePrefix = (prefix: string, str: string) => {
-  if (str.startsWith(prefix)) return str
+export function ensurePrefix(prefix: string, str: string) {
+  if (str.startsWith(prefix))
+    return str
   return prefix + str
 }
 
-export const ensureSuffix = (suffix: string, str: string) => {
-  if (str.endsWith(suffix)) return str
+export function ensureSuffix(suffix: string, str: string) {
+  if (str.endsWith(suffix))
+    return str
   return str + suffix
 }
 

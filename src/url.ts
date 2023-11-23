@@ -15,7 +15,8 @@ export function isUrl(url: string) {
     // eslint-disable-next-line no-new
     new URL(url)
     return true
-  } catch {
+  }
+  catch {
     return false
   }
 }
@@ -39,7 +40,8 @@ export function isAbsoluteUrl(url: string) {
  * ```
  */
 export function combineURLs(baseUrl: string, ...urls: string[]) {
-  if (urls.length === 0) return baseUrl
+  if (urls.length === 0)
+    return baseUrl
   const url = urls.join('/').replace(/\/\/+/g, '/').replace(/^\/+/, '')
   baseUrl = baseUrl.replace(/\/+$/, '')
   return `${baseUrl}/${url}`

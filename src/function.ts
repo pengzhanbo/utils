@@ -54,11 +54,10 @@ export function NotUndefined(val: unknown): boolean {
 export function invoke<T>(fn: Fn<T>): T
 export function invoke(fns: Nullable<Fn>[]): void
 export function invoke<T>(fns: Nullable<Fn>[] | Fn<T>) {
-  if (Array.isArray(fns)) {
-    fns.forEach((fn) => fn && fn())
-  } else {
+  if (Array.isArray(fns))
+    fns.forEach(fn => fn && fn())
+  else
     return fns()
-  }
 }
 
 type ComposeFn = (...args: any[]) => any
@@ -81,8 +80,10 @@ export function compose<T extends ComposeFn[] = ComposeFn[]>(
 ): (...args: Parameters<LastArray<T>>) => ReturnType<FirstArray<T>> {
   return function (...args: Parameters<LastArray<T>>) {
     const len = fns.length
-    if (len === 0) return args
-    if (len === 1) return fns[0](...args)
+    if (len === 0)
+      return args
+    if (len === 1)
+      return fns[0](...args)
     return fns
       .slice(0, -1)
       .reduceRight((acc, fn) => fn(acc), fns[len - 1](...args))

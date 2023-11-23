@@ -13,8 +13,10 @@ import type { Arrayable, Nullable } from './types'
  * ```
  */
 export function toArray<T>(v: Nullable<Arrayable<T>>): Array<T> {
-  if (v === null || v === undefined) return []
-  if (isArray(v)) return v
+  if (v === null || v === undefined)
+    return []
+  if (isArray(v))
+    return v
   return [v]
 }
 
@@ -40,7 +42,8 @@ export function uniqueBy<T>(
 ): T[] {
   return array.reduce((acc: T[], cur: any) => {
     const index = acc.findIndex((item: any) => equalFn(cur, item))
-    if (index === -1) acc.push(cur)
+    if (index === -1)
+      acc.push(cur)
     return acc
   }, [])
 }
@@ -50,7 +53,8 @@ export function uniqueBy<T>(
  * @category Array
  */
 export function remove<T>(array: T[], value: T) {
-  if (!isArray(array)) return false
+  if (!isArray(array))
+    return false
   const index = array.indexOf(value)
   if (index !== -1) {
     array.splice(index, 1)
@@ -77,8 +81,8 @@ export function range(...args: any): number[] {
     start = 0
     stop = args[0]
     step = 1
-  } else {
-    // eslint-disable-next-line @typescript-eslint/no-extra-semi
+  }
+  else {
     ;[start, stop, step = 1] = args
   }
   const arr: number[] = []
@@ -127,7 +131,8 @@ export function shuffle<T>(array: T[]): T[] {
  * ```
  */
 export function sortBy<T>(array: T[], cb: (item: T) => number): T[] {
-  if (array.length === 0) return []
+  if (array.length === 0)
+    return []
   return array.sort((a, b) => {
     const s1 = cb(a)
     const s2 = cb(b)
@@ -145,9 +150,9 @@ export function sortBy<T>(array: T[], cb: (item: T) => number): T[] {
  */
 export function chunk<T>(input: T[], size = 1): T[][] {
   const chunks: T[][] = []
-  for (let i = 0; i < input.length; i += size) {
+  for (let i = 0; i < input.length; i += size)
     chunks.push(input.slice(i, i + size))
-  }
+
   return chunks
 }
 

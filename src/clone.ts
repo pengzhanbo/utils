@@ -18,12 +18,13 @@ export function shallowClone<T = any>(source: T): T {
     for (const [, key] of [
       ...Object.keys(source),
       ...Object.getOwnPropertySymbols(source),
-    ].entries()) {
+    ].entries())
       target[key] = source[key]
-    }
+
     return target as T
   }
-  if (isArray(source)) return [...source] as T
+  if (isArray(source))
+    return [...source] as T
 
   return simpleClone(source)
 }
@@ -38,17 +39,16 @@ export function deepClone<T = any>(source: T): T {
 
 function _deepClone<T>(source: T, seen = new WeakMap<object, unknown>()): T {
   let target: T
-  if (isObject(source)) {
+  if (isObject(source))
     target = Object.create(source.constructor.prototype)
-  }
-  if (isArray(source)) {
+
+  if (isArray(source))
     target = [] as T
-  } else {
+  else
     return source
-  }
-  if (seen.has(source)) {
+
+  if (seen.has(source))
     return seen.get(source) as T
-  }
 
   seen.set(source, target)
 
@@ -57,8 +57,8 @@ function _deepClone<T>(source: T, seen = new WeakMap<object, unknown>()): T {
   for (let i = 0, l = keys.length; i < l; i++) {
     const key = keys[i]
     const value = source[key as any]
-    ;(target as Record<string, unknown>)[key as any] =
-      isObject(value) || isArray(value) ? _deepClone(value, seen) : value
+    ;(target as Record<string, unknown>)[key as any]
+      = isObject(value) || isArray(value) ? _deepClone(value, seen) : value
   }
 
   return target
