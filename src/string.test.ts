@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest'
-import { capitalize, kebabCase, slash } from './string'
+import { camelCase, capitalize, kebabCase, slash } from './string'
 
 it('slash', () => {
   expect(slash('')).toEqual('')
@@ -20,4 +20,11 @@ it('kebabCase', () => {
   expect(kebabCase('ABC')).toEqual('abc')
   expect(kebabCase('__ABC__')).toEqual('__abc__')
   expect(kebabCase('__orderBy__')).toEqual('__order-by__')
+})
+
+it('camelCase', () => {
+  expect(camelCase('foo-bar')).toEqual('fooBar')
+  expect(camelCase('a b c')).toEqual('aBC')
+  expect(camelCase('foo-bar baz_')).toEqual('fooBarBaz_')
+  expect(camelCase('1-foo-2-bar')).toEqual('1Foo2Bar')
 })

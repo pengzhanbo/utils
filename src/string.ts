@@ -42,3 +42,16 @@ export function kebabCase(str: string) {
     .replace(/([a-z])([A-Z])/g, '$1-$2')
     .toLowerCase()
 }
+
+/**
+ * @category string
+ * @example
+ * ```ts
+ * camelCase('foo bar') // => fooBar
+ * camelCase('foo-bar') // => fooBar
+ * ```
+ */
+export function camelCase(str: string) {
+  return str
+    .replace(/(?:-|\s)(\w)/g, (_, m) => m.toUpperCase())
+}

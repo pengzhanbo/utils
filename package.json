@@ -160,7 +160,6 @@
     "test": "vitest run --reporter verbose",
     "release": "bumpp package.json --commit --push --tag && npm publish --access public"
   },
-  "prettier": "@pengzhanbo/prettier-config",
   "dependencies": {
     "throttle-debounce": "^5.0.0"
   },
