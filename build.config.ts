@@ -7,7 +7,8 @@ export default defineBuildConfig({
       input: 'src',
       format: 'cjs',
       outDir: 'dist/cjs',
-      ext: 'js',
+      // fix: #1
+      ext: 'cjs' as any,
       pattern: ['**/*.ts', '!**/*.test.ts'],
     },
     {
