@@ -1,7 +1,7 @@
 {
   "name": "@pengzhanbo/utils",
   "type": "module",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "packageManager": "pnpm@8.15.4",
   "author": "pengzhanbo <volodymyr@foxmail.com> (https://github.com/pengzhanbo)",
   "license": "MIT",
