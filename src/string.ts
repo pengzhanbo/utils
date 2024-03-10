@@ -72,7 +72,7 @@ export function kebabCase(str: string): string {
 /**
  * Convert string to camelCase
  *
- * @category string
+ * @category String
  *
  * @example
  * ```ts
