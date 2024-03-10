@@ -3,8 +3,26 @@
  * @category Types
  */
 export interface ThrottleOptions {
+  /**
+   * Optional, defaults to false. If noTrailing is true, callback will only execute
+   * every `delay` milliseconds while the throttled-function is being called. If
+   * noTrailing is false or unspecified, callback will be executed one final time
+   * after the last throttled-function call. (After the throttled-function has not
+   * been called for `delay` milliseconds, the internal counter is reset)
+   */
   noTrailing?: boolean
+  /**
+   * Optional, defaults to false. If noLeading is false, the first throttled-function
+   * call will execute callback immediately. If noLeading is true, the first the
+   * callback execution will be skipped. It should be noted that callback will never
+   * executed if both noLeading = true and noTrailing = true.
+   */
   noLeading?: boolean
+  /**
+   * If `debounceMode` is true (at begin), schedule
+   * `callback` to execute after `delay` ms. If `debounceMode` is false (at end),
+   * schedule `callback` to execute after `delay` ms.
+   */
   debounceMode?: boolean
 }
 
@@ -24,6 +42,8 @@ interface NoReturn<T extends (...args: any[]) => any> {
  * Throttle execution of a function. Especially useful for rate limiting
  * execution of handlers on events like resize and scroll.
  *
+ * @category Function
+ *
  * @param delay
  * A zero-or-greater delay in milliseconds. For event callbacks, values around
  * 100 or 250 (or even higher) are most useful.
@@ -35,23 +55,6 @@ interface NoReturn<T extends (...args: any[]) => any> {
  *
  * @param options
  * An object to configure options.
- *
- * @param options.noTrailing
- * Optional, defaults to false. If noTrailing is true, callback will only execute
- * every `delay` milliseconds while the throttled-function is being called. If
- * noTrailing is false or unspecified, callback will be executed one final time
- * after the last throttled-function call. (After the throttled-function has not
- * been called for `delay` milliseconds, the internal counter is reset)
- *
- * @param options.noLeading
- * Optional, defaults to false. If noLeading is false, the first throttled-function
- * call will execute callback immediately. If noLeading is true, the first the
- * callback execution will be skipped. It should be noted that callback will never
- * executed if both noLeading = true and noTrailing = true.
- *
- * @param options.debounceMode If `debounceMode` is true (at begin), schedule
- * `callback` to execute after `delay` ms. If `debounceMode` is false (at end),
- * schedule `callback` to execute after `delay` ms.
  *
  * @return
  * A new, throttled, function.
@@ -176,6 +179,13 @@ export function throttle<T extends (...args: any[]) => any>(
  * @category Types
  */
 export interface DebounceOptions {
+  /**
+   * If atBegin is false or unspecified, callback will only be executed `delay`
+   * milliseconds after the last debounced-function call. If atBegin is true,
+   * callback will be executed only at the first debounced-function call. (After
+   * the throttled-function has not been called for `delay` milliseconds, the
+   * internal counter is reset).
+   */
   atBegin?: boolean
 }
 
@@ -183,6 +193,8 @@ export interface DebounceOptions {
  * Debounce execution of a function. Debouncing, unlike throttling,
  * guarantees that a function is only executed a single time, either at the
  * very beginning of a series of calls, or at the very end.
+ *
+ * @category Functions
  *
  * @param delay
  * A zero-or-greater delay in milliseconds. For event callbacks, values around
@@ -195,13 +207,6 @@ export interface DebounceOptions {
  *
  * @param options
  * An object to configure options.
- *
- * @param options.atBegin
- * If atBegin is false or unspecified, callback will only be executed `delay`
- * milliseconds after the last debounced-function call. If atBegin is true,
- * callback will be executed only at the first debounced-function call. (After
- * the throttled-function has not been called for `delay` milliseconds, the
- * internal counter is reset).
  *
  * @return
  * A new, debounced function.

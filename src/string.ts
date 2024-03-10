@@ -6,7 +6,9 @@
  * slash('foo\\bar') // => foo/bar
  * ```
  */
-export const slash = (s: string): string => s.replace(/\\/g, '/')
+export function slash(s: string): string {
+  return s.replace(/\\/g, '/')
+}
 
 /**
  * First letter uppercase, other lowercase
@@ -38,7 +40,7 @@ export function ensurePrefix(prefix: string, str: string): string {
 
 /**
  * Ensure suffix, if str does not end with suffix, it will be added
- * @category
+ * @category String
  *
  * @example
  * ```ts
