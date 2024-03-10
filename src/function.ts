@@ -32,7 +32,7 @@ export function once(func: Fn): Fn {
  * [1, 2, 3, '', false, undefined].filter(isTruthy) // => [1, 2, 3]
  * ```
  */
-export function isTruthy(val: unknown) {
+export function isTruthy(val: unknown): boolean {
   return Boolean(val)
 }
 
@@ -53,7 +53,7 @@ export function NotUndefined(val: unknown): boolean {
  */
 export function invoke<T>(fn: Fn<T>): T
 export function invoke(fns: Nullable<Fn>[]): void
-export function invoke<T>(fns: Nullable<Fn>[] | Fn<T>) {
+export function invoke<T>(fns: Nullable<Fn>[] | Fn<T>): T | void {
   if (Array.isArray(fns))
     fns.forEach(fn => fn && fn())
   else

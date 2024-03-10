@@ -9,7 +9,8 @@ export function simpleClone<T = any>(source: T): T {
 }
 
 /**
- * shallow clone
+ * shallow clone, only clone the first level
+ *
  * @category Clone
  */
 export function shallowClone<T = any>(source: T): T {
@@ -30,7 +31,7 @@ export function shallowClone<T = any>(source: T): T {
 }
 
 /**
- * deep clone
+ * Deep Clone.
  * @category Clone
  */
 export function deepClone<T = any>(source: T): T {

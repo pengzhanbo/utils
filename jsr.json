@@ -1,0 +1,35 @@
+{
+  "name": "@pengzhanbo/utils",
+  "version": "1.1.1",
+  "exports": {
+    ".": "./src/index.ts",
+    "./array": "./src/array.ts",
+    "./clone": "./src/clone.ts",
+    "./common": "./src/common.ts",
+    "./equal": "./src/equal.ts",
+    "./event": "./src/event.ts",
+    "./function": "./src/function.ts",
+    "./is": "./src/is.ts",
+    "./math": "./src/math.ts",
+    "./object": "./src/object.ts",
+    "./promise": "./src/promise.ts",
+    "./string": "./src/string.ts",
+    "./time": "./src/time.ts",
+    "./types": "./src/types.ts",
+    "./url": "./src/url.ts"
+  },
+  "include": [
+    "src/**/*.ts",
+    "LICENSE",
+    "README.md"
+  ],
+  "exclude": [
+    "src/*.test.ts",
+    "pnpm-lock.yaml",
+    "eslint.config.js",
+    "build.config.ts",
+    ".editorconfig",
+    ".github",
+    ".vscode"
+  ]
+}

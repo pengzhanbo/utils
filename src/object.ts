@@ -2,7 +2,7 @@ import { isArray, isObject } from './is'
 import type { DeepMerge, ObjectGet, ObjectKeyPaths } from './types'
 
 /**
- *
+ * Check if an object has a non-inherited property
  * @category Object
  */
 export function hasOwn<T>(obj: T, key: keyof any): key is keyof T {
@@ -10,7 +10,7 @@ export function hasOwn<T>(obj: T, key: keyof any): key is keyof T {
 }
 
 /**
- *
+ * Freeze an object recursively and its properties
  * @category Object
  */
 export function deepFreeze<T>(obj: T): T {
@@ -25,6 +25,7 @@ export function deepFreeze<T>(obj: T): T {
 }
 
 /**
+ * Check if an object has a property
  * @category Object
  */
 export function isKeyof<T extends object>(

@@ -1,5 +1,8 @@
 # @pengzhanbo/utils
 
+[![](https://jsr.io/badges/@pengzhanbo/utils)](https://jsr.io/@pengzhanbo/utils)
+![](https://jsr.io/badges/@pengzhanbo/utils/score)
+
 ## Install
 
 ```sh

@@ -3,7 +3,9 @@ import type { Arrayable, Nullable } from './types'
 
 /**
  * Convert Arrayable<T> to Array<T>
+ *
  * @category Array
+ *
  * @example
  * ```ts
  * toArray(null) // => []
@@ -22,7 +24,9 @@ export function toArray<T>(v: Nullable<Arrayable<T>>): Array<T> {
 
 /**
  * Unique array
+ *
  * @category Array
+ *
  * @example
  * ```ts
  * uniq([1, 1, 2, 2, 3, 3]) // => [1, 2, 3]
@@ -52,7 +56,7 @@ export function uniqueBy<T>(
  * Remove value from array
  * @category Array
  */
-export function remove<T>(array: T[], value: T) {
+export function remove<T>(array: T[], value: T): boolean {
   if (!isArray(array))
     return false
   const index = array.indexOf(value)
@@ -99,7 +103,7 @@ export function range(...args: any): number[] {
  * Move item in an array
  * @category Array
  */
-export function move<T>(arr: T[], from: number, to: number) {
+export function move<T>(arr: T[], from: number, to: number): T[] {
   arr.splice(to, 0, arr.splice(from, 1)[0])
   return arr
 }

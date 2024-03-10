@@ -3,14 +3,14 @@ const RE_HTTP = /^(https?:)?\/\//i
  *
  * @category URL
  */
-export function isHttp(url: string) {
+export function isHttp(url: string): boolean {
   return RE_HTTP.test(url)
 }
 
 /**
  * @category URL
  */
-export function isUrl(url: string) {
+export function isUrl(url: string): boolean {
   try {
     // eslint-disable-next-line no-new
     new URL(url)
@@ -25,7 +25,7 @@ const RE_PROTOCOL = /^([a-z][a-z\d+\-.]*:)?\/\//i
 /**
  * @category URL
  */
-export function isAbsoluteUrl(url: string) {
+export function isAbsoluteUrl(url: string): boolean {
   return RE_PROTOCOL.test(url)
 }
 
@@ -39,7 +39,7 @@ export function isAbsoluteUrl(url: string) {
  * combineURLs('/foo', 'bar', 'index.html') // => /foo/bar/index.html
  * ```
  */
-export function combineURLs(baseUrl: string, ...urls: string[]) {
+export function combineURLs(baseUrl: string, ...urls: string[]): string {
   if (urls.length === 0)
     return baseUrl
   const url = urls.join('/').replace(/\/\/+/g, '/').replace(/^\/+/, '')
@@ -56,7 +56,7 @@ const RE_PROTOCOL_MATCH = /^([-+\w]{1,25})(:?\/\/|:)/
  * parseProtocol('mailto:user@example.com') // => mailto
  * ```
  */
-export function parseProtocol(url: string) {
+export function parseProtocol(url: string): string {
   const match = RE_PROTOCOL_MATCH.exec(url)
   return (match && match[1]) || ''
 }

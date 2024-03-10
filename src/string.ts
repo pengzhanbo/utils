@@ -2,7 +2,7 @@
  * Replace all backslashes with forward slashes
  * @category String
  */
-export const slash = (s: string) => s.replace(/\\/g, '/')
+export const slash = (s: string): string => s.replace(/\\/g, '/')
 
 /**
  * First letter uppercase, other lowercase
@@ -12,17 +12,17 @@ export const slash = (s: string) => s.replace(/\\/g, '/')
  * capitalize('hello') // 'Hello'
  * ```
  */
-export function capitalize(s: string) {
+export function capitalize(s: string): string {
   return s[0].toUpperCase() + s.slice(1).toLowerCase()
 }
 
-export function ensurePrefix(prefix: string, str: string) {
+export function ensurePrefix(prefix: string, str: string): string {
   if (str.startsWith(prefix))
     return str
   return prefix + str
 }
 
-export function ensureSuffix(suffix: string, str: string) {
+export function ensureSuffix(suffix: string, str: string): string {
   if (str.endsWith(suffix))
     return str
   return str + suffix
@@ -36,7 +36,7 @@ export function ensureSuffix(suffix: string, str: string) {
  * kebabCase('orderBy') // => order-by
  * ```
  */
-export function kebabCase(str: string) {
+export function kebabCase(str: string): string {
   return str
     .replace(/\s+/g, '-')
     .replace(/([a-z])([A-Z])/g, '$1-$2')
@@ -51,7 +51,7 @@ export function kebabCase(str: string) {
  * camelCase('foo-bar') // => fooBar
  * ```
  */
-export function camelCase(str: string) {
+export function camelCase(str: string): string {
   return str
     .replace(/(?:-|\s)(\w)/g, (_, m) => m.toUpperCase())
 }

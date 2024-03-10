@@ -14,4 +14,4 @@ export * from './event'
 
 export * from './types'
 
-export * from 'throttle-debounce'
+export * from './throttle-debounce'

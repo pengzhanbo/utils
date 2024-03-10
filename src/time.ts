@@ -1,17 +1,20 @@
 /**
  * @category Time
  * 时间类的工具库， 推荐使用：
+ *
  * - [dayjs](https://day.js.org/)
  * - [date-fns](https://date-fns.org)
+ *
+ * @module
  */
 
 /**
  * @category Time
  */
-export const timestamp = () => +Date.now()
+export const timestamp = (): number => +Date.now()
 
 /**
- * is same day
+ * Check if two dates is same day
  * @category Time
  */
 export function isSameDay(v1: Date, v2?: Date): boolean {
