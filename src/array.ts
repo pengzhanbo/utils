@@ -39,13 +39,18 @@ export function uniq<T>(v: T[]): T[] {
 /**
  * Unique array by a custom equality function
  * @category Array
+ *
+ * @example
+ * ```ts
+ * uniqueBy([1, 1, 2, 2, 3, 3], (a, b) => a === b) // => [1, 2, 3]
+ * ```
  */
 export function uniqueBy<T>(
   array: T[],
-  equalFn: (a: any, b: any) => boolean,
+  equalFn: (a: T, b: T) => boolean,
 ): T[] {
-  return array.reduce((acc: T[], cur: any) => {
-    const index = acc.findIndex((item: any) => equalFn(cur, item))
+  return array.reduce((acc: T[], cur) => {
+    const index = acc.findIndex(item => equalFn(cur, item))
     if (index === -1)
       acc.push(cur)
     return acc
@@ -55,6 +60,18 @@ export function uniqueBy<T>(
 /**
  * Remove value from array
  * @category Array
+ *
+ * @param array - the array
+ * @param value - the value to remove
+ * @returns if `true`, the value is removed, `false` otherwise
+ *
+ * @example
+ * ```ts
+ * const arr = [1, 2, 3]
+ * remove(arr, 2) // => true
+ * console.log(arr) // => [1, 3]
+ * remove(arr, 4) // => false
+ * ```
  */
 export function remove<T>(array: T[], value: T): boolean {
   if (!isArray(array))
@@ -69,15 +86,32 @@ export function remove<T>(array: T[], value: T): boolean {
 
 /**
  * Generate a range array of numbers. The `stop` is exclusive.
+ *
  * @category Array
+ *
+ * @param stop - the end of the range
+ *
  * @example
  * ```ts
  * range(5) // => [0, 1, 2, 3, 4]
+ * ```
+ */
+export function range(stop: number): number[]
+/**
+ * Generate a range array of numbers.
+ *
+ * @category Array
+ *
+ * @param start - the start of the range
+ * @param stop - the end of the range
+ * @param step - the step of the range
+ *
+ * @example
+ * ```ts
  * range(5, 10) // => [5, 6, 7, 8, 9]
  * range(5, 10, 2) // => [5, 7, 9]
  * ```
  */
-export function range(stop: number): number[]
 export function range(start: number, stop: number, step?: number): number[]
 export function range(...args: any): number[] {
   let start, stop, step
@@ -101,7 +135,12 @@ export function range(...args: any): number[] {
 
 /**
  * Move item in an array
+ *
  * @category Array
+ *
+ * @param arr - the array
+ * @param from - the index of the item to move
+ * @param to - the index to move to
  */
 export function move<T>(arr: T[], from: number, to: number): T[] {
   arr.splice(to, 0, arr.splice(from, 1)[0])
@@ -123,6 +162,7 @@ export function shuffle<T>(array: T[]): T[] {
 /**
  * Sort array
  * @category Array
+ *
  * @example
  * ```ts
  * const arr = [
@@ -145,8 +185,13 @@ export function sortBy<T>(array: T[], cb: (item: T) => number): T[] {
 }
 
 /**
+ * Split array into chunks
  *
  * @category Array
+ *
+ * @param input - the array
+ * @param size - the chunk size
+ *
  * @example
  * ```ts
  * chunk([1, 2, 3, 4, 5], 2) // => [[1, 2], [3, 4], [5]]
@@ -162,7 +207,10 @@ export function chunk<T>(input: T[], size = 1): T[][] {
 
 /**
  * Union two arrays
+ *
  * @category Array
+ *
+ * @example
  * ```ts
  * union([1, 2, 3], [2, 4, 5, 6]) // => [1, 2, 3, 4, 5, 6]
  * ```

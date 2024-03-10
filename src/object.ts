@@ -36,7 +36,7 @@ export function isKeyof<T extends object>(
 }
 
 /**
- *
+ * Get a value from an object
  * @category Object
  * @example
  * ```ts

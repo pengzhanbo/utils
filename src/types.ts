@@ -1,25 +1,30 @@
 /**
  * Promise, or maybe not
+ * @category Types
  */
 export type Awaitable<T> = T | PromiseLike<T>
 
 /**
  * Function
+ * @category Types
  */
 export type Fn<T = void> = () => T
 
 /**
  * null or whatever
+ * @category Types
  */
 export type Nullable<T> = T | null | undefined
 
 /**
  * array or not yet
+ * @category Types
  */
 export type Arrayable<T> = T | T[]
 
 /**
  * Constructor
+ * @category Types
  */
 export type Constructor<T = void> = new (...arg: any[]) => T
 
@@ -30,6 +35,10 @@ type GenNode<
   ? `${K}`
   : `.${K}` | (K extends number ? `[${K}]` | `.[${K}]` : never)
 
+/**
+ * Object key paths
+ * @category Types
+ */
 export type ObjectKeyPaths<
   T extends object,
   IsRoot extends boolean = true,
@@ -55,6 +64,10 @@ type KeysPaths<
         ? O
         : `${O extends '' ? O : `${O}.`}${T}`
 
+/**
+ * Get a value from an object
+ * @category Types
+ */
 export type ObjectGet<
   T extends Record<PropertyKey, any>,
   P extends string,
@@ -66,6 +79,10 @@ type MergeInsertions<T> = T extends object
   ? { [K in keyof T]: MergeInsertions<T[K]> }
   : T
 
+/**
+ * Deep merge
+ * @category Types
+ */
 export type DeepMerge<F, S> = MergeInsertions<{
   [K in keyof F | keyof S]: K extends keyof S & keyof F
     ? DeepMerge<F[K], S[K]>

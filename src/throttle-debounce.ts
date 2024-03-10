@@ -1,3 +1,7 @@
+/**
+ * Throttle Options
+ * @category Types
+ */
 export interface ThrottleOptions {
   noTrailing?: boolean
   noLeading?: boolean
@@ -167,6 +171,10 @@ export function throttle<T extends (...args: any[]) => any>(
   return wrapper
 }
 
+/**
+ * Debounce Options
+ * @category Types
+ */
 export interface DebounceOptions {
   atBegin?: boolean
 }

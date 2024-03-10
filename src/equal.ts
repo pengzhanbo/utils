@@ -1,7 +1,9 @@
 import { getTypeName } from './common'
 
 /**
- * Deep equality two values,
+ * Deep equality two values, support array and object
+ *
+ * @category Equal
  */
 export function deepEqual(v1: any, v2: any): boolean {
   const type1 = getTypeName(v1)

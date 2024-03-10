@@ -1,6 +1,6 @@
 {
   "name": "@pengzhanbo/utils",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "exports": {
     ".": "./src/index.ts",
     "./array": "./src/array.ts",
@@ -16,7 +16,8 @@
     "./string": "./src/string.ts",
     "./time": "./src/time.ts",
     "./types": "./src/types.ts",
-    "./url": "./src/url.ts"
+    "./url": "./src/url.ts",
+    "./throttle-debounce": "./src/throttle-debounce.ts"
   },
   "include": [
     "src/**/*.ts",

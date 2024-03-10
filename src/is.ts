@@ -2,16 +2,23 @@ import { getTypeName } from './common'
 
 /**
  * Checks if the input is defined
+ * @category Is
  */
-export const isDef = <T = any>(v?: T): v is T => typeof v !== 'undefined'
+export function isDef<T = any>(v?: T): v is T {
+  return typeof v !== 'undefined'
+}
 
 /**
  * Checks if the input is a boolean
+ * @category Is
  */
-export const isBoolean = (v: unknown): v is boolean => typeof v === 'boolean'
+export function isBoolean(v: unknown): v is boolean {
+  return typeof v === 'boolean'
+}
 
 /**
  * Checks if the input is a function.
+ * @category Is
  */
 export function isFunction<T extends Function>(v: unknown): v is T {
   return typeof v === 'function'
@@ -19,21 +26,31 @@ export function isFunction<T extends Function>(v: unknown): v is T {
 
 /**
  * Checks if the input is a number
+ * @category Is
  */
-export const isNumber = (v: unknown): v is number => typeof v === 'number'
+export function isNumber(v: unknown): v is number {
+  return typeof v === 'number'
+}
 
 /**
  * Checks if the input is a string
+ * @category Is
  */
-export const isString = (v: unknown): v is string => typeof v === 'string'
+export function isString(v: unknown): v is string {
+  return typeof v === 'string'
+}
 
 /**
  * Checks if the input is a symbol
+ * @category Is
  */
-export const isSymbol = (v: unknown): v is symbol => typeof v === 'symbol'
+export function isSymbol(v: unknown): v is symbol {
+  return typeof v === 'symbol'
+}
 
 /**
  * Checks if the input is an object
+ * @category Is
  */
 export function isObject(v: unknown): v is Record<PropertyKey, unknown> {
   return getTypeName(v) === 'object'
@@ -41,8 +58,11 @@ export function isObject(v: unknown): v is Record<PropertyKey, unknown> {
 
 /**
  * Checks if the input is an array
+ * @category Is
  */
-export const isArray = <T>(v: unknown): v is T[] => Array.isArray(v)
+export function isArray<T>(v: unknown): v is T[] {
+  return Array.isArray(v)
+}
 
 /**
  * Checks if the input is undefined
@@ -53,21 +73,31 @@ export function isUndefined(v: unknown): v is undefined {
 
 /**
  * Checks if the input is null
+ * @category Is
  */
-export const isNull = (v: unknown): v is null => getTypeName(v) === 'null'
+export function isNull(v: unknown): v is null {
+  return getTypeName(v) === 'null'
+}
 
 /**
  * Checks if the input is a regexp
+ * @category Is
  */
-export const isRegexp = (v: unknown): v is RegExp => getTypeName(v) === 'regexp'
+export function isRegexp(v: unknown): v is RegExp {
+  return getTypeName(v) === 'regexp'
+}
 
 /**
  * Checks if the input is a date
+ * @category Is
  */
-export const isDate = (v: unknown): v is Date => getTypeName(v) === 'date'
+export function isDate(v: unknown): v is Date {
+  return getTypeName(v) === 'date'
+}
 
 /**
  * Checks if the input is an empty object
+ * @category Is
  */
 export function isEmptyObject(v: unknown): boolean {
   if (!isObject(v))
@@ -81,6 +111,7 @@ export function isEmptyObject(v: unknown): boolean {
 
 /**
  * Checks if the input is a window
+ * @category Is
  */
 export function isWindow(v: unknown): boolean {
   return typeof v !== 'undefined' && getTypeName(v) === 'window'
@@ -88,6 +119,9 @@ export function isWindow(v: unknown): boolean {
 
 /**
  * Checks if the input is a browser
+ * @category Is
  */
-// @ts-expect-error 跳过环境检查
-export const isBrowser = (): boolean => typeof window !== 'undefined'
+export function isBrowser(): boolean {
+  // @ts-expect-error 跳过环境检查
+  return typeof window !== 'undefined'
+}

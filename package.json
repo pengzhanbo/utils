@@ -161,13 +161,9 @@
     "test": "vitest run --reporter verbose",
     "release": "bumpp package.json --commit --push --tag && npm publish --access public"
   },
-  "dependencies": {
-    "throttle-debounce": "^5.0.0"
-  },
   "devDependencies": {
     "@pengzhanbo/eslint-config": "^1.6.1",
     "@types/node": "^20.11.25",
-    "@types/throttle-debounce": "^5.0.2",
     "bumpp": "^9.4.0",
     "eslint": "^8.57.0",
     "typescript": "^5.4.2",

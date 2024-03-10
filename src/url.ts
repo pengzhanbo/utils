@@ -1,6 +1,6 @@
 const RE_HTTP = /^(https?:)?\/\//i
 /**
- *
+ * Check if url is http
  * @category URL
  */
 export function isHttp(url: string): boolean {
@@ -8,6 +8,7 @@ export function isHttp(url: string): boolean {
 }
 
 /**
+ * Check if url is valid
  * @category URL
  */
 export function isUrl(url: string): boolean {
@@ -22,7 +23,9 @@ export function isUrl(url: string): boolean {
 }
 
 const RE_PROTOCOL = /^([a-z][a-z\d+\-.]*:)?\/\//i
+
 /**
+ * Check if url is absolute
  * @category URL
  */
 export function isAbsoluteUrl(url: string): boolean {
@@ -49,6 +52,8 @@ export function combineURLs(baseUrl: string, ...urls: string[]): string {
 
 const RE_PROTOCOL_MATCH = /^([-+\w]{1,25})(:?\/\/|:)/
 /**
+ * Parse protocol from url
+ *
  * @category URL
  * @example
  * ```ts

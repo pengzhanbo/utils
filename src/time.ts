@@ -1,5 +1,4 @@
 /**
- * @category Time
  * 时间类的工具库， 推荐使用：
  *
  * - [dayjs](https://day.js.org/)
@@ -9,9 +8,12 @@
  */
 
 /**
+ * Get current timestamp
  * @category Time
  */
-export const timestamp = (): number => +Date.now()
+export function timestamp(): number {
+  return +Date.now()
+}
 
 /**
  * Check if two dates is same day

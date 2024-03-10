@@ -7,10 +7,33 @@ export function clamp(n: number, min: number, max: number): number {
 }
 
 /**
- * Check if a number is in range
+ * Check if a number is in range [0, max]
+ *
  * @category Math
+ *
+ * @param n - the number
+ * @param max - the maximum number
+ * @example
+ * ```ts
+ * inRange(5, 10) // => true
+ * inRange(10, 5) // => false
+ * ```
  */
 export function inRange(n: number, max: number): boolean
+/**
+ * Check if a number is in range [min, max]
+ *
+ * @category Math
+ *
+ * @param n - the number
+ * @param min - the minimum number
+ * @param max - the maximum number
+ * @example
+ * ```ts
+ * inRange(5, 0, 10) // => true
+ * inRange(10, 0, 5) // => false
+ * ```
+ */
 export function inRange(n: number, min: number, max: number): boolean
 export function inRange(n: number, min: number, max?: number): boolean {
   if (max === undefined) {
@@ -22,15 +45,34 @@ export function inRange(n: number, min: number, max?: number): boolean {
 
 /**
  * Random number
+ *
  * @category Math
+ *
+ * @param max - the maximum number
+ * @param float - (optional) if `true`, returns a floating-point number
+ *
  * @example
  * ```ts
  * random(5) // => an integer between 0 and 5
+ * random(5, true) // => a floating-point number between 0 and 5
+ * ```
+ */
+export function random(max: number, float?: boolean): number
+/**
+ * Random number
+ *
+ * @category Math
+ *
+ * @param min - the minimum number
+ * @param max - the maximum number
+ * @param float - (optional) if `true`, returns a floating-point number
+ *
+ * @example
+ * ```ts
  * random(1, 5) // => an integer between 1 and 5
  * random(1, 5, true) // => a floating-point number between 1 and 5
  * ```
  */
-export function random(max: number, float?: boolean): number
 export function random(min: number, max: number, float?: boolean): number
 export function random(...args: any[]): number {
   let min, max, float

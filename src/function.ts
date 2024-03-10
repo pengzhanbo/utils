@@ -37,6 +37,8 @@ export function isTruthy(val: unknown): boolean {
 }
 
 /**
+ * guard function that returns if val is not undefined
+ *
  * @category Function
  * @example
  * ```ts
@@ -48,10 +50,17 @@ export function NotUndefined(val: unknown): boolean {
 }
 
 /**
- * call the function or every functions in an array
+ * call the function
+ *
  * @category Function
  */
 export function invoke<T>(fn: Fn<T>): T
+/**
+ *  call every functions in an array
+ * @category Function
+ *
+ * @param fns - an array of functions
+ */
 export function invoke(fns: Nullable<Fn>[]): void
 export function invoke<T>(fns: Nullable<Fn>[] | Fn<T>): T | void {
   if (Array.isArray(fns))
