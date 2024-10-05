@@ -2,7 +2,7 @@
  * @category Event
  */
 export class BaseEvent {
-  private _listeners: Map<string, Function[]>
+  private _listeners: Map<string, ((...args: any[]) => void)[]>
 
   constructor() {
     this._listeners = new Map()
@@ -15,7 +15,7 @@ export class BaseEvent {
    * @param listener - the listener function to be called when the event is triggered
    * @return
    */
-  on(event: string, listener: Function): void {
+  on(event: string, listener: (...args: any[]) => void): void {
     if (!this._listeners.has(event))
       this._listeners.set(event, [])
 
@@ -40,7 +40,7 @@ export class BaseEvent {
    * @param event - the name of the event to turn off
    * @param listener - (optional) the listener function to turn off
    */
-  off(event: string, listener?: Function): void {
+  off(event: string, listener?: (...args: any[]) => void): void {
     if (this._listeners.has(event)) {
       listener
         ? this._listeners
@@ -56,7 +56,7 @@ export class BaseEvent {
    * @param event - the event to listen for
    * @param listener - the function to be executed once for the event
    */
-  once(event: string, listener: Function): void {
+  once(event: string, listener: (...args: any[]) => void): void {
     this.on(event, (...args: any[]) => {
       this.off(event, listener)
       listener(...args)

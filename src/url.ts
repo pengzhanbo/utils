@@ -1,4 +1,4 @@
-const RE_HTTP = /^(https?:)?\/\//i
+const RE_HTTP = /^(?:https?:)?\/\//i
 /**
  * Check if url is http
  * @category URL
@@ -22,7 +22,7 @@ export function isUrl(url: string): boolean {
   }
 }
 
-const RE_PROTOCOL = /^([a-z][a-z\d+\-.]*:)?\/\//i
+const RE_PROTOCOL = /^(?:[a-z][a-z\d+\-.]*:)?\/\//i
 
 /**
  * Check if url is absolute
@@ -45,12 +45,12 @@ export function isAbsoluteUrl(url: string): boolean {
 export function combineURLs(baseUrl: string, ...urls: string[]): string {
   if (urls.length === 0)
     return baseUrl
-  const url = urls.join('/').replace(/\/\/+/g, '/').replace(/^\/+/, '')
+  const url = urls.join('/').replace(/\/{2,}/g, '/').replace(/^\/+/, '')
   baseUrl = baseUrl.replace(/\/+$/, '')
   return `${baseUrl}/${url}`
 }
 
-const RE_PROTOCOL_MATCH = /^([-+\w]{1,25})(:?\/\/|:)/
+const RE_PROTOCOL_MATCH = /^([-+\w]{1,25})(?::?\/\/|:)/
 /**
  * Parse protocol from url
  *

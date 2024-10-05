@@ -1,9 +1,9 @@
 # @pengzhanbo/utils
 
-[![](https://jsr.io/badges/@pengzhanbo/utils)](https://jsr.io/@pengzhanbo/utils)
-![](https://jsr.io/badges/@pengzhanbo/utils/score)
+[![jsr package](https://jsr.io/badges/@pengzhanbo/utils)](https://jsr.io/@pengzhanbo/utils)
+![jsr score](https://jsr.io/badges/@pengzhanbo/utils/score)
 [![MIT License](https://img.shields.io/npm/l/@pengzhanbo/utils)](https://github.com/pengzhanbo/utils/blob/main/LICENSE)
-![](https://img.shields.io/npm/dm/@pengzhanbo/utils)
+![npm package](https://img.shields.io/npm/dm/@pengzhanbo/utils)
 
 一个常用的工具类库, 无依赖， 任何运行时。
 

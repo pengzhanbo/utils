@@ -20,7 +20,7 @@ export function isBoolean(v: unknown): v is boolean {
  * Checks if the input is a function.
  * @category Is
  */
-export function isFunction<T extends Function>(v: unknown): v is T {
+export function isFunction<T extends (...args: any[]) => any>(v: unknown): v is T {
   return typeof v === 'function'
 }
 

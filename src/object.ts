@@ -1,5 +1,5 @@
-import { isArray, isObject } from './is'
 import type { DeepMerge, ObjectGet, ObjectKeyPaths } from './types'
+import { isArray, isObject } from './is'
 
 /**
  * Check if an object has a non-inherited property

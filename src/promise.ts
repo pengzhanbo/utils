@@ -1,5 +1,5 @@
-import { isFunction } from './is'
 import type { Fn } from './types'
+import { isFunction } from './is'
 
 /**
  * Sleeps for the given number of milliseconds.
