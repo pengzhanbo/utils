@@ -69,7 +69,7 @@ export function throttle<T extends (...args: any[]) => any>(
     noLeading = false,
     debounceMode = undefined,
   } = options || {}
-  /*
+  /**
    * After wrapper has stopped being called, this timeout ensures that
    * `callback` is executed at the proper times in `throttle` and `end`
    * debounce modes.
@@ -93,7 +93,7 @@ export function throttle<T extends (...args: any[]) => any>(
     cancelled = !upcomingOnly
   }
 
-  /*
+  /**
    * The `wrapper` function encapsulates all of the throttling / debouncing
    * functionality and when executed will limit the rate at which `callback`
    * is executed.
@@ -111,7 +111,7 @@ export function throttle<T extends (...args: any[]) => any>(
       callback.apply(self, args)
     }
 
-    /*
+    /**
      * If `debounceMode` is true (at begin) this is used to clear the flag
      * to allow future `callback` executions.
      */
@@ -120,7 +120,7 @@ export function throttle<T extends (...args: any[]) => any>(
     }
 
     if (!noLeading && debounceMode && !timeoutID) {
-      /*
+      /**
        * Since `wrapper` is being called for the first time and
        * `debounceMode` is true (at begin), execute `callback`
        * and noLeading != true.
@@ -132,7 +132,7 @@ export function throttle<T extends (...args: any[]) => any>(
 
     if (debounceMode === undefined && elapsed > delay) {
       if (noLeading) {
-        /*
+        /**
          * In throttle mode with noLeading, if `delay` time has
          * been exceeded, update `lastExec` and schedule `callback`
          * to execute after `delay` ms.
@@ -142,7 +142,7 @@ export function throttle<T extends (...args: any[]) => any>(
           timeoutID = setTimeout(debounceMode ? clear : exec, delay)
       }
       else {
-        /*
+        /**
          * In throttle mode without noLeading, if `delay` time has been exceeded, execute
          * `callback`.
          */
@@ -150,7 +150,7 @@ export function throttle<T extends (...args: any[]) => any>(
       }
     }
     else if (noTrailing !== true) {
-      /*
+      /**
        * In trailing throttle mode, since `delay` time has not been
        * exceeded, schedule `callback` to execute `delay` ms after most
        * recent execution.

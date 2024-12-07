@@ -1,4 +1,10 @@
 /**
+ * Base Event
+ *
+ * @module Event
+ */
+
+/**
  * @category Event
  */
 export class BaseEvent {

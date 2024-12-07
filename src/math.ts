@@ -1,5 +1,14 @@
 /**
+ * Math Helpers
+ *
+ * @module Math
+ */
+
+/**
  * Clamp a number between min and max
+ *
+ * 返回一个介于最小值和最大值之间的数字
+ *
  * @category Math
  */
 export function clamp(n: number, min: number, max: number): number {
@@ -8,6 +17,8 @@ export function clamp(n: number, min: number, max: number): number {
 
 /**
  * Check if a number is in range [0, max]
+ *
+ * 检查一个数字是否在 [0, max] 范围内
  *
  * @category Math
  *
@@ -22,6 +33,8 @@ export function clamp(n: number, min: number, max: number): number {
 export function inRange(n: number, max: number): boolean
 /**
  * Check if a number is in range [min, max]
+ *
+ * 检查一个数字是否在 [min, max] 范围内
  *
  * @category Math
  *
@@ -46,10 +59,12 @@ export function inRange(n: number, min: number, max?: number): boolean {
 /**
  * Random number
  *
+ * 返回一个介于 0 和 max 之间的随机数
+ *
  * @category Math
  *
- * @param max - the maximum number
- * @param float - (optional) if `true`, returns a floating-point number
+ * @param max - the maximum number. 最大值
+ * @param float - (optional) if `true`, returns a floating-point number. 是否返回浮点数
  *
  * @example
  * ```ts
@@ -59,13 +74,15 @@ export function inRange(n: number, min: number, max?: number): boolean {
  */
 export function random(max: number, float?: boolean): number
 /**
- * Random number
+ * Random number between min and max
+ *
+ * 返回一个介于 min 和 max 之间的随机数
  *
  * @category Math
  *
- * @param min - the minimum number
- * @param max - the maximum number
- * @param float - (optional) if `true`, returns a floating-point number
+ * @param min - the minimum number. 最小值
+ * @param max - the maximum number. 最大值
+ * @param float - (optional) if `true`, returns a floating-point number. 是否返回浮点数
  *
  * @example
  * ```ts

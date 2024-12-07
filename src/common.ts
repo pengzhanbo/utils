@@ -1,4 +1,14 @@
 /**
+ * Common functions
+ *
+ * @module Common
+ */
+
+/**
+ * Get the string representation of a value
+ *
+ * 获取值的字符串表示
+ *
  * @category Common
  */
 export function toString(s: unknown): string {
@@ -7,6 +17,9 @@ export function toString(s: unknown): string {
 
 /**
  * Get type name of a value
+ *
+ * 获取值的类型名称
+ *
  * @category Common
  * @example
  * ```ts

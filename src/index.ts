@@ -11,7 +11,5 @@ export * from './promise'
 export * from './string'
 export * from './throttle-debounce'
 export * from './time'
-
 export * from './types'
-
 export * from './url'

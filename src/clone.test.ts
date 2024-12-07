@@ -10,6 +10,7 @@ it('simpleClone', () => {
 })
 
 it('shallowClone', () => {
+  expect(shallowClone('')).toEqual('')
   expect(shallowClone({ a: 1 })).toEqual({ a: 1 })
   expect(shallowClone([{ a: 1 }])).toEqual([{ a: 1 }])
 })
@@ -17,4 +18,5 @@ it('shallowClone', () => {
 it('deepClone', () => {
   expect(deepClone({ a: 1 })).toEqual({ a: 1 })
   expect(deepClone({ a: { b: { c: 1 } } })).toEqual({ a: { b: { c: 1 } } })
+  expect(deepClone([{ a: { b: { c: 1 } } }])).toEqual([{ a: { b: { c: 1 } } }])
 })

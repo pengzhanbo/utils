@@ -1,8 +1,17 @@
+/**
+ * Object Helpers
+ *
+ * @module Object
+ */
+
 import type { DeepMerge, ObjectGet, ObjectKeyPaths } from './types'
-import { isArray, isObject } from './is'
+import { isArray, isPlainObject } from './is'
 
 /**
  * Check if an object has a non-inherited property
+ *
+ * 检查一个对象是否具有非继承属性
+ *
  * @category Object
  */
 export function hasOwn<T>(obj: T, key: keyof any): key is keyof T {
@@ -11,13 +20,16 @@ export function hasOwn<T>(obj: T, key: keyof any): key is keyof T {
 
 /**
  * Freeze an object recursively and its properties
+ *
+ * 递归冻结一个对象及其属性
+ *
  * @category Object
  */
 export function deepFreeze<T>(obj: T): T {
   if (isArray(obj)) {
     obj.forEach(item => deepFreeze(item))
   }
-  else if (isObject(obj)) {
+  else if (isPlainObject(obj)) {
     Object.freeze(obj)
     Object.keys(obj).forEach(key => deepFreeze(obj[key] as any))
   }
@@ -26,6 +38,9 @@ export function deepFreeze<T>(obj: T): T {
 
 /**
  * Check if an object has a property
+ *
+ * 检查一个对象是否有属性
+ *
  * @category Object
  */
 export function isKeyof<T extends object>(
@@ -37,6 +52,9 @@ export function isKeyof<T extends object>(
 
 /**
  * Get a value from an object
+ *
+ * 从一个对象中获取一个值
+ *
  * @category Object
  * @example
  * ```ts
@@ -58,10 +76,65 @@ export function objectGet<
 }
 
 /**
+ * Creates a new object with specified keys omitted.
+ *
+ * 创建一个新对象，省略指定的键。
+ *
+ * @category Object
+ * @example
+ * ```ts
+ * omit({ a: 1, b: 2 }, ['a']) // => { b: 2 }
+ * ```
+ */
+export function omit<T extends object = object, K extends keyof T = keyof T>(
+  obj: T,
+  keys: readonly K[],
+): Omit<T, K> {
+  const res = { ...obj }
+
+  for (const key of keys) {
+    if (isKeyof(obj, key))
+      delete res[key]
+  }
+
+  return res
+}
+
+/**
+ * Creates a new object composed of the picked object properties.
+ *
+ * 创建一个由所选对象属性组成的新对象。
+ *
+ * @category Object
+ * @example
+ * ```ts
+ * pick({ a: 1, b: 2 }, ['a']) // => { a: 1 }
+ * ```
+ */
+export function pick<T extends object = object, K extends keyof T = keyof T>(
+  obj: T,
+  keys: K[],
+): Pick<T, K> {
+  const res = {} as Pick<T, K>
+
+  for (const key of keys) {
+    if (isKeyof(obj, key))
+      res[key] = obj[key]
+  }
+
+  return res
+}
+
+/**
  * Deep merge
  *
  * The first argument is the target object, the rest are the sources.
  * The target object will be mutated and returned.
+ *
+ * 深度合并
+ *
+ * 第一个参数是目标对象，其余的是源对象。
+ * 目标对象将被修改并返回。
  *
  * @category Object
  */
@@ -108,6 +181,13 @@ export function deepMerge<T extends object = object, S extends object = T>(
  *
  * The first argument is the target object, the rest are the sources.
  * The target object will be mutated and returned.
+ *
+ * 深度合并
+ *
+ * 与 `deepMerge` 不同，它合并数组而不是覆盖它们。
+ *
+ * 第一个参数是目标对象，其余的是源。
+ * 目标对象将被修改并返回。
  *
  * @category Object
  */
@@ -162,5 +242,5 @@ export function deepMergeWithArray<
 }
 
 function isMergableObject(item: any): item is object {
-  return isObject(item) && !Array.isArray(item)
+  return isPlainObject(item) && !Array.isArray(item)
 }

@@ -1,3 +1,8 @@
+/**
+ * Type check
+ *
+ * @module Is
+ */
 import { getTypeName } from './common'
 
 /**
@@ -52,7 +57,7 @@ export function isSymbol(v: unknown): v is symbol {
  * Checks if the input is an object
  * @category Is
  */
-export function isObject(v: unknown): v is Record<PropertyKey, unknown> {
+export function isPlainObject(v: unknown): v is Record<PropertyKey, unknown> {
   return getTypeName(v) === 'object'
 }
 
@@ -100,7 +105,7 @@ export function isDate(v: unknown): v is Date {
  * @category Is
  */
 export function isEmptyObject(v: unknown): boolean {
-  if (!isObject(v))
+  if (!isPlainObject(v))
     return false
   // eslint-disable-next-line no-unreachable-loop
   for (const _ in v)
@@ -110,10 +115,23 @@ export function isEmptyObject(v: unknown): boolean {
 }
 
 /**
+ * Checks if the input is a blob
+ * @category Is
+ */
+export function isBlob(v: unknown): v is Blob {
+  /* istanbul ignore if -- @preserve */
+  if (typeof Blob === 'undefined')
+    return false
+
+  return v instanceof Blob
+}
+
+/**
  * Checks if the input is a window
  * @category Is
  */
 export function isWindow(v: unknown): boolean {
+  /* istanbul ignore next -- @preserve */
   return typeof v !== 'undefined' && getTypeName(v) === 'window'
 }
 
@@ -122,6 +140,66 @@ export function isWindow(v: unknown): boolean {
  * @category Is
  */
 export function isBrowser(): boolean {
+  /* istanbul ignore next -- @preserve */
   // @ts-expect-error 跳过环境检查
   return typeof window !== 'undefined'
+}
+
+/**
+ * Checks if a value is a JSON object.
+ * @category Is
+ */
+export function isJSONObject(obj: unknown): obj is Record<string, any> {
+  if (!isPlainObject(obj)) {
+    return false
+  }
+
+  const keys = Reflect.ownKeys(obj)
+
+  for (let i = 0; i < keys.length; i++) {
+    const key = keys[i]
+    const value = obj[key]
+
+    /* istanbul ignore if -- @preserve */
+    if (typeof key !== 'string') {
+      return false
+    }
+
+    if (!isJSONValue(value)) {
+      return false
+    }
+  }
+
+  return true
+}
+
+/**
+ * Checks if a given value is a valid JSON array.
+ * @category Is
+ */
+export function isJSONArray(value: unknown): value is any[] {
+  if (!Array.isArray(value)) {
+    return false
+  }
+
+  return value.every(item => isJSONValue(item))
+}
+
+/**
+ * Checks if a given value is a valid JSON value.
+ * @category Is
+ */
+export function isJSONValue(value: unknown): value is Record<string, any> | any[] | string | number | boolean | null {
+  switch (typeof value) {
+    case 'object': {
+      return value === null || isJSONArray(value) || isJSONObject(value)
+    }
+    case 'string':
+    case 'number':
+    case 'boolean':
+      return true
+
+    default:
+      return false
+  }
 }

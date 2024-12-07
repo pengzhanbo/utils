@@ -63,5 +63,5 @@ const RE_PROTOCOL_MATCH = /^([-+\w]{1,25})(?::?\/\/|:)/
  */
 export function parseProtocol(url: string): string {
   const match = RE_PROTOCOL_MATCH.exec(url)
-  return (match && match[1]) || ''
+  return match?.[1] || ''
 }

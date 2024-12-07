@@ -1,3 +1,9 @@
+/**
+ * Equal
+ *
+ * @module Equal
+ */
+
 import { getTypeName } from './common'
 
 /**

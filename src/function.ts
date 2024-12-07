@@ -1,7 +1,15 @@
+/**
+ * Function Helpers
+ *
+ * @module Function
+ */
 import type { Fn, Nullable } from './types'
 
 /**
  * noop function
+ *
+ * 空函数
+ *
  * @category Function
  */
 export function noop() {}
@@ -9,6 +17,9 @@ export function noop() {}
 /**
  * Create a function that can only be called once,
  * and repeated calls return the result of the first call
+ *
+ * 创建只能被调用一次的函数，重复调用返回第一次调用的结果
+ *
  * @category Function
  */
 export function once(func: Fn): Fn {
@@ -26,6 +37,9 @@ export function once(func: Fn): Fn {
 
 /**
  * guard function that returns if val is truthy
+ *
+ * 守卫函数，返回 val 是否为真值
+ *
  * @category Function
  * @example
  * ```ts
@@ -39,24 +53,31 @@ export function isTruthy(val: unknown): boolean {
 /**
  * guard function that returns if val is not undefined
  *
+ * 守卫函数，返回 val 不为 undefined
+ *
  * @category Function
  * @example
  * ```ts
  * [1, '', false, undefined].filter(NotUndefined) // => [1, '', false]
  * ```
  */
-export function NotUndefined(val: unknown): boolean {
+export function notUndefined(val: unknown): boolean {
   return typeof val !== 'undefined'
 }
 
 /**
  * call the function
  *
+ * 调用函数
+ *
  * @category Function
  */
 export function invoke<T>(fn: Fn<T>): T
 /**
- *  call every functions in an array
+ * call every functions in an array
+ *
+ * 调用数组中的每个函数
+ *
  * @category Function
  *
  * @param fns - an array of functions
@@ -75,6 +96,9 @@ type FirstArray<T extends any[]> = T extends [infer U, ...any[]] ? U : Fn
 
 /**
  * compose multiple functions, right to left
+ *
+ * 组合多个函数，从右到左执行
+ *
  * @category Function
  * @example
  * ```ts

@@ -1,11 +1,20 @@
+/**
+ * Processing array-type data
+ *
+ * 处理数组类型的数据
+ *
+ * @module Array
+ */
+
 import type { Arrayable, Nullable } from './types'
 import { isArray } from './is'
 
 /**
- * Convert Arrayable<T> to Array<T>
+ * Convert `Arrayable<T>` to `Array<T>`
+ *
+ * 将 `Arrayable<T>` 转换为 `Array<T>`
  *
  * @category Array
- *
  * @example
  * ```ts
  * toArray(null) // => []
@@ -25,8 +34,9 @@ export function toArray<T>(v: Nullable<Arrayable<T>>): Array<T> {
 /**
  * Unique array
  *
- * @category Array
+ * 数组去重
  *
+ * @category Array
  * @example
  * ```ts
  * uniq([1, 1, 2, 2, 3, 3]) // => [1, 2, 3]
@@ -38,8 +48,10 @@ export function uniq<T>(v: T[]): T[] {
 
 /**
  * Unique array by a custom equality function
- * @category Array
  *
+ * 通过自定义相等函数实现数组去重
+ *
+ * @category Array
  * @example
  * ```ts
  * uniqueBy([1, 1, 2, 2, 3, 3], (a, b) => a === b) // => [1, 2, 3]
@@ -59,11 +71,15 @@ export function uniqueBy<T>(
 
 /**
  * Remove value from array
+ *
+ * 从数组中移除值
+ *
  * @category Array
  *
  * @param array - the array
- * @param value - the value to remove
- * @returns if `true`, the value is removed, `false` otherwise
+ * @param value - the value to remove - 待移除的值
+ * @returns - if `true`, the value is removed, `false` otherwise.
+ *          - 如果成功移除,返回 `true`, 否则返回 `false`
  *
  * @example
  * ```ts
@@ -85,11 +101,13 @@ export function remove<T>(array: T[], value: T): boolean {
 }
 
 /**
- * Generate a range array of numbers. The `stop` is exclusive.
+ * Generate a range array of numbers starting from `0`. The `stop` is exclusive.
+ *
+ * 从 `0` 开始生成一个数字范围的数组, `stop` 是不包含的。
  *
  * @category Array
  *
- * @param stop - the end of the range
+ * @param stop - the end of the range. 范围结束数字。
  *
  * @example
  * ```ts
@@ -98,13 +116,15 @@ export function remove<T>(array: T[], value: T): boolean {
  */
 export function range(stop: number): number[]
 /**
- * Generate a range array of numbers.
+ * Generate a range array of numbers. The `stop` is exclusive.
+ *
+ * 生成一个数字范围的数组, `stop` 是不包含的。
  *
  * @category Array
  *
- * @param start - the start of the range
- * @param stop - the end of the range
- * @param step - the step of the range
+ * @param start - the start of the range. 范围开始数字
+ * @param stop - the end of the range. 范围结束数字
+ * @param step - the step of the range. 步进
  *
  * @example
  * ```ts
@@ -136,20 +156,37 @@ export function range(...args: any): number[] {
 /**
  * Move item in an array
  *
+ * 移动数组中的项
+ *
  * @category Array
  *
  * @param arr - the array
- * @param from - the index of the item to move
- * @param to - the index to move to
+ * @param from - the index of the item to move. 要移动的项的索引
+ * @param to - the index to move to. 要移动到的索引
+ * @returns the array with the item moved. 返回移动后的数组
+ * @example
+ * ```ts
+ * move([1, 2, 3], 0, 2) // => [3, 1, 2]
+ * ```
  */
 export function move<T>(arr: T[], from: number, to: number): T[] {
+  if (!isArray(arr) || arr.length === 0) {
+    return arr
+  }
   arr.splice(to, 0, arr.splice(from, 1)[0])
   return arr
 }
 
 /**
  * Shuffle array
+ *
+ * 数组洗牌，随机打乱数组中的顺序
+ *
  * @category Array
+ * @example
+ * ```ts
+ * shuffle([1, 2, 3]) // => [1, 3, 2]
+ * ```
  */
 export function shuffle<T>(array: T[]): T[] {
   for (let i = array.length - 1; i > 0; i--) {
@@ -161,8 +198,10 @@ export function shuffle<T>(array: T[]): T[] {
 
 /**
  * Sort array
- * @category Array
  *
+ * 数组排序
+ *
+ * @category Array
  * @example
  * ```ts
  * const arr = [
@@ -187,10 +226,12 @@ export function sortBy<T>(array: T[], cb: (item: T) => number): T[] {
 /**
  * Split array into chunks
  *
+ * 将数组拆分成块
+ *
  * @category Array
  *
  * @param input - the array
- * @param size - the chunk size
+ * @param size - the chunk size. 块的大小
  *
  * @example
  * ```ts
@@ -208,6 +249,8 @@ export function chunk<T>(input: T[], size = 1): T[][] {
 /**
  * Union two arrays
  *
+ * 两个数组的并集
+ *
  * @category Array
  *
  * @example
@@ -217,4 +260,23 @@ export function chunk<T>(input: T[], size = 1): T[][] {
  */
 export function union<T>(a: T[], b: T[]): T[] {
   return [...new Set([...a, ...b])]
+}
+
+/**
+ * Intersection of two arrays
+ *
+ * 两个数组的交集
+ *
+ * @category Array
+ * @example
+ * ```ts
+ * intersection([1, 2, 3], [2, 4, 5, 6]) // => [2]
+ * ```
+ */
+export function intersection<T>(firstArr: readonly T[], secondArr: readonly T[]): T[] {
+  const secondSet = new Set(secondArr)
+
+  return firstArr.filter((item) => {
+    return secondSet.has(item)
+  })
 }

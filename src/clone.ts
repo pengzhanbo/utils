@@ -1,7 +1,17 @@
-import { isArray, isObject } from './is'
+/**
+ * clone data
+ *
+ * 克隆数据
+ *
+ * @module Clone
+ */
+
+import { isArray, isPlainObject } from './is'
 
 /**
  * simple clone, use JSON.parse and JSON.stringify
+ *
+ * 简单的克隆,使用 JSON.parse 和 JSON.stringify
  * @category Clone
  */
 export function simpleClone<T = any>(source: T): T {
@@ -11,10 +21,12 @@ export function simpleClone<T = any>(source: T): T {
 /**
  * shallow clone, only clone the first level
  *
+ * 浅克隆,只克隆第一层
+ *
  * @category Clone
  */
 export function shallowClone<T = any>(source: T): T {
-  if (isObject(source)) {
+  if (isPlainObject(source)) {
     const target = {} as Record<PropertyKey, any>
     for (const [, key] of [
       ...Object.keys(source),
@@ -32,15 +44,18 @@ export function shallowClone<T = any>(source: T): T {
 
 /**
  * Deep Clone.
+ *
+ * 深度克隆
+ *
  * @category Clone
  */
 export function deepClone<T = any>(source: T): T {
-  return _deepClone(source)
+  return deepCloneImpl(source)
 }
 
-function _deepClone<T>(source: T, seen = new WeakMap<object, unknown>()): T {
+function deepCloneImpl<T>(source: T, seen = new WeakMap<object, unknown>()): T {
   let target: T
-  if (isObject(source))
+  if (isPlainObject(source))
     target = Object.create(source.constructor.prototype)
 
   if (isArray(source))
@@ -59,7 +74,7 @@ function _deepClone<T>(source: T, seen = new WeakMap<object, unknown>()): T {
     const key = keys[i]
     const value = source[key as any]
     ;(target as Record<string, unknown>)[key as any]
-      = isObject(value) || isArray(value) ? _deepClone(value, seen) : value
+      = isPlainObject(value) || isArray(value) ? deepCloneImpl(value, seen) : value
   }
 
   return target
