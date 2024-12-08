@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest'
-import { isArray, isBlob, isBoolean, isDate, isDef, isEmptyObject, isFunction, isJSONArray, isJSONObject, isJSONValue, isNull, isNumber, isPlainObject, isRegexp, isString, isSymbol, isUndefined } from './is'
+import { isArray, isBlob, isBoolean, isDate, isDef, isEmptyObject, isFunction, isJSONArray, isJSONObject, isJSONValue, isNull, isNumber, isPlainObject, isPrimitive, isRegexp, isString, isSymbol, isTypedArray, isUndefined } from './is'
 
 it('isDef', () => {
   expect(isDef(undefined)).toBe(false)
@@ -9,6 +9,19 @@ it('isDef', () => {
   expect(isDef(true)).toBe(true)
   expect(isDef({})).toBe(true)
   expect(isDef(() => {})).toBe(true)
+})
+
+it('isPrimitive', () => {
+  expect(isPrimitive(undefined)).toBe(true)
+  expect(isPrimitive(null)).toBe(true)
+  expect(isPrimitive(1)).toBe(true)
+  expect(isPrimitive('1')).toBe(true)
+  expect(isPrimitive(true)).toBe(true)
+  expect(isPrimitive(false)).toBe(true)
+  expect(isPrimitive({})).toBe(false)
+  expect(isPrimitive([])).toBe(false)
+  expect(isPrimitive(() => {})).toBe(false)
+  expect(isPrimitive(Symbol(''))).toBe(true)
 })
 
 it('isBoolean', () => {
@@ -165,6 +178,27 @@ it('isBlob', () => {
   expect(isBlob({})).toBe(false)
   expect(isBlob(() => {})).toBe(false)
   expect(isBlob(new Blob([]))).toBe(true)
+})
+
+it('isTypedArray', () => {
+  expect(isTypedArray(new Uint8Array(new ArrayBuffer(8)))).toBe(true)
+  expect(isTypedArray(new Uint8ClampedArray(new ArrayBuffer(8)))).toBe(true)
+  expect(isTypedArray(new Uint16Array(new ArrayBuffer(8)))).toBe(true)
+  expect(isTypedArray(new Uint32Array(new ArrayBuffer(8)))).toBe(true)
+  expect(isTypedArray(new BigUint64Array(new ArrayBuffer(8)))).toBe(true)
+  expect(isTypedArray(new Int8Array(new ArrayBuffer(8)))).toBe(true)
+  expect(isTypedArray(new Int16Array(new ArrayBuffer(8)))).toBe(true)
+  expect(isTypedArray(new Int32Array(new ArrayBuffer(8)))).toBe(true)
+  expect(isTypedArray(new BigInt64Array(new ArrayBuffer(8)))).toBe(true)
+  expect(isTypedArray(new Float32Array(new ArrayBuffer(8)))).toBe(true)
+  expect(isTypedArray(new Float64Array(new ArrayBuffer(8)))).toBe(true)
+  expect(isTypedArray(undefined)).toBe(false)
+  expect(isTypedArray(new Map())).toBe(false)
+  expect(isTypedArray(new Set())).toBe(false)
+  expect(isTypedArray('')).toBe(false)
+  expect(isTypedArray(Symbol(''))).toBe(false)
+  expect(isTypedArray([1, 2, 3])).toBe(false)
+  expect(isTypedArray(false)).toBe(false)
 })
 
 it('isJSONValue', () => {

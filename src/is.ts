@@ -14,6 +14,14 @@ export function isDef<T = any>(v?: T): v is T {
 }
 
 /**
+ * Checks if the input is a primitive
+ * @category Is
+ */
+export function isPrimitive(v: unknown): v is null | undefined | boolean | number | string | symbol | bigint {
+  return v === null || (typeof v !== 'object' && typeof v !== 'function')
+}
+
+/**
  * Checks if the input is a boolean
  * @category Is
  */
@@ -124,6 +132,14 @@ export function isBlob(v: unknown): v is Blob {
     return false
 
   return v instanceof Blob
+}
+
+/**
+ * Checks if the input is a typed array
+ * @category Is
+ */
+export function isTypedArray(v: unknown): v is Int8Array | Uint8Array | Uint8ClampedArray | Int16Array | Uint16Array | Int32Array | Uint32Array | Float32Array | Float64Array {
+  return ArrayBuffer.isView(v) && !(v instanceof DataView)
 }
 
 /**
