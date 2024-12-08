@@ -24,4 +24,11 @@ jobs:
         run: pnpm i
 
       - name: Test
+        env:
+          NODE_OPTIONS: --max_old_space_size=8192
         run: pnpm run test
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
