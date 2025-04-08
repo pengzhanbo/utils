@@ -126,7 +126,7 @@ export function objectMap<K extends string, V, NK extends PropertyKey = K, NV = 
  *
  * @category Object
  */
-export function objectKeys<T extends object>(obj: T) {
+export function objectKeys<T extends object>(obj: T): Array<`${keyof T & (string | number | boolean | null | undefined)}`> {
   return Object.keys(obj) as Array<`${keyof T & (string | number | boolean | null | undefined)}`>
 }
 
@@ -135,7 +135,7 @@ export function objectKeys<T extends object>(obj: T) {
  *
  * @category Object
  */
-export function objectEntries<T extends object>(obj: T) {
+export function objectEntries<T extends object>(obj: T): Array<[keyof T, T[keyof T]]> {
   return Object.entries(obj) as Array<[keyof T, T[keyof T]]>
 }
 

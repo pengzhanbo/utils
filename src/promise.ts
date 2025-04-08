@@ -233,7 +233,12 @@ export function createSingletonPromise<T>(fn: () => Promise<T>): SingletonPromis
  * await lock.wait() // it will wait all tasking finished
  * ```
  */
-export function createPromiseLock() {
+export function createPromiseLock(): {
+  run: <T = void>(fn: () => Promise<T>) => Promise<T>
+  wait: () => Promise<void>
+  isWaiting: () => boolean
+  clear: () => void
+} {
   const locks: Promise<any>[] = []
 
   return {
