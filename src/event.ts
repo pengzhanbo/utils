@@ -50,8 +50,8 @@ export class BaseEvent {
     if (this._listeners.has(event)) {
       listener
         ? this._listeners
-          .get(event)!
-          .splice(this._listeners.get(event)!.indexOf(listener), 1)
+            .get(event)!
+            .splice(this._listeners.get(event)!.indexOf(listener), 1)
         : this._listeners.delete(event)
     }
   }
