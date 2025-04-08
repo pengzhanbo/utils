@@ -1,23 +1,8 @@
 {
   "name": "@pengzhanbo/utils",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "exports": {
-    ".": "./src/index.ts",
-    "./array": "./src/array.ts",
-    "./clone": "./src/clone.ts",
-    "./common": "./src/common.ts",
-    "./equal": "./src/equal.ts",
-    "./event": "./src/event.ts",
-    "./function": "./src/function.ts",
-    "./is": "./src/is.ts",
-    "./math": "./src/math.ts",
-    "./object": "./src/object.ts",
-    "./promise": "./src/promise.ts",
-    "./string": "./src/string.ts",
-    "./time": "./src/time.ts",
-    "./types": "./src/types.ts",
-    "./url": "./src/url.ts",
-    "./throttle-debounce": "./src/throttle-debounce.ts"
+    ".": "./src/index.ts"
   },
   "include": [
     "src/**/*.ts",
@@ -25,7 +10,7 @@
     "README.md"
   ],
   "exclude": [
-    "src/*.test.ts",
+    "src/**/*.test.ts",
     "pnpm-lock.yaml",
     "eslint.config.js",
     "build.config.ts",
