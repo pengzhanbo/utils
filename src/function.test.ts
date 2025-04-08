@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
-import { compose, invoke, isTruthy, notUndefined, once } from './function'
+import { compose, invoke, once } from './function'
 
-describe('once', () => {
+describe('functions > once', () => {
   it('should work', () => {
     const fn = vi.fn()
     const onceFn = once(fn)
@@ -9,7 +9,8 @@ describe('once', () => {
     onceFn()
     expect(fn).toHaveBeenCalledTimes(1)
   })
-  it('should work with arguments', () => {
+
+  it('should work with once', () => {
     let id = 1
     const fn = vi.fn(() => id++)
     const onceFn = once(fn)
@@ -18,27 +19,14 @@ describe('once', () => {
     expect(fn).toHaveBeenCalledTimes(1)
     expect(id).toBe(2)
   })
-})
 
-describe('isTruthy', () => {
-  it('should work', () => {
-    expect(isTruthy(1)).toBe(true)
-    expect(isTruthy(0)).toBe(false)
-  })
-
-  it('should work with filter', () => {
-    expect([1, 2, 3, '', false, undefined].filter(isTruthy)).toEqual([1, 2, 3])
-  })
-})
-
-describe('notUndefined', () => {
-  it('should work', () => {
-    expect(notUndefined(1)).toBe(true)
-    expect(notUndefined(undefined)).toBe(false)
-  })
-
-  it('should work with filter', () => {
-    expect([1, 2, 3, '', false, undefined].filter(notUndefined)).toEqual([1, 2, 3, '', false])
+  it('should work with arguments', () => {
+    const fn = vi.fn((a: number, b: number) => a + b)
+    const onceFn = once(fn)
+    onceFn(1, 2)
+    onceFn(1, 2)
+    expect(fn).toHaveBeenCalledTimes(1)
+    expect(fn).toHaveBeenCalledWith(1, 2)
   })
 })
 
@@ -72,7 +60,6 @@ describe('compose', () => {
   }
 
   it('should work', () => {
-    // @ts-expect-error
     expect(compose()(1, 2)).toEqual([1, 2])
     expect(compose(add)(1, 2)).toBe(3)
     expect(compose(multiply, add)(1, 2)).toBe(6)
