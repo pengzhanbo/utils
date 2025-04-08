@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { chunk, intersection, move, range, remove, shuffle, sortBy, toArray, union, uniq, uniqueBy } from './array'
 
-describe('toArray', () => {
+describe('array > toArray', () => {
   it.each([
     [undefined, []],
     [null, []],
@@ -16,7 +16,7 @@ describe('toArray', () => {
   })
 })
 
-describe('uniq', () => {
+describe('array > uniq', () => {
   it.each([
     [[undefined, undefined], [undefined]],
     [[null, null], [null]],
@@ -34,7 +34,7 @@ describe('uniq', () => {
   })
 })
 
-describe('uniqueBy', () => {
+describe('array > uniqueBy', () => {
   const equalFn = (l: { a: number }, r: { a: number }) => l.a === r.a
   it.each([
     [[], []],
@@ -45,7 +45,7 @@ describe('uniqueBy', () => {
   })
 })
 
-describe('remove', () => {
+describe('array > remove', () => {
   it.each([
     [null, 0, null, false],
     [[], 0, [], false],
@@ -58,7 +58,7 @@ describe('remove', () => {
   })
 })
 
-describe('range', () => {
+describe('array > range', () => {
   it.each([
     [[0], []],
     [[5], [0, 1, 2, 3, 4]],
@@ -70,7 +70,7 @@ describe('range', () => {
   })
 })
 
-describe('move', () => {
+describe('array > move', () => {
   it.each([
     [null, 0, 0, null],
     [[], 0, 0, []],
@@ -84,7 +84,7 @@ describe('move', () => {
   })
 })
 
-describe('shuffle', () => {
+describe('array > shuffle', () => {
   it.each([
     [[]],
     [[1, 2]],
@@ -94,7 +94,7 @@ describe('shuffle', () => {
   })
 })
 
-describe('sortBy', () => {
+describe('array > sortBy', () => {
   it.each([
     [[], (v: number) => v, []],
     [[3, 4, 2, 5], (v: number) => v, [2, 3, 4, 5]],
@@ -118,7 +118,7 @@ describe('sortBy', () => {
   })
 })
 
-describe('chunk', () => {
+describe('array > chunk', () => {
   it.each([
     [[1, 2, 3, 4, 5], 2, [[1, 2], [3, 4], [5]]],
     [[1, 2, 3, 4, 5], 3, [[1, 2, 3], [4, 5]]],
@@ -129,7 +129,7 @@ describe('chunk', () => {
   })
 })
 
-describe('union', () => {
+describe('array > union', () => {
   it.each([
     [[], [], []],
     [[1, 2, 3], [], [1, 2, 3]],
@@ -142,7 +142,7 @@ describe('union', () => {
   })
 })
 
-describe('intersection', () => {
+describe('array > intersection', () => {
   it.each([
     [[], [], []],
     [[1, 2, 3], [], []],
