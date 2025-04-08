@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { deepEqual } from './equal'
 
 describe('deepEqual', () => {
-  it('should work', () => {
+  it('should be true', () => {
     expect(deepEqual(1, 1)).toBe(true)
     expect(deepEqual(undefined, undefined)).toBe(true)
     expect(deepEqual(null, null)).toBe(true)
@@ -14,7 +14,8 @@ describe('deepEqual', () => {
     expect(deepEqual({ a: { b: [1, 2] } }, { a: { b: [1, 2] } })).toBe(true)
   })
 
-  it('should not work', () => {
+  it('should be false', () => {
+    expect(deepEqual(+0, -0)).toBe(false)
     expect(deepEqual(1, 2)).toBe(false)
     expect(deepEqual(undefined, null)).toBe(false)
     expect(deepEqual([1, 2], [1, 2, 3])).toBe(false)
