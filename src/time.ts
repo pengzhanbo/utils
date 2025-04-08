@@ -19,8 +19,13 @@ export function timestamp(): number {
  * Check if two dates is same day
  * @category Time
  */
-export function isSameDay(v1: Date, v2?: Date): boolean {
-  v2 ||= new Date()
+export function isSameDay(date1: Date | number | string, date2?: Date | number | string): boolean {
+  if (!date2)
+    return false
+
+  const v1 = new Date(date1)
+  const v2 = new Date(date2)
+
   const y1 = v1.getFullYear()
   const m1 = v1.getMonth()
   const d1 = v1.getDate()
