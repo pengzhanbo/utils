@@ -4,7 +4,8 @@
  * @module Object
  */
 
-import type { DeepMerge, ObjectGet, ObjectKeyPaths } from './types'
+import type { DeepMerge, ObjectGet, ObjectKeyPaths } from './_internal/types'
+import { notNullish } from './guard'
 import { isArray, isPlainObject } from './is'
 
 /**
@@ -27,11 +28,17 @@ export function hasOwn<T>(obj: T, key: keyof any): key is keyof T {
  */
 export function deepFreeze<T>(obj: T): T {
   if (isArray(obj)) {
-    obj.forEach(item => deepFreeze(item))
+    for (let i = 0; i < obj.length; i++) {
+      deepFreeze(obj[i])
+    }
   }
   else if (isPlainObject(obj)) {
     Object.freeze(obj)
-    Object.keys(obj).forEach(key => deepFreeze(obj[key] as any))
+
+    const keys = Object.keys(obj)
+    for (let i = 0; i < keys.length; i++) {
+      deepFreeze(obj[keys[i]])
+    }
   }
   return obj
 }
@@ -73,6 +80,63 @@ export function objectGet<
     res = res?.[k]
 
   return res
+}
+
+/**
+ * Map key/value pairs for an object, and construct a new one
+ *
+ * 为一个对象映射键值对，并构造一个新对象
+ *
+ * @category Object
+ *
+ * Transform:
+ * @example
+ * ```
+ * objectMap({ a: 1, b: 2 }, (k, v) => [k.toString().toUpperCase(), v.toString()])
+ * // { A: '1', B: '2' }
+ * ```
+ *
+ * Swap key/value:
+ * @example
+ * ```
+ * objectMap({ a: 1, b: 2 }, (k, v) => [v, k])
+ * // { 1: 'a', 2: 'b' }
+ * ```
+ *
+ * Filter keys:
+ * @example
+ * ```
+ * objectMap({ a: 1, b: 2 }, (k, v) => k === 'a' ? undefined : [k, v])
+ * // { b: 2 }
+ * ```
+ */
+export function objectMap<K extends string, V, NK extends PropertyKey = K, NV = V>(
+  obj: Record<K, V>,
+  fn: (key: K, value: V) => [NK, NV] | undefined,
+): Record<NK, NV> {
+  return Object.fromEntries(
+    Object.entries(obj)
+      .map(([k, v]) => fn(k as K, v as V))
+      .filter(notNullish),
+  ) as Record<NK, NV>
+}
+
+/**
+ * Strict typed `Object.keys`
+ *
+ * @category Object
+ */
+export function objectKeys<T extends object>(obj: T) {
+  return Object.keys(obj) as Array<`${keyof T & (string | number | boolean | null | undefined)}`>
+}
+
+/**
+ * Strict typed `Object.entries`
+ *
+ * @category Object
+ */
+export function objectEntries<T extends object>(obj: T) {
+  return Object.entries(obj) as Array<[keyof T, T[keyof T]]>
 }
 
 /**
@@ -150,9 +214,11 @@ export function deepMerge<T extends object = object, S extends object = T>(
     return target as any
 
   if (isMergableObject(target) && isMergableObject(source)) {
-    Object.keys(source).forEach((key) => {
+    const keys = Object.keys(source)
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i]
       if (key === '__proto__' || key === 'constructor' || key === 'prototype')
-        return
+        continue
 
       // @ts-expect-error source[key] can be any
       if (isMergableObject(source[key])) {
@@ -168,7 +234,7 @@ export function deepMerge<T extends object = object, S extends object = T>(
         // @ts-expect-error target[key] can be any
         target[key] = source[key]
       }
-    })
+    }
   }
 
   return deepMerge(target, ...sources)
@@ -206,9 +272,11 @@ export function deepMergeWithArray<
     target.push(...source)
 
   if (isMergableObject(target) && isMergableObject(source)) {
-    Object.keys(source).forEach((key) => {
+    const keys = Object.keys(source)
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i]
       if (key === '__proto__' || key === 'constructor' || key === 'prototype')
-        return
+        continue
 
       // @ts-expect-error source[key] can be any
       if (Array.isArray(source[key])) {
@@ -235,7 +303,7 @@ export function deepMergeWithArray<
         // @ts-expect-error source[key] can be any
         target[key] = source[key]
       }
-    })
+    }
   }
 
   return deepMergeWithArray(target, ...sources)
