@@ -1,11 +1,5 @@
 import { expect, it } from 'vitest'
-import { camelCase, capitalize, ensurePrefix, ensureSuffix, kebabCase, lowerCase, pascalCase, slash, snakeCase, upperCase, words } from './string'
-
-it('slash', () => {
-  expect(slash('')).toEqual('')
-  expect(slash('foo\\bar')).toEqual('foo/bar')
-  expect(slash('foo\\\\bar/\\baz')).toEqual('foo//bar//baz')
-})
+import { camelCase, capitalize, ensurePrefix, ensureSuffix, kebabCase, lowerCase, pascalCase, snakeCase, upperCase, words } from './string'
 
 it('ensurePrefix', () => {
   expect(ensurePrefix('foo', 'bar')).toEqual('foobar')

@@ -3,20 +3,6 @@
  *
  * @module String
  */
-/**
- * Replace all backslashes with forward slashes
- *
- * 将所有反斜杠替换为正斜杠
- *
- * @category String
- * @example
- * ```ts
- * slash('foo\\bar') // => foo/bar
- * ```
- */
-export function slash(s: string): string {
-  return s.replace(/\\/g, '/')
-}
 
 /**
  * Ensure prefix, if str does not start with prefix, it will be added
