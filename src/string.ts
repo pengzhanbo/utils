@@ -187,3 +187,40 @@ export function pascalCase(str: string): string {
 
   return parts.map(word => capitalize(word)).join('')
 }
+
+const htmlEscapes: Record<string, string> = {
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  '\'': '&#39;',
+}
+const RE_ESCAPE = /[&<>"']/g
+
+/**
+ * Converts the characters "&", "<", ">", '"', and "'" in `str` to their corresponding HTML entities.
+ *
+ * @category String
+ * @example
+ * ```ts
+ * escape('<script>alert(1)</script>') // => &lt;script&gt;alert(1)&lt;/script&gt;
+ * ```
+ */
+export function escape(str: string): string {
+  return str.replace(RE_ESCAPE, match => htmlEscapes[match])
+}
+
+const RE_ESCAPE_REGEXP = /[\\^$.*+?()[\]{}|]/g
+
+/**
+ * Escapes the RegExp special characters "^", "$", "\\", ".", "*", "+", "?", "(", ")", "[", "]", "{", "}", and "|" in `str`.
+ *
+ * @category String
+ * @example
+ * ```ts
+ * escapeRegExp('[link](https://sub.domain.com/)'); // '\[link\]\(https://sub\.domain\.com/\)'
+ * ```
+ */
+export function escapeRegExp(str: string): string {
+  return str.replace(RE_ESCAPE_REGEXP, '\\$&')
+}

@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest'
-import { camelCase, capitalize, ensurePrefix, ensureSuffix, kebabCase, lowerCase, pascalCase, snakeCase, upperCase, words } from './string'
+import { camelCase, capitalize, ensurePrefix, ensureSuffix, escape, escapeRegExp, kebabCase, lowerCase, pascalCase, snakeCase, upperCase, words } from './string'
 
 it('ensurePrefix', () => {
   expect(ensurePrefix('foo', 'bar')).toEqual('foobar')
@@ -95,4 +95,27 @@ it('pascalCase', () => {
   expect(pascalCase('ABC')).toEqual('Abc')
   expect(pascalCase('__ABC__')).toEqual('Abc')
   expect(pascalCase('__orderBy__')).toEqual('OrderBy')
+})
+
+it('escape', () => {
+  expect(escape('')).toEqual('')
+  expect(escape('<')).toEqual('&lt;')
+  expect(escape('<a>')).toEqual('&lt;a&gt;')
+  expect(escape('<a href="https://example.com">')).toEqual('&lt;a href=&quot;https://example.com&quot;&gt;')
+  expect(escape('<script>alert(1)</script>')).toEqual('&lt;script&gt;alert(1)&lt;/script&gt;')
+  expect(escape('&')).toEqual('&amp;')
+  expect(escape('"')).toEqual('&quot;')
+  expect(escape('\'')).toEqual('&#39;')
+  expect(escape('<>&"\'')).toEqual('&lt;&gt;&amp;&quot;&#39;')
+  expect(escape('normal text')).toEqual('normal text')
+  expect(escape('1234567890')).toEqual('1234567890')
+  expect(escape(' ')).toEqual(' ')
+  expect(escape('\n')).toEqual('\n')
+})
+
+it('escapeRegExp', () => {
+  const escaped = '\\^\\$\\.\\*\\+\\?\\(\\)\\[\\]\\{\\}\\|\\\\'
+  const unescaped = '^$.*+?()[]{}|\\'
+  expect(escapeRegExp(unescaped + unescaped)).toBe(escaped + escaped)
+  expect(escapeRegExp('abc')).toBe('abc')
 })
