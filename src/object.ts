@@ -125,6 +125,10 @@ export function objectMap<K extends string, V, NK extends PropertyKey = K, NV = 
  * Strict typed `Object.keys`
  *
  * @category Object
+ * @example
+ * ```ts
+ * objectKeys({ a: 1, b: 2 }) // => ['a', 'b']
+ * ```
  */
 export function objectKeys<T extends object>(obj: T): Array<`${keyof T & (string | number | boolean | null | undefined)}`> {
   return Object.keys(obj) as Array<`${keyof T & (string | number | boolean | null | undefined)}`>
@@ -134,6 +138,10 @@ export function objectKeys<T extends object>(obj: T): Array<`${keyof T & (string
  * Strict typed `Object.entries`
  *
  * @category Object
+ * @example
+ * ```ts
+ * objectEntries({ a: 1, b: 2 }) // => [['a', 1], ['b', 2]]
+ * ```
  */
 export function objectEntries<T extends object>(obj: T): Array<[keyof T, T[keyof T]]> {
   return Object.entries(obj) as Array<[keyof T, T[keyof T]]>
