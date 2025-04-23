@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest'
-import { camelCase, capitalize, ensurePrefix, ensureSuffix, escape, escapeRegExp, kebabCase, lowerCase, pascalCase, snakeCase, upperCase, words } from './string'
+import { camelCase, capitalize, ensurePrefix, ensureSuffix, escape, escapeRegExp, kebabCase, lowerCase, pascalCase, snakeCase, unescape, upperCase, words } from './string'
 
 it('ensurePrefix', () => {
   expect(ensurePrefix('foo', 'bar')).toEqual('foobar')
@@ -118,4 +118,19 @@ it('escapeRegExp', () => {
   const unescaped = '^$.*+?()[]{}|\\'
   expect(escapeRegExp(unescaped + unescaped)).toBe(escaped + escaped)
   expect(escapeRegExp('abc')).toBe('abc')
+})
+
+it('unescape', () => {
+  let escaped = '&amp;&lt;&gt;&quot;&#39;/'
+  let unescaped = '&<>"\'/'
+  escaped += escaped
+  unescaped += unescaped
+
+  expect(unescape('&amp;lt;')).toBe('&lt;')
+  expect(unescape(escaped)).toBe(unescaped)
+  expect(unescape('abc')).toBe('abc')
+  expect(unescape(escape(unescaped))).toBe(unescaped)
+  expect(unescape('&#39;')).toBe('\'')
+  expect(unescape('&#039;')).toBe('\'')
+  expect(unescape('&#000039;')).toBe('\'')
 })

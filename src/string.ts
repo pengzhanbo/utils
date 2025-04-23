@@ -224,3 +224,29 @@ const RE_ESCAPE_REGEXP = /[\\^$.*+?()[\]{}|]/g
 export function escapeRegExp(str: string): string {
   return str.replace(RE_ESCAPE_REGEXP, '\\$&')
 }
+
+const htmlUnescapes: Record<string, string> = {
+  '&amp;': '&',
+  '&lt;': '<',
+  '&gt;': '>',
+  '&quot;': '"',
+  '&#39;': '\'',
+}
+const RE_UNESCAPE = /&(?:amp|lt|gt|quot|#(0+)?39);/g
+
+/**
+ * Converts the HTML entities `&amp;`, `&lt;`, `&gt;`, `&quot;`, and `&#39;` in `str` to their corresponding characters.
+ * It is the inverse of `escape`.
+ *
+ * 将`str`中的HTML实体`&amp;`、`&lt;`、`&gt;`、`&quot;`和`&#39;`转换回对应的字符。
+ * 此操作是`escape`的逆向过程。
+ *
+ * @category String
+ * @example
+ * ```ts
+ * unescape('&lt;script&gt;alert(1)&lt;/script&gt;') // => <script>alert(1)</script>
+ * ```
+ */
+export function unescape(str: string): string {
+  return str.replace(RE_UNESCAPE, match => htmlUnescapes[match] || '\'')
+}
