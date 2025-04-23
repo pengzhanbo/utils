@@ -200,6 +200,8 @@ const RE_ESCAPE = /[&<>"']/g
 /**
  * Converts the characters "&", "<", ">", '"', and "'" in `str` to their corresponding HTML entities.
  *
+ * 将`str`中的字符"&"、"<"、">"、'"'和"'"转换为对应的HTML实体。
+ *
  * @category String
  * @example
  * ```ts
@@ -214,6 +216,8 @@ const RE_ESCAPE_REGEXP = /[\\^$.*+?()[\]{}|]/g
 
 /**
  * Escapes the RegExp special characters "^", "$", "\\", ".", "*", "+", "?", "(", ")", "[", "]", "{", "}", and "|" in `str`.
+ *
+ * 转义`str`中的正则表达式特殊字符"^"、"$"、"\\"、"."、"*"、"+"、"?"、"("、")"、"["、"]"、"{"、"}"以及"|"。
  *
  * @category String
  * @example
