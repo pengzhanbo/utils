@@ -91,6 +91,14 @@ export function random(max: number, float?: boolean): number
  * ```
  */
 export function random(min: number, max: number, float?: boolean): number
+/**
+ * Random number between min and max
+ *
+ * 返回一个介于 min 和 max 之间的随机数
+ *
+ * @param args
+ * @returns a random number / 返回一个随机数
+ */
 export function random(...args: any[]): number {
   let min, max, float
   if (args.length === 1) {

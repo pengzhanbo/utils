@@ -14,8 +14,7 @@ export type ObjectKeyPaths<
   IsRoot extends boolean = true,
   K extends keyof T = keyof T,
 > = K extends string | number
-  ?
-  | GenNode<K, IsRoot>
+  ? | GenNode<K, IsRoot>
   | (T[K] extends object
     ? `${GenNode<K, IsRoot>}${ObjectKeyPaths<T[K], false>}`
     : never)

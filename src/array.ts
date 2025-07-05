@@ -133,6 +133,14 @@ export function range(stop: number): number[]
  * ```
  */
 export function range(start: number, stop: number, step?: number): number[]
+/**
+ * Generate a range array of numbers. The `stop` is exclusive.
+ *
+ * 生成一个数字范围的数组, `stop` 是不包含的。
+ *
+ * @param args
+ * @returns - a range array of numbers / 返回一个数字范围的数组
+ */
 export function range(...args: any): number[] {
   let start, stop, step
   if (args.length === 1) {
