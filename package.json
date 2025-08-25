@@ -2,7 +2,7 @@
   "name": "@pengzhanbo/utils",
   "type": "module",
   "version": "2.1.0",
-  "packageManager": "pnpm@10.12.4",
+  "packageManager": "pnpm@10.15.0",
   "author": "pengzhanbo <volodymyr@foxmail.com> (https://github.com/pengzhanbo)",
   "license": "MIT",
   "homepage": "https://github.com/pengzhanbo/utils",
@@ -32,14 +32,14 @@
     "release": "bumpp package.json --commit --push --tag && npm publish --access public"
   },
   "devDependencies": {
-    "@pengzhanbo/eslint-config": "^1.34.0",
-    "@types/node": "^22.16.0",
+    "@pengzhanbo/eslint-config": "^1.36.0",
+    "@types/node": "^22.18.0",
     "@vitest/coverage-istanbul": "^3.2.4",
-    "bumpp": "^10.2.0",
-    "cross-env": "^7.0.3",
-    "eslint": "^9.30.1",
-    "typescript": "^5.8.3",
-    "unbuild": "^3.5.0",
+    "bumpp": "^10.2.3",
+    "cross-env": "^10.0.0",
+    "eslint": "^9.34.0",
+    "typescript": "^5.9.2",
+    "unbuild": "^3.6.1",
     "vitest": "^3.2.4"
   }
 }
