@@ -37,7 +37,7 @@ export function deepFreeze<T>(obj: T): T {
 
     const keys = Object.keys(obj)
     for (let i = 0; i < keys.length; i++) {
-      deepFreeze(obj[keys[i]])
+      deepFreeze(obj[keys[i]!])
     }
   }
   return obj

@@ -181,7 +181,7 @@ export function move<T>(arr: T[], from: number, to: number): T[] {
   if (!isArray(arr) || arr.length === 0) {
     return arr
   }
-  arr.splice(to, 0, arr.splice(from, 1)[0])
+  arr.splice(to, 0, arr.splice(from, 1)[0]!)
   return arr
 }
 
@@ -199,7 +199,7 @@ export function move<T>(arr: T[], from: number, to: number): T[] {
 export function shuffle<T>(array: T[]): T[] {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1))
-    ;[array[i], array[j]] = [array[j], array[i]]
+    ;[array[i], array[j]] = [array[j]!, array[i]!]
   }
   return array
 }

@@ -157,7 +157,6 @@ export function isWindow(v: unknown): boolean {
  */
 export function isBrowser(): boolean {
   /* istanbul ignore next -- @preserve */
-  // @ts-expect-error 跳过环境检查
   return typeof window !== 'undefined'
 }
 
@@ -173,7 +172,7 @@ export function isJSONObject(obj: unknown): obj is Record<string, any> {
   const keys = Reflect.ownKeys(obj)
 
   for (let i = 0; i < keys.length; i++) {
-    const key = keys[i]
+    const key = keys[i]!
     const value = obj[key]
 
     /* istanbul ignore if -- @preserve */

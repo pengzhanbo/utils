@@ -162,7 +162,7 @@ export function copyProperties<T>(
   const keys = [...Object.keys(source), ...getSymbols(source)]
 
   for (let i = 0; i < keys.length; i++) {
-    const key = keys[i]
+    const key = keys[i]!
     const descriptor = Object.getOwnPropertyDescriptor(target, key)
 
     if (descriptor == null || descriptor.writable) {

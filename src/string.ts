@@ -70,7 +70,7 @@ export function words(str: string): string[] {
 export function capitalize(s: string): string {
   if (!s)
     return s
-  return s[0].toUpperCase() + s.slice(1).toLowerCase()
+  return s[0]!.toUpperCase() + s.slice(1).toLowerCase()
 }
 
 /**
@@ -129,7 +129,7 @@ export function camelCase(str: string): string {
 
   const [first, ...rest] = parts
 
-  return `${first.toLowerCase()}${rest.map(word => capitalize(word)).join('')}`
+  return `${first!.toLowerCase()}${rest.map(word => capitalize(word)).join('')}`
 }
 
 /**
@@ -209,7 +209,7 @@ const RE_ESCAPE = /[&<>"']/g
  * ```
  */
 export function escape(str: string): string {
-  return str.replace(RE_ESCAPE, match => htmlEscapes[match])
+  return str.replace(RE_ESCAPE, match => htmlEscapes[match]!)
 }
 
 const RE_ESCAPE_REGEXP = /[\\^$.*+?()[\]{}|]/g

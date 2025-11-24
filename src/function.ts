@@ -86,9 +86,9 @@ export function compose<T extends ComposeFn[] = ComposeFn[]>(
     if (len === 0)
       return args
     if (len === 1)
-      return fns[0](...args)
+      return fns[0]!(...args)
     return fns
       .slice(0, -1)
-      .reduceRight((acc, fn) => fn(acc), fns[len - 1](...args))
+      .reduceRight((acc, fn) => fn(acc), fns[len - 1]!(...args))
   }
 }
