@@ -2,8 +2,8 @@
   "name": "@pengzhanbo/utils",
   "type": "module",
   "version": "2.1.0",
-  "packageManager": "pnpm@10.15.0",
-  "author": "pengzhanbo <volodymyr@foxmail.com> (https://github.com/pengzhanbo)",
+  "packageManager": "pnpm@10.23.0",
+  "author": "pengzhanbo <q942450674@outlook.com> (https://github.com/pengzhanbo)",
   "license": "MIT",
   "homepage": "https://github.com/pengzhanbo/utils",
   "repository": {
@@ -25,21 +25,23 @@
     "dist"
   ],
   "scripts": {
-    "build": "unbuild",
+    "build": "tsdown",
     "lint": "eslint .",
     "prepublishOnly": "pnpm run build",
     "test": "cross-env TZ=Etc/UTC vitest --coverage",
-    "release": "bumpp package.json --commit --push --tag && npm publish --access public"
+    "release:publish": "pnpm publish --provenance --access public",
+    "release": "bumpp package.json jsr.json --commit \"build: publish v%s\" --push --tag --all"
   },
   "devDependencies": {
-    "@pengzhanbo/eslint-config": "^1.36.0",
-    "@types/node": "^22.18.0",
-    "@vitest/coverage-istanbul": "^3.2.4",
-    "bumpp": "^10.2.3",
-    "cross-env": "^10.0.0",
-    "eslint": "^9.34.0",
-    "typescript": "^5.9.2",
-    "unbuild": "^3.6.1",
-    "vitest": "^3.2.4"
+    "@pengzhanbo/eslint-config": "^1.41.0",
+    "@pengzhanbo/tsconfig": "^1.41.0",
+    "@types/node": "^22.19.1",
+    "@vitest/coverage-istanbul": "^4.0.13",
+    "bumpp": "^10.3.1",
+    "cross-env": "^10.1.0",
+    "eslint": "^9.39.1",
+    "tsdown": "^0.16.6",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.13"
   }
 }
