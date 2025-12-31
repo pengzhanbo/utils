@@ -32,7 +32,8 @@ describe('clone > shallowClone', () => {
     expect(shallowClone(new SharedArrayBuffer(1))).toEqual(new SharedArrayBuffer(1))
     expect(shallowClone(/a/)).toEqual(/a/)
     expect(shallowClone(new DataView(new ArrayBuffer(1)))).toEqual(new DataView(new ArrayBuffer(1)))
-    expect(shallowClone(new File(['a'], 'a'))).toEqual(new File(['a'], 'a'))
+    const file = new File(['a'], 'a')
+    expect(shallowClone(file)).toEqual(file)
   })
 
   it('should clone Error', () => {
