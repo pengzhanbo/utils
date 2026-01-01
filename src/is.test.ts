@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest'
-import { isArray, isBlob, isBoolean, isDate, isDef, isEmptyObject, isFunction, isJSONArray, isJSONObject, isJSONValue, isNull, isNumber, isPlainObject, isPrimitive, isRegexp, isString, isSymbol, isTypedArray, isUndefined } from './is'
+import { isArray, isBlob, isBoolean, isDate, isDef, isEmptyObject, isFinite, isFunction, isInteger, isJSONArray, isJSONObject, isJSONValue, isNull, isNumber, isPlainObject, isPrimitive, isRegexp, isSafeInteger, isString, isSymbol, isTypedArray, isUndefined } from './is'
 
 it('isDef', () => {
   expect(isDef(undefined)).toBe(false)
@@ -229,4 +229,64 @@ it('isJSONObject', () => {
   expect(isJSONObject({})).toBe(true)
   expect(isJSONObject({ a: 1 })).toBe(true)
   expect(isJSONObject({ a: () => {}, [Symbol.iterator]: () => [] })).toBe(false)
+})
+
+it('isInteger', () => {
+  expect(isInteger(1)).toBe(true)
+  expect(isInteger(1.1)).toBe(false)
+  expect(isInteger(Number.NaN)).toBe(false)
+  expect(isInteger(Infinity)).toBe(false)
+  expect(isInteger(-Infinity)).toBe(false)
+
+  expect(isInteger(2 ** 53 - 1)).toBe(true)
+  expect(isInteger(2 ** 53)).toBe(true)
+  expect(isInteger(2 ** 53 + 1)).toBe(true)
+
+  expect(isInteger('1')).toBe(false)
+  expect(isInteger('')).toBe(false)
+  expect(isInteger('a')).toBe(false)
+
+  expect(isInteger({})).toBe(false)
+  expect(isInteger([])).toBe(false)
+  expect(isInteger(() => {})).toBe(false)
+})
+
+it('isSafeInteger', () => {
+  expect(isSafeInteger(1)).toBe(true)
+  expect(isSafeInteger(2 ** 53 - 1)).toBe(true)
+  expect(isSafeInteger(2 ** 53)).toBe(false)
+  expect(isSafeInteger(2 ** 53 + 1)).toBe(false)
+  expect(isSafeInteger(Number.MAX_SAFE_INTEGER)).toBe(true)
+  expect(isSafeInteger(Number.MAX_SAFE_INTEGER + 1)).toBe(false)
+  expect(isSafeInteger(Number.MIN_SAFE_INTEGER)).toBe(true)
+  expect(isSafeInteger(Number.MIN_SAFE_INTEGER - 1)).toBe(false)
+
+  expect(isSafeInteger(1.1)).toBe(false)
+  expect(isSafeInteger(Number.NaN)).toBe(false)
+  expect(isSafeInteger(Infinity)).toBe(false)
+  expect(isSafeInteger(-Infinity)).toBe(false)
+
+  expect(isSafeInteger('1')).toBe(false)
+  expect(isSafeInteger('')).toBe(false)
+  expect(isSafeInteger('a')).toBe(false)
+
+  expect(isSafeInteger({})).toBe(false)
+  expect(isSafeInteger([])).toBe(false)
+  expect(isSafeInteger(() => {})).toBe(false)
+})
+
+it('isFinite', () => {
+  expect(isFinite(1)).toBe(true)
+  expect(isFinite(2 ** 53 - 1)).toBe(true)
+  expect(isFinite(2 ** 53)).toBe(true)
+  expect(isFinite(2 ** 53 + 1)).toBe(true)
+  expect(isFinite(Number.MAX_SAFE_INTEGER)).toBe(true)
+  expect(isFinite(Number.MAX_SAFE_INTEGER + 1)).toBe(true)
+  expect(isFinite(Number.MIN_SAFE_INTEGER)).toBe(true)
+  expect(isFinite(Number.MIN_SAFE_INTEGER - 1)).toBe(true)
+
+  expect(isFinite(1.1)).toBe(true)
+  expect(isFinite(Number.NaN)).toBe(false)
+  expect(isFinite(Infinity)).toBe(false)
+  expect(isFinite(-Infinity)).toBe(false)
 })

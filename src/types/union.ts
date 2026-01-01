@@ -75,3 +75,14 @@ export type UnionToTuple<T, L = LastOfUnion<T>>
   = IsNever<T> extends false
     ? [...UnionToTuple<Exclude<T, L>>, L]
     : []
+
+/**
+ * A literal type that supports custom further strings but preserves autocompletion in IDEs.
+ *
+ * 支持自定义进一步字符串但保留IDE自动完成的字面量类型。
+ *
+ * @see https://github.com/microsoft/TypeScript/issues/29729#issuecomment-471566609
+ */
+export type LiteralUnion<Union extends Base, Base = string>
+  = | Union
+    | (Base & { __zz_IGNORE_ME__?: never })

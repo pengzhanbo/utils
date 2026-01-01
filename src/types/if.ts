@@ -65,3 +65,26 @@ export type IfNever<T, Y = true, N = false> = If<IsNever<T>, Y, N>
  * @category Types
  */
 export type IfUnknown<T, Y = true, N = false> = If<IsUnknown<T>, Y, N>
+
+/**
+ * An if-else-like type that resolves depending on whether the given type is `any` or `never`.
+ *
+ * 一种类似if-else的类型，根据给定类型是`any`还是`never`来解析。
+ *
+ * @example
+ * ```ts
+ * // When `T` is a NOT `any` or `never` (like `string`) => Returns `IfNotAnyOrNever` branch
+ * type A = IfNotAnyOrNever<string, 'VALID', 'IS_ANY', 'IS_NEVER'>;
+ * //=> 'VALID'
+ *
+ * // When `T` is `any` => Returns `IfAny` branch
+ * type B = IfNotAnyOrNever<any, 'VALID', 'IS_ANY', 'IS_NEVER'>;
+ * //=> 'IS_ANY'
+ *
+ * // When `T` is `never` => Returns `IfNever` branch
+ * type C = IfNotAnyOrNever<never, 'VALID', 'IS_ANY', 'IS_NEVER'>;
+ * //=> 'IS_NEVER'
+ * ```
+ */
+export type IfNotAnyOrNever<T, IfNotAnyOrNever, IfAny = any, IfNever = never>
+  = If<IsAny<T>, IfAny, If<IsNever<T>, IfNever, IfNotAnyOrNever>>

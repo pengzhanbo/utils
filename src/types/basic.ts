@@ -52,3 +52,14 @@ export type ElementOf<T> = T extends (infer E)[] ? E : never
  * @category Types
  */
 export type LooseRequired<T> = { [P in keyof (T & Required<T>)]: T[P] }
+
+/**
+ * Negate a boolean type
+ *
+ * @category Types
+ */
+export type Not<A extends boolean> = A extends true
+  ? false
+  : A extends false
+    ? true
+    : never

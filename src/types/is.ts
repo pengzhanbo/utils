@@ -1,4 +1,5 @@
-import type { Primitive } from './basic'
+import type { Not, Primitive } from './basic'
+import type { NegativeInfinity, PositiveInfinity } from './numeric'
 
 /**
  * If the type T accepts type `Primitive`, output type true, otherwise output type false.
@@ -129,3 +130,67 @@ type InternalIsUnion<T, U = T>
 export type IsEqual<X, Y> = (<T>() => T extends X ? 1 : 2) extends <T>() => T extends Y ? 1 : 2
   ? true
   : false
+
+/**
+ * Returns a boolean for whether the given `boolean` is not `false`.
+ *
+ * 返回一个布尔值，表示给定的`boolean`是否不为`false`。
+ *
+ * @category Types
+ */
+export type IsNotFalse<T extends boolean> = [T] extends [false] ? false : true
+
+/**
+ * Returns a boolean for whether the given type is `any` or `never`.
+ *
+ * This type can be better to use than {@link IfNotAnyOrNever `IfNotAnyOrNever`} in recursive types because it does not evaluate any branches.
+ *
+ * 返回一个布尔值，用于判断给定类型是否为 `any` 或 `never`。
+ *
+ * 在递归类型中使用此类型比使用 {@link IfNotAnyOrNever} 更优，因为它不会评估任何分支。
+ *
+ * @example
+ * ```
+ * // When `T` is a NOT `any` or `never` (like `string`) => Returns `false`
+ * type A = IsAnyOrNever<string>;
+ * //=> false
+ *
+ * // When `T` is `any` => Returns `true`
+ * type B = IsAnyOrNever<any>;
+ * //=> true
+ *
+ * // When `T` is `never` => Returns `true`
+ * type C = IsAnyOrNever<never>;
+ * //=> true
+ * ```
+ *
+ * @category Types
+ */
+export type IsAnyOrNever<T> = IsNotFalse<IsAny<T> | IsNever<T>>
+
+/**
+ * Returns a boolean for whether the given number is a float, like `1.5` or `-1.5`.
+ *
+ * 返回一个布尔值，表示给定的数字是否为浮点数，例如 `1.5` 或 `-1.5`。
+ *
+ * @category Types
+ */
+export type IsFloat<T> = T extends number
+  ? `${T}` extends `${number}e${infer E extends '-' | '+'}${number}`
+    ? E extends '-'
+      ? true
+      : false
+    : `${T}` extends `${number}.${number}`
+      ? true
+      : false
+  : false
+
+export type IsInteger<T> = T extends bigint
+  ? true
+  : T extends number
+    ? number extends T
+      ? false
+      : T extends PositiveInfinity | NegativeInfinity
+        ? false
+        : Not<IsFloat<T>>
+    : false

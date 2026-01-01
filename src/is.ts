@@ -1,3 +1,4 @@
+import type { Finite, Integer } from './types'
 /**
  * Type check
  *
@@ -157,7 +158,7 @@ export function isWindow(v: unknown): boolean {
  */
 export function isBrowser(): boolean {
   /* istanbul ignore next -- @preserve */
-  return typeof window !== 'undefined'
+  return typeof window !== 'undefined' && window.document != null
 }
 
 /**
@@ -217,4 +218,55 @@ export function isJSONValue(value: unknown): value is Record<string, any> | any[
     default:
       return false
   }
+}
+
+/**
+ * Checks if the input is an integer
+ *
+ * 检查输入是否为整数
+ *
+ * @category Is
+ *
+ * @example
+ * ```ts
+ * isInteger(1) // => true
+ * isInteger(1.1) // => false
+ * ```
+ */
+export function isInteger<T>(v: T): v is Integer<T> {
+  return Number.isInteger(v)
+}
+
+/**
+ * A strongly-typed version of `Number.isSafeInteger()`.
+ *
+ * `Number.isSafeInteger()` 的强类型版本。
+ *
+ * @category Is
+ *
+ * @example
+ * ```ts
+ * isSafeInteger(1) // => true
+ * isSafeInteger(1.1) // => false
+ * ```
+ */
+export function isSafeInteger<T>(v: T): v is Integer<T> {
+  return Number.isSafeInteger(v)
+}
+
+/**
+ * A strongly-typed version of `Number.isFinite()`.
+ *
+ * `Number.isFinite()` 的强类型版本。
+ *
+ * @category Is
+ *
+ * @example
+ * ```ts
+ * isFinite(1) // => true
+ * isFinite(Number.INFINITY) // => true
+ * ```
+ */
+export function isFinite<T extends number>(v: T): v is Finite<T> {
+  return Number.isFinite(v)
 }
