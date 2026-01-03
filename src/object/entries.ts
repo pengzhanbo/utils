@@ -1,6 +1,6 @@
 /**
  * Strict typed `Object.entries`
- * 
+ *
  * 严格类型的 `Object.entries`
  *
  * @category Object
