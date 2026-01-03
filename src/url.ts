@@ -6,6 +6,7 @@
 
 import { ensurePrefix, ensureSuffix } from './string'
 
+const RE_SLASH = /\\/g
 /**
  * Replace all backslashes with forward slashes
  *
@@ -18,7 +19,7 @@ import { ensurePrefix, ensureSuffix } from './string'
  * ```
  */
 export function slash(s: string): string {
-  return s.replace(/\\/g, '/')
+  return s.replace(RE_SLASH, '/')
 }
 
 /**
@@ -33,7 +34,7 @@ export function slash(s: string): string {
  * ```
  */
 export function ensureLeadingSlash(str: string): string {
-  return ensurePrefix('/', slash(str))
+  return ensurePrefix(slash(str), '/')
 }
 
 /**
@@ -48,7 +49,7 @@ export function ensureLeadingSlash(str: string): string {
  * ```
  */
 export function ensureTrailingSlash(str: string): string {
-  return ensureSuffix('/', slash(str))
+  return ensureSuffix(slash(str), '/')
 }
 
 /**

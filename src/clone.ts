@@ -14,6 +14,7 @@ import { hasOwn } from './object'
  * simple clone, use JSON.parse and JSON.stringify
  *
  * 简单的克隆,使用 JSON.parse 和 JSON.stringify
+ *
  * @category Clone
  */
 export function simpleClone<T = any>(source: T): T {

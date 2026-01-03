@@ -1,4 +1,15 @@
 /**
+ * Get the string representation of a value
+ *
+ * 获取值的字符串表示
+ *
+ * @category Common
+ */
+export function toString(s: unknown): string {
+  return Object.prototype.toString.call(s)
+}
+
+/**
  * guard function that returns if val is truthy
  *
  * 守卫函数，返回 val 是否为真值
@@ -6,10 +17,10 @@
  * @category Function
  * @example
  * ```ts
- * [1, 2, 3, '', false, undefined].filter(isTruthy) // => [1, 2, 3]
+ * [1, 2, 3, '', false, undefined].filter(toTruthy) // => [1, 2, 3]
  * ```
  */
-export function isTruthy(val: unknown): boolean {
+export function toTruthy(val: unknown): boolean {
   return Boolean(val)
 }
 

@@ -1,14 +1,40 @@
-import type { Finite, Integer } from './types'
 /**
- * Type check
+ * Predicate helpers
  *
- * @module Is
+ * @module Predicate
  */
-import { getTypeName } from './common'
+
+import type { Finite, Integer } from './types'
+import { toString } from './guard'
+
+export function typeOf(s: unknown): string {
+  return s === null
+    ? 'null'
+    : typeof s === 'object' || typeof s === 'function'
+      ? toString(s).slice(8, -1).toLowerCase()
+      : typeof s
+}
+
+/**
+ * Checks if a value is of a given type
+ *
+ * 检查值是否为给定类型
+ *
+ * @category Common
+ * @example
+ * ```ts
+ * isTypeof(null, 'null') // => true
+ * isTypeof(undefined, 'undefined') // => true
+ * isTypeof({}, 'object') // => true
+ * ```
+ */
+export function isTypeof(s: unknown, type: string): boolean {
+  return typeOf(s) === type
+}
 
 /**
  * Checks if the input is defined
- * @category Is
+ * @category Predicate
  */
 export function isDef<T = any>(v?: T): v is T {
   return typeof v !== 'undefined'
@@ -16,7 +42,7 @@ export function isDef<T = any>(v?: T): v is T {
 
 /**
  * Checks if the input is a primitive
- * @category Is
+ * @category Predicate
  */
 export function isPrimitive(v: unknown): v is null | undefined | boolean | number | string | symbol | bigint {
   return v === null || (typeof v !== 'object' && typeof v !== 'function')
@@ -24,7 +50,7 @@ export function isPrimitive(v: unknown): v is null | undefined | boolean | numbe
 
 /**
  * Checks if the input is a boolean
- * @category Is
+ * @category Predicate
  */
 export function isBoolean(v: unknown): v is boolean {
   return typeof v === 'boolean'
@@ -32,7 +58,7 @@ export function isBoolean(v: unknown): v is boolean {
 
 /**
  * Checks if the input is a function.
- * @category Is
+ * @category Predicate
  */
 export function isFunction<T extends (...args: any[]) => any>(v: unknown): v is T {
   return typeof v === 'function'
@@ -40,7 +66,7 @@ export function isFunction<T extends (...args: any[]) => any>(v: unknown): v is 
 
 /**
  * Checks if the input is a number
- * @category Is
+ * @category Predicate
  */
 export function isNumber(v: unknown): v is number {
   return typeof v === 'number'
@@ -48,7 +74,7 @@ export function isNumber(v: unknown): v is number {
 
 /**
  * Checks if the input is a string
- * @category Is
+ * @category Predicate
  */
 export function isString(v: unknown): v is string {
   return typeof v === 'string'
@@ -56,7 +82,7 @@ export function isString(v: unknown): v is string {
 
 /**
  * Checks if the input is a symbol
- * @category Is
+ * @category Predicate
  */
 export function isSymbol(v: unknown): v is symbol {
   return typeof v === 'symbol'
@@ -64,15 +90,15 @@ export function isSymbol(v: unknown): v is symbol {
 
 /**
  * Checks if the input is an object
- * @category Is
+ * @category Predicate
  */
 export function isPlainObject(v: unknown): v is Record<PropertyKey, unknown> {
-  return getTypeName(v) === 'object'
+  return isTypeof(v, 'object')
 }
 
 /**
  * Checks if the input is an array
- * @category Is
+ * @category Predicate
  */
 export function isArray<T>(v: unknown): v is T[] {
   return Array.isArray(v)
@@ -80,6 +106,8 @@ export function isArray<T>(v: unknown): v is T[] {
 
 /**
  * Checks if the input is undefined
+ *
+ * @category Predicate
  */
 export function isUndefined(v: unknown): v is undefined {
   return typeof v === 'undefined'
@@ -87,31 +115,45 @@ export function isUndefined(v: unknown): v is undefined {
 
 /**
  * Checks if the input is null
- * @category Is
+ * @category Predicate
  */
 export function isNull(v: unknown): v is null {
-  return getTypeName(v) === 'null'
+  return isTypeof(v, 'null')
 }
 
 /**
  * Checks if the input is a regexp
- * @category Is
+ * @category Predicate
  */
 export function isRegexp(v: unknown): v is RegExp {
-  return getTypeName(v) === 'regexp'
+  return isTypeof(v, 'regexp')
 }
 
 /**
  * Checks if the input is a date
- * @category Is
+ * @category Predicate
  */
 export function isDate(v: unknown): v is Date {
-  return getTypeName(v) === 'date'
+  return isTypeof(v, 'date')
+}
+
+/**
+ * Check if an object has a property
+ *
+ * 检查一个对象是否有属性
+ *
+ * @category Predicate
+ */
+export function isKeyof<T extends object>(
+  obj: T,
+  key: PropertyKey,
+): key is keyof T {
+  return key in obj
 }
 
 /**
  * Checks if the input is an empty object
- * @category Is
+ * @category Predicate
  */
 export function isEmptyObject(v: unknown): boolean {
   if (!isPlainObject(v))
@@ -125,7 +167,7 @@ export function isEmptyObject(v: unknown): boolean {
 
 /**
  * Checks if the input is a blob
- * @category Is
+ * @category Predicate
  */
 export function isBlob(v: unknown): v is Blob {
   /* istanbul ignore if -- @preserve */
@@ -137,7 +179,7 @@ export function isBlob(v: unknown): v is Blob {
 
 /**
  * Checks if the input is a typed array
- * @category Is
+ * @category Predicate
  */
 export function isTypedArray(v: unknown): v is Int8Array | Uint8Array | Uint8ClampedArray | Int16Array | Uint16Array | Int32Array | Uint32Array | Float32Array | Float64Array {
   return ArrayBuffer.isView(v) && !(v instanceof DataView)
@@ -145,16 +187,16 @@ export function isTypedArray(v: unknown): v is Int8Array | Uint8Array | Uint8Cla
 
 /**
  * Checks if the input is a window
- * @category Is
+ * @category Predicate
  */
-export function isWindow(v: unknown): boolean {
+export function isWindow(): boolean {
   /* istanbul ignore next -- @preserve */
-  return typeof v !== 'undefined' && getTypeName(v) === 'window'
+  return typeof window !== 'undefined' && isTypeof(window, 'window')
 }
 
 /**
  * Checks if the input is a browser
- * @category Is
+ * @category Predicate
  */
 export function isBrowser(): boolean {
   /* istanbul ignore next -- @preserve */
@@ -163,7 +205,7 @@ export function isBrowser(): boolean {
 
 /**
  * Checks if a value is a JSON object.
- * @category Is
+ * @category Predicate
  */
 export function isJSONObject(obj: unknown): obj is Record<string, any> {
   if (!isPlainObject(obj)) {
@@ -191,7 +233,7 @@ export function isJSONObject(obj: unknown): obj is Record<string, any> {
 
 /**
  * Checks if a given value is a valid JSON array.
- * @category Is
+ * @category Predicate
  */
 export function isJSONArray(value: unknown): value is any[] {
   if (!Array.isArray(value)) {
@@ -203,7 +245,7 @@ export function isJSONArray(value: unknown): value is any[] {
 
 /**
  * Checks if a given value is a valid JSON value.
- * @category Is
+ * @category Predicate
  */
 export function isJSONValue(value: unknown): value is Record<string, any> | any[] | string | number | boolean | null {
   switch (typeof value) {
@@ -225,7 +267,7 @@ export function isJSONValue(value: unknown): value is Record<string, any> | any[
  *
  * 检查输入是否为整数
  *
- * @category Is
+ * @category Predicate
  *
  * @example
  * ```ts
@@ -242,7 +284,7 @@ export function isInteger<T>(v: T): v is Integer<T> {
  *
  * `Number.isSafeInteger()` 的强类型版本。
  *
- * @category Is
+ * @category Predicate
  *
  * @example
  * ```ts
@@ -259,7 +301,7 @@ export function isSafeInteger<T>(v: T): v is Integer<T> {
  *
  * `Number.isFinite()` 的强类型版本。
  *
- * @category Is
+ * @category Predicate
  *
  * @example
  * ```ts

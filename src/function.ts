@@ -42,22 +42,22 @@ export function once<T extends (...args: any[]) => any>(func: T): T {
  *
  * @category Function
  */
-export function invoke<T>(fn: Fn<T>): T
+export function invoke<T>(fn: Fn<T>, ...args: any): T
 /**
- * call every functions in an array
+ * call every functions in an array, the remaining parameters are passed in turn
  *
- * 调用数组中的每个函数
+ * 调用数组中的每个函数，剩余参数依次传入
  *
  * @category Function
  *
  * @param fns - an array of functions
  */
-export function invoke(fns: Nullable<Fn>[]): void
-export function invoke<T>(fns: Nullable<Fn>[] | Fn<T>): T | void {
+export function invoke(fns: Nullable<Fn>[], ...args: any[]): void
+export function invoke<T>(fns: Nullable<Fn>[] | Fn<T>, ...args: any[]): T | void {
   if (Array.isArray(fns))
-    fns.forEach(fn => fn && fn())
+    fns.forEach(fn => fn && fn(...args))
   else
-    return fns()
+    return fns(...args)
 }
 
 type ComposeFn = (...args: any[]) => any

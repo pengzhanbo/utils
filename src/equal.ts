@@ -4,7 +4,7 @@
  * @module Equal
  */
 
-import { getTypeName } from './common'
+import { typeOf } from './is'
 
 /**
  * Deep equality two values, support array and object
@@ -12,8 +12,8 @@ import { getTypeName } from './common'
  * @category Equal
  */
 export function deepEqual(v1: any, v2: any): boolean {
-  const type1 = getTypeName(v1)
-  const type2 = getTypeName(v2)
+  const type1 = typeOf(v1)
+  const type2 = typeOf(v2)
   if (type1 !== type2)
     return false
   if (type1 === 'array') {
