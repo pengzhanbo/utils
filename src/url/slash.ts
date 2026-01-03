@@ -1,10 +1,5 @@
-/**
- * URL Helpers
- *
- * @module URL
- */
-
-import { ensurePrefix, ensureSuffix } from './string'
+import { ensurePrefix } from '../string/ensure-prefix'
+import { ensureSuffix } from '../string/ensure-suffix'
 
 const RE_SLASH = /\\/g
 /**
@@ -12,7 +7,7 @@ const RE_SLASH = /\\/g
  *
  * 将所有反斜杠替换为正斜杠
  *
- * @category String
+ * @category URL
  * @example
  * ```ts
  * slash('foo\\bar') // => foo/bar
@@ -27,7 +22,7 @@ export function slash(s: string): string {
  *
  * 确保前缀，如果字符串不以斜杠开头，则将添加斜杠
  *
- * @category String
+ * @category URL
  * @example
  * ```ts
  * ensureLeadingSlash('foo/bar') // => /foo/bar
@@ -42,7 +37,7 @@ export function ensureLeadingSlash(str: string): string {
  *
  * 确保后缀，如果字符串不以斜杠结尾，则将添加斜杠
  *
- * @category String
+ * @category URL
  * @example
  * ```ts
  * ensureTrailingSlash('/foo/bar') // => /foo/bar/
@@ -57,7 +52,7 @@ export function ensureTrailingSlash(str: string): string {
  *
  * 删除斜杆前缀，如果字符串以斜杠开头，则将删除
  *
- * @category String
+ * @category URL
  * @example
  * ```ts
  * removeLeadingSlash('/foo/bar') // => foo/bar
@@ -76,7 +71,7 @@ export function removeLeadingSlash(str: string): string {
  *
  * 删除斜杆后缀，如果字符串以斜杠结尾，则将删除
  *
- * @category String
+ * @category URL
  * @example
  * ```ts
  * removeTrailingSlash('/foo/bar/') // => /foo/bar
@@ -88,62 +83,4 @@ export function removeTrailingSlash(str: string): string {
 
   str = slash(str)
   return str[str.length - 1] === '/' ? str.slice(0, -1) : str
-}
-
-const RE_HTTP = /^(?:https?:)?\/\//i
-/**
- * Check if url is http
- * @category URL
- */
-export function isHttp(url: string): boolean {
-  return RE_HTTP.test(url)
-}
-
-/**
- * Check if url is valid
- * @category URL
- */
-export function isUrl(url: string): boolean {
-  try {
-    // eslint-disable-next-line no-new
-    new URL(url)
-    return true
-  }
-  catch {
-    return false
-  }
-}
-
-/**
- * combines urls
- * @category URL
- * @example
- * ```ts
- * combineURLs('http://example.com', 'foo', 'bar') // => http://example.com/foo/bar
- * combineURLs('//example.com', '/foo') // => //example.com/foo
- * combineURLs('/foo', 'bar', 'index.html') // => /foo/bar/index.html
- * ```
- */
-export function combineURLs(baseUrl: string, ...urls: string[]): string {
-  if (urls.length === 0)
-    return baseUrl
-  const url = removeLeadingSlash(urls.join('/').replace(/\/+/g, '/'))
-  baseUrl = removeTrailingSlash(baseUrl)
-  return `${baseUrl}/${url}`
-}
-
-const RE_PROTOCOL_MATCH = /^([-+\w]{1,25})(?::?\/\/|:)/
-/**
- * Parse protocol from url
- *
- * @category URL
- * @example
- * ```ts
- * parseProtocol('http://example.com') // => http
- * parseProtocol('mailto:user@example.com') // => mailto
- * ```
- */
-export function parseProtocol(url: string): string {
-  const match = RE_PROTOCOL_MATCH.exec(url)
-  return match?.[1] || ''
 }

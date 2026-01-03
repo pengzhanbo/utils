@@ -1,5 +1,30 @@
 import { describe, expect, it } from 'vitest'
-import { isArray, isBlob, isBoolean, isDate, isDef, isEmptyObject, isFinite, isFunction, isInteger, isJSONArray, isJSONObject, isJSONValue, isKeyof, isNull, isNumber, isPlainObject, isPrimitive, isRegexp, isSafeInteger, isString, isSymbol, isTypedArray, isTypeof, isUndefined } from './is'
+import {
+  isArray,
+  isBlob,
+  isBoolean,
+  isDate,
+  isDef,
+  isEmptyObject,
+  isFinite,
+  isFunction,
+  isInteger,
+  isJSONArray,
+  isJSONObject,
+  isJSONValue,
+  isKeyof,
+  isNull,
+  isNumber,
+  isPlainObject,
+  isPrimitive,
+  isRegexp,
+  isSafeInteger,
+  isString,
+  isSymbol,
+  isTypedArray,
+  isTypeof,
+  isUndefined,
+} from './is'
 
 describe('common > getTypeName', () => {
   it('should return type name', () => {

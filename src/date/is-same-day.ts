@@ -1,23 +1,6 @@
 /**
- * Recommended date library:
- *
- * - [dayjs](https://day.js.org/)
- * - [date-fns](https://date-fns.org)
- *
- * @module
- */
-
-/**
- * Get current timestamp
- * @category Time
- */
-export function timestamp(): number {
-  return +Date.now()
-}
-
-/**
  * Check if two dates is same day
- * @category Time
+ * @category Date
  */
 export function isSameDay(date1: Date | number | string, date2?: Date | number | string): boolean {
   if (!date2)

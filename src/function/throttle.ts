@@ -1,3 +1,5 @@
+import type { Cancel, CancelOptions, FnNoReturn } from '../_internal/types'
+
 /**
  * Throttle Options
  * @category Types
@@ -9,6 +11,10 @@ export interface ThrottleOptions {
    * noTrailing is false or unspecified, callback will be executed one final time
    * after the last throttled-function call. (After the throttled-function has not
    * been called for `delay` milliseconds, the internal counter is reset)
+   *
+   * 可选，默认为false。如果noTrailing为true，回调函数仅在节流函数被调用时每`delay`毫秒执行一次。
+   * 如果noTrailing为false或未指定，回调函数将在最后一次节流函数调用后额外执行一次。
+   * （当节流函数在`delay`毫秒内未被调用时，内部计数器将被重置）
    */
   noTrailing?: boolean
   /**
@@ -16,31 +22,29 @@ export interface ThrottleOptions {
    * call will execute callback immediately. If noLeading is true, the first the
    * callback execution will be skipped. It should be noted that callback will never
    * executed if both noLeading = true and noTrailing = true.
+   *
+   * 可选，默认为false。如果noLeading为false，第一次节流函数调用将立即执行回调。
+   * 如果noLeading为true，第一次回调执行将被跳过。
+   * 需要注意的是，如果noLeading = true且noTrailing = true，回调将永远不会被执行。
    */
   noLeading?: boolean
   /**
    * If `debounceMode` is true (at begin), schedule
    * `callback` to execute after `delay` ms. If `debounceMode` is false (at end),
    * schedule `callback` to execute after `delay` ms.
+   *
+   * 如果 `debounceMode` 为 true（在开始时），则安排
+   * `callback` 在 `delay` 毫秒后执行。如果 `debounceMode` 为 false（在结束时），
+   * 安排 `callback` 在 `delay` 毫秒后执行。
    */
   debounceMode?: boolean
-}
-
-interface CancelOptions {
-  upcomingOnly?: boolean
-}
-
-interface Cancel {
-  cancel: (options?: CancelOptions) => void
-}
-
-interface NoReturn<T extends (...args: any[]) => any> {
-  (...args: Parameters<T>): void
 }
 
 /**
  * Throttle execution of a function. Especially useful for rate limiting
  * execution of handlers on events like resize and scroll.
+ *
+ * 限制函数的执行频率。特别适用于限制事件处理程序的执行速率，例如调整大小和滚动事件。
  *
  * @category Function
  *
@@ -48,22 +52,28 @@ interface NoReturn<T extends (...args: any[]) => any> {
  * A zero-or-greater delay in milliseconds. For event callbacks, values around
  * 100 or 250 (or even higher) are most useful.
  *
+ * 一个零或更大的延迟时间，以毫秒为单位。对于事件回调，大约
+ * 100或250（甚至更高）的值最为实用。
+ *
  * @param callback
  * A function to be executed after delay milliseconds. The `this` context and
  * all arguments are passed through, as-is, to `callback` when the
  * throttled-function is executed.
  *
+ * 一个在延迟毫秒后执行的函数。
+ * 当节流函数执行时，`this`上下文和所有参数都会原样传递给`callback`。
+ *
  * @param options
  * An object to configure options.
+ * 用于配置选项的对象。
  *
- * @return
- * A new, throttled, function.
+ * @return A new throttled function.
  */
 export function throttle<T extends (...args: any[]) => any>(
   delay: number,
   callback: T,
   options?: ThrottleOptions,
-): NoReturn<T> & Cancel {
+): FnNoReturn<T> & Cancel {
   const {
     noTrailing = false,
     noLeading = false,
@@ -73,6 +83,10 @@ export function throttle<T extends (...args: any[]) => any>(
    * After wrapper has stopped being called, this timeout ensures that
    * `callback` is executed at the proper times in `throttle` and `end`
    * debounce modes.
+   *
+   * 在包装器停止调用后，此超时确保
+   * 在节流和结束模式中，`callback` 在适当的时间执行
+   * 防抖模式。
    */
   let timeoutID: NodeJS.Timeout | undefined
   let cancelled = false
@@ -97,6 +111,8 @@ export function throttle<T extends (...args: any[]) => any>(
    * The `wrapper` function encapsulates all of the throttling / debouncing
    * functionality and when executed will limit the rate at which `callback`
    * is executed.
+   *
+   * `wrapper`函数封装了所有的节流/防抖功能，执行时将限制`callback`的回调执行频率。
    */
   function wrapper(this: any, ...args: Parameters<T>) {
     const self = this as any
@@ -114,6 +130,9 @@ export function throttle<T extends (...args: any[]) => any>(
     /**
      * If `debounceMode` is true (at begin) this is used to clear the flag
      * to allow future `callback` executions.
+     *
+     * 如果`debounceMode`为真（在开始时），这用于清除标志
+     * 以允许未来的`callback`执行。
      */
     function clear() {
       timeoutID = undefined
@@ -124,6 +143,9 @@ export function throttle<T extends (...args: any[]) => any>(
        * Since `wrapper` is being called for the first time and
        * `debounceMode` is true (at begin), execute `callback`
        * and noLeading != true.
+       *
+       * 由于`wrapper`是首次被调用，且 `debounceMode`为真（在开始时），
+       * 执行 `callback` 且`noLeading`不为真。
        */
       exec()
     }
@@ -136,6 +158,10 @@ export function throttle<T extends (...args: any[]) => any>(
          * In throttle mode with noLeading, if `delay` time has
          * been exceeded, update `lastExec` and schedule `callback`
          * to execute after `delay` ms.
+         *
+         * 在无前导的节流模式下，若`delay`时间已超过：
+         * 更新`lastExec`并安排`callback`
+         * 在`delay`毫秒后执行。
          */
         lastExec = Date.now()
         if (!noTrailing)
@@ -145,6 +171,8 @@ export function throttle<T extends (...args: any[]) => any>(
         /**
          * In throttle mode without noLeading, if `delay` time has been exceeded, execute
          * `callback`.
+         *
+         * 在无前导的节流模式下，若已超过`delay`时间，则执行 `callback`。
          */
         exec()
       }
@@ -160,6 +188,12 @@ export function throttle<T extends (...args: any[]) => any>(
        *
        * If `debounceMode` is false (at end), schedule `callback` to
        * execute after `delay` ms.
+       *
+       * 在节流模式中，由于`delay`时间尚未超过，安排`callback`在最近一次执行后的`delay`毫秒执行。
+       *
+       * 如果`debounceMode`为true（在开始时），安排`clear`在`delay`毫秒后执行。
+       *
+       * 如果`debounceMode`为false（在结束时），安排`callback`在 `delay`毫秒后执行。
        */
       timeoutID = setTimeout(
         debounceMode ? clear : exec,
@@ -172,50 +206,4 @@ export function throttle<T extends (...args: any[]) => any>(
 
   // Return the wrapper function.
   return wrapper
-}
-
-/**
- * Debounce Options
- * @category Types
- */
-export interface DebounceOptions {
-  /**
-   * If atBegin is false or unspecified, callback will only be executed `delay`
-   * milliseconds after the last debounced-function call. If atBegin is true,
-   * callback will be executed only at the first debounced-function call. (After
-   * the throttled-function has not been called for `delay` milliseconds, the
-   * internal counter is reset).
-   */
-  atBegin?: boolean
-}
-
-/**
- * Debounce execution of a function. Debouncing, unlike throttling,
- * guarantees that a function is only executed a single time, either at the
- * very beginning of a series of calls, or at the very end.
- *
- * @category Functions
- *
- * @param delay
- * A zero-or-greater delay in milliseconds. For event callbacks, values around
- * 100 or 250 (or even higher) are most useful.
- *
- * @param callback
- * A function to be executed after delay milliseconds. The `this` context and
- * all arguments are passed through, as-is, to `callback` when the
- * debounced-function is executed.
- *
- * @param options
- * An object to configure options.
- *
- * @return
- * A new, debounced function.
- */
-export function debounce<T extends (...args: any[]) => any>(
-  delay: number,
-  callback: T,
-  options?: DebounceOptions,
-): NoReturn<T> & Cancel {
-  const { atBegin = false } = options || {}
-  return throttle(delay, callback, { debounceMode: atBegin !== false })
 }

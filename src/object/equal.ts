@@ -4,7 +4,7 @@
  * @module Equal
  */
 
-import { typeOf } from './is'
+import { typeOf } from '../is'
 
 /**
  * Deep equality two values, support array and object

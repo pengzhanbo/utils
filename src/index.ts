@@ -21,10 +21,7 @@
  */
 
 export * from './array'
-export * from './assert'
-export * from './clone'
 export * from './date'
-export * from './equal'
 export * from './event'
 export * from './function'
 export * from './guard'
@@ -33,6 +30,6 @@ export * from './math'
 export * from './object'
 export * from './promise'
 export * from './string'
-export * from './throttle-debounce'
 export * from './types'
 export * from './url'
+export * from './util'

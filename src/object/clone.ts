@@ -6,9 +6,9 @@
  * @module Clone
  */
 
-import { deepCloneImpl } from './_internal/deepCloneImpl'
-import { isArray, isPlainObject, isPrimitive, isTypedArray } from './is'
-import { hasOwn } from './object'
+import { deepCloneImpl } from '../_internal/deepCloneImpl'
+import { isArray, isPlainObject, isPrimitive, isTypedArray } from '../is'
+import { hasOwn } from './has-own'
 
 /**
  * simple clone, use JSON.parse and JSON.stringify
