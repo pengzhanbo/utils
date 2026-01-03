@@ -5,14 +5,27 @@
  */
 
 import type { Finite, Integer } from './types'
+import {
+  T_BOOLEAN,
+  T_DATE,
+  T_FUNCTION,
+  T_NULL,
+  T_NUMBER,
+  T_OBJECT,
+  T_REGEXP,
+  T_STRING,
+  T_SYMBOL,
+  T_UNDEFINED,
+} from './_internal/tags'
 import { toString } from './guard'
 
 export function typeOf(s: unknown): string {
+  const type = typeof s
   return s === null
-    ? 'null'
-    : typeof s === 'object' || typeof s === 'function'
+    ? T_NULL
+    : type === T_OBJECT || type === T_FUNCTION
       ? toString(s).slice(8, -1).toLowerCase()
-      : typeof s
+      : type
 }
 
 /**
@@ -37,7 +50,7 @@ export function isTypeof(s: unknown, type: string): boolean {
  * @category Predicate
  */
 export function isDef<T = any>(v?: T): v is T {
-  return typeof v !== 'undefined'
+  return !isTypeof(v, T_UNDEFINED)
 }
 
 /**
@@ -45,7 +58,8 @@ export function isDef<T = any>(v?: T): v is T {
  * @category Predicate
  */
 export function isPrimitive(v: unknown): v is null | undefined | boolean | number | string | symbol | bigint {
-  return v === null || (typeof v !== 'object' && typeof v !== 'function')
+  // eslint-disable-next-line valid-typeof
+  return v === null || (typeof v !== T_OBJECT && typeof v !== T_FUNCTION)
 }
 
 /**
@@ -53,7 +67,7 @@ export function isPrimitive(v: unknown): v is null | undefined | boolean | numbe
  * @category Predicate
  */
 export function isBoolean(v: unknown): v is boolean {
-  return typeof v === 'boolean'
+  return isTypeof(v, T_BOOLEAN)
 }
 
 /**
@@ -61,7 +75,8 @@ export function isBoolean(v: unknown): v is boolean {
  * @category Predicate
  */
 export function isFunction<T extends (...args: any[]) => any>(v: unknown): v is T {
-  return typeof v === 'function'
+  // eslint-disable-next-line valid-typeof
+  return typeof v === T_FUNCTION
 }
 
 /**
@@ -69,7 +84,7 @@ export function isFunction<T extends (...args: any[]) => any>(v: unknown): v is 
  * @category Predicate
  */
 export function isNumber(v: unknown): v is number {
-  return typeof v === 'number'
+  return isTypeof(v, T_NUMBER)
 }
 
 /**
@@ -77,7 +92,7 @@ export function isNumber(v: unknown): v is number {
  * @category Predicate
  */
 export function isString(v: unknown): v is string {
-  return typeof v === 'string'
+  return isTypeof(v, T_STRING)
 }
 
 /**
@@ -85,7 +100,7 @@ export function isString(v: unknown): v is string {
  * @category Predicate
  */
 export function isSymbol(v: unknown): v is symbol {
-  return typeof v === 'symbol'
+  return isTypeof(v, T_SYMBOL)
 }
 
 /**
@@ -93,7 +108,7 @@ export function isSymbol(v: unknown): v is symbol {
  * @category Predicate
  */
 export function isPlainObject(v: unknown): v is Record<PropertyKey, unknown> {
-  return isTypeof(v, 'object')
+  return isTypeof(v, T_OBJECT)
 }
 
 /**
@@ -110,7 +125,7 @@ export function isArray<T>(v: unknown): v is T[] {
  * @category Predicate
  */
 export function isUndefined(v: unknown): v is undefined {
-  return typeof v === 'undefined'
+  return isTypeof(v, T_UNDEFINED)
 }
 
 /**
@@ -118,7 +133,7 @@ export function isUndefined(v: unknown): v is undefined {
  * @category Predicate
  */
 export function isNull(v: unknown): v is null {
-  return isTypeof(v, 'null')
+  return isTypeof(v, T_NULL)
 }
 
 /**
@@ -126,7 +141,7 @@ export function isNull(v: unknown): v is null {
  * @category Predicate
  */
 export function isRegexp(v: unknown): v is RegExp {
-  return isTypeof(v, 'regexp')
+  return isTypeof(v, T_REGEXP)
 }
 
 /**
@@ -134,7 +149,7 @@ export function isRegexp(v: unknown): v is RegExp {
  * @category Predicate
  */
 export function isDate(v: unknown): v is Date {
-  return isTypeof(v, 'date')
+  return isTypeof(v, T_DATE)
 }
 
 /**
@@ -171,7 +186,8 @@ export function isEmptyObject(v: unknown): boolean {
  */
 export function isBlob(v: unknown): v is Blob {
   /* istanbul ignore if -- @preserve */
-  if (typeof Blob === 'undefined')
+  // eslint-disable-next-line valid-typeof
+  if (typeof Blob === T_UNDEFINED)
     return false
 
   return v instanceof Blob
@@ -185,13 +201,27 @@ export function isTypedArray(v: unknown): v is Int8Array | Uint8Array | Uint8Cla
   return ArrayBuffer.isView(v) && !(v instanceof DataView)
 }
 
+declare let Buffer: undefined | typeof globalThis.Buffer
+
+/**
+ * Checks if the input is a buffer
+ *
+ * @category Predicate
+ */
+export function isBuffer(v: unknown): boolean {
+  /* istanbul ignore next -- @preserve */
+  // eslint-disable-next-line valid-typeof
+  return typeof Buffer !== T_UNDEFINED && Buffer!.isBuffer(v)
+}
+
 /**
  * Checks if the input is a window
  * @category Predicate
  */
 export function isWindow(): boolean {
   /* istanbul ignore next -- @preserve */
-  return typeof window !== 'undefined' && isTypeof(window, 'window')
+  // eslint-disable-next-line valid-typeof
+  return typeof window !== T_UNDEFINED && isTypeof(window, 'window')
 }
 
 /**
@@ -200,7 +230,8 @@ export function isWindow(): boolean {
  */
 export function isBrowser(): boolean {
   /* istanbul ignore next -- @preserve */
-  return typeof window !== 'undefined' && window.document != null
+  // eslint-disable-next-line valid-typeof
+  return typeof window !== T_UNDEFINED && window.document != null
 }
 
 /**
@@ -219,7 +250,8 @@ export function isJSONObject(obj: unknown): obj is Record<string, any> {
     const value = obj[key]
 
     /* istanbul ignore if -- @preserve */
-    if (typeof key !== 'string') {
+    // eslint-disable-next-line valid-typeof
+    if (typeof key !== T_STRING) {
       return false
     }
 
@@ -249,12 +281,12 @@ export function isJSONArray(value: unknown): value is any[] {
  */
 export function isJSONValue(value: unknown): value is Record<string, any> | any[] | string | number | boolean | null {
   switch (typeof value) {
-    case 'object': {
+    case T_OBJECT: {
       return value === null || isJSONArray(value) || isJSONObject(value)
     }
-    case 'string':
-    case 'number':
-    case 'boolean':
+    case T_STRING:
+    case T_NUMBER:
+    case T_BOOLEAN:
       return true
 
     default:

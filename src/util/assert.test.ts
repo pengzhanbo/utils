@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { assert } from './assert'
 
-describe('common > assert', () => {
+describe('util > assert', () => {
   it('should throw error', () => {
     expect(() => assert(false)).toThrow()
   })

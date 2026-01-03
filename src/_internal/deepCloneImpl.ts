@@ -1,5 +1,6 @@
 import { isPrimitive, isTypedArray } from '../is'
 import { hasOwn } from '../object'
+import { T_OBJECT, T_UNDEFINED } from './tags'
 
 export function deepCloneImpl<T>(
   valueToClone: any,
@@ -70,8 +71,8 @@ export function deepCloneImpl<T>(
     return result as T
   }
 
-  // eslint-disable-next-line node/prefer-global/buffer
-  if (typeof Buffer !== 'undefined' && Buffer.isBuffer(valueToClone)) {
+  // eslint-disable-next-line node/prefer-global/buffer, valid-typeof
+  if (typeof Buffer !== T_UNDEFINED && Buffer.isBuffer(valueToClone)) {
     // @ts-ignore
     return valueToClone.subarray() as T
   }
@@ -89,7 +90,8 @@ export function deepCloneImpl<T>(
 
   if (
     valueToClone instanceof ArrayBuffer
-    || (typeof SharedArrayBuffer !== 'undefined' && valueToClone instanceof SharedArrayBuffer)
+    // eslint-disable-next-line valid-typeof
+    || (typeof SharedArrayBuffer !== T_UNDEFINED && valueToClone instanceof SharedArrayBuffer)
   ) {
     return valueToClone.slice(0) as T
   }
@@ -104,7 +106,8 @@ export function deepCloneImpl<T>(
   }
 
   // For legacy NodeJS support
-  if (typeof File !== 'undefined' && valueToClone instanceof File) {
+  // eslint-disable-next-line valid-typeof
+  if (typeof File !== T_UNDEFINED && valueToClone instanceof File) {
     const result = new File([valueToClone], valueToClone.name, {
       type: valueToClone.type,
     })
@@ -139,7 +142,8 @@ export function deepCloneImpl<T>(
   }
 
   /* istanbul ignore if -- @preserve */
-  if (typeof valueToClone === 'object' && valueToClone !== null) {
+  // eslint-disable-next-line valid-typeof
+  if (typeof valueToClone === T_OBJECT && valueToClone !== null) {
     const result = Object.create(Object.getPrototypeOf(valueToClone))
 
     stack.set(valueToClone, result)
