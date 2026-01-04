@@ -2,21 +2,21 @@ import type { Arrayable } from '../types'
 import { orderBy } from './order-by'
 
 /**
- * Sorts an array of objects based on the given `accords`.
+ * Sorts an array of (objects | strings | numbers) based on the given `accords`.
  *
  * - If you provide keys, it sorts the objects by the values of those keys.
  * - If you provide functions, it sorts based on the values returned by those functions.
  *
- * The function returns the array of objects sorted in ascending order.
- * If two objects have the same value for the current accordion, it uses the next accordion to determine their order.
+ * The function returns the array of (objects | strings | numbers) sorted in ascending order.
+ * If two (objects | strings | numbers) the same value for the current accordion, it uses the next accordion to determine their order.
  *
- * 根据给定的`accords`对对象数组进行排序。
+ * 根据给定的`accords`对 (objects | strings | numbers) 数组进行排序。
  *
  * - 如果提供键名，则按这些键对应的值对对象进行排序。
  * - 如果提供函数，则根据这些函数返回的值进行排序。
  *
- * 该函数返回按升序排序的对象数组。
- * 若两个对象在当前排序依据上具有相同值，则使用下一个排序依据来确定它们的顺序。
+ * 该函数返回按升序排序的 (objects | strings | numbers) 数组。
+ * 若两个 (objects | strings | numbers) 在当前排序依据上具有相同值，则使用下一个排序依据来确定它们的顺序。
  *
  * @category Array
  *
@@ -40,9 +40,9 @@ import { orderBy } from './order-by'
  * // ]
  * ```
  */
-export function sortBy<T extends object>(
+export function sortBy<T>(
   arr: readonly T[],
-  accords: Arrayable<((item: T) => unknown) | keyof T>,
+  accords: Arrayable<((item: T) => unknown) | (T extends object ? keyof T : never)>,
 ): T[] {
   return orderBy(arr, accords, 'asc')
 }

@@ -6,6 +6,37 @@ describe('array > orderBy', () => {
     expect(orderBy([], [], [])).toEqual([])
   })
 
+  it('should order strings in ascending order', () => {
+    expect(orderBy(['barney', 'fred', 'pebbles'], item => item)).toEqual([
+      'barney',
+      'fred',
+      'pebbles',
+    ])
+
+    expect(orderBy(['pebbles', 'fred', 'barney'], item => item)).toEqual([
+      'barney',
+      'fred',
+      'pebbles',
+    ])
+  })
+
+  it('should order strings in descending order', () => {
+    expect(orderBy(['barney', 'fred', 'pebbles'], item => item, ['desc'])).toEqual([
+      'pebbles',
+      'fred',
+      'barney',
+    ])
+  })
+
+  it('should order numbers in ascending order', () => {
+    expect(orderBy([4, 2, 8, 6], item => item)).toEqual([2, 4, 6, 8])
+    expect(orderBy([112, 223, 101, 88], item => item)).toEqual([88, 101, 112, 223])
+  })
+
+  it('should order numbers in descending order', () => {
+    expect(orderBy([4, 2, 8, 6], item => item, ['desc'])).toEqual([8, 6, 4, 2])
+  })
+
   interface User {
     user: string
     age: number

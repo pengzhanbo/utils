@@ -6,6 +6,25 @@ describe('array > sortBy', () => {
     expect(sortBy([], [])).toEqual([])
   })
 
+  it('should sort strings', () => {
+    expect(sortBy(['barney', 'fred', 'pebbles'], item => item)).toEqual([
+      'barney',
+      'fred',
+      'pebbles',
+    ])
+
+    expect(sortBy(['pebbles', 'fred', 'barney'], item => item)).toEqual([
+      'barney',
+      'fred',
+      'pebbles',
+    ])
+  })
+
+  it('should sort numbers', () => {
+    expect(sortBy([4, 2, 8, 6], item => item)).toEqual([2, 4, 6, 8])
+    expect(sortBy([112, 223, 101, 88], item => item)).toEqual([88, 101, 112, 223])
+  })
+
   const users = [
     { user: 'foo', age: 24 },
     { user: 'bar', age: 7 },
