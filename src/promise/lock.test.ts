@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 import { createPromiseLock } from './lock'
-import { sleep } from '.'
+import { sleep } from './sleep'
 
 describe('promise > createPromiseLock', () => {
   it('should work', async () => {
