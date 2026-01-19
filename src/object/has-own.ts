@@ -1,3 +1,5 @@
+const hasOwnProperty = Object.prototype.hasOwnProperty
+
 /**
  * Check if an object has a non-inherited property
  *
@@ -6,5 +8,5 @@
  * @category Object
  */
 export function hasOwn<T>(obj: T, key: keyof any): key is keyof T {
-  return obj === null ? false : Object.prototype.hasOwnProperty.call(obj, key)
+  return obj === null ? false : hasOwnProperty.call(obj, key)
 }
