@@ -1,3 +1,7 @@
 {
-  "cSpell.words": ["Arrayable"]
+  "cSpell.words": ["Arrayable"],
+  "editor.defaultFormatter": "oxc.oxc-vscode",
+  "editor.formatOnSave": true,
+  "oxc.typeAware": true,
+  "oxc.unusedDisableDirectives": "deny"
 }
