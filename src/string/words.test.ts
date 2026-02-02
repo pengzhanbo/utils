@@ -10,7 +10,12 @@ describe('string > words', () => {
   it('should work with ASCII comma-separated string', () => {
     expect(words('foo,bar,baz')).toEqual(['foo', 'bar', 'baz'])
     expect(words('foo,bar, & baz,')).toEqual(['foo', 'bar', 'baz'])
-    expect(words('  leading and trailing whitespace  ')).toEqual(['leading', 'and', 'trailing', 'whitespace'])
+    expect(words('  leading and trailing whitespace  ')).toEqual([
+      'leading',
+      'and',
+      'trailing',
+      'whitespace',
+    ])
   })
 
   it('should work with space-separated string', () => {
@@ -20,7 +25,19 @@ describe('string > words', () => {
 
   it('should work with Unicode emojis', () => {
     expect(words('foo🚀bar')).toEqual(['foo', '🚀', 'bar'])
-    expect(words('example🚀with✨emojis💡and🔍special🌟characters')).toEqual(['example', '🚀', 'with', '✨', 'emojis', '💡', 'and', '🔍', 'special', '🌟', 'characters'])
+    expect(words('example🚀with✨emojis💡and🔍special🌟characters')).toEqual([
+      'example',
+      '🚀',
+      'with',
+      '✨',
+      'emojis',
+      '💡',
+      'and',
+      '🔍',
+      'special',
+      '🌟',
+      'characters',
+    ])
   })
 
   it('should work with special characters', () => {
@@ -46,7 +63,14 @@ describe('string > words', () => {
   })
 
   it('should work with mixed formats', () => {
-    expect(words('camelCase_snake_case-kebabCase')).toEqual(['camel', 'Case', 'snake', 'case', 'kebab', 'Case'])
+    expect(words('camelCase_snake_case-kebabCase')).toEqual([
+      'camel',
+      'Case',
+      'snake',
+      'case',
+      'kebab',
+      'Case',
+    ])
   })
 
   it('should work with acronyms', () => {

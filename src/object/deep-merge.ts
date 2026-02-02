@@ -16,23 +16,17 @@ import { isPlainObject } from '../is'
 export function deepMerge<
   T extends Record<PropertyKey, any>,
   S extends Record<PropertyKey, any> = T,
->(
-  target: T,
-  ...sources: S[]
-): DeepMerge<T, S> {
-  if (!sources.length)
-    return target as any
+>(target: T, ...sources: S[]): DeepMerge<T, S> {
+  if (!sources.length) return target as any
 
   const source = sources.shift()
-  if (source === undefined)
-    return target as any
+  if (source === undefined) return target as any
 
   if (isMergableObject(target) && isMergableObject(source)) {
     const keys = Object.keys(source)
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i]
-      if (key === '__proto__' || key === 'constructor' || key === 'prototype')
-        continue
+      if (key === '__proto__' || key === 'constructor' || key === 'prototype') continue
 
       // @ts-expect-error source[key] can be any
       if (isMergableObject(source[key])) {
@@ -43,8 +37,7 @@ export function deepMerge<
 
         // @ts-expect-error target[key] can be any
         deepMerge(target[key], source[key])
-      }
-      else {
+      } else {
         // @ts-expect-error target[key] can be any
         target[key] = source[key]
       }
@@ -75,22 +68,18 @@ export function deepMergeWithArray<
   T extends Record<PropertyKey, any>,
   S extends Record<PropertyKey, any> = T,
 >(target: T, ...sources: S[]): DeepMerge<T, S> {
-  if (!sources.length)
-    return target as any
+  if (!sources.length) return target as any
 
   const source = sources.shift()
-  if (source === undefined)
-    return target as any
+  if (source === undefined) return target as any
 
-  if (Array.isArray(target) && Array.isArray(source))
-    target.push(...source)
+  if (Array.isArray(target) && Array.isArray(source)) target.push(...source)
 
   if (isMergableObject(target) && isMergableObject(source)) {
     const keys = Object.keys(source)
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i]
-      if (key === '__proto__' || key === 'constructor' || key === 'prototype')
-        continue
+      if (key === '__proto__' || key === 'constructor' || key === 'prototype') continue
 
       // @ts-expect-error source[key] can be any
       if (Array.isArray(source[key])) {
@@ -112,8 +101,7 @@ export function deepMergeWithArray<
 
         // @ts-expect-error source[key] can be any
         deepMergeWithArray(target[key], source[key])
-      }
-      else {
+      } else {
         // @ts-expect-error source[key] can be any
         target[key] = source[key]
       }
@@ -127,9 +115,7 @@ function isMergableObject(item: any): item is object {
   return isPlainObject(item) && !Array.isArray(item)
 }
 
-type MergeInsertions<T> = T extends object
-  ? { [K in keyof T]: MergeInsertions<T[K]> }
-  : T
+type MergeInsertions<T> = T extends object ? { [K in keyof T]: MergeInsertions<T[K]> } : T
 
 /**
  * Deep merge

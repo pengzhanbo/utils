@@ -24,7 +24,7 @@
  */
 export function difference<T>(firstArr: readonly T[], secondArr: readonly T[]): T[] {
   const set = new Set(secondArr)
-  return firstArr.filter(item => !set.has(item))
+  return firstArr.filter((item) => !set.has(item))
 }
 
 /**
@@ -67,7 +67,7 @@ export function differenceBy<T, U>(
   secondArr: readonly U[],
   mapper: (value: T | U) => unknown,
 ): T[] {
-  const set = new Set(secondArr.map(item => mapper(item)))
+  const set = new Set(secondArr.map((item) => mapper(item)))
 
-  return firstArr.filter(item => !set.has(mapper(item)))
+  return firstArr.filter((item) => !set.has(mapper(item)))
 }

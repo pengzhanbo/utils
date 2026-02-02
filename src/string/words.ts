@@ -28,7 +28,8 @@
  * // ['case', 'Case', 'HTML', 'Response', '🚀']
  * ```
  */
-export const CASE_SPLIT_PATTERN = /\p{Lu}?\p{Ll}+|\d+|\p{Lu}+(?!\p{Ll})|[\p{Emoji_Presentation}\p{Extended_Pictographic}]|\p{L}+/gu
+export const CASE_SPLIT_PATTERN =
+  /\p{Lu}?\p{Ll}+|\d+|\p{Lu}+(?!\p{Ll})|[\p{Emoji_Presentation}\p{Extended_Pictographic}]|\p{L}+/gu
 
 /**
  * Split string into as words array
@@ -46,7 +47,6 @@ export const CASE_SPLIT_PATTERN = /\p{Lu}?\p{Ll}+|\d+|\p{Lu}+(?!\p{Ll})|[\p{Emoj
  * ```
  */
 export function words(str: string): string[] {
-  if (!str)
-    return []
+  if (!str) return []
   return Array.from(str.match(CASE_SPLIT_PATTERN) ?? [])
 }

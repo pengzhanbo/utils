@@ -14,8 +14,7 @@ import { removeLeadingSlash, removeTrailingSlash } from './slash'
  * ```
  */
 export function combineURLs(baseUrl: string, ...urls: string[]): string {
-  if (urls.length === 0)
-    return baseUrl
+  if (urls.length === 0) return baseUrl
   const url = removeLeadingSlash(urls.join('/').replace(/\/+/g, '/'))
   baseUrl = removeTrailingSlash(baseUrl)
   return `${baseUrl}/${url}`

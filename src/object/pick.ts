@@ -18,8 +18,7 @@ export function pick<T extends Record<PropertyKey, any>, K extends keyof T = key
   const res = Object.create(Object.getPrototypeOf(obj)) as Pick<T, K>
 
   for (const key of keys) {
-    if (isKeyof(obj, key))
-      res[key] = obj[key]
+    if (isKeyof(obj, key)) res[key] = obj[key]
   }
 
   return res

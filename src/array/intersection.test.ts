@@ -16,8 +16,14 @@ describe('array > intersectionBy', () => {
   })
 
   it('should return the intersection of two arrays with different element types using the `mapper` function', () => {
-    interface CSV { id: number, csv: number }
-    interface JSON { id: number, json: number }
+    interface CSV {
+      id: number
+      csv: number
+    }
+    interface JSON {
+      id: number
+      json: number
+    }
 
     const array1: CSV[] = [
       { id: 1, csv: 1 },
@@ -29,9 +35,7 @@ describe('array > intersectionBy', () => {
       { id: 4, json: 2 },
     ]
 
-    const result = intersectionBy(array1, array2, value => value.id)
-    expect(result).toEqual([
-      { id: 2, csv: 1 },
-    ])
+    const result = intersectionBy(array1, array2, (value) => value.id)
+    expect(result).toEqual([{ id: 2, csv: 1 }])
   })
 })

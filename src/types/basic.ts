@@ -23,14 +23,7 @@ export type Prettify<T> = { [K in keyof T]: T[K] } & {}
 /**
  * Primitive types
  */
-export type Primitive
-  = | null
-    | undefined
-    | string
-    | number
-    | boolean
-    | symbol
-    | bigint
+export type Primitive = null | undefined | string | number | boolean | symbol | bigint
 
 /**
  * Constructor
@@ -58,8 +51,4 @@ export type LooseRequired<T> = { [P in keyof (T & Required<T>)]: T[P] }
  *
  * @category Types
  */
-export type Not<A extends boolean> = A extends true
-  ? false
-  : A extends false
-    ? true
-    : never
+export type Not<A extends boolean> = A extends true ? false : A extends false ? true : never

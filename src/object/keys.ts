@@ -9,6 +9,8 @@
  * objectKeys({ a: 1, b: 2 }) // => ['a', 'b']
  * ```
  */
-export function objectKeys<T extends object>(obj: T): Array<`${keyof T & (string | number | boolean | null | undefined)}`> {
+export function objectKeys<T extends object>(
+  obj: T,
+): Array<`${keyof T & (string | number | boolean | null | undefined)}`> {
   return Object.keys(obj) as Array<`${keyof T & (string | number | boolean | null | undefined)}`>
 }

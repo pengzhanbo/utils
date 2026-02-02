@@ -1,0 +1,24 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "ignorePatterns": ["coverage/", "dist/"],
+  "semi": false,
+  "singleQuote": true,
+  "quoteProps": "consistent",
+  "experimentalSortImports": {
+    "groups": [
+      "type-import",
+      ["type-builtin", "type-external", "type-internal"],
+      ["type-parent", "type-sibling", "type-index"],
+      "value-builtin",
+      "value-external",
+      "value-internal",
+      ["value-parent", "value-sibling", "value-index"],
+      "side-effect",
+      "ts-equals-import",
+      "unknown",
+      "style",
+      "side-effect-style"
+    ],
+    "newlinesBetween": false
+  }
+}

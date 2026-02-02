@@ -7,13 +7,13 @@ describe('array > sortBy', () => {
   })
 
   it('should sort strings', () => {
-    expect(sortBy(['barney', 'fred', 'pebbles'], item => item)).toEqual([
+    expect(sortBy(['barney', 'fred', 'pebbles'], (item) => item)).toEqual([
       'barney',
       'fred',
       'pebbles',
     ])
 
-    expect(sortBy(['pebbles', 'fred', 'barney'], item => item)).toEqual([
+    expect(sortBy(['pebbles', 'fred', 'barney'], (item) => item)).toEqual([
       'barney',
       'fred',
       'pebbles',
@@ -21,8 +21,8 @@ describe('array > sortBy', () => {
   })
 
   it('should sort numbers', () => {
-    expect(sortBy([4, 2, 8, 6], item => item)).toEqual([2, 4, 6, 8])
-    expect(sortBy([112, 223, 101, 88], item => item)).toEqual([88, 101, 112, 223])
+    expect(sortBy([4, 2, 8, 6], (item) => item)).toEqual([2, 4, 6, 8])
+    expect(sortBy([112, 223, 101, 88], (item) => item)).toEqual([88, 101, 112, 223])
   })
 
   const users = [
@@ -51,7 +51,7 @@ describe('array > sortBy', () => {
   })
 
   it('should stable sort objects by iteratee function', () => {
-    expect(sortBy(users, [user => user.user])).toEqual([
+    expect(sortBy(users, [(user) => user.user])).toEqual([
       { user: 'bar', age: 7 },
       { user: 'bar', age: 29 },
       { user: 'foo', age: 24 },
@@ -60,7 +60,7 @@ describe('array > sortBy', () => {
   })
 
   it('should stable sort objects by iteratee function and property', () => {
-    expect(sortBy(users, [user => user.user, user => user.age])).toEqual([
+    expect(sortBy(users, [(user) => user.user, (user) => user.age])).toEqual([
       { user: 'bar', age: 7 },
       { user: 'bar', age: 29 },
       { user: 'foo', age: 8 },
@@ -69,7 +69,7 @@ describe('array > sortBy', () => {
   })
 
   it('should stable sort objects by mixed iteratee function and key', () => {
-    expect(sortBy(users, ['user', user => user.age])).toEqual([
+    expect(sortBy(users, ['user', (user) => user.age])).toEqual([
       { user: 'bar', age: 7 },
       { user: 'bar', age: 29 },
       { user: 'foo', age: 8 },

@@ -33,8 +33,7 @@ export function createPromiseLock(): {
       locks.push(p)
       try {
         return await p
-      }
-      finally {
+      } finally {
         remove(locks, p)
       }
     },

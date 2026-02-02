@@ -3,6 +3,9 @@ import { objectEntries } from './entries'
 
 describe('object > objectEntries', () => {
   it('should work', () => {
-    expect(objectEntries({ a: 1, b: 2 })).toEqual([['a', 1], ['b', 2]])
+    expect(objectEntries({ a: 1, b: 2 })).toEqual([
+      ['a', 1],
+      ['b', 2],
+    ])
   })
 })

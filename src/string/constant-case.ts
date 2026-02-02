@@ -13,13 +13,11 @@ import { words } from './words'
  * ```
  */
 export function constantCase(str: string): string {
-  if (!str)
-    return ''
+  if (!str) return ''
 
   const parts = words(str)
 
-  if (parts.length === 0)
-    return ''
+  if (parts.length === 0) return ''
 
-  return parts.map(word => word.toUpperCase()).join('_')
+  return parts.map((word) => word.toUpperCase()).join('_')
 }

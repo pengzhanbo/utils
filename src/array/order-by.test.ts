@@ -7,13 +7,13 @@ describe('array > orderBy', () => {
   })
 
   it('should order strings in ascending order', () => {
-    expect(orderBy(['barney', 'fred', 'pebbles'], item => item)).toEqual([
+    expect(orderBy(['barney', 'fred', 'pebbles'], (item) => item)).toEqual([
       'barney',
       'fred',
       'pebbles',
     ])
 
-    expect(orderBy(['pebbles', 'fred', 'barney'], item => item)).toEqual([
+    expect(orderBy(['pebbles', 'fred', 'barney'], (item) => item)).toEqual([
       'barney',
       'fred',
       'pebbles',
@@ -21,7 +21,7 @@ describe('array > orderBy', () => {
   })
 
   it('should order strings in descending order', () => {
-    expect(orderBy(['barney', 'fred', 'pebbles'], item => item, ['desc'])).toEqual([
+    expect(orderBy(['barney', 'fred', 'pebbles'], (item) => item, ['desc'])).toEqual([
       'pebbles',
       'fred',
       'barney',
@@ -29,12 +29,12 @@ describe('array > orderBy', () => {
   })
 
   it('should order numbers in ascending order', () => {
-    expect(orderBy([4, 2, 8, 6], item => item)).toEqual([2, 4, 6, 8])
-    expect(orderBy([112, 223, 101, 88], item => item)).toEqual([88, 101, 112, 223])
+    expect(orderBy([4, 2, 8, 6], (item) => item)).toEqual([2, 4, 6, 8])
+    expect(orderBy([112, 223, 101, 88], (item) => item)).toEqual([88, 101, 112, 223])
   })
 
   it('should order numbers in descending order', () => {
-    expect(orderBy([4, 2, 8, 6], item => item, ['desc'])).toEqual([8, 6, 4, 2])
+    expect(orderBy([4, 2, 8, 6], (item) => item, ['desc'])).toEqual([8, 6, 4, 2])
   })
 
   interface User {
@@ -93,7 +93,7 @@ describe('array > orderBy', () => {
   })
 
   it('should order objects by criteria functions', () => {
-    expect(orderBy(users2, [obj => obj.user, obj => obj.age], ['asc'])).toEqual([
+    expect(orderBy(users2, [(obj) => obj.user, (obj) => obj.age], ['asc'])).toEqual([
       { user: 'barney', age: 34 },
       { user: 'barney', age: 36 },
       { user: 'fred', age: 40 },

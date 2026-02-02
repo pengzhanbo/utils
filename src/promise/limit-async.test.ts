@@ -20,7 +20,13 @@ describe('promise > limitAsync', () => {
 
     const limitedCallback = limitAsync(callback, 2)
 
-    await Promise.all([limitedCallback(), limitedCallback(), limitedCallback(), limitedCallback(), limitedCallback()])
+    await Promise.all([
+      limitedCallback(),
+      limitedCallback(),
+      limitedCallback(),
+      limitedCallback(),
+      limitedCallback(),
+    ])
 
     expect(maxRunning).toBeLessThanOrEqual(2)
     expect(callback).toHaveBeenCalledTimes(5)
@@ -31,7 +37,12 @@ describe('promise > limitAsync', () => {
 
     const limitedCallback = limitAsync(callback, 3)
 
-    const results = await Promise.all([limitedCallback(3), limitedCallback(1), limitedCallback(4), limitedCallback(2)])
+    const results = await Promise.all([
+      limitedCallback(3),
+      limitedCallback(1),
+      limitedCallback(4),
+      limitedCallback(2),
+    ])
 
     expect(results).toEqual([3, 1, 4, 2])
 
@@ -52,6 +63,8 @@ describe('promise > limitAsync', () => {
 
     const limitedCallback = limitAsync(callback, 2)
 
-    await expect(Promise.all([limitedCallback(1), limitedCallback(2), limitedCallback(3)])).rejects.toThrow('fail')
+    await expect(
+      Promise.all([limitedCallback(1), limitedCallback(2), limitedCallback(3)]),
+    ).rejects.toThrow('fail')
   })
 })

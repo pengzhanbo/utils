@@ -50,8 +50,7 @@ export function orderBy<T>(
   accords: Arrayable<((item: T) => unknown) | (T extends object ? keyof T : never)>,
   orders: Arrayable<'asc' | 'desc'> = 'asc',
 ): T[] {
-  if (arr.length === 0)
-    return []
+  if (arr.length === 0) return []
 
   accords = toArray(accords)
   orders = toArray(orders)
@@ -63,8 +62,8 @@ export function orderBy<T>(
       const accord = accords[i]!
       const isFunc = typeof accord === 'function'
 
-      const valueA = isTypeof(a, T_OBJECT) ? isFunc ? accord(a) : a[accord] : a
-      const valueB = isTypeof(b, T_OBJECT) ? isFunc ? accord(b) : b[accord] : b
+      const valueA = isTypeof(a, T_OBJECT) ? (isFunc ? accord(a) : a[accord]) : a
+      const valueB = isTypeof(b, T_OBJECT) ? (isFunc ? accord(b) : b[accord]) : b
 
       const result = compareValues(valueA, valueB, order!)
 

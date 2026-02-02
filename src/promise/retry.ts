@@ -18,20 +18,21 @@
  */
 export function retry<T>(
   fn: () => Promise<T>,
-  { limit = 3, delay = 0 }: { limit?: number, delay?: number } = {},
+  { limit = 3, delay = 0 }: { limit?: number; delay?: number } = {},
 ): Promise<T> {
   return new Promise((resolve, reject) => {
     let attempts = 0
     const retry = () => {
-      fn().then(resolve).catch((error) => {
-        attempts++
-        if (attempts < limit) {
-          setTimeout(retry, delay)
-        }
-        else {
-          reject(error)
-        }
-      })
+      fn()
+        .then(resolve)
+        .catch((error) => {
+          attempts++
+          if (attempts < limit) {
+            setTimeout(retry, delay)
+          } else {
+            reject(error)
+          }
+        })
     }
     retry()
   })

@@ -15,23 +15,17 @@ describe('array > remove', () => {
 })
 
 describe('array > removeBy', () => {
-  interface V { a: number }
+  interface V {
+    a: number
+  }
 
   const predicate = (item: V) => item.a === 2
 
   it.each([
     [null, null, false],
     [[], [], false],
-    [
-      [{ a: 1 }, { a: 3 }],
-      [{ a: 1 }, { a: 3 }],
-      false,
-    ],
-    [
-      [{ a: 1 }, { a: 2 }, { a: 3 }],
-      [{ a: 1 }, { a: 3 }],
-      true,
-    ],
+    [[{ a: 1 }, { a: 3 }], [{ a: 1 }, { a: 3 }], false],
+    [[{ a: 1 }, { a: 2 }, { a: 3 }], [{ a: 1 }, { a: 3 }], true],
   ])('%s, remove value: %s => %s, removed: %s', (input, expected, removed) => {
     expect(removeBy(input as unknown as V[], predicate)).toEqual(removed)
     expect(input).toEqual(expected)

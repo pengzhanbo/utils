@@ -23,8 +23,7 @@ import { isArray } from '../is'
  * ```
  */
 export function remove<T>(array: T[], value: T): boolean {
-  if (!isArray(array))
-    return false
+  if (!isArray(array)) return false
   const index = array.indexOf(value)
   if (index !== -1) {
     array.splice(index, 1)
@@ -69,8 +68,7 @@ export function removeBy<T>(
   array: T[],
   predicate: (item: T, index: number, array: readonly T[]) => boolean,
 ): boolean {
-  if (!isArray(array))
-    return false
+  if (!isArray(array)) return false
   const index = array.findIndex(predicate)
   if (index !== -1) {
     array.splice(index, 1)

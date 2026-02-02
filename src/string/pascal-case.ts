@@ -14,13 +14,11 @@ import { words } from './words'
  * ```
  */
 export function pascalCase(str: string): string {
-  if (!str)
-    return ''
+  if (!str) return ''
 
   const parts = words(str)
 
-  if (parts.length === 0)
-    return ''
+  if (parts.length === 0) return ''
 
-  return parts.map(word => capitalize(word)).join('')
+  return parts.map((word) => capitalize(word)).join('')
 }

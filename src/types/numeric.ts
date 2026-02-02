@@ -57,7 +57,11 @@ export type Finite<T extends number> = T extends PositiveInfinity | NegativeInfi
  *
  * @category Types
  */
-export type Negative<T extends _Numeric> = T extends Zero ? never : `${T}` extends `-${string}` ? T : never
+export type Negative<T extends _Numeric> = T extends Zero
+  ? never
+  : `${T}` extends `-${string}`
+    ? T
+    : never
 
 /**
  * A `number` that is an integer.
@@ -67,7 +71,9 @@ export type Negative<T extends _Numeric> = T extends Zero ? never : `${T}` exten
  * @category Types
  */
 export type Integer<T> = T extends unknown // To distributive type
-  ? IsInteger<T> extends true ? T : never
+  ? IsInteger<T> extends true
+    ? T
+    : never
   : never // Never happens
 
 /**
@@ -86,7 +92,9 @@ export type NegativeInteger<T extends number> = Negative<Integer<T>>
  * @category Types
  */
 export type Float<T> = T extends unknown // To distributive type
-  ? IsFloat<T> extends true ? T : never
+  ? IsFloat<T> extends true
+    ? T
+    : never
   : never // Never happens
 
 /**

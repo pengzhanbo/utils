@@ -14,6 +14,8 @@ describe('promise > withTimeout', () => {
   })
 
   it('should work with timeout', async () => {
-    await expect(withTimeout(() => sleep(1000), 100)).rejects.toThrowError('The operation was timed out')
+    await expect(withTimeout(() => sleep(1000), 100)).rejects.toThrowError(
+      'The operation was timed out',
+    )
   })
 })

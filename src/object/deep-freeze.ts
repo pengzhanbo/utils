@@ -12,8 +12,7 @@ export function deepFreeze<T>(obj: T): T {
     for (let i = 0; i < obj.length; i++) {
       deepFreeze(obj[i])
     }
-  }
-  else if (isPlainObject(obj)) {
+  } else if (isPlainObject(obj)) {
     Object.freeze(obj)
 
     const keys = Object.keys(obj)

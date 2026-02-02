@@ -1,8 +1,5 @@
 {
-  "extends": [
-    "@pengzhanbo/tsconfig/tsconfig.json",
-    "@pengzhanbo/tsconfig/tsconfig.lib.json"
-  ],
+  "extends": ["@pengzhanbo/tsconfig/tsconfig.json", "@pengzhanbo/tsconfig/tsconfig.lib.json"],
   "include": ["./src"],
   "exclude": ["node_modules", "dist"]
 }

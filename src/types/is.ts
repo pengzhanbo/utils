@@ -60,9 +60,8 @@ export type IsNull<T> = [T] extends [null] ? true : false
  *
  * @category Types
  */
-export type IsNullable<T> = IsAny<T> extends true
-  ? true
-  : Extract<T, null> extends never ? false : true
+export type IsNullable<T> =
+  IsAny<T> extends true ? true : Extract<T, null> extends never ? false : true
 
 /**
  * If the type T accepts type `undefined`, output type true, otherwise output type false.
@@ -100,25 +99,19 @@ export type IsUnion<T> = InternalIsUnion<T>
  *
  * `IsUnion` 的实际实现。
  */
-type InternalIsUnion<T, U = T>
-  = (
-    IsNever<T> extends true
-      ? false
-      : T extends any
-        ? [U] extends [T]
-            ? false
-            : true
-        : never
-  ) extends infer Result
-  // In some cases `Result` will return `false | true` which is `boolean`,
-  // that means `T` has at least two types and it's a union type,
-  // so we will return `true` instead of `boolean`.
-  // 在某些情况下，`Result` 会返回 `false | true`，即 `boolean`，
-  // 这意味着 `T` 至少有两种类型，并且它是一个联合类型，
-  // 因此我们将返回 `true` 而不是 `boolean`。
-    ? boolean extends Result ? true
-      : Result
-    : never // Should never happen
+type InternalIsUnion<T, U = T> = (
+  IsNever<T> extends true ? false : T extends any ? ([U] extends [T] ? false : true) : never
+) extends infer Result
+  ? // In some cases `Result` will return `false | true` which is `boolean`,
+    // that means `T` has at least two types and it's a union type,
+    // so we will return `true` instead of `boolean`.
+    // 在某些情况下，`Result` 会返回 `false | true`，即 `boolean`，
+    // 这意味着 `T` 至少有两种类型，并且它是一个联合类型，
+    // 因此我们将返回 `true` 而不是 `boolean`。
+    boolean extends Result
+    ? true
+    : Result
+  : never // Should never happen
 
 /**
  * If the type X is equal to the type Y, output type true, otherwise output type false.
@@ -127,9 +120,8 @@ type InternalIsUnion<T, U = T>
  *
  * @category Types
  */
-export type IsEqual<X, Y> = (<T>() => T extends X ? 1 : 2) extends <T>() => T extends Y ? 1 : 2
-  ? true
-  : false
+export type IsEqual<X, Y> =
+  (<T>() => T extends X ? 1 : 2) extends <T>() => T extends Y ? 1 : 2 ? true : false
 
 /**
  * Returns a boolean for whether the given `boolean` is not `false`.

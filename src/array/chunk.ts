@@ -15,8 +15,7 @@
  */
 export function chunk<T>(input: T[], size = 1): T[][] {
   const chunks: T[][] = []
-  for (let i = 0; i < input.length; i += size)
-    chunks.push(input.slice(i, i + size))
+  for (let i = 0; i < input.length; i += size) chunks.push(input.slice(i, i + size))
 
   return chunks
 }

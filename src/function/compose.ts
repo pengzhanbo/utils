@@ -23,12 +23,8 @@ export function compose<T extends ComposeFn[] = ComposeFn[]>(
 ): (...args: Parameters<LastArray<T>>) => ReturnType<FirstArray<T>> {
   return function (...args: Parameters<LastArray<T>>) {
     const len = fns.length
-    if (len === 0)
-      return args
-    if (len === 1)
-      return fns[0]!(...args)
-    return fns
-      .slice(0, -1)
-      .reduceRight((acc, fn) => fn(acc), fns[len - 1]!(...args))
+    if (len === 0) return args
+    if (len === 1) return fns[0]!(...args)
+    return fns.slice(0, -1).reduceRight((acc, fn) => fn(acc), fns[len - 1]!(...args))
   }
 }

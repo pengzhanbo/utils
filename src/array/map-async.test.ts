@@ -6,7 +6,7 @@ describe('array >mapAsync', () => {
   it('maps array asynchronously', async () => {
     const arr = [1, 2, 3]
 
-    const callback = vi.fn(async n => n * 2)
+    const callback = vi.fn(async (n) => n * 2)
     const result = await mapAsync(arr, callback)
 
     expect(result).toEqual([2, 4, 6])
@@ -19,7 +19,7 @@ describe('array >mapAsync', () => {
 
   it('returns empty array if given empty array', async () => {
     const arr: number[] = []
-    const callback = vi.fn(async n => n * 2)
+    const callback = vi.fn(async (n) => n * 2)
 
     const result = await mapAsync(arr, callback)
     expect(result).toEqual([])

@@ -25,10 +25,14 @@ export async function filterAsync<T>(
   predicate: (item: T, index: number, array: readonly T[]) => Promise<boolean>,
   concurrency?: number,
 ): Promise<T[]> {
-  const result = await promiseParallel(
-    array.map((...args) => () => predicate(...args)),
+  const result = (await promiseParallel(
+    array.map(
+      (...args) =>
+        () =>
+          predicate(...args),
+    ),
     concurrency,
-  ) as boolean[]
+  )) as boolean[]
 
   return array.filter((_, index) => result[index])
 }

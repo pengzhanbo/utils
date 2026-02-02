@@ -31,14 +31,13 @@
  * const [error, result] = attempt(() => add(1, 2)) // [null, 3]
  * ```
  */
-export function attempt<
-  T extends (...args: any[]) => any,
-  E extends Error,
->(func: T, ...args: Parameters<T>): [null, ReturnType<T>] | [E, null] {
+export function attempt<T extends (...args: any[]) => any, E extends Error>(
+  func: T,
+  ...args: Parameters<T>
+): [null, ReturnType<T>] | [E, null] {
   try {
     return [null, func(...args)]
-  }
-  catch (error) {
+  } catch (error) {
     return [error as E, null]
   }
 }

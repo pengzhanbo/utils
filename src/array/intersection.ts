@@ -24,7 +24,7 @@
 export function intersection<T>(firstArr: readonly T[], secondArr: readonly T[]): T[] {
   const secondSet = new Set(secondArr)
 
-  return firstArr.filter(item => secondSet.has(item))
+  return firstArr.filter((item) => secondSet.has(item))
 }
 
 /**
@@ -72,7 +72,7 @@ export function intersectionBy<T, U>(
   secondArr: readonly U[],
   mapper: (item: T | U) => unknown,
 ): T[] {
-  const secondSet = new Set(secondArr.map(item => mapper(item)))
+  const secondSet = new Set(secondArr.map((item) => mapper(item)))
 
-  return firstArr.filter(item => secondSet.has(mapper(item)))
+  return firstArr.filter((item) => secondSet.has(mapper(item)))
 }

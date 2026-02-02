@@ -3,8 +3,7 @@
  * @category Date
  */
 export function isSameDay(date1: Date | number | string, date2?: Date | number | string): boolean {
-  if (!date2)
-    return false
+  if (!date2) return false
 
   const v1 = new Date(date1)
   const v2 = new Date(date2)

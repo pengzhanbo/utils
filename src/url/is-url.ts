@@ -10,8 +10,7 @@ export function isUrl(url: string): boolean {
     // eslint-disable-next-line no-new
     new URL(url)
     return true
-  }
-  catch {
+  } catch {
     return false
   }
 }

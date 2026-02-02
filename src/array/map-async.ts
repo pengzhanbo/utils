@@ -32,8 +32,12 @@ export async function mapAsync<T>(
   predicate: (item: T, index: number, array: readonly T[]) => Promise<T>,
   concurrency?: number,
 ): Promise<T[]> {
-  return await promiseParallel(
-    array.map((...args) => () => predicate(...args)),
+  return (await promiseParallel(
+    array.map(
+      (...args) =>
+        () =>
+          predicate(...args),
+    ),
     concurrency,
-  ) as T[]
+  )) as T[]
 }

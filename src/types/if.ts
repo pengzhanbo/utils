@@ -13,10 +13,7 @@ import type { IsAny, IsNever, IsNull, IsUndefined, IsUnknown } from './is'
  *
  * @category Types
  */
-export type If<T extends boolean, Y, N>
-  = IsNever<T> extends true
-    ? N
-    : T extends true ? Y : N
+export type If<T extends boolean, Y, N> = IsNever<T> extends true ? N : T extends true ? Y : N
 
 /**
  * If the type T accepts type "any", output type Y, otherwise output type N.
@@ -86,5 +83,8 @@ export type IfUnknown<T, Y = true, N = false> = If<IsUnknown<T>, Y, N>
  * //=> 'IS_NEVER'
  * ```
  */
-export type IfNotAnyOrNever<T, IfNotAnyOrNever, IfAny = any, IfNever = never>
-  = If<IsAny<T>, IfAny, If<IsNever<T>, IfNever, IfNotAnyOrNever>>
+export type IfNotAnyOrNever<T, IfNotAnyOrNever, IfAny = any, IfNever = never> = If<
+  IsAny<T>,
+  IfAny,
+  If<IsNever<T>, IfNever, IfNotAnyOrNever>
+>

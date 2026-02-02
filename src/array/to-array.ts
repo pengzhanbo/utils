@@ -18,9 +18,7 @@ import { isArray } from '../is'
  * ```
  */
 export function toArray<T>(v: Nullable<Arrayable<T>>): T[] {
-  if (v === null || v === undefined)
-    return []
-  if (isArray(v))
-    return v
+  if (v === null || v === undefined) return []
+  if (isArray(v)) return v
   return [v]
 }

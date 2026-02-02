@@ -42,13 +42,11 @@ export function promiseParallel(
       Promise.resolve(isFunction(promise) ? promise() : promise)
         .then((res) => {
           result[index] = res
-          if (++resolvedCount === len)
-            resolve(result)
+          if (++resolvedCount === len) resolve(result)
 
-          if (current < len)
-            next()
+          if (current < len) next()
         })
-        .catch(reason => reject(reason))
+        .catch((reason) => reject(reason))
     }
     for (let i = 0; i < concurrency && i < len; i++) next()
   })
@@ -94,11 +92,9 @@ export function promiseParallelSettled(
   const len = promises.length
   return new Promise((resolve) => {
     function resolved() {
-      if (++resolvedCount === len)
-        resolve(result)
+      if (++resolvedCount === len) resolve(result)
 
-      if (current < len)
-        next()
+      if (current < len) next()
     }
     function next() {
       const index = current++

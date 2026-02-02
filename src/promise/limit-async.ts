@@ -27,15 +27,17 @@ import { Semaphore } from '../promise'
  * await Promise.all(urls.map(url => limitedFetch(url)));
  * ```
  */
-export function limitAsync<F extends (...args: any[]) => Promise<any>>(callback: F, concurrency: number): F {
+export function limitAsync<F extends (...args: any[]) => Promise<any>>(
+  callback: F,
+  concurrency: number,
+): F {
   const semaphore = new Semaphore(concurrency)
 
   return async function (this: ThisType<F>, ...args: Parameters<F>): Promise<ReturnType<F>> {
     try {
       await semaphore.acquire()
       return await callback.apply(this, args)
-    }
-    finally {
+    } finally {
       semaphore.release()
     }
   } as F

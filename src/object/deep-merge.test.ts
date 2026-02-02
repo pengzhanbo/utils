@@ -12,7 +12,10 @@ describe('object > deepMerge', () => {
 
   it('should work with nested object', () => {
     expect(deepMerge({ a: { b: 1 } }, { a: { c: 2 } })).toEqual({ a: { b: 1, c: 2 } })
-    expect(deepMerge({ a: { b: 1 } }, { a: { c: 2 }, d: { e: 3 } })).toEqual({ a: { b: 1, c: 2 }, d: { e: 3 } })
+    expect(deepMerge({ a: { b: 1 } }, { a: { c: 2 }, d: { e: 3 } })).toEqual({
+      a: { b: 1, c: 2 },
+      d: { e: 3 },
+    })
   })
 
   it('should work with overwrite array', () => {
@@ -31,7 +34,10 @@ describe('object > deepMergeWithArray', () => {
 
   it('should work with nested object', () => {
     expect(deepMergeWithArray({ a: { b: 1 } }, { a: { c: 2 } })).toEqual({ a: { b: 1, c: 2 } })
-    expect(deepMergeWithArray({ a: { b: 1 } }, { a: { c: 2 }, d: { e: 3 } })).toEqual({ a: { b: 1, c: 2 }, d: { e: 3 } })
+    expect(deepMergeWithArray({ a: { b: 1 } }, { a: { c: 2 }, d: { e: 3 } })).toEqual({
+      a: { b: 1, c: 2 },
+      d: { e: 3 },
+    })
   })
 
   it('should work with array', () => {

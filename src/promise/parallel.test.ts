@@ -9,11 +9,9 @@ describe('promise > promiseParallel', () => {
     await expect(promiseParallel([])).resolves.toEqual([])
   })
   it('should work with default', async () => {
-    await expect(
-      promiseParallel(
-        range(5).map((_, i) => Promise.resolve(i)),
-      ),
-    ).resolves.toEqual([0, 1, 2, 3, 4])
+    await expect(promiseParallel(range(5).map((_, i) => Promise.resolve(i)))).resolves.toEqual([
+      0, 1, 2, 3, 4,
+    ])
   })
   it('should work with all promises fulfilled', async () => {
     const start = performance.now()
@@ -48,19 +46,26 @@ describe('promise > promiseParallelSettled', () => {
     await expect(promiseParallelSettled([])).resolves.toEqual([])
   })
   it('should work with all promises fulfilled', async () => {
-    await expect(promiseParallelSettled(range(5).map(() => Promise.resolve(1))))
-      .resolves
-      .toEqual(range(5).map(() => ({ status: 'fulfilled', value: 1 })))
+    await expect(promiseParallelSettled(range(5).map(() => Promise.resolve(1)))).resolves.toEqual(
+      range(5).map(() => ({ status: 'fulfilled', value: 1 })),
+    )
   })
 
   it('should work with some promises rejected', async () => {
     await expect(
-      promiseParallelSettled([...range(7).map(async (i) => {
-        await sleep(i * 10)
-        return i
-      }), () => Promise.reject(new Error('error'))], 4),
-    ).resolves.toEqual(
-      [...range(7).map(i => ({ status: 'fulfilled', value: i })), { status: 'rejected', reason: new Error('error') }],
-    )
+      promiseParallelSettled(
+        [
+          ...range(7).map(async (i) => {
+            await sleep(i * 10)
+            return i
+          }),
+          () => Promise.reject(new Error('error')),
+        ],
+        4,
+      ),
+    ).resolves.toEqual([
+      ...range(7).map((i) => ({ status: 'fulfilled', value: i })),
+      { status: 'rejected', reason: new Error('error') },
+    ])
   })
 })

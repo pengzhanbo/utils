@@ -74,11 +74,7 @@ export function throttle<T extends (...args: any[]) => any>(
   callback: T,
   options?: ThrottleOptions,
 ): FnNoReturn<T> & Cancel {
-  const {
-    noTrailing = false,
-    noLeading = false,
-    debounceMode = undefined,
-  } = options || {}
+  const { noTrailing = false, noLeading = false, debounceMode = undefined } = options || {}
   /**
    * After wrapper has stopped being called, this timeout ensures that
    * `callback` is executed at the proper times in `throttle` and `end`
@@ -96,8 +92,7 @@ export function throttle<T extends (...args: any[]) => any>(
 
   // Function to clear existing timeout
   function clearExistingTimeout() {
-    if (timeoutID)
-      clearTimeout(timeoutID)
+    if (timeoutID) clearTimeout(timeoutID)
   }
 
   // Function to cancel next exec
@@ -118,8 +113,7 @@ export function throttle<T extends (...args: any[]) => any>(
     const self = this as any
     const elapsed = Date.now() - lastExec
 
-    if (cancelled)
-      return
+    if (cancelled) return
 
     // Execute `callback` and update the `lastExec` timestamp.
     function exec() {
@@ -164,10 +158,8 @@ export function throttle<T extends (...args: any[]) => any>(
          * 在`delay`毫秒后执行。
          */
         lastExec = Date.now()
-        if (!noTrailing)
-          timeoutID = setTimeout(debounceMode ? clear : exec, delay)
-      }
-      else {
+        if (!noTrailing) timeoutID = setTimeout(debounceMode ? clear : exec, delay)
+      } else {
         /**
          * In throttle mode without noLeading, if `delay` time has been exceeded, execute
          * `callback`.
@@ -176,8 +168,7 @@ export function throttle<T extends (...args: any[]) => any>(
          */
         exec()
       }
-    }
-    else if (noTrailing !== true) {
+    } else if (noTrailing !== true) {
       /**
        * In trailing throttle mode, since `delay` time has not been
        * exceeded, schedule `callback` to execute `delay` ms after most

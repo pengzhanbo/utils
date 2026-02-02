@@ -1,47 +1,57 @@
 {
   "name": "@pengzhanbo/utils",
-  "type": "module",
   "version": "3.1.0",
-  "packageManager": "pnpm@10.28.0",
-  "author": "pengzhanbo <q942450674@outlook.com> (https://github.com/pengzhanbo)",
-  "license": "MIT",
+  "keywords": [
+    "utils"
+  ],
   "homepage": "https://github.com/pengzhanbo/utils",
+  "bugs": "https://github.com/pengzhanbo/utils/issues",
+  "license": "MIT",
+  "author": "pengzhanbo <q942450674@outlook.com> (https://github.com/pengzhanbo)",
   "repository": {
     "type": "git",
     "url": "https://github.com/pengzhanbo/utils.git"
   },
-  "bugs": "https://github.com/pengzhanbo/utils/issues",
-  "keywords": [
-    "utils"
-  ],
-  "sideEffects": false,
-  "exports": {
-    ".": "./dist/index.mjs"
-  },
-  "main": "./dist/index.mjs",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.mts",
   "files": [
     "dist"
   ],
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "exports": {
+    ".": "./dist/index.mjs"
+  },
   "scripts": {
     "build": "tsdown",
-    "lint": "eslint .",
+    "lint": "oxlint . --type-check --type-aware",
+    "format": "oxfmt .",
     "prepublishOnly": "pnpm run build",
     "test": "cross-env TZ=Etc/UTC vitest --coverage",
     "release:publish": "pnpm publish --provenance --access public",
-    "release": "bumpp package.json jsr.json --commit \"build: publish v%s\" --push --tag --all"
+    "release": "bumpp package.json jsr.json --commit \"build: publish v%s\" --push --tag --all",
+    "prepare": "husky"
   },
   "devDependencies": {
-    "@pengzhanbo/eslint-config": "^1.46.0",
-    "@pengzhanbo/tsconfig": "^1.46.0",
-    "@types/node": "^25.0.9",
-    "@vitest/coverage-v8": "^4.0.17",
+    "@pengzhanbo/tsconfig": "^1.48.0",
+    "@types/node": "^25.2.0",
+    "@vitest/coverage-v8": "^4.0.18",
     "bumpp": "^10.4.0",
     "cross-env": "^10.1.0",
-    "eslint": "^9.39.2",
-    "tsdown": "^0.19.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "oxfmt": "^0.28.0",
+    "oxlint": "^1.43.0",
+    "oxlint-tsgolint": "^0.11.4",
+    "tsdown": "^0.20.1",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.17"
-  }
+    "vitest": "^4.0.18"
+  },
+  "lint-staged": {
+    "*.{js,ts,mjs,cjs}": "pnpm run lint",
+    "*": "oxfmt --no-error-on-unmatched-pattern",
+    "*.{js,ts}": "vitest related --run"
+  },
+  "packageManager": "pnpm@10.28.2"
 }

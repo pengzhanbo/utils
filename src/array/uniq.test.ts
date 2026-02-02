@@ -31,12 +31,14 @@ describe('array > uniqBy', () => {
       [{ a: 2 }, { a: 1 }],
     ],
   ])('(%s => %s', (input, expected) => {
-    expect(uniqBy(input, item => item.a)).toEqual(expected)
+    expect(uniqBy(input, (item) => item.a)).toEqual(expected)
   })
 })
 
 describe('array > uniqWith', () => {
-  interface V { a: number }
+  interface V {
+    a: number
+  }
 
   const equalFn = (l: V, r: V) => l.a === r.a
 

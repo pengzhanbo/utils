@@ -19,8 +19,7 @@ export function omit<T extends Record<PropertyKey, any>, K extends keyof T = key
   Object.assign(res, obj)
 
   for (const key of keys) {
-    if (isKeyof(obj, key))
-      delete res[key]
+    if (isKeyof(obj, key)) delete res[key]
   }
 
   return res

@@ -57,7 +57,9 @@ export function isDef<T = any>(v?: T): v is T {
  * Checks if the input is a primitive
  * @category Predicate
  */
-export function isPrimitive(v: unknown): v is null | undefined | boolean | number | string | symbol | bigint {
+export function isPrimitive(
+  v: unknown,
+): v is null | undefined | boolean | number | string | symbol | bigint {
   // eslint-disable-next-line valid-typeof
   return v === null || (typeof v !== T_OBJECT && typeof v !== T_FUNCTION)
 }
@@ -159,10 +161,7 @@ export function isDate(v: unknown): v is Date {
  *
  * @category Predicate
  */
-export function isKeyof<T extends object>(
-  obj: T,
-  key: PropertyKey,
-): key is keyof T {
+export function isKeyof<T extends object>(obj: T, key: PropertyKey): key is keyof T {
   return key in obj
 }
 
@@ -171,11 +170,9 @@ export function isKeyof<T extends object>(
  * @category Predicate
  */
 export function isEmptyObject(v: unknown): boolean {
-  if (!isPlainObject(v))
-    return false
+  if (!isPlainObject(v)) return false
   // eslint-disable-next-line no-unreachable-loop
-  for (const _ in v)
-    return false
+  for (const _ in v) return false
 
   return true
 }
@@ -187,8 +184,7 @@ export function isEmptyObject(v: unknown): boolean {
 export function isBlob(v: unknown): v is Blob {
   /* istanbul ignore if -- @preserve */
   // eslint-disable-next-line valid-typeof
-  if (typeof Blob === T_UNDEFINED)
-    return false
+  if (typeof Blob === T_UNDEFINED) return false
 
   return v instanceof Blob
 }
@@ -197,7 +193,18 @@ export function isBlob(v: unknown): v is Blob {
  * Checks if the input is a typed array
  * @category Predicate
  */
-export function isTypedArray(v: unknown): v is Int8Array | Uint8Array | Uint8ClampedArray | Int16Array | Uint16Array | Int32Array | Uint32Array | Float32Array | Float64Array {
+export function isTypedArray(
+  v: unknown,
+): v is
+  | Int8Array
+  | Uint8Array
+  | Uint8ClampedArray
+  | Int16Array
+  | Uint16Array
+  | Int32Array
+  | Uint32Array
+  | Float32Array
+  | Float64Array {
   return ArrayBuffer.isView(v) && !(v instanceof DataView)
 }
 
@@ -272,14 +279,16 @@ export function isJSONArray(value: unknown): value is any[] {
     return false
   }
 
-  return value.every(item => isJSONValue(item))
+  return value.every((item) => isJSONValue(item))
 }
 
 /**
  * Checks if a given value is a valid JSON value.
  * @category Predicate
  */
-export function isJSONValue(value: unknown): value is Record<string, any> | any[] | string | number | boolean | null {
+export function isJSONValue(
+  value: unknown,
+): value is Record<string, any> | any[] | string | number | boolean | null {
   switch (typeof value) {
     case T_OBJECT: {
       return value === null || isJSONArray(value) || isJSONObject(value)

@@ -29,14 +29,13 @@ export function simpleClone<T = any>(source: T): T {
  * @category Clone
  */
 export function shallowClone<T = any>(source: T): T {
-  if (isPrimitive(source))
-    return source
+  if (isPrimitive(source)) return source
 
   if (
-    isArray(source)
-    || isTypedArray(source)
-    || source instanceof ArrayBuffer
-    || (typeof SharedArrayBuffer !== 'undefined' && source instanceof SharedArrayBuffer)
+    isArray(source) ||
+    isTypedArray(source) ||
+    source instanceof ArrayBuffer ||
+    (typeof SharedArrayBuffer !== 'undefined' && source instanceof SharedArrayBuffer)
   ) {
     return source.slice(0) as T
   }
@@ -64,8 +63,7 @@ export function shallowClone<T = any>(source: T): T {
       cause: source.cause,
     })
 
-    if (hasOwn(source, 'name'))
-      newError.name = source.name
+    if (hasOwn(source, 'name')) newError.name = source.name
 
     newError.stack = source.stack
 
@@ -73,7 +71,10 @@ export function shallowClone<T = any>(source: T): T {
   }
 
   if (typeof File !== 'undefined' && source instanceof File) {
-    const newFile = new Constructor([source], source.name, { type: source.type, lastModified: source.lastModified })
+    const newFile = new Constructor([source], source.name, {
+      type: source.type,
+      lastModified: source.lastModified,
+    })
     return newFile
   }
 

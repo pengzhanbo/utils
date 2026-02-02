@@ -78,6 +78,7 @@ export function deepCloneImpl<T>(
   }
 
   if (isTypedArray(valueToClone)) {
+    // oxlint-disable-next-line new-cap
     const result = new (Object.getPrototypeOf(valueToClone).constructor)(valueToClone.length)
     stack.set(valueToClone, result)
 
@@ -89,15 +90,19 @@ export function deepCloneImpl<T>(
   }
 
   if (
-    valueToClone instanceof ArrayBuffer
+    valueToClone instanceof ArrayBuffer ||
     // eslint-disable-next-line valid-typeof
-    || (typeof SharedArrayBuffer !== T_UNDEFINED && valueToClone instanceof SharedArrayBuffer)
+    (typeof SharedArrayBuffer !== T_UNDEFINED && valueToClone instanceof SharedArrayBuffer)
   ) {
     return valueToClone.slice(0) as T
   }
 
   if (valueToClone instanceof DataView) {
-    const result = new DataView(valueToClone.buffer.slice(0), valueToClone.byteOffset, valueToClone.byteLength)
+    const result = new DataView(
+      valueToClone.buffer.slice(0),
+      valueToClone.byteOffset,
+      valueToClone.byteLength,
+    )
     stack.set(valueToClone, result)
 
     copyProperties(result, valueToClone, objectToClone, stack)
@@ -128,11 +133,13 @@ export function deepCloneImpl<T>(
   }
 
   if (valueToClone instanceof Error) {
-    const result = new (valueToClone.constructor as { new (...args: any[]): Error })(valueToClone.message, { cause: valueToClone.cause })
+    const result = new (valueToClone.constructor as { new (...args: any[]): Error })(
+      valueToClone.message,
+      { cause: valueToClone.cause },
+    )
     stack.set(valueToClone, result)
 
-    if (hasOwn(valueToClone, 'name'))
-      result.name = valueToClone.name
+    if (hasOwn(valueToClone, 'name')) result.name = valueToClone.name
 
     result.stack = valueToClone.stack
 
@@ -176,7 +183,7 @@ export function copyProperties<T>(
 }
 
 export function getSymbols(object: any) {
-  return Object.getOwnPropertySymbols(object).filter(symbol =>
+  return Object.getOwnPropertySymbols(object).filter((symbol) =>
     Object.prototype.propertyIsEnumerable.call(object, symbol),
   )
 }

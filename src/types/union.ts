@@ -8,31 +8,28 @@ import type { IsNever } from './is'
  *
  * @category Types
  */
-export type UnionToIntersection<Union> = (
+export type UnionToIntersection<Union> =
   // `extends unknown` is always going to be the case and is used to convert the
   // `Union` into a [distributive conditional type](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-8.html#distributive-conditional-types).
-  Union extends unknown
-  // The union type is used as the only argument to a function since the union
-  // of function arguments is an intersection.
-    ? (distributedUnion: Union) => void
-  // This won't happen.
+  (
+    Union extends unknown
+      ? // The union type is used as the only argument to a function since the union
+        // of function arguments is an intersection.
+        (distributedUnion: Union) => void
+      : // This won't happen.
+        never
+  ) extends (mergedIntersection: infer Intersection) => void // arguments of unions of functions as an intersection of the union. // Infer the `Intersection` type since TypeScript represents the positional
+    ? // The `& Union` is to ensure result of `UnionToIntersection<A | B>` is always assignable to `A | B`
+      Intersection & Union
     : never
-// Infer the `Intersection` type since TypeScript represents the positional
-// arguments of unions of functions as an intersection of the union.
-) extends ((mergedIntersection: infer Intersection) => void)
-// The `& Union` is to ensure result of `UnionToIntersection<A | B>` is always assignable to `A | B`
-  ? Intersection & Union
-  : never
 
 /**
  * Returns the last element of a union type.
  *
  * 返回联合类型的最后一个元素。
  */
-type LastOfUnion<T>
-  = UnionToIntersection<T extends any ? () => T : never> extends () => (infer R)
-    ? R
-    : never
+type LastOfUnion<T> =
+  UnionToIntersection<T extends any ? () => T : never> extends () => infer R ? R : never
 
 /**
  * Convert a union type into an unordered tuple type of its elements.
@@ -71,10 +68,8 @@ type LastOfUnion<T>
  * //=> ['dog', 'cat', 'snake']
  * ```
  */
-export type UnionToTuple<T, L = LastOfUnion<T>>
-  = IsNever<T> extends false
-    ? [...UnionToTuple<Exclude<T, L>>, L]
-    : []
+export type UnionToTuple<T, L = LastOfUnion<T>> =
+  IsNever<T> extends false ? [...UnionToTuple<Exclude<T, L>>, L] : []
 
 /**
  * A literal type that supports custom further strings but preserves autocompletion in IDEs.
@@ -83,6 +78,6 @@ export type UnionToTuple<T, L = LastOfUnion<T>>
  *
  * @see https://github.com/microsoft/TypeScript/issues/29729#issuecomment-471566609
  */
-export type LiteralUnion<Union extends Base, Base = string>
-  = | Union
-    | (Base & { __zz_IGNORE_ME__?: never })
+export type LiteralUnion<Union extends Base, Base = string> =
+  | Union
+  | (Base & { __zz_IGNORE_ME__?: never })

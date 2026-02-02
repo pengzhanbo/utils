@@ -59,8 +59,7 @@ export function ensureTrailingSlash(str: string): string {
  * ```
  */
 export function removeLeadingSlash(str: string): string {
-  if (!str)
-    return str
+  if (!str) return str
 
   str = slash(str)
   return str[0] === '/' ? str.slice(1) : str
@@ -78,8 +77,7 @@ export function removeLeadingSlash(str: string): string {
  * ```
  */
 export function removeTrailingSlash(str: string): string {
-  if (!str)
-    return str
+  if (!str) return str
 
   str = slash(str)
   return str[str.length - 1] === '/' ? str.slice(0, -1) : str

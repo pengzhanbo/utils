@@ -34,16 +34,12 @@ export function uniq<T>(v: T[]): T[] {
  * // => [1.1, 2.1]
  * ```
  */
-export function uniqBy<T, U>(
-  v: readonly T[],
-  predicate: (item: T) => U,
-): T[] {
+export function uniqBy<T, U>(v: readonly T[], predicate: (item: T) => U): T[] {
   const map = new Map<U, T>()
   for (let i = 0; i < v.length; i++) {
     const value = v[i]!
     const key = predicate(value)
-    if (!map.has(key))
-      map.set(key, value)
+    if (!map.has(key)) map.set(key, value)
   }
   return Array.from(map.values())
 }
@@ -60,14 +56,10 @@ export function uniqBy<T, U>(
  * // => [1, 2, 3]
  * ```
  */
-export function uniqWith<T>(
-  array: readonly T[],
-  equal: (a: T, b: T) => boolean,
-): T[] {
+export function uniqWith<T>(array: readonly T[], equal: (a: T, b: T) => boolean): T[] {
   return array.reduce((acc: T[], cur) => {
-    const index = acc.findIndex(item => equal(cur, item))
-    if (index === -1)
-      acc.push(cur)
+    const index = acc.findIndex((item) => equal(cur, item))
+    if (index === -1) acc.push(cur)
     return acc
   }, [])
 }

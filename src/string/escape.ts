@@ -3,7 +3,7 @@ const htmlEscapes: Record<string, string> = {
   '<': '&lt;',
   '>': '&gt;',
   '"': '&quot;',
-  '\'': '&#39;',
+  "'": '&#39;',
 }
 const RE_ESCAPE = /[&<>"']/g
 
@@ -19,7 +19,7 @@ const RE_ESCAPE = /[&<>"']/g
  * ```
  */
 export function escape(str: string): string {
-  return str.replace(RE_ESCAPE, match => htmlEscapes[match]!)
+  return str.replace(RE_ESCAPE, (match) => htmlEscapes[match]!)
 }
 
 const RE_ESCAPE_REGEXP = /[\\^$.*+?()[\]{}|]/g
@@ -44,7 +44,7 @@ const htmlUnescapes: Record<string, string> = {
   '&lt;': '<',
   '&gt;': '>',
   '&quot;': '"',
-  '&#39;': '\'',
+  '&#39;': "'",
 }
 const RE_UNESCAPE = /&(?:amp|lt|gt|quot|#(0+)?39);/g
 
@@ -62,5 +62,5 @@ const RE_UNESCAPE = /&(?:amp|lt|gt|quot|#(0+)?39);/g
  * ```
  */
 export function unescape(str: string): string {
-  return str.replace(RE_UNESCAPE, match => htmlUnescapes[match] || '\'')
+  return str.replace(RE_UNESCAPE, (match) => htmlUnescapes[match] || "'")
 }

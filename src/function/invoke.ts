@@ -19,8 +19,6 @@ export function invoke<T>(fn: Fn<T>, ...args: any): T
  */
 export function invoke(fns: Nullable<Fn>[], ...args: any[]): void
 export function invoke<T>(fns: Nullable<Fn>[] | Fn<T>, ...args: any[]): T | void {
-  if (Array.isArray(fns))
-    fns.forEach(fn => fn && fn(...args))
-  else
-    return fns(...args)
+  if (Array.isArray(fns)) fns.forEach((fn) => fn && fn(...args))
+  else return fns(...args)
 }

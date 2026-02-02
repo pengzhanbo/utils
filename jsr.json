@@ -4,11 +4,7 @@
   "exports": {
     ".": "./src/index.ts"
   },
-  "include": [
-    "src/**/*.ts",
-    "LICENSE",
-    "README.md"
-  ],
+  "include": ["src/**/*.ts", "LICENSE", "README.md"],
   "exclude": [
     "src/**/*.test.ts",
     "pnpm-lock.yaml",

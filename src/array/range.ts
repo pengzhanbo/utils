@@ -45,8 +45,7 @@ export function range(...args: any): number[] {
     start = 0
     stop = args[0]
     step = 1
-  }
-  else {
+  } else {
     ;[start, stop, step = 1] = args
   }
   const arr: number[] = []

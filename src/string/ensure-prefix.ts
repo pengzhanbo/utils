@@ -15,9 +15,7 @@
  * ```
  */
 export function ensurePrefix(str: string, prefix: string): string {
-  if (!prefix)
-    return str
-  if (str.startsWith(prefix))
-    return str
+  if (!prefix) return str
+  if (str.startsWith(prefix)) return str
   return `${prefix}${str}`
 }

@@ -33,14 +33,13 @@ import type { AsyncReturnType } from '../types'
  * const [error, result] = await attempt(async() => await add(1, 2)) // [null, 3]
  * ```
  */
-export async function attemptAsync<
-  T extends (...args: any[]) => Promise<any>,
-  E extends Error,
->(func: T, ...args: Parameters<T>): Promise<[null, AsyncReturnType<T>] | [E, null]> {
+export async function attemptAsync<T extends (...args: any[]) => Promise<any>, E extends Error>(
+  func: T,
+  ...args: Parameters<T>
+): Promise<[null, AsyncReturnType<T>] | [E, null]> {
   try {
     return [null, await func(...args)]
-  }
-  catch (error) {
+  } catch (error) {
     return [error as E, null]
   }
 }

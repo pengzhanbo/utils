@@ -15,15 +15,13 @@ import { words } from './words'
  * ```
  */
 export function camelCase(str: string): string {
-  if (!str)
-    return ''
+  if (!str) return ''
 
   const parts = words(str)
 
-  if (parts.length === 0)
-    return ''
+  if (parts.length === 0) return ''
 
   const [first, ...rest] = parts
 
-  return `${first!.toLowerCase()}${rest.map(word => capitalize(word)).join('')}`
+  return `${first!.toLowerCase()}${rest.map((word) => capitalize(word)).join('')}`
 }
