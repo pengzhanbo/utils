@@ -109,7 +109,6 @@ it('isFunction', () => {
   expect(isFunction(false)).toBe(false)
   expect(isFunction({})).toBe(false)
   expect(isFunction(() => {})).toBe(true)
-  // eslint-disable-next-line prefer-arrow-callback
   expect(isFunction(function () {})).toBe(true)
 })
 
@@ -206,7 +205,6 @@ it('isRegexp', () => {
   expect(isRegexp({})).toBe(false)
   expect(isRegexp(() => {})).toBe(false)
   expect(isRegexp(/a/)).toBe(true)
-  // eslint-disable-next-line prefer-regex-literals
   expect(isRegexp(new RegExp('a'))).toBe(true)
 })
 

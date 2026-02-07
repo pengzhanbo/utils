@@ -9,6 +9,7 @@
 export * from './chunk'
 export * from './difference'
 export * from './filter-async'
+export * from './find-then'
 export * from './intersection'
 export * from './map-async'
 export * from './move'

@@ -171,7 +171,6 @@ export function isKeyof<T extends object>(obj: T, key: PropertyKey): key is keyo
  */
 export function isEmptyObject(v: unknown): boolean {
   if (!isPlainObject(v)) return false
-  // eslint-disable-next-line no-unreachable-loop
   for (const _ in v) return false
 
   return true
