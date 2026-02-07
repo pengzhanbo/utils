@@ -6,4 +6,5 @@ export default defineConfig({
   dts: true,
   format: 'esm',
   minify: true,
+  fixedExtension: false,
 })
