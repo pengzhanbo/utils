@@ -10,6 +10,10 @@ type FirstArray<T extends any[]> = T extends [infer U, ...any[]] ? U : Fn
  * 组合多个函数，从右到左执行
  *
  * @category Function
+ *
+ * @param fns - The functions to compose. 要组合的函数
+ * @returns A new function that is the composition of the input functions. 由输入函数组合而成的新函数
+ *
  * @example
  * ```ts
  * const add = (a) => a + 1

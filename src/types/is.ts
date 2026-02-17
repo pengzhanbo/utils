@@ -9,6 +9,8 @@ import type { NegativeInfinity, PositiveInfinity } from './numeric'
  * 如果类型 T 接受类型 `Primitive`，则输出 true，否则输出 false。
  *
  * @category Types
+ *
+ * @template T - 要检查的类型
  */
 export type IsPrimitive<T> = [T] extends [Primitive] ? true : false
 
@@ -20,6 +22,8 @@ export type IsPrimitive<T> = [T] extends [Primitive] ? true : false
  * @see https://stackoverflow.com/a/49928360/1490091
  *
  * @category Types
+ *
+ * @template T - 要检查的类型
  */
 export type IsAny<T> = 0 extends 1 & NoInfer<T> ? true : false
 
@@ -32,6 +36,8 @@ export type IsAny<T> = 0 extends 1 & NoInfer<T> ? true : false
  * @see https://stackoverflow.com/a/53984913/10292952
  *
  * @category Types
+ *
+ * @template T - 要检查的类型
  */
 export type IsNever<T> = [T] extends [never] ? true : false
 
@@ -41,6 +47,8 @@ export type IsNever<T> = [T] extends [never] ? true : false
  * 如果类型 T 接受类型 `null`，则输出 true，否则输出 false。
  *
  * @category Types
+ *
+ * @template T - 要检查的类型
  */
 export type IsNull<T> = [T] extends [null] ? true : false
 
@@ -48,6 +56,10 @@ export type IsNull<T> = [T] extends [null] ? true : false
  * If the type T accepts type `null`, output type true, otherwise output type false.
  *
  * 如果类型 T 包含类型 `null`，则输出 true，否则输出 false。
+ *
+ * @category Types
+ *
+ * @template T - 要检查的类型
  *
  * @example
  * ```ts
@@ -57,8 +69,6 @@ export type IsNull<T> = [T] extends [null] ? true : false
  * type B = IsNullable<string | null>;
  * //=> true
  * ```
- *
- * @category Types
  */
 export type IsNullable<T> =
   IsAny<T> extends true ? true : Extract<T, null> extends never ? false : true
@@ -69,6 +79,8 @@ export type IsNullable<T> =
  * 如果类型 T 接受类型 `undefined`，则输出 true，否则输出 false。
  *
  * @category Types
+ *
+ * @template T - 要检查的类型
  */
 export type IsUndefined<T> = [T] extends [undefined] ? true : false
 
@@ -78,6 +90,8 @@ export type IsUndefined<T> = [T] extends [undefined] ? true : false
  * 如果类型 T 接受类型 `unknown`，则输出 true，否则输出 false。
  *
  * @category Types
+ *
+ * @template T - 要检查的类型
  */
 export type IsUnknown<T> = unknown extends T // `T` can be `unknown` or `any`
   ? IsNull<T> extends false // `any` can be `null`, but `unknown` can't be
@@ -91,6 +105,8 @@ export type IsUnknown<T> = unknown extends T // `T` can be `unknown` or `any`
  * 如果类型 T 是联合类型，则输出 true，否则输出 false。
  *
  * @category Types
+ *
+ * @template T - 要检查的类型
  */
 export type IsUnion<T> = InternalIsUnion<T>
 
@@ -98,6 +114,9 @@ export type IsUnion<T> = InternalIsUnion<T>
  * The actual implementation of `IsUnion`.
  *
  * `IsUnion` 的实际实现。
+ *
+ * @template T - 要检查的类型
+ * @template U - 内部使用的类型参数
  */
 type InternalIsUnion<T, U = T> = (
   IsNever<T> extends true ? false : T extends any ? ([U] extends [T] ? false : true) : never
@@ -119,6 +138,9 @@ type InternalIsUnion<T, U = T> = (
  * 如果类型 X 等于类型 Y，则输出 true，否则输出 false。
  *
  * @category Types
+ *
+ * @template X - 第一个要比较的类型
+ * @template Y - 第二个要比较的类型
  */
 export type IsEqual<X, Y> =
   (<T>() => T extends X ? 1 : 2) extends <T>() => T extends Y ? 1 : 2 ? true : false
@@ -129,6 +151,8 @@ export type IsEqual<X, Y> =
  * 返回一个布尔值，表示给定的`boolean`是否不为`false`。
  *
  * @category Types
+ *
+ * @template T - 要检查的布尔类型
  */
 export type IsNotFalse<T extends boolean> = [T] extends [false] ? false : true
 
@@ -140,6 +164,10 @@ export type IsNotFalse<T extends boolean> = [T] extends [false] ? false : true
  * 返回一个布尔值，用于判断给定类型是否为 `any` 或 `never`。
  *
  * 在递归类型中使用此类型比使用 {@link IfNotAnyOrNever} 更优，因为它不会评估任何分支。
+ *
+ * @category Types
+ *
+ * @template T - 要检查的类型
  *
  * @example
  * ```
@@ -155,8 +183,6 @@ export type IsNotFalse<T extends boolean> = [T] extends [false] ? false : true
  * type C = IsAnyOrNever<never>;
  * //=> true
  * ```
- *
- * @category Types
  */
 export type IsAnyOrNever<T> = IsNotFalse<IsAny<T> | IsNever<T>>
 
@@ -166,6 +192,8 @@ export type IsAnyOrNever<T> = IsNotFalse<IsAny<T> | IsNever<T>>
  * 返回一个布尔值，表示给定的数字是否为浮点数，例如 `1.5` 或 `-1.5`。
  *
  * @category Types
+ *
+ * @template T - 要检查的类型
  */
 export type IsFloat<T> = T extends number
   ? `${T}` extends `${number}e${infer E extends '-' | '+'}${number}`
@@ -177,6 +205,15 @@ export type IsFloat<T> = T extends number
       : false
   : false
 
+/**
+ * Returns a boolean for whether the given type is an integer.
+ *
+ * 返回一个布尔值，表示给定的类型是否为整数。
+ *
+ * @category Types
+ *
+ * @template T - 要检查的类型
+ */
 export type IsInteger<T> = T extends bigint
   ? true
   : T extends number

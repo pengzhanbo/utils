@@ -5,8 +5,9 @@
  *
  * @category String
  *
- * @param str - the string to check
- * @param prefix - the prefix to ensure
+ * @param str - The string to check. 要检查的字符串
+ * @param prefix - The prefix to ensure. 要确保的前缀
+ * @returns The string with the prefix ensured. 确保前缀后的字符串
  *
  * @example
  * ```ts

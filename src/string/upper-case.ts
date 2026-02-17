@@ -6,6 +6,10 @@ import { words } from './words'
  * 将字符串转换为大写
  *
  * @category String
+ *
+ * @param str - 要转换的字符串
+ * @returns 转换后的大写字符串，单词之间用空格分隔
+ *
  * @example
  * ```ts
  * upperCase('Hello World') // => 'HELLO WORLD'

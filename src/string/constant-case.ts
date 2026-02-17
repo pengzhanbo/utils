@@ -6,6 +6,10 @@ import { words } from './words'
  * 将字符串转换为常量命名法
  *
  * @category String
+ *
+ * @param str - The string to convert. 要转换的字符串
+ * @returns The string in constant case. 常量命名法格式的字符串
+ *
  * @example
  * ```ts
  * constantCase('foo bar') // => FOO_BAR

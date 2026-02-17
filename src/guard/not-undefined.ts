@@ -3,10 +3,14 @@
  *
  * 守卫函数，返回 val 不为 undefined
  *
- * @category Function
+ * @category Guard
+ *
+ * @param val - The value to check. 要检查的值
+ * @returns True if the value is not undefined, false otherwise. 如果值不是undefined则返回true，否则返回false
+ *
  * @example
  * ```ts
- * [1, '', false, undefined].filter(NotUndefined) // => [1, '', false]
+ * [1, '', false, undefined].filter(notUndefined) // => [1, '', false]
  * ```
  */
 export function notUndefined(val: unknown): boolean {

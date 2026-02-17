@@ -8,6 +8,9 @@ import { words } from './words'
  *
  * @category String
  *
+ * @param str - The string to convert. 要转换的字符串
+ * @returns The string in camelCase. 驼峰命名法格式的字符串
+ *
  * @example
  * ```ts
  * camelCase('foo bar') // => fooBar

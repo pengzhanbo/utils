@@ -11,10 +11,9 @@ import { isFunction } from '../is'
  *
  * @category Promise
  *
- * @param promises - the array of promises to execute
- * @param concurrency - (optional) the maximum number of promises to execute in parallel 最大并发数
- * @returns - a Promise that resolves with an array containing the resolved values of each promise
- *          - 一个Promise，它解析为一个包含每个promise解析值的数组
+ * @param promises - The array of promises or promise-returning functions to execute. 要执行的promise数组或返回promise的函数数组
+ * @param concurrency - (optional) The maximum number of promises to execute in parallel. Defaults to infinity. 最大并发数，默认为无穷大
+ * @returns A Promise that resolves with an array containing the resolved values of each promise. 一个Promise，它解析为一个包含每个promise解析值的数组
  * @example
  * ```ts
  * const promises = [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)]
@@ -24,7 +23,7 @@ import { isFunction } from '../is'
  */
 export function promiseParallel(
   promises: (PromiseLike<any> | (() => PromiseLike<any>))[],
-  concurrency = Number.POSITIVE_INFINITY,
+  concurrency: number = Number.POSITIVE_INFINITY,
 ): Promise<any[]> {
   promises = Array.from(promises)
 
@@ -65,10 +64,9 @@ export function promiseParallel(
  *
  * @category Promise
  *
- * @param promises - the array of promises to execute
- * @param concurrency - (optional) the maximum number of promises to execute in parallel
- * @returns - a Promise that resolves with an array containing the resolved values of each promise
- *          - 一个Promise，它解析为一个包含每个promise解析状态和值的数组
+ * @param promises - The array of promises or promise-returning functions to execute. 要执行的promise数组或返回promise的函数数组
+ * @param concurrency - (optional) The maximum number of promises to execute in parallel. Defaults to infinity. 最大并发数，默认为无穷大
+ * @returns A Promise that resolves with an array of promise settlement results. 一个Promise，它解析为一个包含每个promise解析状态和值的数组
  * @example
  * ```ts
  * const promises = [Promise.resolve(1), Promise.resolve(2), Promise.reject('error')]
@@ -78,7 +76,7 @@ export function promiseParallel(
  */
 export function promiseParallelSettled(
   promises: (PromiseLike<any> | (() => PromiseLike<any>))[],
-  concurrency = Number.POSITIVE_INFINITY,
+  concurrency: number = Number.POSITIVE_INFINITY,
 ): Promise<PromiseSettledResult<any>[]> {
   promises = Array.from(promises)
 

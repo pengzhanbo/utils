@@ -7,6 +7,9 @@ import { words } from './words'
  *
  * @category String
  *
+ * @param str - 要转换的字符串
+ * @returns 转换后的短横线命名法字符串
+ *
  * @example
  * ```ts
  * kebabCase('a b c') // => a-b-c

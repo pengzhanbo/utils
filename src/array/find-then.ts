@@ -20,7 +20,7 @@ export function findFirstThen<T>(
   array: T[],
   predicate: (value: T, index: number, array: T[]) => boolean,
   then: (value: T, index: number, array: T[]) => void,
-  start = 0,
+  start: number = 0,
 ): boolean {
   return _findThen(array, predicate, then, start)
 }
@@ -47,7 +47,7 @@ export function findLastThen<T>(
   array: T[],
   predicate: (value: T, index: number, array: T[]) => boolean,
   then: (value: T, index: number, array: T[]) => void,
-  start = array.length - 1,
+  start: number = array.length - 1,
 ): boolean {
   return _findThen(array, predicate, then, start, true)
 }
@@ -56,7 +56,7 @@ function _findThen<T>(
   array: T[],
   predicate: (value: T, index: number, array: T[]) => boolean,
   then: (value: T, index: number, array: T[]) => void,
-  start = 0,
+  start: number = 0,
   lastIndex = false,
 ): boolean {
   const end = lastIndex ? -1 : array.length

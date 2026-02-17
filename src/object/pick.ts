@@ -6,6 +6,11 @@ import { isKeyof } from '../is'
  * 创建一个由所选对象属性组成的新对象。
  *
  * @category Object
+ *
+ * @param obj - The source object. 源对象
+ * @param keys - The keys to pick. 要选择的键
+ * @returns A new object with only the picked properties. 仅包含所选属性的新对象
+ *
  * @example
  * ```ts
  * pick({ a: 1, b: 2 }, ['a']) // => { a: 1 }

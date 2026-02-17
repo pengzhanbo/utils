@@ -5,8 +5,10 @@
  *
  * @category Math
  *
- * @param n - the number
- * @param max - the maximum number
+ * @param n - The number to check. 要检查的数字
+ * @param max - The maximum number. 最大值
+ * @returns True if the number is in range, false otherwise. 如果数字在范围内则返回true，否则返回false
+ *
  * @example
  * ```ts
  * inRange(5, 10) // => true
@@ -21,9 +23,11 @@ export function inRange(n: number, max: number): boolean
  *
  * @category Math
  *
- * @param n - the number
- * @param min - the minimum number
- * @param max - the maximum number
+ * @param n - The number to check. 要检查的数字
+ * @param min - The minimum number. 最小值
+ * @param max - The maximum number. 最大值
+ * @returns True if the number is in range, false otherwise. 如果数字在范围内则返回true，否则返回false
+ *
  * @example
  * ```ts
  * inRange(5, 0, 10) // => true

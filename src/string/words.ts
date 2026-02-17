@@ -28,7 +28,7 @@
  * // ['case', 'Case', 'HTML', 'Response', '🚀']
  * ```
  */
-export const CASE_SPLIT_PATTERN =
+export const CASE_SPLIT_PATTERN: RegExp =
   /\p{Lu}?\p{Ll}+|\d+|\p{Lu}+(?!\p{Ll})|[\p{Emoji_Presentation}\p{Extended_Pictographic}]|\p{L}+/gu
 
 /**

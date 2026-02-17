@@ -4,11 +4,16 @@
  * 使用 dot path 从一个对象中获取一个值
  *
  * @category Object
+ *
+ * @param source - The source object. 源对象
+ * @param path - The dot path to retrieve. 要获取的路径
+ * @returns The value at the specified path. 指定路径处的值
+ *
  * @example
  * ```ts
  * objectGet({ a: 1 }, 'a') // => 1
  * objectGet({ a: { b: 2 } }, 'a.b') // => 2
- * objectGet({ a: [{ b: 2 }] }, 'a[0].b') // => 2
+ * objectGet({ a: [{ b: 2 }], 'a[0].b') // => 2
  * ```
  */
 export function objectGet<T extends Record<PropertyKey, any>, P extends ObjectKeyPaths<T>>(

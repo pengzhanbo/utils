@@ -6,6 +6,11 @@ import { removeLeadingSlash, removeTrailingSlash } from './slash'
  * 合并 urls
  *
  * @category URL
+ *
+ * @param baseUrl - The base URL. 基础URL
+ * @param urls - The URLs to combine. 要合并的URL
+ * @returns The combined URL. 合并后的URL
+ *
  * @example
  * ```ts
  * combineURLs('http://example.com', 'foo', 'bar') // => http://example.com/foo/bar

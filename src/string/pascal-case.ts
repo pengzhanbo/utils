@@ -7,6 +7,10 @@ import { words } from './words'
  * 将字符串转换为大驼峰命名法
  *
  * @category String
+ *
+ * @param str - 要转换的字符串
+ * @returns 转换后的大驼峰命名法字符串
+ *
  * @example
  * ```ts
  * pascalCase('foo bar') // => FooBar

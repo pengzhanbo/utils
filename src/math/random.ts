@@ -5,8 +5,9 @@
  *
  * @category Math
  *
- * @param max - the maximum number. 最大值
- * @param float - (optional) if `true`, returns a floating-point number. 是否返回浮点数
+ * @param max - The maximum number. 最大值
+ * @param float - (optional) If `true`, returns a floating-point number. 是否返回浮点数
+ * @returns A random number. 一个随机数
  *
  * @example
  * ```ts
@@ -22,9 +23,10 @@ export function random(max: number, float?: boolean): number
  *
  * @category Math
  *
- * @param min - the minimum number. 最小值
- * @param max - the maximum number. 最大值
- * @param float - (optional) if `true`, returns a floating-point number. 是否返回浮点数
+ * @param min - The minimum number. 最小值
+ * @param max - The maximum number. 最大值
+ * @param float - (optional) If `true`, returns a floating-point number. 是否返回浮点数
+ * @returns A random number. 一个随机数
  *
  * @example
  * ```ts

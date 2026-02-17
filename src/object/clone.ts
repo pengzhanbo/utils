@@ -16,6 +16,9 @@ import { hasOwn } from './has-own'
  * 简单的克隆,使用 JSON.parse 和 JSON.stringify
  *
  * @category Clone
+ *
+ * @param source - The source data to clone. 要克隆的源数据
+ * @returns The cloned data. 克隆后的数据
  */
 export function simpleClone<T = any>(source: T): T {
   return JSON.parse(JSON.stringify(source))
@@ -27,6 +30,9 @@ export function simpleClone<T = any>(source: T): T {
  * 浅克隆,只克隆第一层
  *
  * @category Clone
+ *
+ * @param source - The source data to clone. 要克隆的源数据
+ * @returns The cloned data. 克隆后的数据
  */
 export function shallowClone<T = any>(source: T): T {
   if (isPrimitive(source)) return source
@@ -93,6 +99,9 @@ export function shallowClone<T = any>(source: T): T {
  * 深度克隆
  *
  * @category Clone
+ *
+ * @param source - The source data to clone. 要克隆的源数据
+ * @returns The deeply cloned data. 深度克隆后的数据
  */
 export function deepClone<T = any>(source: T): T {
   return deepCloneImpl(source, source, new Map())

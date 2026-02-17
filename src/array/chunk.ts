@@ -5,8 +5,9 @@
  *
  * @category Array
  *
- * @param input - the array
- * @param size - the chunk size. 块的大小
+ * @param input - The array to be chunked. 要分块的数组
+ * @param size - The size of each chunk. Defaults to 1. 每个块的大小，默认为1
+ * @returns A new array of chunks. 分块后的新数组
  *
  * @example
  * ```ts

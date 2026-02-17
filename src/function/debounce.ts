@@ -28,27 +28,12 @@ export interface DebounceOptions {
  * 防抖函数的执行。与节流不同，防抖确保一个函数在一系列调用中仅执行一次，
  * 要么在调用的最开始，要么在调用的最末尾。
  *
- * @category Functions
+ * @category Function
  *
- * @param delay
- * A zero-or-greater delay in milliseconds. For event callbacks, values around
- * 100 or 250 (or even higher) are most useful.
- *
- * 一个零或更大的延迟，以毫秒为单位。对于事件回调，大约 100 或 250（甚至更高）的值最为实用。
- *
- * @param callback
- * A function to be executed after delay milliseconds. The `this` context and
- * all arguments are passed through, as-is, to `callback` when the
- * debounced-function is executed.
- *
- * 一个在延迟毫秒后执行的函数。当防抖函数执行时，`this`上下文和所有参数都会原样传递给`callback`。
- *
- * @param options
- * An object to configure options.
- * 用于配置选项的对象。
- *
- * @return
- * A new, debounced function.
+ * @param delay - A zero-or-greater delay in milliseconds. For event callbacks, values around 100 or 250 (or even higher) are most useful. 一个零或更大的延迟，以毫秒为单位。对于事件回调，大约100或250（甚至更高）的值最为实用。
+ * @param callback - A function to be executed after delay milliseconds. The `this` context and all arguments are passed through, as-is, to `callback` when the debounced-function is executed. 一个在延迟毫秒后执行的函数。当防抖函数执行时，`this`上下文和所有参数都会原样传递给`callback`。
+ * @param options - An object to configure options. 用于配置选项的对象。
+ * @returns A new, debounced function. 新的防抖函数
  */
 export function debounce<T extends (...args: any[]) => any>(
   delay: number,

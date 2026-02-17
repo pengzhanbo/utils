@@ -10,7 +10,13 @@ import { typeOf } from '../is'
 /**
  * Deep equality two values, support array and object
  *
+ * 深度比较两个值是否相等，支持数组和对象
+ *
  * @category Equal
+ *
+ * @param v1 - The first value to compare. 第一个要比较的值
+ * @param v2 - The second value to compare. 第二个要比较的值
+ * @returns True if the values are deeply equal, false otherwise. 如果值深度相等则返回true，否则返回false
  */
 export function deepEqual(v1: any, v2: any): boolean {
   const type1 = typeOf(v1)

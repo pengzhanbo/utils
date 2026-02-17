@@ -7,6 +7,10 @@ import { notNullish } from '../guard'
  *
  * @category Object
  *
+ * @param obj - The source object. 源对象
+ * @param mapper - The mapper function to transform key/value pairs. 用于转换键值对的映射函数
+ * @returns A new object with transformed key/value pairs. 具有转换后键值对的新对象
+ *
  * Transform:
  * @example
  * ```

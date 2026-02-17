@@ -5,8 +5,9 @@
  *
  * @category String
  *
- * @param str - the string to check
- * @param suffix - the suffix to ensure
+ * @param str - The string to check. 要检查的字符串
+ * @param suffix - The suffix to ensure. 要确保的后缀
+ * @returns The string with the suffix ensured. 确保后缀后的字符串
  *
  * @example
  * ```ts

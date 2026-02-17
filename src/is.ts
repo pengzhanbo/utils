@@ -19,6 +19,16 @@ import {
 } from './_internal/tags'
 import { toString } from './guard'
 
+/**
+ * Get the type of a value
+ *
+ * 获取值的类型
+ *
+ * @category Common
+ *
+ * @param s - The value to get the type of. 要获取类型的值
+ * @returns The type of the value as a string. 值的类型字符串
+ */
 export function typeOf(s: unknown): string {
   const type = typeof s
   return s === null
@@ -34,6 +44,11 @@ export function typeOf(s: unknown): string {
  * 检查值是否为给定类型
  *
  * @category Common
+ *
+ * @param s - The value to check. 要检查的值
+ * @param type - The type to check against. 要检查的类型
+ * @returns True if the value is of the given type, false otherwise. 如果值为给定类型则返回true，否则返回false
+ *
  * @example
  * ```ts
  * isTypeof(null, 'null') // => true
@@ -47,7 +62,13 @@ export function isTypeof(s: unknown, type: string): boolean {
 
 /**
  * Checks if the input is defined
+ *
+ * 检查输入是否已定义
+ *
  * @category Predicate
+ *
+ * @param v - The value to check. 要检查的值
+ * @returns True if the value is defined, false otherwise. 如果值已定义则返回true，否则返回false
  */
 export function isDef<T = any>(v?: T): v is T {
   return !isTypeof(v, T_UNDEFINED)
@@ -55,7 +76,13 @@ export function isDef<T = any>(v?: T): v is T {
 
 /**
  * Checks if the input is a primitive
+ *
+ * 检查输入是否为原始值
+ *
  * @category Predicate
+ *
+ * @param v - The value to check. 要检查的值
+ * @returns True if the value is a primitive, false otherwise. 如果值为原始值则返回true，否则返回false
  */
 export function isPrimitive(
   v: unknown,
@@ -66,7 +93,13 @@ export function isPrimitive(
 
 /**
  * Checks if the input is a boolean
+ *
+ * 检查输入是否为布尔值
+ *
  * @category Predicate
+ *
+ * @param v - The value to check. 要检查的值
+ * @returns True if the value is a boolean, false otherwise. 如果值为布尔值则返回true，否则返回false
  */
 export function isBoolean(v: unknown): v is boolean {
   return isTypeof(v, T_BOOLEAN)
@@ -74,7 +107,13 @@ export function isBoolean(v: unknown): v is boolean {
 
 /**
  * Checks if the input is a function.
+ *
+ * 检查输入是否为函数
+ *
  * @category Predicate
+ *
+ * @param v - The value to check. 要检查的值
+ * @returns True if the value is a function, false otherwise. 如果值为函数则返回true，否则返回false
  */
 export function isFunction<T extends (...args: any[]) => any>(v: unknown): v is T {
   // eslint-disable-next-line valid-typeof
@@ -83,7 +122,13 @@ export function isFunction<T extends (...args: any[]) => any>(v: unknown): v is 
 
 /**
  * Checks if the input is a number
+ *
+ * 检查输入是否为数字
+ *
  * @category Predicate
+ *
+ * @param v - The value to check. 要检查的值
+ * @returns True if the value is a number, false otherwise. 如果值为数字则返回true，否则返回false
  */
 export function isNumber(v: unknown): v is number {
   return isTypeof(v, T_NUMBER)
@@ -91,7 +136,13 @@ export function isNumber(v: unknown): v is number {
 
 /**
  * Checks if the input is a string
+ *
+ * 检查输入是否为字符串
+ *
  * @category Predicate
+ *
+ * @param v - The value to check. 要检查的值
+ * @returns True if the value is a string, false otherwise. 如果值为字符串则返回true，否则返回false
  */
 export function isString(v: unknown): v is string {
   return isTypeof(v, T_STRING)
@@ -99,7 +150,13 @@ export function isString(v: unknown): v is string {
 
 /**
  * Checks if the input is a symbol
+ *
+ * 检查输入是否为符号
+ *
  * @category Predicate
+ *
+ * @param v - The value to check. 要检查的值
+ * @returns True if the value is a symbol, false otherwise. 如果值为符号则返回true，否则返回false
  */
 export function isSymbol(v: unknown): v is symbol {
   return isTypeof(v, T_SYMBOL)
@@ -107,7 +164,13 @@ export function isSymbol(v: unknown): v is symbol {
 
 /**
  * Checks if the input is an object
+ *
+ * 检查输入是否为对象
+ *
  * @category Predicate
+ *
+ * @param v - The value to check. 要检查的值
+ * @returns True if the value is an object, false otherwise. 如果值为对象则返回true，否则返回false
  */
 export function isPlainObject(v: unknown): v is Record<PropertyKey, unknown> {
   return isTypeof(v, T_OBJECT)
@@ -115,7 +178,13 @@ export function isPlainObject(v: unknown): v is Record<PropertyKey, unknown> {
 
 /**
  * Checks if the input is an array
+ *
+ * 检查输入是否为数组
+ *
  * @category Predicate
+ *
+ * @param v - The value to check. 要检查的值
+ * @returns True if the value is an array, false otherwise. 如果值为数组则返回true，否则返回false
  */
 export function isArray<T>(v: unknown): v is T[] {
   return Array.isArray(v)
@@ -124,7 +193,12 @@ export function isArray<T>(v: unknown): v is T[] {
 /**
  * Checks if the input is undefined
  *
+ * 检查输入是否为undefined
+ *
  * @category Predicate
+ *
+ * @param v - The value to check. 要检查的值
+ * @returns True if the value is undefined, false otherwise. 如果值为undefined则返回true，否则返回false
  */
 export function isUndefined(v: unknown): v is undefined {
   return isTypeof(v, T_UNDEFINED)
@@ -132,7 +206,13 @@ export function isUndefined(v: unknown): v is undefined {
 
 /**
  * Checks if the input is null
+ *
+ * 检查输入是否为null
+ *
  * @category Predicate
+ *
+ * @param v - The value to check. 要检查的值
+ * @returns True if the value is null, false otherwise. 如果值为null则返回true，否则返回false
  */
 export function isNull(v: unknown): v is null {
   return isTypeof(v, T_NULL)
@@ -140,7 +220,13 @@ export function isNull(v: unknown): v is null {
 
 /**
  * Checks if the input is a regexp
+ *
+ * 检查输入是否为正则表达式
+ *
  * @category Predicate
+ *
+ * @param v - The value to check. 要检查的值
+ * @returns True if the value is a regexp, false otherwise. 如果值为正则表达式则返回true，否则返回false
  */
 export function isRegexp(v: unknown): v is RegExp {
   return isTypeof(v, T_REGEXP)
@@ -148,7 +234,13 @@ export function isRegexp(v: unknown): v is RegExp {
 
 /**
  * Checks if the input is a date
+ *
+ * 检查输入是否为日期
+ *
  * @category Predicate
+ *
+ * @param v - The value to check. 要检查的值
+ * @returns True if the value is a date, false otherwise. 如果值为日期则返回true，否则返回false
  */
 export function isDate(v: unknown): v is Date {
   return isTypeof(v, T_DATE)
@@ -160,6 +252,10 @@ export function isDate(v: unknown): v is Date {
  * 检查一个对象是否有属性
  *
  * @category Predicate
+ *
+ * @param obj - The object to check. 要检查的对象
+ * @param key - The key to check for. 要检查的键
+ * @returns True if the object has the property, false otherwise. 如果对象具有该属性则返回true，否则返回false
  */
 export function isKeyof<T extends object>(obj: T, key: PropertyKey): key is keyof T {
   return key in obj
@@ -167,7 +263,13 @@ export function isKeyof<T extends object>(obj: T, key: PropertyKey): key is keyo
 
 /**
  * Checks if the input is an empty object
+ *
+ * 检查输入是否为空对象
+ *
  * @category Predicate
+ *
+ * @param v - The value to check. 要检查的值
+ * @returns True if the value is an empty object, false otherwise. 如果值为空对象则返回true，否则返回false
  */
 export function isEmptyObject(v: unknown): boolean {
   if (!isPlainObject(v)) return false
@@ -178,7 +280,13 @@ export function isEmptyObject(v: unknown): boolean {
 
 /**
  * Checks if the input is a blob
+ *
+ * 检查输入是否为Blob
+ *
  * @category Predicate
+ *
+ * @param v - The value to check. 要检查的值
+ * @returns True if the value is a blob, false otherwise. 如果值为Blob则返回true，否则返回false
  */
 export function isBlob(v: unknown): v is Blob {
   /* istanbul ignore if -- @preserve */
@@ -190,7 +298,13 @@ export function isBlob(v: unknown): v is Blob {
 
 /**
  * Checks if the input is a typed array
+ *
+ * 检查输入是否为类型化数组
+ *
  * @category Predicate
+ *
+ * @param v - The value to check. 要检查的值
+ * @returns True if the value is a typed array, false otherwise. 如果值为类型化数组则返回true，否则返回false
  */
 export function isTypedArray(
   v: unknown,
@@ -212,7 +326,12 @@ declare let Buffer: undefined | typeof globalThis.Buffer
 /**
  * Checks if the input is a buffer
  *
+ * 检查输入是否为Buffer
+ *
  * @category Predicate
+ *
+ * @param v - The value to check. 要检查的值
+ * @returns True if the value is a buffer, false otherwise. 如果值为Buffer则返回true，否则返回false
  */
 export function isBuffer(v: unknown): boolean {
   /* istanbul ignore next -- @preserve */
@@ -222,7 +341,12 @@ export function isBuffer(v: unknown): boolean {
 
 /**
  * Checks if the input is a window
+ *
+ * 检查是否在浏览器窗口环境中
+ *
  * @category Predicate
+ *
+ * @returns True if in a window environment, false otherwise. 如果在窗口环境中则返回true，否则返回false
  */
 export function isWindow(): boolean {
   /* istanbul ignore next -- @preserve */
@@ -232,7 +356,12 @@ export function isWindow(): boolean {
 
 /**
  * Checks if the input is a browser
+ *
+ * 检查是否在浏览器环境中
+ *
  * @category Predicate
+ *
+ * @returns True if in a browser environment, false otherwise. 如果在浏览器环境中则返回true，否则返回false
  */
 export function isBrowser(): boolean {
   /* istanbul ignore next -- @preserve */
@@ -242,7 +371,13 @@ export function isBrowser(): boolean {
 
 /**
  * Checks if a value is a JSON object.
+ *
+ * 检查一个值是否为JSON对象
+ *
  * @category Predicate
+ *
+ * @param obj - The value to check. 要检查的值
+ * @returns True if the value is a JSON object, false otherwise. 如果值为JSON对象则返回true，否则返回false
  */
 export function isJSONObject(obj: unknown): obj is Record<string, any> {
   if (!isPlainObject(obj)) {
@@ -271,7 +406,13 @@ export function isJSONObject(obj: unknown): obj is Record<string, any> {
 
 /**
  * Checks if a given value is a valid JSON array.
+ *
+ * 检查给定值是否为有效的JSON数组
+ *
  * @category Predicate
+ *
+ * @param value - The value to check. 要检查的值
+ * @returns True if the value is a valid JSON array, false otherwise. 如果值是有效的JSON数组则返回true，否则返回false
  */
 export function isJSONArray(value: unknown): value is any[] {
   if (!Array.isArray(value)) {
@@ -283,7 +424,13 @@ export function isJSONArray(value: unknown): value is any[] {
 
 /**
  * Checks if a given value is a valid JSON value.
+ *
+ * 检查给定值是否为有效的JSON值
+ *
  * @category Predicate
+ *
+ * @param value - The value to check. 要检查的值
+ * @returns True if the value is a valid JSON value, false otherwise. 如果值是有效的JSON值则返回true，否则返回false
  */
 export function isJSONValue(
   value: unknown,
@@ -309,6 +456,9 @@ export function isJSONValue(
  *
  * @category Predicate
  *
+ * @param v - The value to check. 要检查的值
+ * @returns True if the value is an integer, false otherwise. 如果值为整数则返回true，否则返回false
+ *
  * @example
  * ```ts
  * isInteger(1) // => true
@@ -326,6 +476,9 @@ export function isInteger<T>(v: T): v is Integer<T> {
  *
  * @category Predicate
  *
+ * @param v - The value to check. 要检查的值
+ * @returns True if the value is a safe integer, false otherwise. 如果值为安全整数则返回true，否则返回false
+ *
  * @example
  * ```ts
  * isSafeInteger(1) // => true
@@ -342,6 +495,9 @@ export function isSafeInteger<T>(v: T): v is Integer<T> {
  * `Number.isFinite()` 的强类型版本。
  *
  * @category Predicate
+ *
+ * @param v - The value to check. 要检查的值
+ * @returns True if the value is finite, false otherwise. 如果值为有限数则返回true，否则返回false
  *
  * @example
  * ```ts

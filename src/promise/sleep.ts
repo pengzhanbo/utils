@@ -11,15 +11,16 @@ export interface SleepOptions {
  *
  * @category Promise
  *
- * @param ms - the number of milliseconds to sleep. 睡眠的毫秒数
- * @param options - the options for the sleep. 睡眠的配置项
- * @param options.signal - the signal to abort the sleep. 睡眠的中止信号
- * @returns a promise
+ * @param ms - The number of milliseconds to sleep. 睡眠的毫秒数
+ * @param options - The options for the sleep. 睡眠的配置项
+ * @param options.signal - The signal to abort the sleep. 睡眠的中止信号
+ * @returns A promise that resolves after the specified delay. 在指定延迟后解析的Promise
+ * @throws {AbortError} If the sleep is aborted via the signal. 如果通过信号中止睡眠
  *
  * @example
  * ```ts
  * console.log('Start');
- * await delay(1000); // Delays execution for 1 second
+ * await sleep(1000); // Delays execution for 1 second
  * console.log('End');
  * ```
  *
@@ -30,7 +31,7 @@ export interface SleepOptions {
  *
  * setTimeout(() => controller.abort(), 50); // Will cancel the delay after 50ms
  * try {
- *   await delay(100, { signal });
+ *   await sleep(100, { signal });
  * } catch (error) {
  *   console.error(error); // Will log 'AbortError'
  * }
@@ -68,4 +69,4 @@ export async function sleep(ms: number, { signal }: SleepOptions = {}): Promise<
  *
  * @category Promise
  */
-export const delay = sleep
+export const delay: typeof sleep = sleep

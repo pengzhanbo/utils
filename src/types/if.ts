@@ -12,6 +12,10 @@ import type { IsAny, IsNever, IsNull, IsUndefined, IsUnknown } from './is'
  * - 你可以将此与 `Is*` 类型结合使用，以创建类似 if-else 的能力。例如，`If<IsAny<any>, 'is any', 'not any'>`。
  *
  * @category Types
+ *
+ * @template T - 布尔条件类型
+ * @template Y - 条件为 true 时返回的类型
+ * @template N - 条件为 false 时返回的类型
  */
 export type If<T extends boolean, Y, N> = IsNever<T> extends true ? N : T extends true ? Y : N
 
@@ -24,6 +28,9 @@ export type If<T extends boolean, Y, N> = IsNever<T> extends true ? N : T extend
  *
  * @category Types
  *
+ * @template T - 要检查的类型
+ * @template Y - 类型为 any 时返回的类型
+ * @template N - 类型不为 any 时返回的类型
  */
 export type IfAny<T, Y, N> = If<IsAny<T>, Y, N>
 
@@ -33,6 +40,10 @@ export type IfAny<T, Y, N> = If<IsAny<T>, Y, N>
  * 如果类型 T 接受类型 `null`，则输出类型 Y，否则输出类型 N。
  *
  * @category Types
+ *
+ * @template T - 要检查的类型
+ * @template Y - 类型为 null 时返回的类型
+ * @template N - 类型不为 null 时返回的类型
  */
 export type IfNull<T, Y = true, N = false> = If<IsNull<T>, Y, N>
 
@@ -42,6 +53,10 @@ export type IfNull<T, Y = true, N = false> = If<IsNull<T>, Y, N>
  * 如果类型 T 接受类型 `undefined`，则输出类型 Y，否则输出类型 N。
  *
  * @category Types
+ *
+ * @template T - 要检查的类型
+ * @template Y - 类型为 undefined 时返回的类型
+ * @template N - 类型不为 undefined 时返回的类型
  */
 export type IfUndefined<T, Y = true, N = false> = If<IsUndefined<T>, Y, N>
 
@@ -51,6 +66,10 @@ export type IfUndefined<T, Y = true, N = false> = If<IsUndefined<T>, Y, N>
  * 如果类型 T 接受类型 `never`，则输出类型 Y，否则输出类型 N。
  *
  * @category Types
+ *
+ * @template T - 要检查的类型
+ * @template Y - 类型为 never 时返回的类型
+ * @template N - 类型不为 never 时返回的类型
  */
 export type IfNever<T, Y = true, N = false> = If<IsNever<T>, Y, N>
 
@@ -60,6 +79,10 @@ export type IfNever<T, Y = true, N = false> = If<IsNever<T>, Y, N>
  * 如果类型 T 接受类型 `unknown`，则输出类型 Y，否则输出类型 N。
  *
  * @category Types
+ *
+ * @template T - 要检查的类型
+ * @template Y - 类型为 unknown 时返回的类型
+ * @template N - 类型不为 unknown 时返回的类型
  */
 export type IfUnknown<T, Y = true, N = false> = If<IsUnknown<T>, Y, N>
 
@@ -67,6 +90,13 @@ export type IfUnknown<T, Y = true, N = false> = If<IsUnknown<T>, Y, N>
  * An if-else-like type that resolves depending on whether the given type is `any` or `never`.
  *
  * 一种类似if-else的类型，根据给定类型是`any`还是`never`来解析。
+ *
+ * @category Types
+ *
+ * @template T - 要检查的类型
+ * @template IfNotAnyOrNever - 类型既不是 any 也不是 never 时返回的类型
+ * @template IfAny - 类型为 any 时返回的类型
+ * @template IfNever - 类型为 never 时返回的类型
  *
  * @example
  * ```ts

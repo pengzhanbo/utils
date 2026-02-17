@@ -12,9 +12,9 @@
  *
  * @category Array
  *
- * @param firstArr - the first array. 第一个数组
- * @param secondArr - the second array. 第二个数组
- * @returns - a new array containing the elements that are present in the first array but not in the second array. -- 包含存在于第一个数组中但不在第二个数组中的元素的新数组
+ * @param firstArr - The first array. 第一个数组
+ * @param secondArr - The second array. 第二个数组
+ * @returns A new array containing the elements that are present in the first array but not in the second array. 包含存在于第一个数组中但不在第二个数组中的元素的新数组
  *
  * @example
  * ```ts
@@ -45,6 +45,12 @@ export function difference<T>(firstArr: readonly T[], secondArr: readonly T[]): 
  * 本质上，它会过滤掉第一个数组中那些在映射后与第二个数组映射版本中元素匹配的元素。
  *
  * @category Array
+ *
+ * @param firstArr - The first array. 第一个数组
+ * @param secondArr - The second array. 第二个数组
+ * @param mapper - The mapper function to transform elements. 用于转换元素的映射函数
+ * @returns A new array containing the elements that are present in the first array but not in the second array. 包含存在于第一个数组中但不在第二个数组中的元素的新数组
+ *
  * @example
  * ```ts
  * const array1 = [{ id: 1 }, { id: 2 }, { id: 3 }]

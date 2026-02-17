@@ -48,26 +48,10 @@ export interface ThrottleOptions {
  *
  * @category Function
  *
- * @param delay
- * A zero-or-greater delay in milliseconds. For event callbacks, values around
- * 100 or 250 (or even higher) are most useful.
- *
- * 一个零或更大的延迟时间，以毫秒为单位。对于事件回调，大约
- * 100或250（甚至更高）的值最为实用。
- *
- * @param callback
- * A function to be executed after delay milliseconds. The `this` context and
- * all arguments are passed through, as-is, to `callback` when the
- * throttled-function is executed.
- *
- * 一个在延迟毫秒后执行的函数。
- * 当节流函数执行时，`this`上下文和所有参数都会原样传递给`callback`。
- *
- * @param options
- * An object to configure options.
- * 用于配置选项的对象。
- *
- * @return A new throttled function.
+ * @param delay - A zero-or-greater delay in milliseconds. For event callbacks, values around 100 or 250 (or even higher) are most useful. 一个零或更大的延迟时间，以毫秒为单位。对于事件回调，大约100或250（甚至更高）的值最为实用。
+ * @param callback - A function to be executed after delay milliseconds. The `this` context and all arguments are passed through, as-is, to `callback` when the throttled-function is executed. 一个在延迟毫秒后执行的函数。当节流函数执行时，`this`上下文和所有参数都会原样传递给`callback`。
+ * @param options - An object to configure options. 用于配置选项的对象。
+ * @returns A new throttled function. 新的节流函数
  */
 export function throttle<T extends (...args: any[]) => any>(
   delay: number,
