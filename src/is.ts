@@ -87,7 +87,7 @@ export function isDef<T = any>(v?: T): v is T {
 export function isPrimitive(
   v: unknown,
 ): v is null | undefined | boolean | number | string | symbol | bigint {
-  // eslint-disable-next-line valid-typeof
+  // oxlint-disable-next-line valid-typeof
   return v === null || (typeof v !== T_OBJECT && typeof v !== T_FUNCTION)
 }
 

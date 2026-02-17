@@ -1,5 +1,3 @@
-/* eslint-disable ts/method-signature-style */
-
 import { remove } from '../array/remove'
 import { invoke } from '../function/invoke'
 
