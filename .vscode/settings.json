@@ -2,6 +2,10 @@
   "cSpell.words": ["Arrayable"],
   "editor.defaultFormatter": "oxc.oxc-vscode",
   "editor.formatOnSave": true,
+  "editor.formatOnSaveMode": "file",
   "oxc.typeAware": true,
-  "oxc.unusedDisableDirectives": "deny"
+  "oxc.unusedDisableDirectives": "deny",
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "never" // let oxfmt handle import organization
+  }
 }
