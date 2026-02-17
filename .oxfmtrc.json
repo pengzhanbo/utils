@@ -13,11 +13,8 @@
       "value-external",
       "value-internal",
       ["value-parent", "value-sibling", "value-index"],
-      "side-effect",
-      "ts-equals-import",
       "unknown",
-      "style",
-      "side-effect-style"
+      "style"
     ],
     "newlinesBetween": false
   }
