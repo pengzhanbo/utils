@@ -1,1 +1,1 @@
-export const del = Reflect.deleteProperty
+export const del: typeof Reflect.deleteProperty = Reflect.deleteProperty

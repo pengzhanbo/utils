@@ -1,4 +1,4 @@
-import { isArray, isPlainObject } from '../is'
+import { isArray, isPlainObject } from '../predicate'
 
 /**
  * Freeze an object recursively and its properties

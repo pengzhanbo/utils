@@ -1,4 +1,4 @@
-import { isFunction } from '../is'
+import { isFunction } from '../predicate'
 
 /**
  * Executes an array of promises in parallel with a given concurrency. The function

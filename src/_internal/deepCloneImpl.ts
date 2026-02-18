@@ -1,11 +1,11 @@
-import { isPrimitive, isTypedArray } from '../is'
 import { hasOwn } from '../object'
+import { isPrimitive, isTypedArray } from '../predicate'
 import { T_OBJECT, T_UNDEFINED } from './tags'
 
 export function deepCloneImpl<T>(
   valueToClone: any,
   objectToClone: T,
-  stack = new Map<any, any>(),
+  stack: Map<any, any> = new Map(),
 ): T {
   if (isPrimitive(valueToClone)) {
     return valueToClone as T
@@ -71,7 +71,7 @@ export function deepCloneImpl<T>(
     return result as T
   }
 
-  // eslint-disable-next-line node/prefer-global/buffer, valid-typeof
+  // eslint-disable-next-line valid-typeof
   if (typeof Buffer !== T_UNDEFINED && Buffer.isBuffer(valueToClone)) {
     // @ts-ignore
     return valueToClone.subarray() as T
@@ -182,7 +182,7 @@ export function copyProperties<T>(
   }
 }
 
-export function getSymbols(object: any) {
+export function getSymbols(object: any): symbol[] {
   return Object.getOwnPropertySymbols(object).filter((symbol) =>
     Object.prototype.propertyIsEnumerable.call(object, symbol),
   )

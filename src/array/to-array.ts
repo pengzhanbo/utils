@@ -1,5 +1,5 @@
 import type { Arrayable, Nullable } from '../types'
-import { isArray } from '../is'
+import { isArray } from '../predicate'
 
 /**
  * Convert `Arrayable<T>` to `Array<T>`

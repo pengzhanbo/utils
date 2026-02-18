@@ -1,4 +1,4 @@
-import { isArray } from '../is'
+import { isArray } from '../predicate'
 
 /**
  * Remove value from array

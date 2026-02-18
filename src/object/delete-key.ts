@@ -1,6 +1,6 @@
 import type { Arrayable } from '../types'
 import { del } from '../_internal/reflect'
-import { isArray } from '../is'
+import { isArray } from '../predicate'
 
 /**
  * Delete keys from object

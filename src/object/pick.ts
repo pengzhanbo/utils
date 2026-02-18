@@ -1,4 +1,4 @@
-import { isKeyof } from '../is'
+import { isKeyof } from '../predicate'
 
 /**
  * Creates a new object composed of the picked object properties.

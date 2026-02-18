@@ -1,4 +1,4 @@
-import { isPlainObject } from '../is'
+import { isPlainObject } from '../predicate'
 
 /**
  * Deep merge

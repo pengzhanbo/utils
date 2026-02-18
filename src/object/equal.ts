@@ -5,7 +5,7 @@
  */
 
 import { T_ARRAY, T_OBJECT } from '../_internal/tags'
-import { typeOf } from '../is'
+import { typeOf } from '../predicate'
 
 /**
  * Deep equality two values, support array and object

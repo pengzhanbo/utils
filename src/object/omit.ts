@@ -1,4 +1,4 @@
-import { isKeyof } from '../is'
+import { isKeyof } from '../predicate'
 
 /**
  * Creates a new object with specified keys omitted.

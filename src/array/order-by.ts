@@ -1,7 +1,7 @@
 import type { Arrayable } from '../types'
 import { compareValues } from '../_internal/compare-values'
 import { T_OBJECT } from '../_internal/tags'
-import { isTypeof } from '../is'
+import { isTypeof } from '../predicate'
 import { toArray } from './to-array'
 
 /**

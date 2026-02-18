@@ -7,7 +7,7 @@
  */
 
 import { deepCloneImpl } from '../_internal/deepCloneImpl'
-import { isArray, isPlainObject, isPrimitive, isTypedArray } from '../is'
+import { isArray, isPlainObject, isPrimitive, isTypedArray } from '../predicate'
 import { hasOwn } from './has-own'
 
 /**
