@@ -30,9 +30,7 @@ export function gcd(a: number, b: number): number {
   if (b === 0) return a
 
   while (b !== 0) {
-    const temp = b
-    b = a % b
-    a = temp
+    ;[a, b] = [b, a % b]
   }
 
   return a
