@@ -73,7 +73,7 @@ export function sampleSize<T>(array: readonly T[], size: number): T[] {
 
   for (let i = 0; i < resultLength; i++) {
     const randomIndex = i + Math.floor(Math.random() * (result.length - i))
-    ;[result[i]!, result[randomIndex]!] = [result[randomIndex]!, result[i]!]
+    ;[result[i], result[randomIndex]] = [result[randomIndex]!, result[i]!]
   }
 
   return result.slice(0, resultLength)
