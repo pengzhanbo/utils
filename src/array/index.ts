@@ -6,6 +6,7 @@
  * @module Array
  */
 
+export * from './ArrayIterator'
 export * from './chunk'
 export * from './count'
 export * from './difference'
