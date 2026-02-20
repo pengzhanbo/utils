@@ -8,10 +8,14 @@
   "exclude": [
     "src/**/*.test.ts",
     "pnpm-lock.yaml",
-    "eslint.config.js",
-    "build.config.ts",
     ".editorconfig",
     ".github",
-    ".vscode"
+    ".vscode",
+    ".husky",
+    ".oxfmtrc.json",
+    ".oxlintrc.json",
+    "pnpm-workspace.yaml",
+    "tsdown.config.ts",
+    "vitest.config.ts"
   ]
 }
