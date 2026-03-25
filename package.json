@@ -35,24 +35,24 @@
     "prepare": "husky"
   },
   "devDependencies": {
-    "@pengzhanbo/tsconfig": "^2.0.0",
-    "@types/node": "^25.2.3",
-    "@vitest/coverage-v8": "^4.0.18",
-    "bumpp": "^10.4.1",
+    "@pengzhanbo/tsconfig": "^2.2.0",
+    "@types/node": "^25.5.0",
+    "@vitest/coverage-v8": "^4.1.1",
+    "bumpp": "^11.0.1",
     "cross-env": "^10.1.0",
     "husky": "^9.1.7",
-    "lint-staged": "^16.2.7",
-    "oxfmt": "^0.33.0",
-    "oxlint": "^1.48.0",
-    "oxlint-tsgolint": "^0.14.0",
-    "tsdown": "^0.20.3",
-    "typescript": "^5.9.3",
-    "vitest": "^4.0.18"
+    "lint-staged": "^16.4.0",
+    "oxfmt": "^0.42.0",
+    "oxlint": "^1.57.0",
+    "oxlint-tsgolint": "^0.17.4",
+    "tsdown": "^0.21.5",
+    "typescript": "^6.0.2",
+    "vitest": "^4.1.1"
   },
   "lint-staged": {
     "*.{js,ts,mjs,cjs}": "pnpm run lint",
     "*": "oxfmt --no-error-on-unmatched-pattern",
     "*.{js,ts}": "vitest related --run"
   },
-  "packageManager": "pnpm@10.30.0"
+  "packageManager": "pnpm@10.33.0"
 }
