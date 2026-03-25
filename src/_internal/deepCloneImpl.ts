@@ -71,7 +71,7 @@ export function deepCloneImpl<T>(
     return result as T
   }
 
-  // eslint-disable-next-line valid-typeof
+  // oxlint-disable-next-line valid-typeof
   if (typeof Buffer !== T_UNDEFINED && Buffer.isBuffer(valueToClone)) {
     // @ts-ignore
     return valueToClone.subarray() as T
