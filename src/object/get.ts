@@ -1,3 +1,4 @@
+const DOT_PATHS_REG = /\[(?:(?<quote>['"])([\s\S]+?)\k<quote>|([\s\S]+))\]/g
 /**
  * Retrieve a value from an object using dot path
  *
@@ -20,7 +21,7 @@ export function objectGet<T extends Record<PropertyKey, any>, P extends ObjectKe
   source: T,
   path: P,
 ): ObjectGet<T, P> {
-  const keys = path.replace(/\[['"]?(.+?)['"]?\]/g, '.$1').split('.')
+  const keys = path.replace(DOT_PATHS_REG, '.$2$3').split('.')
   let res: any = source
   for (const k of keys) res = res?.[k]
 
@@ -29,7 +30,7 @@ export function objectGet<T extends Record<PropertyKey, any>, P extends ObjectKe
 
 type GenNode<K extends string | number, IsRoot extends boolean> = IsRoot extends true
   ? `${K}`
-  : `.${K}` | (K extends number ? `[${K}]` | `.[${K}]` : never)
+  : `.${K}` | `["${K}"]` | `['${K}']` | (K extends number ? `[${K}]` | `.[${K}]` : never)
 
 /**
  * Object key paths
