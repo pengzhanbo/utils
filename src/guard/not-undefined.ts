@@ -1,3 +1,5 @@
+import { isUndefined } from '../predicate'
+
 /**
  * guard function that returns if val is not undefined
  *
@@ -14,5 +16,5 @@
  * ```
  */
 export function notUndefined(val: unknown): boolean {
-  return typeof val !== 'undefined'
+  return !isUndefined(val)
 }

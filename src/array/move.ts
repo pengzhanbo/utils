@@ -1,9 +1,10 @@
 import { isArray } from '../predicate'
 
 /**
- * Move item in an array
+ * Move item in an array, change the original array.
  *
- * 移动数组中的项
+ *
+ * 移动数组中的项，此方法会改变原数组。
  *
  * @category Array
  *

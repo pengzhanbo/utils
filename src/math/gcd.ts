@@ -19,9 +19,7 @@ import { isFinite } from '../predicate'
  * ```
  */
 export function gcd(a: number, b: number): number {
-  if (Number.isNaN(a) || Number.isNaN(b) || !isFinite(a) || !isFinite(b)) {
-    return Number.NaN
-  }
+  if (!isFinite(a) || !isFinite(b)) return Number.NaN
 
   a = Math.abs(Math.floor(a))
   b = Math.abs(Math.floor(b))

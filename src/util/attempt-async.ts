@@ -21,19 +21,19 @@ import type { AsyncReturnType } from '../types'
  *
  * @example
  * ```ts
- * const [error, result] = await attempt(() => Promise.resolve(12)) // [null, 12]
- * const [error, result] = await attempt(() => { Promise.reject(new Error('error')) }) // [Error, null]
+ * const [error, result] = await attemptAsync(() => Promise.resolve(12)) // [null, 12]
+ * const [error, result] = await attemptAsync(() => { Promise.reject(new Error('error')) }) // [Error, null]
  * ```
  *
  * @example
  * ```ts
  * const add = (a, b) => Promise.resolve(a + b)
- * const [error, result] = await attempt(add, 1, 2) // [null, 3]
+ * const [error, result] = await attemptAsync(add, 1, 2) // [null, 3]
  * // or
- * const [error, result] = await attempt(async() => await add(1, 2)) // [null, 3]
+ * const [error, result] = await attemptAsync(async() => await add(1, 2)) // [null, 3]
  * ```
  */
-export async function attemptAsync<T extends (...args: any[]) => Promise<any>, E extends Error>(
+export async function attemptAsync<T extends (...args: any[]) => Promise<any>, E = Error>(
   func: T,
   ...args: Parameters<T>
 ): Promise<[null, AsyncReturnType<T>] | [E, null]> {

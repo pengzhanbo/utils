@@ -19,7 +19,11 @@ type Zero = 0 | 0n
 /**
  * Matches the hidden `Infinity` type.
  *
+ * Bypassing TypeScript restrictions
+ *
  * 匹配隐藏的 `Infinity` 类型。
+ *
+ * 绕过 TypeScript 的限制
  *
  * @see https://github.com/microsoft/TypeScript/issues/31752
  *

@@ -43,7 +43,9 @@ export function random(min: number, max: number, float?: boolean): number
  * @param args
  * @returns a random number / 返回一个随机数
  */
-export function random(...args: any[]): number {
+export function random(
+  ...args: [max: number, float?: boolean] | [min: number, max: number, float?: boolean]
+): number {
   let min, max, float
   if (args.length === 1) {
     min = 0

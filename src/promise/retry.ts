@@ -1,3 +1,5 @@
+import { RetryError } from '../error'
+
 /**
  * Retry a async function with a delay
  *
@@ -30,7 +32,7 @@ export function retry<T>(
           if (attempts < limit) {
             setTimeout(retry, delay)
           } else {
-            reject(error)
+            reject(new RetryError(attempts, (error as Error).message))
           }
         })
     }

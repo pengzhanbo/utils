@@ -1,3 +1,5 @@
+import { isNil } from '../predicate'
+
 /**
  * guard function that returns if val is not null or undefined
  *
@@ -14,5 +16,5 @@
  * ```
  */
 export function notNullish<T>(val: T | null | undefined): val is NonNullable<T> {
-  return val != null
+  return !isNil(val)
 }

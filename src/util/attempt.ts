@@ -31,7 +31,7 @@
  * const [error, result] = attempt(() => add(1, 2)) // [null, 3]
  * ```
  */
-export function attempt<T extends (...args: any[]) => any, E extends Error>(
+export function attempt<T extends (...args: any[]) => any, E = Error>(
   func: T,
   ...args: Parameters<T>
 ): [null, ReturnType<T>] | [E, null] {

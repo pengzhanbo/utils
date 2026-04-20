@@ -20,9 +20,7 @@ import { gcd } from './gcd'
  * ```
  */
 export function lcm(a: number, b: number): number {
-  if (Number.isNaN(a) || Number.isNaN(b) || !isFinite(a) || !isFinite(b)) {
-    return Number.NaN
-  }
+  if (!isFinite(a) || !isFinite(b)) return Number.NaN
 
   if (a === 0 || b === 0) return 0
 

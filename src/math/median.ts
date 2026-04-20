@@ -16,9 +16,8 @@
  * ```
  */
 export function median(numbers: number[]): number {
-  if (numbers.length === 0) {
-    return Number.NaN
-  }
+  if (numbers.length === 0) return Number.NaN
+  if (numbers.length === 1) return numbers[0]!
 
   const sorted = [...numbers].sort((a, b) => a - b)
   const mid = Math.floor(sorted.length / 2)

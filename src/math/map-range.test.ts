@@ -31,7 +31,7 @@ describe('math > mapRange', () => {
   })
 
   it('should handle same input min and max', () => {
-    expect(mapRange(5, 0, 0, 0, 100)).toBe(Number.POSITIVE_INFINITY)
+    expect(mapRange(5, 0, 0, 0, 100)).toBe(0)
   })
 
   it('should handle NaN input', () => {

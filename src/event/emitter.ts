@@ -110,11 +110,11 @@ export function createEmitter<Events extends Record<EventType, unknown>>(
   }
 
   const emit = <Key extends keyof Events>(type: Key, event?: Events[Key]) => {
-    const list = listeners.get(type)
-    if (list?.length) invoke(list, event)
+    const list = listeners.get(type) as unknown as EventListenerList<Events[Key]>
+    if (list?.length) invoke(list, event!)
 
-    const wildcardList = listeners.get('*')
-    if (wildcardList?.length) invoke(wildcardList, type, event)
+    const wildcardList = listeners.get('*') as unknown as EventWildcardListenerList<Events>
+    if (wildcardList?.length) invoke(wildcardList, type as string, event!)
   }
 
   const once = <Key extends keyof Events>(type: Key, listener: Listener) => {

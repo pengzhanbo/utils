@@ -11,7 +11,7 @@ import type { Fn, Nullable } from '../types'
  * @param args - The arguments to pass to the function. 要传递给函数的参数
  * @returns The result of the function call. 函数调用的结果
  */
-export function invoke<T>(fn: Fn<T>, ...args: any): T
+export function invoke<F extends Fn>(fn: F, ...args: Parameters<F>): ReturnType<Fn>
 /**
  * call every functions in an array, the remaining parameters are passed in turn
  *
@@ -22,8 +22,11 @@ export function invoke<T>(fn: Fn<T>, ...args: any): T
  * @param fns - An array of functions. 函数数组
  * @param args - The arguments to pass to each function. 要传递给每个函数的参数
  */
-export function invoke(fns: Nullable<Fn>[], ...args: any[]): void
-export function invoke<T>(fns: Nullable<Fn>[] | Fn<T>, ...args: any[]): T | void {
+export function invoke<F extends Fn>(fns: Nullable<F>[], ...args: Parameters<F>): void
+export function invoke<F extends Fn>(
+  fns: Nullable<F>[] | F,
+  ...args: Parameters<F>
+): ReturnType<Fn> | void {
   if (Array.isArray(fns)) fns.forEach((fn) => fn && fn(...args))
   else return fns(...args)
 }

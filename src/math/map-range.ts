@@ -26,5 +26,6 @@ export function mapRange(
   outMin: number,
   outMax: number,
 ): number {
+  if (inMin === inMax) return outMin
   return ((value - inMin) / (inMax - inMin)) * (outMax - outMin) + outMin
 }

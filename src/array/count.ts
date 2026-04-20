@@ -24,11 +24,14 @@
  * // => 2
  * ```
  */
-export function count<T>(array: readonly T[], predicate: (item: T) => boolean): number {
+export function count<T>(
+  array: readonly T[],
+  predicate: (item: T, index: number) => boolean,
+): number {
   let result = 0
 
   for (let i = 0; i < array.length; i++) {
-    if (predicate(array[i]!)) {
+    if (predicate(array[i]!, i)) {
       result++
     }
   }

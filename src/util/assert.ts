@@ -14,8 +14,14 @@
  * @throws {Error} If the condition is false. 如果条件为假
  *
  * @category Common
+ *
+ * @example
+ * ```ts
+ * assert(true) // no throw
+ * assert(false, 'custom message') // throws Error: custom message
+ * ```
  */
-export function assert(condition: unknown, message?: string): asserts condition {
+export function assert(condition: boolean, message?: string): asserts condition {
   if (!condition) {
     throw new Error(message || 'Assertion failed')
   }

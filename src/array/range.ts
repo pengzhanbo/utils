@@ -39,7 +39,7 @@ export function range(start: number, stop: number, step?: number): number[]
  * @param args
  * @returns - a range array of numbers / 返回一个数字范围的数组
  */
-export function range(...args: any): number[] {
+export function range(...args: [number] | [number, number, number?]): number[] {
   let start, stop, step
   if (args.length === 1) {
     start = 0
