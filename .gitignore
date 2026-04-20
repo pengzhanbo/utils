@@ -6,3 +6,8 @@ coverage
 
 npm-debug.log*
 pnpm-debug.log*
+
+.claude
+.agent
+
+!.claude/skills
