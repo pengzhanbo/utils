@@ -35,19 +35,19 @@
     "prepare": "husky"
   },
   "devDependencies": {
-    "@pengzhanbo/tsconfig": "^2.2.0",
-    "@types/node": "^25.5.0",
-    "@vitest/coverage-v8": "^4.1.1",
+    "@pengzhanbo/tsconfig": "^2.4.0",
+    "@types/node": "^25.6.0",
+    "@vitest/coverage-v8": "^4.1.4",
     "bumpp": "^11.0.1",
     "cross-env": "^10.1.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.4.0",
-    "oxfmt": "^0.42.0",
-    "oxlint": "^1.57.0",
-    "oxlint-tsgolint": "^0.17.4",
-    "tsdown": "^0.21.5",
-    "typescript": "^6.0.2",
-    "vitest": "^4.1.1"
+    "oxfmt": "^0.45.0",
+    "oxlint": "^1.60.0",
+    "oxlint-tsgolint": "^0.21.1",
+    "tsdown": "^0.21.9",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.4"
   },
   "lint-staged": {
     "*.{js,ts,mjs,cjs}": "pnpm run lint",
