@@ -9,7 +9,6 @@
  *
  * @category Types
  *
- * @template T - 要美化的类型
  *
  * @example
  * ```ts
@@ -38,7 +37,6 @@ export type Primitive = null | undefined | string | number | boolean | symbol | 
  *
  * @category Types
  *
- * @template T - 构造函数返回的实例类型
  */
 export type Constructor<T = void> = new (...arg: any[]) => T
 
@@ -49,7 +47,6 @@ export type Constructor<T = void> = new (...arg: any[]) => T
  *
  * @category Types
  *
- * @template T - 要推断的数组类型
  */
 export type ElementOf<T> = T extends (infer E)[] ? E : never
 
@@ -60,7 +57,6 @@ export type ElementOf<T> = T extends (infer E)[] ? E : never
  *
  * @category Types
  *
- * @template T - 原始对象类型
  */
 export type LooseRequired<T> = { [P in keyof (T & Required<T>)]: T[P] }
 
@@ -71,6 +67,5 @@ export type LooseRequired<T> = { [P in keyof (T & Required<T>)]: T[P] }
  *
  * @category Types
  *
- * @template A - 要否定的布尔类型
  */
 export type Not<A extends boolean> = A extends true ? false : A extends false ? true : never

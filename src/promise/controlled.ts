@@ -4,6 +4,8 @@
  * 返回一个 Promise，带有 `resolve` 和 `reject` 方法
  *
  * @category Promise
+ *
+ * @returns A controlled promise. 受控Promise
  * @example
  * ```
  * const promise = createControlledPromise()
@@ -31,6 +33,8 @@ export function createControlledPromise<T>(): ControlledPromise<T> {
  * 带有自身`resolve`和`reject`方法的Promise
  *
  * @category Promise
+ *
+ * @internal
  */
 export interface ControlledPromise<T = void> extends Promise<T> {
   resolve: (value: T | PromiseLike<T>) => void

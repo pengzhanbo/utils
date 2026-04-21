@@ -1,6 +1,8 @@
 /**
  * Promise Helpers
  *
+ * Promise帮助函数
+ *
  * @module Promise
  */
 

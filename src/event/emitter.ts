@@ -22,7 +22,6 @@ type EventListenerMap<T extends Record<EventType, unknown>> = Map<
  * 事件发射器接口。
  *
  * @category Event
- * @template Events - 事件类型映射，键为事件名称，值为事件类型
  * @internal
  */
 export interface EventEmitter<Events extends Record<EventType, unknown>> {

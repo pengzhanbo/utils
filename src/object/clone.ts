@@ -21,6 +21,7 @@ import { hasOwn } from './has-own'
  * @returns The cloned data. 克隆后的数据
  */
 export function simpleClone<T = any>(source: T): T {
+  if (isPrimitive(source)) return source
   return JSON.parse(JSON.stringify(source))
 }
 

@@ -61,7 +61,6 @@ export type NegativeInfinity = -1e999
  *
  * @category Types
  *
- * @template T - 要检查的数字类型
  *
  * @example
  * ```ts
@@ -76,8 +75,6 @@ export type Finite<T extends number> = T extends PositiveInfinity | NegativeInfi
  * 负数 `number`/`bigint`（`-∞ < x < 0`）
  *
  * @category Types
- *
- * @template T - 要检查的数字类型
  */
 export type Negative<T extends _Numeric> = T extends Zero
   ? never
@@ -91,8 +88,6 @@ export type Negative<T extends _Numeric> = T extends Zero
  * 一个整数类型的`number`。
  *
  * @category Types
- *
- * @template T - 要检查的类型
  */
 export type Integer<T> = T extends unknown // To distributive type
   ? IsInteger<T> extends true
@@ -108,8 +103,6 @@ export type Integer<T> = T extends unknown // To distributive type
  * 等同于`Negative<Integer<T>>`。
  *
  * @category Types
- *
- * @template T - 要检查的数字类型
  */
 export type NegativeInteger<T extends number> = Negative<Integer<T>>
 /**
@@ -118,8 +111,6 @@ export type NegativeInteger<T extends number> = Negative<Integer<T>>
  * 一个浮点数类型的`number`。
  *
  * @category Types
- *
- * @template T - 要检查的类型
  */
 export type Float<T> = T extends unknown // To distributive type
   ? IsFloat<T> extends true
@@ -135,7 +126,5 @@ export type Float<T> = T extends unknown // To distributive type
  * 等同于 `Negative<Float<T>>`。
  *
  * @category Types
- *
- * @template T - 要检查的数字类型
  */
 export type NegativeFloat<T extends number> = Negative<Float<T>>

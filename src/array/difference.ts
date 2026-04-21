@@ -12,8 +12,6 @@
  *
  * @category Array
  *
- * @template T - The type of elements in the array. 数组中元素的类型
- *
  * @param firstArr - The first array. 第一个数组
  * @param secondArr - The second array. 第二个数组
  * @returns A new array containing the elements that are present in the first array but not in the second array. 包含存在于第一个数组中但不在第二个数组中的元素的新数组
@@ -48,8 +46,6 @@ export function difference<T>(firstArr: readonly T[], secondArr: readonly T[]): 
  *
  * @category Array
  *
- * @template T - The type of elements in the first array. 第一个数组中元素的类型
- * @template U - The type of elements in the second array. 第二个数组中元素的类型
  *
  * @param firstArr - The first array. 第一个数组
  * @param secondArr - The second array. 第二个数组

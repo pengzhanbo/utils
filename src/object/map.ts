@@ -11,23 +11,23 @@ import { notNullish } from '../guard'
  * @param mapper - The mapper function to transform key/value pairs. 用于转换键值对的映射函数
  * @returns A new object with transformed key/value pairs. 具有转换后键值对的新对象
  *
- * Transform:
  * @example
  * ```ts
+ * // Transform:
  * objectMap({ a: 1, b: 2 }, (k, v) => [k.toString().toUpperCase(), v.toString()])
  * // { A: '1', B: '2' }
  * ```
  *
- * Swap key/value:
  * @example
  * ```ts
+ * // Swap key/value:
  * objectMap({ a: 1, b: 2 }, (k, v) => [v, k])
  * // { 1: 'a', 2: 'b' }
  * ```
  *
- * Filter keys:
  * @example
  * ```ts
+ * // Filter keys:
  * objectMap({ a: 1, b: 2 }, (k, v) => k === 'a' ? undefined : [k, v])
  * // { b: 2 }
  * ```

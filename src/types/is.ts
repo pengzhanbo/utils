@@ -10,7 +10,6 @@ import type { NegativeInfinity, PositiveInfinity } from './numeric'
  *
  * @category Types
  *
- * @template T - 要检查的类型
  */
 export type IsPrimitive<T> = [T] extends [Primitive] ? true : false
 
@@ -23,7 +22,6 @@ export type IsPrimitive<T> = [T] extends [Primitive] ? true : false
  *
  * @category Types
  *
- * @template T - 要检查的类型
  */
 export type IsAny<T> = 0 extends 1 & NoInfer<T> ? true : false
 
@@ -37,7 +35,6 @@ export type IsAny<T> = 0 extends 1 & NoInfer<T> ? true : false
  *
  * @category Types
  *
- * @template T - 要检查的类型
  */
 export type IsNever<T> = [T] extends [never] ? true : false
 
@@ -48,7 +45,6 @@ export type IsNever<T> = [T] extends [never] ? true : false
  *
  * @category Types
  *
- * @template T - 要检查的类型
  */
 export type IsNull<T> = [T] extends [null] ? true : false
 
@@ -58,8 +54,6 @@ export type IsNull<T> = [T] extends [null] ? true : false
  * 如果类型 T 包含类型 `null`，则输出 true，否则输出 false。
  *
  * @category Types
- *
- * @template T - 要检查的类型
  *
  * @example
  * ```ts
@@ -80,7 +74,6 @@ export type IsNullable<T> =
  *
  * @category Types
  *
- * @template T - 要检查的类型
  */
 export type IsUndefined<T> = [T] extends [undefined] ? true : false
 
@@ -91,7 +84,6 @@ export type IsUndefined<T> = [T] extends [undefined] ? true : false
  *
  * @category Types
  *
- * @template T - 要检查的类型
  */
 export type IsUnknown<T> = unknown extends T // `T` can be `unknown` or `any`
   ? IsNull<T> extends false // `any` can be `null`, but `unknown` can't be
@@ -106,7 +98,6 @@ export type IsUnknown<T> = unknown extends T // `T` can be `unknown` or `any`
  *
  * @category Types
  *
- * @template T - 要检查的类型
  */
 export type IsUnion<T> = InternalIsUnion<T>
 
@@ -115,8 +106,6 @@ export type IsUnion<T> = InternalIsUnion<T>
  *
  * `IsUnion` 的实际实现。
  *
- * @template T - 要检查的类型
- * @template U - 内部使用的类型参数
  * @internal
  */
 export type InternalIsUnion<T, U = T> = (
@@ -139,9 +128,6 @@ export type InternalIsUnion<T, U = T> = (
  * 如果类型 X 等于类型 Y，则输出 true，否则输出 false。
  *
  * @category Types
- *
- * @template X - 第一个要比较的类型
- * @template Y - 第二个要比较的类型
  */
 export type IsEqual<X, Y> =
   (<T>() => T extends X ? 1 : 2) extends <T>() => T extends Y ? 1 : 2 ? true : false
@@ -153,7 +139,6 @@ export type IsEqual<X, Y> =
  *
  * @category Types
  *
- * @template T - 要检查的布尔类型
  */
 export type IsNotFalse<T extends boolean> = [T] extends [false] ? false : true
 
@@ -167,8 +152,6 @@ export type IsNotFalse<T extends boolean> = [T] extends [false] ? false : true
  * 在递归类型中使用此类型比使用 {@link IfNotAnyOrNever} 更优，因为它不会评估任何分支。
  *
  * @category Types
- *
- * @template T - 要检查的类型
  *
  * @example
  * ```
@@ -194,7 +177,6 @@ export type IsAnyOrNever<T> = IsNotFalse<IsAny<T> | IsNever<T>>
  *
  * @category Types
  *
- * @template T - 要检查的类型
  */
 export type IsFloat<T> = T extends number
   ? `${T}` extends `${number}e${infer E extends '-' | '+'}${number}`
@@ -213,7 +195,6 @@ export type IsFloat<T> = T extends number
  *
  * @category Types
  *
- * @template T - 要检查的类型
  */
 export type IsInteger<T> = T extends bigint
   ? true

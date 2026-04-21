@@ -7,8 +7,6 @@ import type { IsNever } from './is'
  * @see https://stackoverflow.com/a/50375286/2172153
  *
  * @category Types
- *
- * @template Union - 要转换的联合类型
  */
 export type UnionToIntersection<Union> =
   // `extends unknown` is always going to be the case and is used to convert the
@@ -30,7 +28,6 @@ export type UnionToIntersection<Union> =
  *
  * 返回联合类型的最后一个元素。
  *
- * @template T - 联合类型
  * @internal
  */
 export type LastOfUnion<T> =
@@ -50,9 +47,6 @@ export type LastOfUnion<T> =
  * 当你有具有有限键集的对象，并且希望定义仅允许的键的类型，但又不想重复自己时，这会很有用。
  *
  * @category Types
- *
- * @template T - 要转换的联合类型
- * @template L - 内部使用的类型参数
  *
  * @example
  * ```ts
@@ -87,9 +81,6 @@ export type UnionToTuple<T, L = LastOfUnion<T>> =
  * @see https://github.com/microsoft/TypeScript/issues/29729#issuecomment-471566609
  *
  * @category Types
- *
- * @template Union - 字面量联合类型
- * @template Base - 基础类型，默认为 string
  */
 export type LiteralUnion<Union extends Base, Base = string> =
   | Union

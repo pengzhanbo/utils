@@ -8,6 +8,9 @@ import { isArray } from '../predicate'
  *
  * @category Array
  *
+ * @param v - The value to convert to array / 要转换为数组的值
+ * @returns The array / 数组
+ *
  * @example
  * ```ts
  * toArray(null) // => []

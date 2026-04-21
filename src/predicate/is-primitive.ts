@@ -14,5 +14,5 @@ export function isPrimitive(
   v: unknown,
 ): v is null | undefined | boolean | number | string | symbol | bigint {
   // oxlint-disable-next-line valid-typeof
-  return v === null || (typeof v !== T_OBJECT && typeof v !== T_FUNCTION)
+  return v == null || (typeof v !== T_OBJECT && typeof v !== T_FUNCTION)
 }

@@ -20,6 +20,10 @@ import { orderBy } from './order-by'
  *
  * @category Array
  *
+ * @param arr - The array to sort / 要排序的数组
+ * @param accords - The accordion to use to sort by / 用于排序的排序依据
+ * @returns The sorted array / 排序后的数组
+ *
  * @example
  * ```ts
  * const users = [

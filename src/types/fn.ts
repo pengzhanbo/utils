@@ -4,8 +4,6 @@
  * Promise 类型或非 Promise 类型
  *
  * @category Types
- *
- * @template T - 原始类型
  */
 export type Awaitable<T> = T | PromiseLike<T>
 
@@ -15,8 +13,6 @@ export type Awaitable<T> = T | PromiseLike<T>
  * 函数类型
  *
  * @category Types
- *
- * @template T - 函数返回值类型
  */
 export type Fn<T = void> = (...args: any[]) => T
 
@@ -26,8 +22,6 @@ export type Fn<T = void> = (...args: any[]) => T
  * 异步函数类型
  *
  * @category Types
- *
- * @template T - 异步函数返回值类型
  */
 export type AsyncFn<T = void> = (...args: any[]) => Promise<T>
 
@@ -37,7 +31,5 @@ export type AsyncFn<T = void> = (...args: any[]) => Promise<T>
  * 异步函数的返回类型
  *
  * @category Types
- *
- * @template T - 异步函数类型
  */
 export type AsyncReturnType<T extends AsyncFn> = Awaited<ReturnType<T>>

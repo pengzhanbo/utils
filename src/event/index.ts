@@ -1,4 +1,8 @@
 /**
+ * Event Helpers
+ *
+ * 事件帮助函数
+ *
  * @module Event
  */
 

@@ -12,6 +12,10 @@ import { isPlainObject } from '../predicate'
  * 目标对象将被修改并返回。
  *
  * @category Object
+ *
+ * @param target - The target object / 目标对象
+ * @param sources - The source objects / 源对象
+ * @returns The merged object / 合并后的对象
  */
 export function deepMerge<
   T extends Record<PropertyKey, any>,
@@ -63,6 +67,10 @@ export function deepMerge<
  * 目标对象将被修改并返回。
  *
  * @category Object
+ *
+ * @param target - The target object / 目标对象
+ * @param sources - The source objects / 源对象
+ * @returns The merged object / 合并后的对象
  */
 export function deepMergeWithArray<
   T extends Record<PropertyKey, any>,

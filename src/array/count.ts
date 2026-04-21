@@ -5,8 +5,6 @@
  *
  * @category Array
  *
- * @template T - The type of elements in the array. 数组中元素的类型
- *
  * @param array - The array to count elements in. 要统计元素数量的数组
  * @param predicate - The function to test each element. 用于测试每个元素的函数
  * @returns The number of elements that satisfy the predicate. 满足谓词的元素数量
@@ -56,9 +54,6 @@ export function count<T>(
  * 值是产生该键的元素数量。
  *
  * @category Array
- *
- * @template T - The type of elements in the array. 数组中元素的类型
- * @template K - The type of the keys in the object. 对象中键的类型
  *
  * @param array - The array to count. 要统计的数组
  * @param iteratee - The function to transform elements into keys. 将元素转换为键的函数

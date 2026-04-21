@@ -47,8 +47,6 @@ type Operation<T> =
  *
  * 支持链式操作和惰性计算的数组迭代器类
  *
- * @typeParam T - The type of elements in the array. 数组元素的类型
- *
  * @category Array
  *
  * @example

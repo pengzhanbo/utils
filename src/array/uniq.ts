@@ -4,6 +4,10 @@
  * 通过数组元素的相同性来实现数组去重
  *
  * @category Array
+ *
+ * @param v - The array to remove duplicates from / 要去重的数组
+ * @returns The array with duplicates removed / 去重后的数组
+ *
  * @example
  * ```ts
  * uniq([1, 1, 2, 2, 3, 3]) // => [1, 2, 3]
@@ -19,6 +23,11 @@ export function uniq<T>(v: T[]): T[] {
  * 通过自定义 predicate 函数实现数组去重
  *
  * @category Array
+ *
+ * @param predicate - The function to use to transform each element / 用于每个元素的 predicate 函数
+ * @param v - The array to remove duplicates from / 要去重的数组
+ * @returns The array with duplicates removed / 去重后的数组
+ *
  * @example
  * ```ts
  * uniqBy([
