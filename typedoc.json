@@ -44,5 +44,6 @@
   },
   "treatWarningsAsErrors": false,
   "emit": "docs",
-  "pretty": true
+  "pretty": true,
+  "plugin": ["typedoc-github-theme"]
 }
