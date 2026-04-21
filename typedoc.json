@@ -45,5 +45,5 @@
   "treatWarningsAsErrors": false,
   "emit": "docs",
   "pretty": true,
-  "plugin": ["typedoc-github-theme"]
+  "plugin": ["typedoc-github-theme", "typedoc-plugin-coverage"]
 }
