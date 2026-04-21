@@ -14,7 +14,7 @@ export type Awaitable<T> = T | PromiseLike<T>
  *
  * @category Types
  */
-export type Fn<T = void> = (...args: any[]) => T
+export type Fn<T = any> = (...args: any[]) => T
 
 /**
  * Async Function

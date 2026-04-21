@@ -31,6 +31,28 @@ export type Prettify<T> = { [K in keyof T]: T[K] } & {}
 export type Primitive = null | undefined | string | number | boolean | symbol | bigint
 
 /**
+ * any primitive, `void`, `Date`, or `RegExp` value
+ *
+ * 任何原始类型、`void`、`Date` 或 `RegExp` 类型
+ *
+ * @category Types
+ */
+export type BuiltIns = Primitive | void | Date | RegExp
+
+/**
+ * Non-recursive types
+ *
+ * 非递归类型
+ *
+ * @category Types
+ */
+export type NonRecursiveType =
+  | BuiltIns
+  | Function
+  | (new (...arguments_: any[]) => unknown)
+  | Promise<unknown>
+
+/**
  * Constructor
  *
  * 构造函数类型
