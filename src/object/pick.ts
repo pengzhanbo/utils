@@ -1,4 +1,5 @@
 import { isKeyof } from '../predicate'
+import { objectKeys } from './keys'
 
 /**
  * Creates a new object composed of the picked object properties.
@@ -24,6 +25,35 @@ export function pick<T extends Record<PropertyKey, any>, K extends keyof T = key
 
   for (const key of keys) {
     if (isKeyof(obj, key)) res[key] = obj[key]
+  }
+
+  return res
+}
+
+/**
+ * Creates a new object with properties that satisfy the predicate.
+ *
+ * 创建一个新对象，仅包含满足 predicate 的属性
+ *
+ * @category Object
+ *
+ * @param obj - The source object. 源对象
+ * @param predicate - The predicate function. 谓词函数
+ * @returns A new object with properties that satisfy the predicate. 满足谓词的新对象
+ *
+ * @example
+ * ```ts
+ * pickBy({ a: 1, b: 2, c: 3 }, (v) => v > 1) // => { b: 2, c: 3 }
+ * ```
+ */
+export function pickBy<T extends Record<PropertyKey, any>>(
+  obj: T,
+  predicate: (value: T[keyof T], key: keyof T) => boolean,
+): Partial<T> {
+  const res: Partial<T> = Object.create(Object.getPrototypeOf(obj))
+
+  for (const key of objectKeys(obj)) {
+    if (isKeyof(obj, key) && predicate(obj[key], key)) res[key] = obj[key]
   }
 
   return res
