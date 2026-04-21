@@ -5,6 +5,8 @@
  *
  * 一个常用的工具类库, 无依赖， 任何运行时。
  *
+ * [![document coverage](https://utils.pengzhanbo.cn/coverage.svg)](https://utils.pengzhanbo.cn/)
+ *
  * ## Example
  *
  * ```ts
