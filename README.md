@@ -23,4 +23,4 @@ npm install @pengzhanbo/utils
 
 ## Usage
 
-See [Document](https://jsr.io/@pengzhanbo/utils)
+See [Document](https://utils.pengzhanbo.cn/)
