@@ -3,6 +3,7 @@ import type { Cancel, CancelOptions, FnNoReturn } from '../_internal/types'
 /**
  * Throttle Options
  * @category Types
+ * @internal
  */
 export interface ThrottleOptions {
   /**

@@ -4,6 +4,7 @@ import { throttle } from './throttle'
 /**
  * Debounce Options
  * @category Types
+ * @internal
  */
 export interface DebounceOptions {
   /**

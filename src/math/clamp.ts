@@ -9,6 +9,12 @@
  * @param min - The minimum value. 最小值
  * @param max - The maximum value. 最大值
  * @returns The clamped number. 限制后的数字
+ *
+ * @example
+ * ```ts
+ * clamp(5, 0, 10) // => 5
+ * clamp(10, 0, 5) // => 5
+ * ```
  */
 export function clamp(n: number, min: number, max: number): number {
   return Math.min(max, Math.max(n, min))

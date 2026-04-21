@@ -17,6 +17,19 @@ export function union<T>(a: T[], b: T[]): T[] {
   return uniq([...a, ...b])
 }
 
+/**
+ * Union two arrays by predicate
+ *
+ * 两个数组的并集，根据 predicate 函数进行比较
+ *
+ * @category Array
+ *
+ * @example
+ * ```ts
+ * unionBy([1, 2, 3], [2, 4, 5, 6], (item) => item % 2) // => [1, 2, 3, 4, 5, 6]
+ * unionBy([1, 2], [3, 4], (item) => item % 2) // => []
+ * ```
+ */
 export function unionBy<T, U>(a: T[], b: T[], predicate: (item: T) => U): T[] {
   return uniqBy([...a, ...b], predicate)
 }

@@ -14,8 +14,10 @@
  * @param predicate - The function to test each element. 用于测试每个元素的函数
  * @returns A tuple of two arrays: [elements that satisfy predicate, elements that don't]. 包含两个数组的元组：[满足谓词的元素, 不满足谓词的元素]
  *
- * @performance O(n) time complexity - single pass through the array
- *              O(n) 时间复杂度 - 单次遍历数组
+ * @remarks
+ * O(n) time complexity - single pass through the array
+ *
+ * O(n) 时间复杂度 - 单次遍历数组
  *
  * @example
  * ```ts

@@ -11,6 +11,7 @@ import { isFunction, isInteger, isNumber } from '../predicate'
  * Predicate function type for filtering array elements
  *
  * 用于过滤数组元素的断言函数类型
+ * @internal
  */
 export type ArrayIteratorPredicate<T> = (value: T, index: number) => boolean
 
@@ -18,6 +19,7 @@ export type ArrayIteratorPredicate<T> = (value: T, index: number) => boolean
  * Transform function type for mapping array elements
  *
  * 用于映射数组元素的转换函数类型
+ * @internal
  */
 export type ArrayIteratorTransform<T, R> = (value: T, index: number) => R
 
@@ -25,6 +27,7 @@ export type ArrayIteratorTransform<T, R> = (value: T, index: number) => R
  * Callback function type for forEach
  *
  * forEach 回调函数类型
+ * @internal
  */
 export type ArrayIteratorCallback<T> = (value: T, index: number) => void
 

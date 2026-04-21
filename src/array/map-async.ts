@@ -6,6 +6,8 @@ import { promiseParallel } from '../promise'
  *
  * 使用异步回调函数转换数组中的每个元素，并返回一个解析为转换后值数组的 promise。
  *
+ * @category Array
+ *
  * @example
  * ```ts
  * const users = [{ id: 1 }, { id: 2 }, { id: 3 }];

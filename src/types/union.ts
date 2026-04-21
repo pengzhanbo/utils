@@ -31,8 +31,9 @@ export type UnionToIntersection<Union> =
  * 返回联合类型的最后一个元素。
  *
  * @template T - 联合类型
+ * @internal
  */
-type LastOfUnion<T> =
+export type LastOfUnion<T> =
   UnionToIntersection<T extends any ? () => T : never> extends () => infer R ? R : never
 
 /**

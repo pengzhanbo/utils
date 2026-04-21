@@ -2,6 +2,9 @@ import { hasOwn } from '../object'
 import { isPrimitive, isTypedArray } from '../predicate'
 import { T_OBJECT, T_UNDEFINED } from './tags'
 
+/**
+ * @internal
+ */
 export function deepCloneImpl<T>(
   valueToClone: any,
   objectToClone: T,
@@ -164,6 +167,9 @@ export function deepCloneImpl<T>(
   return valueToClone
 }
 
+/**
+ * @internal
+ */
 export function copyProperties<T>(
   target: any,
   source: any,
@@ -182,6 +188,9 @@ export function copyProperties<T>(
   }
 }
 
+/**
+ * @internal
+ */
 export function getSymbols(object: any): symbol[] {
   return Object.getOwnPropertySymbols(object).filter((symbol) =>
     Object.prototype.propertyIsEnumerable.call(object, symbol),

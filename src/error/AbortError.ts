@@ -7,6 +7,12 @@
  * @augments Error
  *
  * @param message - The error message. 错误消息
+ *
+ * @example
+ * ```ts
+ * new AbortError()
+ * // => AbortError: The operation was aborted
+ * ```
  */
 export class AbortError extends Error {
   constructor(message = 'The operation was aborted') {

@@ -7,7 +7,7 @@ import { toString } from '../guard'
  *
  * 获取值的类型
  *
- * @category Common
+ * @category Predicate
  *
  * @param s - The value to get the type of. 要获取类型的值
  * @returns The type of the value as a string. 值的类型字符串

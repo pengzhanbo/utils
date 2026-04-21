@@ -16,8 +16,10 @@
  * @param iteratee - The function to transform elements into group keys. 将元素转换为分组键的函数
  * @returns An object with grouped elements. 分组后的对象
  *
- * @performance Uses Map for O(1) key lookup, overall O(n) time complexity
- *              使用 Map 实现 O(1) 键查找，整体时间复杂度 O(n)
+ * @remarks
+ * Uses Map for O(1) key lookup, overall O(n) time complexity
+ *
+ * 使用 Map 实现 O(1) 键查找，整体时间复杂度 O(n)
  *
  * @example
  * ```ts

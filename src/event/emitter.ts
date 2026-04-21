@@ -1,24 +1,30 @@
 import { remove } from '../array/remove'
 import { invoke } from '../function/invoke'
 
-export type EventType = string | symbol
+type EventType = string | symbol
 
-export type EventListener<T> = (event: T) => void
+type EventListener<T> = (event: T) => void
 
-export type EventWildcardListener<T = Record<string, unknown>> = (
-  type: keyof T,
-  event: T[keyof T],
-) => void
+type EventWildcardListener<T = Record<string, unknown>> = (type: keyof T, event: T[keyof T]) => void
 
-export type EventListenerList<T> = EventListener<T>[]
+type EventListenerList<T> = EventListener<T>[]
 
-export type EventWildcardListenerList<T> = EventWildcardListener<T>[]
+type EventWildcardListenerList<T> = EventWildcardListener<T>[]
 
-export type EventListenerMap<T extends Record<EventType, unknown>> = Map<
+type EventListenerMap<T extends Record<EventType, unknown>> = Map<
   keyof T | '*',
   EventListenerList<T[keyof T]> | EventWildcardListenerList<T>
 >
 
+/**
+ * Event emitter interface.
+ *
+ * 事件发射器接口。
+ *
+ * @category Event
+ * @template Events - 事件类型映射，键为事件名称，值为事件类型
+ * @internal
+ */
 export interface EventEmitter<Events extends Record<EventType, unknown>> {
   listeners: EventListenerMap<Events>
 

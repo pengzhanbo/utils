@@ -15,6 +15,8 @@
  *
  * 信号量通过维护获取者的 FIFO（先进先出）顺序来确保公平性。
  *
+ * @category Promise
+ *
  * @example
  * ```ts
  * const sema = new Semaphore(2);

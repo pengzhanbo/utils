@@ -6,6 +6,7 @@ import type { IsFloat, IsInteger } from './is'
  * 数字类型，包括 number 和 bigint
  *
  * @category Types
+ * @internal
  */
 export type _Numeric = number | bigint
 
@@ -13,8 +14,9 @@ export type _Numeric = number | bigint
  * Zero type, includes 0 and 0n
  *
  * 零类型，包括 0 和 0n
+ * @internal
  */
-type Zero = 0 | 0n
+export type Zero = 0 | 0n
 
 /**
  * Matches the hidden `Infinity` type.

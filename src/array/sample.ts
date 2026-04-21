@@ -8,8 +8,10 @@
  * @param array - The array to sample from. 要取样的数组
  * @returns A random element from the array, or undefined if the array is empty. 数组中的随机元素，如果数组为空则返回 undefined
  *
- * @performance O(1) time complexity - direct index access
- *              O(1) 时间复杂度 - 直接索引访问
+ * @remarks
+ * O(1) time complexity - direct index access
+ *
+ * O(1) 时间复杂度 - 直接索引访问
  *
  * @example
  * ```ts
@@ -47,10 +49,10 @@ export function sample<T>(array: readonly T[]): T | undefined {
  * @param size - The number of elements to sample. 要取样的元素数量
  * @returns An array of random elements from the array. 数组中的随机元素数组
  *
- * @performance O(n) time complexity where n is the size parameter
- *              Uses Fisher-Yates partial shuffle for unbiased sampling
- *              O(n) 时间复杂度，其中 n 为 size 参数
- *              使用 Fisher-Yates 部分洗牌算法实现无偏取样
+ * @remarks
+ * O(n) time complexity where n is the size parameter. Uses Fisher-Yates partial shuffle for unbiased sampling
+ *
+ * O(n) 时间复杂度，其中 n 为 size 参数。使用 Fisher-Yates 部分洗牌算法实现无偏取样
  *
  * @example
  * ```ts

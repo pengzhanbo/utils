@@ -117,8 +117,9 @@ export type IsUnion<T> = InternalIsUnion<T>
  *
  * @template T - 要检查的类型
  * @template U - 内部使用的类型参数
+ * @internal
  */
-type InternalIsUnion<T, U = T> = (
+export type InternalIsUnion<T, U = T> = (
   IsNever<T> extends true ? false : T extends any ? ([U] extends [T] ? false : true) : never
 ) extends infer Result
   ? // In some cases `Result` will return `false | true` which is `boolean`,

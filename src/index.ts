@@ -1,8 +1,6 @@
 /**
  * @pengzhanbo/utils
  *
- * =====================
- *
  * A common JavaScript utility library, zero dependencies, any runtime.
  *
  * 一个常用的工具类库, 无依赖， 任何运行时。

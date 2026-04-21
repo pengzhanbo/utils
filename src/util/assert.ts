@@ -13,7 +13,7 @@
  * @param message - The message to display if the condition is false. 如果条件为假时显示的消息
  * @throws {Error} If the condition is false. 如果条件为假
  *
- * @category Common
+ * @category Util
  *
  * @example
  * ```ts

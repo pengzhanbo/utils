@@ -7,6 +7,12 @@
  * @augments Error
  *
  * @param message - The error message. 错误消息
+ *
+ * @example
+ * ```ts
+ * new TimeoutError()
+ * // => TimeoutError: The operation was timed out
+ * ```
  */
 export class TimeoutError extends Error {
   constructor(message = 'The operation was timed out') {

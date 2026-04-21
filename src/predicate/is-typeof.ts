@@ -5,7 +5,7 @@ import { typeOf } from './type-of'
  *
  * 检查值是否为给定类型
  *
- * @category Common
+ * @category Predicate
  *
  * @param s - The value to check. 要检查的值
  * @param type - The type to check against. 要检查的类型

@@ -10,6 +10,13 @@ import type { Fn, Nullable } from '../types'
  * @param fn - The function to call. 要调用的函数
  * @param args - The arguments to pass to the function. 要传递给函数的参数
  * @returns The result of the function call. 函数调用的结果
+ *
+ * @example
+ * ```ts
+ * const add = (a, b) => a + b
+ * invoke(add, 1, 2)
+ * // => 3
+ * ```
  */
 export function invoke<F extends Fn>(fn: F, ...args: Parameters<F>): ReturnType<Fn>
 /**
@@ -21,6 +28,13 @@ export function invoke<F extends Fn>(fn: F, ...args: Parameters<F>): ReturnType<
  *
  * @param fns - An array of functions. 函数数组
  * @param args - The arguments to pass to each function. 要传递给每个函数的参数
+ * @returns undefined 无返回值
+ *
+ * @example
+ * ```ts
+ * const add = (a, b) => a + b
+ * invoke([add, add], 1, 2)
+ * ```
  */
 export function invoke<F extends Fn>(fns: Nullable<F>[], ...args: Parameters<F>): void
 export function invoke<F extends Fn>(

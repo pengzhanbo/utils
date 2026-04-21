@@ -8,7 +8,15 @@
  *
  * @param func - The function to wrap. 要包装的函数
  * @returns A new function that can only be called once. 只能被调用一次的新函数
- */
+ *
+ * @example
+ * ```ts
+ * const add = (a, b) => a + b
+ * const onceAdd = once(add)
+ * onceAdd(1, 2) // => 3
+ * onceAdd(2, 3) // => 3
+ * ```
+ * */
 export function once<T extends (...args: any[]) => any>(func: T): T {
   let called = false
   let res: ReturnType<T>

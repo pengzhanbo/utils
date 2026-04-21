@@ -7,6 +7,12 @@
  * @augments Error
  *
  * @param message - The error message. 错误消息
+ *
+ * @example
+ * ```ts
+ * new RetryError(3)
+ * // => RetryError: The retry operation failed
+ * ```
  */
 export class RetryError extends Error {
   attempts: number

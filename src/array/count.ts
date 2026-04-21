@@ -5,12 +5,16 @@
  *
  * @category Array
  *
+ * @template T - The type of elements in the array. 数组中元素的类型
+ *
  * @param array - The array to count elements in. 要统计元素数量的数组
  * @param predicate - The function to test each element. 用于测试每个元素的函数
  * @returns The number of elements that satisfy the predicate. 满足谓词的元素数量
  *
- * @performance O(n) time complexity - single pass through the array
- *              O(n) 时间复杂度 - 单次遍历数组
+ * @remarks
+ * O(n) time complexity - single pass through the array
+ *
+ * O(n) 时间复杂度 - 单次遍历数组
  *
  * @example
  * ```ts
@@ -53,12 +57,17 @@ export function count<T>(
  *
  * @category Array
  *
+ * @template T - The type of elements in the array. 数组中元素的类型
+ * @template K - The type of the keys in the object. 对象中键的类型
+ *
  * @param array - The array to count. 要统计的数组
  * @param iteratee - The function to transform elements into keys. 将元素转换为键的函数
  * @returns An object with keys mapped to their counts. 键映射到其计数的对象
  *
- * @performance Uses Map for O(1) key lookup, overall O(n) time complexity
- *              使用 Map 实现 O(1) 键查找，整体时间复杂度 O(n)
+ * @remarks
+ * Uses Map for O(1) key lookup, overall O(n) time complexity
+ *
+ * 使用 Map 实现 O(1) 键查找，整体时间复杂度 O(n)
  *
  * @example
  * ```ts

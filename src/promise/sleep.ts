@@ -1,5 +1,6 @@
 import { AbortError } from '../error/AbortError'
 
+/** @internal */
 export interface SleepOptions {
   signal?: AbortSignal
 }
