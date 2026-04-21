@@ -1,0 +1,48 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": ["./src/index.ts"],
+  "exclude": ["**/*.test.ts"],
+  "router": "category",
+  "out": "docs/dist",
+  "cleanOutputDir": true,
+  "json": "docs/dist/typedoc.json",
+  "categoryOrder": [
+    "Array",
+    "Object",
+    "String",
+    "Promise",
+    "Function",
+    "Date",
+    "Guard",
+    "Math",
+    "Predicate",
+    "Types",
+    "URL",
+    "Util",
+    "Error",
+    "Event",
+    "*"
+  ],
+  "navigation": {
+    "includeCategories": true
+  },
+  "navigationLinks": {
+    "GitHub": "https://github.com/pengzhanbo/utils",
+    "npm": "https://www.npmjs.com/package/@pengzhanbo/utils",
+    "npmx.dev": "https://npmx.dev/package/@pengzhanbo/utils",
+    "jsr": "https://jsr.io/@pengzhanbo/utils",
+    "@pengzhanbo": "https://pengzhanbo.cn"
+  },
+  "includeVersion": true,
+  "readme": "none",
+  "excludeInternal": true,
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "excludePrivateClassFields": true,
+  "validation": {
+    "invalidLink": true
+  },
+  "treatWarningsAsErrors": false,
+  "emit": "docs",
+  "pretty": true
+}

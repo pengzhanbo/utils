@@ -32,7 +32,10 @@
     "test": "cross-env TZ=Etc/UTC vitest --coverage",
     "release:publish": "pnpm publish --provenance --access public",
     "release": "bumpp package.json jsr.json --commit \"build: publish v%s\" --push --tag --all",
-    "prepare": "husky"
+    "prepare": "husky",
+    "docs:dev": "typedoc --watch",
+    "docs:build": "typedoc",
+    "docs:preview": "http-server docs/dist"
   },
   "devDependencies": {
     "@pengzhanbo/tsconfig": "^2.4.0",
@@ -40,12 +43,14 @@
     "@vitest/coverage-v8": "^4.1.4",
     "bumpp": "^11.0.1",
     "cross-env": "^10.1.0",
+    "http-server": "^14.1.1",
     "husky": "^9.1.7",
     "lint-staged": "^16.4.0",
     "oxfmt": "^0.45.0",
     "oxlint": "^1.60.0",
     "oxlint-tsgolint": "^0.21.1",
     "tsdown": "^0.21.9",
+    "typedoc": "^0.28.19",
     "typescript": "^6.0.3",
     "vitest": "^4.1.4"
   },
