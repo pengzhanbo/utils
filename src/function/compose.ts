@@ -1,7 +1,16 @@
 import type { Fn } from '../types'
 
-type ComposeFn = (...args: any[]) => any
+/**
+ * Get the type of the last element in the array
+ *
+ * 获取数组的最后一个元素类型
+ */
 type LastArray<T extends any[]> = T extends [...any[], infer U] ? U : Fn
+/**
+ * Get the type of the first element in the array
+ *
+ * 获取数组的第一个元素类型
+ */
 type FirstArray<T extends any[]> = T extends [infer U, ...any[]] ? U : Fn
 
 /**
@@ -22,7 +31,7 @@ type FirstArray<T extends any[]> = T extends [infer U, ...any[]] ? U : Fn
  * compose(add, subtract, multiply)(1, 2) // => (1 * 2) - 2 + 1 = 1
  * ```
  */
-export function compose<T extends ComposeFn[] = ComposeFn[]>(
+export function compose<T extends Fn[] = Fn[]>(
   ...fns: T
 ): (...args: Parameters<LastArray<T>>) => ReturnType<FirstArray<T>> {
   return function (...args: Parameters<LastArray<T>>) {

@@ -1,8 +1,5 @@
 import type { Fn } from '../types'
 
-/**
- * @hideCategories
- */
 export interface MemoizeOptions {
   /**
    * Maximum number of cached entries.
@@ -25,8 +22,6 @@ export interface MemoizeOptions {
  * Memoized function
  *
  * 记忆化后的函数
- *
- * @internal
  */
 export type MemoizedFn<T extends Fn> = T & {
   /**
@@ -48,9 +43,9 @@ type CacheValue = { readonly value: any; readonly timestamp: number }
  *
  * @param func - The function to memoize. 要记忆化的函数
  * @param options - Options for memoization. 记忆化配置
- * @param options.maxSize - Maximum number of cached entries. 缓存条目最大数量
- * @param options.ttl - Time-to-live in milliseconds. If set, cache expires after this duration. 缓存有效期（毫秒）。设置后缓存将在此时间后过期
- * @param options.keyResolver - Custom key resolver. By default, arguments are serialized via JSON. 自定义 key 生成器。默认使用 JSON 序列化参数
+ * @param options.maxSize
+ * @param options.ttl
+ * @param options.keyResolver
  * @returns A memoized version of the function. 记忆化后的函数
  *
  * @example
@@ -63,25 +58,34 @@ type CacheValue = { readonly value: any; readonly timestamp: number }
  * ```
  *
  * @example
+ * With TTL (expires after 1000ms) / 缓存有效期（毫秒）。
  * ```ts
- * // With TTL (expires after 1000ms)
  * const fn = memoize(someExpensiveFn, { ttl: 1000 })
  * fn('key') // computed
  * fn('key') // cached (within TTL)
  * ```
  *
  * @example
+ * With maxSize (LRU eviction when limit exceeded) / 最大缓存条目数量（LRU 缓存策略）
  * ```ts
- * // With maxSize (LRU eviction when limit exceeded)
  * const fn = memoize(someExpensiveFn, { maxSize: 100 })
  * ```
  *
  * @example
+ * With custom key resolver / 自定义 key 生成器
  * ```ts
- * // With custom key resolver
  * const fn = memoize(someExpensiveFn, {
  *   keyResolver: (a, b) => `${a}:${b}`
  * })
+ * ```
+ *
+ * @example
+ * Clear cache / 清除缓存
+ * ```ts
+ * const fn = memoize(someExpensiveFn)
+ * fn('key') // computed
+ * fn('key') // cached
+ * fn.clear()
  * ```
  */
 export function memoize<T extends Fn>(func: T, options?: MemoizeOptions): MemoizedFn<T> {

@@ -105,8 +105,6 @@ export type IsUnion<T> = InternalIsUnion<T>
  * The actual implementation of `IsUnion`.
  *
  * `IsUnion` 的实际实现。
- *
- * @internal
  */
 export type InternalIsUnion<T, U = T> = (
   IsNever<T> extends true ? false : T extends any ? ([U] extends [T] ? false : true) : never

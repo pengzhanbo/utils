@@ -50,7 +50,6 @@ export function createSingletonPromise<T>(fn: () => Promise<T>): SingletonPromis
   return wrapper
 }
 
-/** @internal */
 export interface SingletonPromise<T> {
   (): Promise<T>
   /**

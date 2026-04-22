@@ -14,7 +14,6 @@ export type _Numeric = number | bigint
  * Zero type, includes 0 and 0n
  *
  * 零类型，包括 0 和 0n
- * @internal
  */
 export type Zero = 0 | 0n
 

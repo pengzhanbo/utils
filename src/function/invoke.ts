@@ -28,7 +28,7 @@ export function invoke<F extends Fn>(fn: F, ...args: Parameters<F>): ReturnType<
  *
  * @param fns - An array of functions. 函数数组
  * @param args - The arguments to pass to each function. 要传递给每个函数的参数
- * @returns undefined 无返回值
+ * @returns void 无返回值
  *
  * @example
  * ```ts

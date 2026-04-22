@@ -9,9 +9,12 @@ import { sleep } from './sleep'
  * @category Promise
  *
  * @param ms - the number of milliseconds to wait before rejecting the promise. 超时的毫秒数
- * @returns A promise that rejects with a `TimeoutError` after the specified delay. 一个 promise，它将在指定的延迟时间后拒绝，抛出一个 `TimeoutError`。
+ * @returns
+ * A promise that rejects with a `TimeoutError` after the specified delay.
  *
- * @throws Throws a `TimeoutError` after the specified delay.
+ * 一个 promise，它将在指定的延迟时间后拒绝，抛出一个 `TimeoutError`。
+ *
+ * @throws Throws a {@link TimeoutError} after the specified delay.
  *
  * @example
  * ```ts
@@ -34,9 +37,12 @@ export async function timeout(ms: number): Promise<never> {
  *
  * @category Promise
  *
- * @param run - the async function to execute.
- * @param ms - the number of milliseconds to wait before rejecting the promise.
- * @returns A promise that resolves with the result of the async function, or rejects with a `TimeoutError` if the function does not resolve within the specified timeout. 一个 promise，它将解析为异步函数的结果，或者如果在指定超时内函数未解析，则拒绝并抛出`TimeoutError`。
+ * @param run - the async function to execute. 执行的异步函数
+ * @param ms - the number of milliseconds to wait before rejecting the promise. 超时的毫秒数
+ * @returns
+ * A promise that resolves with the result of the async function, or rejects with a `TimeoutError` if the function does not resolve within the specified timeout.
+ *
+ * 一个 promise，它将解析为异步函数的结果，或者如果在指定超时内函数未解析，则拒绝并抛出`TimeoutError`。
  *
  * @example
  * ```ts

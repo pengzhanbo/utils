@@ -6,7 +6,6 @@ import { objectEntries } from './entries'
  * Predicate function type for filtering object entries
  *
  * 用于过滤对象条目的断言函数类型
- * @internal
  */
 export type ObjectIteratorPredicate<K extends string, V> = (key: K, value: V) => boolean
 
@@ -14,7 +13,6 @@ export type ObjectIteratorPredicate<K extends string, V> = (key: K, value: V) =>
  * Transform function type for mapping object entries
  *
  * 用于映射对象条目的转换函数类型
- * @internal
  */
 export type ObjectIteratorTransform<K extends string, V, NK extends PropertyKey, NV> = (
   key: K,

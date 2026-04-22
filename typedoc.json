@@ -7,6 +7,7 @@
   "cleanOutputDir": true,
   "json": "docs/dist/typedoc.json",
   "categoryOrder": [
+    "Predicate",
     "Array",
     "Object",
     "String",
@@ -15,12 +16,12 @@
     "Date",
     "Guard",
     "Math",
-    "Predicate",
     "Types",
     "URL",
     "Util",
     "Error",
     "Event",
+    "Clone",
     "*"
   ],
   "navigation": {
@@ -28,9 +29,9 @@
   },
   "navigationLinks": {
     "GitHub": "https://github.com/pengzhanbo/utils",
-    "npm": "https://www.npmjs.com/package/@pengzhanbo/utils",
-    "npmx.dev": "https://npmx.dev/package/@pengzhanbo/utils",
-    "jsr": "https://jsr.io/@pengzhanbo/utils",
+    "NPM": "https://www.npmjs.com/package/@pengzhanbo/utils",
+    "NPMX.DEV": "https://npmx.dev/package/@pengzhanbo/utils",
+    "JSR": "https://jsr.io/@pengzhanbo/utils",
     "@pengzhanbo": "https://pengzhanbo.cn"
   },
   "includeVersion": true,
@@ -45,5 +46,11 @@
   "treatWarningsAsErrors": false,
   "emit": "docs",
   "pretty": true,
-  "plugin": ["typedoc-github-theme", "typedoc-plugin-coverage"]
+  "plugin": [
+    "typedoc-github-theme",
+    "typedoc-plugin-coverage",
+    "typedoc-plugin-mdn-links",
+    "typedoc-plugin-missing-exports"
+  ],
+  "customCss": "./docs/theme/custom.css"
 }

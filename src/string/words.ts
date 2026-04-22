@@ -27,6 +27,7 @@
  * const matched = 'caseCaseHTMLResponse🚀'.match(CASE_SPLIT_PATTERN)
  * // ['case', 'Case', 'HTML', 'Response', '🚀']
  * ```
+ *
  * @internal
  */
 export const CASE_SPLIT_PATTERN: RegExp =

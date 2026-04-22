@@ -6,6 +6,7 @@
  * @category Error
  * @augments Error
  *
+ * @param attempts - The number of attempts. 尝试次数
  * @param message - The error message. 错误消息
  *
  * @example

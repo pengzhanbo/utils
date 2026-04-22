@@ -40,6 +40,7 @@
 export * from './array'
 export * from './date'
 export * from './event'
+export * from './error'
 export * from './function'
 export * from './guard'
 export * from './math'

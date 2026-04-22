@@ -1,7 +1,11 @@
 import { AbortError } from '../error/AbortError'
 
-/** @internal */
 export interface SleepOptions {
+  /**
+   * The signal to abort the sleep.
+   *
+   * 睡眠的中止信号
+   */
   signal?: AbortSignal
 }
 

@@ -1,17 +1,50 @@
 import { remove } from '../array/remove'
 import { invoke } from '../function/invoke'
 
-type EventType = string | symbol
+/**
+ * Event type
+ *
+ * 事件类型
+ */
+export type EventType = string | symbol
 
-type EventListener<T> = (event: T) => void
+/**
+ * Event listener type
+ *
+ * 事件监听器类型
+ */
+export type EventListener<T> = (event: T) => void
 
-type EventWildcardListener<T = Record<string, unknown>> = (type: keyof T, event: T[keyof T]) => void
+/**
+ * Event wildcard listener type
+ *
+ * 事件通配符监听器类型
+ */
+export type EventWildcardListener<T = Record<string, unknown>> = (
+  type: keyof T,
+  event: T[keyof T],
+) => void
 
-type EventListenerList<T> = EventListener<T>[]
+/**
+ * Event listener list type
+ *
+ * 事件监听器列表类型
+ */
+export type EventListenerList<T> = EventListener<T>[]
 
-type EventWildcardListenerList<T> = EventWildcardListener<T>[]
+/**
+ * Event wildcard listener list type
+ *
+ * 事件通配符监听器列表类型
+ */
+export type EventWildcardListenerList<T> = EventWildcardListener<T>[]
 
-type EventListenerMap<T extends Record<EventType, unknown>> = Map<
+/**
+ * Event listener map type
+ *
+ * 事件监听器映射类型
+ */
+export type EventListenerMap<T extends Record<EventType, unknown>> = Map<
   keyof T | '*',
   EventListenerList<T[keyof T]> | EventWildcardListenerList<T>
 >
@@ -20,9 +53,6 @@ type EventListenerMap<T extends Record<EventType, unknown>> = Map<
  * Event emitter interface.
  *
  * 事件发射器接口。
- *
- * @category Event
- * @internal
  */
 export interface EventEmitter<Events extends Record<EventType, unknown>> {
   listeners: EventListenerMap<Events>
