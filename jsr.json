@@ -12,10 +12,13 @@
     ".github",
     ".vscode",
     ".husky",
+    "docs",
     ".oxfmtrc.json",
     ".oxlintrc.json",
+    "CLAUDE.md",
     "pnpm-workspace.yaml",
     "tsdown.config.ts",
-    "vitest.config.ts"
+    "vitest.config.ts",
+    "typedoc.json"
   ]
 }
