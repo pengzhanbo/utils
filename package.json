@@ -30,6 +30,9 @@
     "format": "oxfmt .",
     "prepublishOnly": "pnpm run build",
     "test": "cross-env TZ=Etc/UTC vitest --coverage",
+    "test:unit": "cross-env TZ=Etc/UTC vitest run --coverage",
+    "test:bench": "cross-env TZ=Etc/UTC vitest bench",
+    "test:bench:json": "cross-env TZ=Etc/UTC vitest bench --outputJson=benchmark-results.json",
     "release:publish": "pnpm publish --provenance --access public",
     "release": "bumpp package.json jsr.json --commit \"build: publish v%s\" --push --tag --all",
     "prepare": "husky",
@@ -46,10 +49,10 @@
     "http-server": "^14.1.1",
     "husky": "^9.1.7",
     "lint-staged": "^16.4.0",
-    "oxfmt": "^0.46.0",
-    "oxlint": "^1.61.0",
-    "oxlint-tsgolint": "^0.21.1",
-    "tsdown": "^0.21.9",
+    "oxfmt": "^0.47.0",
+    "oxlint": "^1.62.0",
+    "oxlint-tsgolint": "^0.22.1",
+    "tsdown": "^0.21.10",
     "typedoc": "^0.28.19",
     "typedoc-github-theme": "^0.4.0",
     "typedoc-plugin-coverage": "^4.0.3",
@@ -63,5 +66,5 @@
     "*": "oxfmt --no-error-on-unmatched-pattern",
     "*.{js,ts}": "vitest related --run"
   },
-  "packageManager": "pnpm@10.33.0"
+  "packageManager": "pnpm@10.33.2"
 }
