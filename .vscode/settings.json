@@ -1,5 +1,5 @@
 {
-  "cSpell.words": ["Arrayable"],
+  "cSpell.words": ["aggregateerror", "Arrayable", "domexception", "oxlint"],
   "editor.defaultFormatter": "oxc.oxc-vscode",
   "editor.formatOnSave": true,
   "editor.formatOnSaveMode": "file",
