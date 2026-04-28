@@ -7,6 +7,7 @@
   "include": ["src/**/*.ts", "LICENSE", "README.md"],
   "exclude": [
     "src/**/*.test.ts",
+    "src/__benchmarks__/**",
     "pnpm-lock.yaml",
     ".editorconfig",
     ".github",
