@@ -1,0 +1,120 @@
+name: Performance Benchmark
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      verbose:
+        description: 'Verbose output'
+        required: false
+        default: false
+        type: boolean
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  benchmark:
+    name: Run Benchmarks
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run unit tests
+        run: pnpm run test:unit
+
+      - name: Run benchmarks
+        env:
+          NODE_ENV: production
+        run: pnpm run test:bench:json
+
+      - name: Check for regressions
+        id: check
+        continue-on-error: true
+        run: |
+          if [ -f docs/benchmark-baseline.json ]; then
+            node scripts/check-benchmark.js \
+              --baseline docs/benchmark-baseline.json \
+              --current benchmark-results.json \
+              --threshold 20 \
+            || echo "::warning::Performance regression detected"
+          else
+            echo "No baseline found — saving current results as baseline"
+            mkdir -p docs
+            cp benchmark-results.json docs/benchmark-baseline.json
+          fi
+
+      - name: Upload benchmark results
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-results
+          path: benchmark-results.json
+          retention-days: 30
+
+      - name: Comment on PR
+        if: github.event_name == 'pull_request' && steps.check.outcome == 'success'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+
+            let body = '## 📊 Performance Benchmark Results\n\n';
+
+            if (fs.existsSync('benchmark-results.json')) {
+              try {
+                const data = JSON.parse(fs.readFileSync('benchmark-results.json', 'utf8'));
+                const items = Array.isArray(data) ? data : (data.results || []);
+                
+                // Show top 5 slowest by mean time
+                const sorted = [...items].sort((a, b) => (b.mean || 0) - (a.mean || 0)).slice(0, 8);
+                
+                body += '| Benchmark | Mean (ms) | ops/sec |\n';
+                body += '|----------|-----------|--------|\n';
+                for (const item of sorted) {
+                  const name = (item.name || item.id || '?').slice(0, 50);
+                  const mean = (item.mean || 0).toFixed(3);
+                  const hz = item.hz ? item.hz.toFixed(0) : '-';
+                  body += `| \`${name}\` | ${mean} | ${hz} |\n`;
+                }
+                
+                body += `\n<details>\n<summary>Full Results</summary>\n\n\`\`\`json\n${JSON.stringify(sorted, null, 2)}\n\`\`\`\n</details>\n`;
+              } catch(e) {
+                body += 'Could not parse benchmark results.\n';
+              }
+            } else {
+              body += 'No benchmark results generated.\n';
+            }
+
+            body += '\n---\n*Run by [benchmark.yml](.github/workflows/benchmark.yml)*\n';
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
