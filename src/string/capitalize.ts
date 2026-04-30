@@ -16,5 +16,8 @@
  */
 export function capitalize(s: string): string {
   if (!s) return s
-  return s[0]!.toUpperCase() + s.slice(1).toLowerCase()
+  const firstCodePoint = s.codePointAt(0)!
+  // oxlint-disable-next-line unicorn/number-literal-case
+  const firstCharLen = firstCodePoint > 0xffff ? 2 : 1
+  return String.fromCodePoint(firstCodePoint).toUpperCase() + s.slice(firstCharLen).toLowerCase()
 }

@@ -11,6 +11,9 @@ import { isFinite } from '../predicate'
  * @param b - The second number. 第二个数
  * @returns The greatest common divisor of a and b. a和b的最大公约数
  *
+ * @see {@link lcm} — for least common multiple
+ * @see {@link lcm} — 最小公倍数
+ *
  * @example
  * ```ts
  * gcd(12, 8) // => 4

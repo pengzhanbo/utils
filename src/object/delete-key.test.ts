@@ -33,4 +33,17 @@ describe('deleteKey', () => {
     expect(deleteKey(obj, [])).toBe(false)
     expect(obj).toEqual({ a: 1 })
   })
+
+  it('should return false when all keys in array are non-configurable and deletion fails', () => {
+    const obj = {}
+    Object.defineProperty(obj, 'a', { value: 1, configurable: false })
+    expect(deleteKey(obj, ['a'] as any)).toBe(false)
+  })
+
+  it('should return true when at least one key in array is successfully deleted', () => {
+    const obj: any = { a: 1, b: 2 }
+    Object.defineProperty(obj, 'c', { value: 3, configurable: false })
+    expect(deleteKey(obj, ['a', 'c'] as any)).toBe(true)
+    expect(obj.a).toBeUndefined()
+  })
 })

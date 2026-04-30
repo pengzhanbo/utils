@@ -12,7 +12,6 @@ describe('predicate > isEmpty', () => {
 
   it('should return true for empty strings', () => {
     expect(isEmpty('')).toBe(true)
-    expect(isEmpty('')).toBe(true)
   })
 
   it('should return false for non-empty strings', () => {
@@ -54,7 +53,22 @@ describe('predicate > isEmpty', () => {
     expect(isEmpty(new Set([1]))).toBe(false)
   })
 
-  it('should return false for other types', () => {
+  it('should return true for empty TypedArray', () => {
+    expect(isEmpty(new Uint8Array(0))).toBe(true)
+    expect(isEmpty(new Int32Array(0))).toBe(true)
+    expect(isEmpty(new Float64Array(0))).toBe(true)
+  })
+
+  it('should return false for non-empty TypedArray', () => {
+    expect(isEmpty(new Uint8Array(1))).toBe(false)
+  })
+
+  it('should return true for object with only Symbol keys', () => {
+    const sym = Symbol('a')
+    expect(isEmpty({ [sym]: 1 })).toBe(true)
+  })
+
+  it('should return false for number and boolean primitives', () => {
     expect(isEmpty(0)).toBe(false)
     expect(isEmpty(false)).toBe(false)
     expect(isEmpty(Symbol('test'))).toBe(false)

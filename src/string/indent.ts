@@ -18,6 +18,6 @@
 export function indent(str: string, indent: string = '  '): string {
   if (!str) return str
 
-  const lines = str.split('\n')
-  return lines.map((line) => `${indent}${line}`).join('\n')
+  const lines = str.split(/\r?\n/)
+  return lines.map((line) => (line ? `${indent}${line}` : line)).join('\n')
 }

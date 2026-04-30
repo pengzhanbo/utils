@@ -7,8 +7,8 @@ import { words } from './words'
  *
  * @category String
  *
- * @param str - 要转换的字符串
- * @returns 转换后的小写字符串，单词之间用空格分隔
+ * @param str - The string to convert. 要转换的字符串
+ * @returns The lowercase string with words separated by spaces. 转换后的小写字符串，单词之间用空格分隔
  *
  * @example
  * ```ts

@@ -1,10 +1,12 @@
 const RE_PROTOCOL_MATCH = /^([-+\w]{1,25})(?::?\/\/|:)/i
+
 /**
- * Parse protocol from url
+ * Parse protocol from URL.
  *
- * 从 url 中解析协议
+ * 从 URL 中解析协议。
  *
  * @category URL
+ *
  * @example
  * ```ts
  * parseProtocol('http://example.com') // => http

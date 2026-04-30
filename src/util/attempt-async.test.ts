@@ -41,9 +41,10 @@ describe('util > attemptAsync', () => {
   it('should work with non-Error thrown objects', async () => {
     const [error, result] = await attemptAsync(async () => {
       // eslint-disable-next-line no-throw-literal
-      throw 'string error' // Not an Error instance
+      throw 'string error'
     })
-    expect(error).toBe('string error')
+    expect(error).toBeInstanceOf(Error)
+    expect(error instanceof Error && error.message).toBe('string error')
     expect(result).toBeNull()
   })
 })

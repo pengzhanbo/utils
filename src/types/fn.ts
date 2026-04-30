@@ -4,6 +4,7 @@
  * Promise 类型或非 Promise 类型
  *
  * @category Types
+ * @typeParam T - The type of the value / 值的类型
  */
 export type Awaitable<T> = T | PromiseLike<T>
 

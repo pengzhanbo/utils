@@ -7,6 +7,8 @@ import { isNil } from '../predicate'
  *
  * @category Guard
  *
+ * @typeParam T - The type of elements in the array / 数组元素的类型
+ *
  * @param val - The value to check. 要检查的值
  * @returns True if the value is not null or undefined, false otherwise. 如果值不是null或undefined则返回true，否则返回false
  *

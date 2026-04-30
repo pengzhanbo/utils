@@ -7,6 +7,7 @@ import type { IsNever } from './is'
  * @see https://stackoverflow.com/a/50375286/2172153
  *
  * @category Types
+ * @typeParam Union - The union type to convert / 要转换的联合类型
  */
 export type UnionToIntersection<Union> =
   // `extends unknown` is always going to be the case and is used to convert the

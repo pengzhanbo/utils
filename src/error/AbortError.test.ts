@@ -39,4 +39,11 @@ describe('error > AbortError', () => {
     expect(new AbortError('Custom message').message).toBe('Custom message')
     expect(new AbortError('Error: failed').message).toBe('Error: failed')
   })
+
+  it('should support ErrorOptions with cause', () => {
+    const cause = new Error('original error')
+    const error = new AbortError('aborted', { cause })
+    expect(error.message).toBe('aborted')
+    expect(error.cause).toBe(cause)
+  })
 })

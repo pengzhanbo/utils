@@ -9,42 +9,55 @@
  *
  * @category Promise
  *
- * @param fn - the function that returns the promise to wrap - 要包装的 promise 返回函数
- * @returns a function that returns the wrapped promise
- *          - 返回包装后的 promise
+ * @typeParam T - The type of the resolved value / 解析值的类型
+ * @param fn - the function that returns the promise to wrap / 要包装的 promise 返回函数
+ * @returns a function that returns the wrapped promise / 返回包装后的 promise
+ *
  * @example
  * ```ts
  * let i = 1
  * const singleton = createSingletonPromise(() => Promise.resolve(i++))
- * const p1 = singleton()
- * const p2 = singleton()
+ *
+ * const p1 = singleton() // fn only called once, i++ → 1
+ * const p2 = singleton() // same promise returned, fn not called again
  * console.log(p1 === p2) // true
  *
- * await p1() // will log: 2
- * await p2() // will log: 2
+ * await p1 // => 1
+ * await p2 // => 1 (same cached result)
  * ```
  *
  * @example
  * ```ts
- * let i = 0
+ * let i = 1
  * const singleton = createSingletonPromise(() => Promise.resolve(i++))
  *
- * await singleton() // will log: 1
- * await singleton.reset() // reset the promise, and await it to have proper shutdown
- * await singleton() // will log: 2
+ * await singleton() // => 1
+ * await singleton.reset() // clear cached promise, wait for pending if any
+ * await singleton() // => 2 (fn called again, i++ → 2)
  * ```
  */
 export function createSingletonPromise<T>(fn: () => Promise<T>): SingletonPromise<T> {
   let _promise: Promise<T> | undefined
+  let _resetting: Promise<unknown> | undefined
 
   function wrapper() {
+    if (_resetting) {
+      const resettingPromise = _resetting
+      _resetting = undefined
+      _promise = resettingPromise.then(() => fn())
+      return _promise
+    }
     if (!_promise) _promise = fn()
     return _promise
   }
   wrapper.reset = async () => {
     const _prev = _promise
     _promise = undefined
-    if (_prev) await _prev
+    if (_prev) {
+      _resetting = _prev.catch(() => {})
+      await _resetting
+      _resetting = undefined
+    }
   }
 
   return wrapper
@@ -53,7 +66,7 @@ export function createSingletonPromise<T>(fn: () => Promise<T>): SingletonPromis
 export interface SingletonPromise<T> {
   (): Promise<T>
   /**
-   * Reset current staled promise.
+   * Reset current stale promise.
    * Await it to have proper shutdown.
    *
    * 重置当前过期的 promise。

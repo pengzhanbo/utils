@@ -11,8 +11,10 @@ import { isArray } from '../predicate'
  *
  * @param array - the array
  * @param value - the value to remove - 待移除的值
- * @returns - if `true`, the value is removed, `false` otherwise.
- *          - 如果成功移除,返回 `true`, 否则返回 `false`
+ * @returns
+ * if `true`, the value is removed, `false` otherwise.
+ *
+ * 如果成功移除,返回 `true`, 否则返回 `false`
  *
  * @example
  * ```ts
@@ -21,10 +23,15 @@ import { isArray } from '../predicate'
  * console.log(arr) // => [1, 3]
  * remove(arr, 4) // => false
  * ```
+ * @remarks
+ * This function mutates the original array in place. It uses `Array.prototype.splice` to remove the element.
+ *
+ * 此函数会直接修改原数组。它使用 `Array.prototype.splice` 移除元素。
+ * @typeParam T - The type of elements in the array / 数组元素的类型
  */
 export function remove<T>(array: T[], value: T): boolean {
   if (!isArray(array)) return false
-  const index = array.indexOf(value)
+  const index = array.findIndex((item) => Object.is(item, value))
   if (index !== -1) {
     array.splice(index, 1)
     return true
@@ -37,14 +44,19 @@ export function remove<T>(array: T[], value: T): boolean {
  *
  * 通过 predicate 方法，从数组中移除值
  *
- * also see {@link remove}
- *
  * @category Array
  *
- * @param array - the array
- * @param predicate - the predicate function
- * @returns - if `true`, the value is removed, `false` otherwise.
- *          - 如果成功移除,返回 `true`, 否则返回 `false`
+ * @typeParam T - The type of elements in the array / 数组元素的类型
+ * @param array - the array / 数组
+ * @param predicate - the predicate function / 谓词函数
+ * @returns if `true`, the value is removed, `false` otherwise. / 如果成功移除,返回 `true`, 否则返回 `false`
+ *
+ * @remarks
+ * This function mutates the original array in place. It uses `Array.prototype.splice` to remove the element.
+ *
+ * 此函数会直接修改原数组。它使用 `Array.prototype.splice` 移除元素。
+ *
+ * @see also {@link remove}
  *
  * @example
  * ```ts

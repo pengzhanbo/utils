@@ -5,19 +5,21 @@
  *
  * @category Promise
  *
- * @returns A controlled promise. 受控Promise
+ * @typeParam T - The type of the resolved value / 解析值的类型
+ * @returns A controlled promise. / 受控Promise
+ *
  * @example
- * ```
+ * ```ts
  * const promise = createControlledPromise()
  *
  * await promise
  *
- * // in anther context:
+ * // in another context:
  * promise.resolve(data)
  * ```
  */
 export function createControlledPromise<T>(): ControlledPromise<T> {
-  let resolve: any, reject: any
+  let resolve!: (value: T | PromiseLike<T>) => void, reject!: (reason?: any) => void
   const promise = new Promise<T>((_resolve, _reject) => {
     resolve = _resolve
     reject = _reject

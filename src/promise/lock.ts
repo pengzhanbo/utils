@@ -15,7 +15,7 @@ import { remove } from '../array/remove'
  *   await doSomething()
  * })
  *
- * // in anther context:
+ * // in another context:
  * await lock.wait() // it will wait all tasking finished
  * ```
  */

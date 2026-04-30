@@ -8,6 +8,24 @@ import { promiseParallel } from '../promise'
  *
  * @category Array
  *
+ * @typeParam T - The type of elements in the array / 数组元素的类型
+ * @typeParam R - The type of the transformed result / 转换结果的类型
+ * @param array - The array to transform / 要转换的数组
+ * @param transform - The async callback function to apply to each element / 对每个元素应用的异步回调函数
+ * @param concurrency - The maximum number of concurrent operations to allow / 允许的最大并发操作数
+ * @returns A promise that resolves to an array of transformed values / 解析为转换后值数组的 promise
+ *
+ * @remarks
+ * Transform functions are executed concurrently via {@link promiseParallel} under the hood.
+ * The results maintain the original array order regardless of the order in which transforms resolve.
+ * The `concurrency` parameter controls the maximum number of simultaneously pending operations.
+ *
+ * 转换函数通过底层的 {@link promiseParallel}并发执行。
+ * 无论转换函数的解析顺序如何，结果都保持原始数组的顺序。
+ * `concurrency`参数控制同时进行中的最大操作数。
+ *
+ * @see {@link filterAsync} — for async filtering / 异步过滤
+ *
  * @example
  * ```ts
  * const users = [{ id: 1 }, { id: 2 }, { id: 3 }];
@@ -29,17 +47,18 @@ import { promiseParallel } from '../promise'
  * // Processes at most 2 operations concurrently
  * ```
  */
-export async function mapAsync<T>(
+export async function mapAsync<T, R = T>(
   array: readonly T[],
-  predicate: (item: T, index: number, array: readonly T[]) => Promise<T>,
+  transform: (item: T, index: number, array: readonly T[]) => Promise<R>,
   concurrency?: number,
-): Promise<T[]> {
-  return (await promiseParallel(
+): Promise<R[]> {
+  const result: R[] = await promiseParallel(
     array.map(
       (...args) =>
         () =>
-          predicate(...args),
+          transform(...args),
     ),
     concurrency,
-  )) as T[]
+  )
+  return result
 }

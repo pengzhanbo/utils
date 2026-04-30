@@ -13,14 +13,11 @@
  *
  * @category Array
  *
+ * @typeParam T - The type of elements in the array / 数组元素的类型
+ * @typeParam K - The type of the key (extends PropertyKey) / 键的类型（继承 PropertyKey）
  * @param array - The array to convert. 要转换的数组
  * @param iteratee - The function to transform elements into keys. 将元素转换为键的函数
  * @returns An object with keys mapped to the last element that produced each key. 键映射到产生该键的最后一个元素的对象
- *
- * @remarks
- * Uses Map for O(1) key lookup, overall O(n) time complexity
- *
- * 使用 Map 实现 O(1) 键查找，整体时间复杂度 O(n)
  *
  * @example
  * ```ts
@@ -38,7 +35,7 @@ export function keyBy<T, K extends PropertyKey>(
   array: readonly T[],
   iteratee: (item: T) => K,
 ): Record<K, T> {
-  const result = {} as Record<K, T>
+  const result = Object.create(null) as Record<K, T>
 
   for (let i = 0; i < array.length; i++) {
     const item = array[i]!

@@ -10,6 +10,7 @@ import { isError } from '../predicate/is-error'
  * @param v - The value to check. 要检查的值
  * @param message - Custom error message if the value is not an Error. 如果值不是 Error 时的自定义错误消息
  * @returns The value if it is an Error. 如果是 Error 则返回该值
+ *
  * @throws Error if the value is not an Error. 如果值不是 Error 则抛出错误
  *
  * @example

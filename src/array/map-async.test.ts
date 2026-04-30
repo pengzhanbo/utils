@@ -83,4 +83,19 @@ describe('array >mapAsync', () => {
     await mapAsync(arr, fn)
     expect(maxRunning).toBe(10)
   })
+
+  it('should support type transformation from T to R', async () => {
+    const arr = [1, 2, 3]
+    const result = await mapAsync(arr, async (n) => String(n))
+    expect(result).toEqual(['1', '2', '3'])
+  })
+
+  it('should support transforming objects to different shape', async () => {
+    const users = [
+      { id: 1, name: 'Alice' },
+      { id: 2, name: 'Bob' },
+    ]
+    const result = await mapAsync(users, async (user) => user.name)
+    expect(result).toEqual(['Alice', 'Bob'])
+  })
 })

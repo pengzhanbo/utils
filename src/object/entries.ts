@@ -5,8 +5,12 @@
  *
  * @category Object
  *
+ * @typeParam T - The type of elements in the array / 数组元素的类型
  * @param obj - The object to get entries from. 要获取键值对的对象
  * @returns An array of key-value pairs. 键值对数组
+ *
+ * @see {@link objectKeys} — for typed Object.keys
+ * @see {@link objectKeys} — 类型安全的 Object.keys
  *
  * @example
  * ```ts

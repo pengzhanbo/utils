@@ -1,12 +1,13 @@
 /**
- * Check if url is valid
+ * Check if URL is valid.
  *
- * 检查 url 是否有效
+ * 检查 URL 是否有效。
  *
  * @category URL
  *
- * @param url - The URL to check. 要检查的URL
- * @returns True if the URL is valid. 如果URL有效则返回true
+ * @param url - The URL to check. 要检查的 URL
+ *
+ * @returns True if the URL is valid. 如果 URL 有效则返回 true
  */
 export function isUrl(url: string): boolean {
   try {

@@ -14,6 +14,7 @@
  * type PartialPerson = DeepPartial<Person>
  * // { name: string; address?: { city?: string; zip?: string } | undefined }
  * ```
+ * @typeParam T - The type of elements in the array / 数组元素的类型
  */
 export type DeepPartial<T> = T extends (infer U)[]
   ? DeepPartial<U>[]

@@ -31,4 +31,23 @@ describe('string > truncate', () => {
     expect(truncate('hello', 0)).toBe('')
     expect(truncate('hello', 0, '..')).toBe('')
   })
+
+  it('should return original string for negative length', () => {
+    expect(truncate('hello', -1)).toBe('hello')
+  })
+
+  it('should return original string for NaN length', () => {
+    expect(truncate('hello', Number.NaN)).toBe('hello')
+  })
+
+  it('should handle Infinity length', () => {
+    expect(truncate('hello', Number.POSITIVE_INFINITY)).toBe('hello')
+  })
+
+  it('should handle surrogate pairs (emoji) safely', () => {
+    expect(truncate('a🚀cdef', 5)).toBe('a🚀...')
+    expect(truncate('🚀🚀🚀🚀', 2)).toBe('..')
+    expect(truncate('a🚀cdef', 3)).toBe('...')
+    expect(truncate('🎉🎊🎈', 2, '…')).toBe('🎉…')
+  })
 })

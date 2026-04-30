@@ -1,4 +1,5 @@
 import type { Fn, Nullable } from '../types'
+import { isArray } from '../predicate'
 
 /**
  * call the function
@@ -7,6 +8,7 @@ import type { Fn, Nullable } from '../types'
  *
  * @category Function
  *
+ * @typeParam F - The type of the function / 函数的类型
  * @param fn - The function to call. 要调用的函数
  * @param args - The arguments to pass to the function. 要传递给函数的参数
  * @returns The result of the function call. 函数调用的结果
@@ -18,7 +20,7 @@ import type { Fn, Nullable } from '../types'
  * // => 3
  * ```
  */
-export function invoke<F extends Fn>(fn: F, ...args: Parameters<F>): ReturnType<Fn>
+export function invoke<F extends Fn>(fn: F, ...args: Parameters<F>): ReturnType<F>
 /**
  * call every functions in an array, the remaining parameters are passed in turn
  *
@@ -26,9 +28,10 @@ export function invoke<F extends Fn>(fn: F, ...args: Parameters<F>): ReturnType<
  *
  * @category Function
  *
+ * @typeParam F - The type of the function / 函数的类型
  * @param fns - An array of functions. 函数数组
  * @param args - The arguments to pass to each function. 要传递给每个函数的参数
- * @returns void 无返回值
+ * @returns void / 无返回值
  *
  * @example
  * ```ts
@@ -40,7 +43,7 @@ export function invoke<F extends Fn>(fns: Nullable<F>[], ...args: Parameters<F>)
 export function invoke<F extends Fn>(
   fns: Nullable<F>[] | F,
   ...args: Parameters<F>
-): ReturnType<Fn> | void {
-  if (Array.isArray(fns)) fns.forEach((fn) => fn && fn(...args))
+): ReturnType<F> | void {
+  if (isArray(fns)) fns.forEach((fn) => fn?.(...args))
   else return fns(...args)
 }

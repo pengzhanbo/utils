@@ -93,4 +93,27 @@ describe('array > countBy', () => {
     const result = countBy(input, (x) => String(x) as PropertyKey)
     expect(result).toEqual({ null: 3, undefined: 2 })
   })
+
+  it('should handle prototype property names as keys without errors', () => {
+    const result = countBy(['x', 'y', 'z'], () => 'toString' as PropertyKey)
+    expect(result).toEqual({ toString: 3 })
+    expect(typeof result.toString).toBe('number')
+  })
+
+  it('should handle constructor as key without errors', () => {
+    const result = countBy(['a', 'b'], () => 'constructor' as PropertyKey)
+    expect(result).toEqual({ constructor: 2 })
+    expect(typeof result.constructor).toBe('number')
+  })
+
+  it('should handle hasOwnProperty as key without errors', () => {
+    const result = countBy([1, 2], () => 'hasOwnProperty' as PropertyKey)
+    expect(result).toEqual({ hasOwnProperty: 2 })
+    expect(typeof result.hasOwnProperty).toBe('number')
+  })
+
+  it('should handle __proto__ as key without prototype pollution', () => {
+    const result = countBy(['a', 'b'], () => '__proto__' as any)
+    expect(Object.getOwnPropertyDescriptor(result, '__proto__')!.value).toBe(2)
+  })
 })

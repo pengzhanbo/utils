@@ -18,11 +18,12 @@ export function slash(s: string): string {
 }
 
 /**
- * Ensure leading slash, if str does not start with slash, it will be added
+ * Ensure leading slash, if str does not start with slash, it will be added.
  *
- * 确保前缀，如果字符串不以斜杠开头，则将添加斜杠
+ * 确保前缀，如果字符串不以斜杠开头，则将添加斜杠。
  *
  * @category URL
+ *
  * @example
  * ```ts
  * ensureLeadingSlash('foo/bar') // => /foo/bar
@@ -48,11 +49,12 @@ export function ensureTrailingSlash(str: string): string {
 }
 
 /**
- * Remove leading slash, if str starts with slash, it will be removed
+ * Remove leading slash, if str starts with slash, it will be removed.
  *
- * 删除斜杆前缀，如果字符串以斜杠开头，则将删除
+ * 删除斜杆前缀，如果字符串以斜杠开头，则将删除。
  *
  * @category URL
+ *
  * @example
  * ```ts
  * removeLeadingSlash('/foo/bar') // => foo/bar
@@ -66,11 +68,12 @@ export function removeLeadingSlash(str: string): string {
 }
 
 /**
- * Remove trailing slash, if str ends with slash, it will be removed
+ * Remove trailing slash, if str ends with slash, it will be removed.
  *
- * 删除斜杆后缀，如果字符串以斜杠结尾，则将删除
+ * 删除斜杆后缀，如果字符串以斜杠结尾，则将删除。
  *
  * @category URL
+ *
  * @example
  * ```ts
  * removeTrailingSlash('/foo/bar/') // => /foo/bar

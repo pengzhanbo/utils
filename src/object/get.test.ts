@@ -67,6 +67,19 @@ describe('object > objectGet', () => {
     expect(objectGet({ a: { b: 1 } }, "a['b']")).toBe(1)
   })
 
+  it('should work with quoted bracket notation containing dots', () => {
+    expect(objectGet({ a: { 'b.c': 1 } }, "a['b.c']")).toBe(1)
+  })
+
+  it('should work with double-quoted bracket notation containing dots', () => {
+    expect(objectGet({ a: { 'b.c': 1 } }, 'a["b.c"]')).toBe(1)
+  })
+
+  it('should work with quoted bracket notation containing special characters', () => {
+    expect(objectGet({ a: { 'b"c': 1 } }, "a['b\"c']")).toBe(1)
+    expect(objectGet({ a: { "b'c": 1 } }, 'a["b\'c"]')).toBe(1)
+  })
+
   it('should work with objects having numeric keys', () => {
     expect(objectGet({ 0: { a: 1 } }, '0.a')).toBe(1)
     expect(objectGet({ a: { 0: { b: 1 } } }, 'a.0.b')).toBe(1)
@@ -93,8 +106,8 @@ describe('object > objectGet', () => {
   })
 
   it('should work with path containing only bracket notation', () => {
-    // @ts-expect-error
-    expect(objectGet({ a: { b: 1 } }, '["a"]')).toBe(undefined) // This is a path with literal key "a"
+    // @ts-expect-error -- root-level bracket notation not in ObjectKeyPaths
+    expect(objectGet({ a: { b: 1 } }, '["a"]')).toEqual({ b: 1 })
     expect(objectGet({ a: { b: 1 } }, 'a["b"]')).toBe(1)
   })
 
@@ -105,6 +118,20 @@ describe('object > objectGet', () => {
   it('should work with empty array access', () => {
     // @ts-expect-error
     expect(objectGet({ a: [] }, 'a[0]')).toBe(undefined)
+  })
+
+  it('should handle malformed path with unclosed bracket', () => {
+    const obj = { a: { b: 1 } }
+    // @ts-expect-error
+    expect(objectGet(obj, 'a[')).toEqual({ b: 1 })
+    // @ts-expect-error
+    expect(objectGet(obj, 'a[b')).toEqual({ b: 1 })
+  })
+
+  it('should skip empty bracket content', () => {
+    const obj = { a: { b: 1 } }
+    // @ts-expect-error
+    expect(objectGet(obj, 'a[].b')).toBe(1)
   })
 
   it('should work with sparse arrays', () => {

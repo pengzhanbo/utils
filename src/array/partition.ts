@@ -10,6 +10,7 @@
  *
  * @category Array
  *
+ * @typeParam T - The type of elements in the array / 数组元素的类型
  * @param array - The array to partition. 要分区的数组
  * @param predicate - The function to test each element. 用于测试每个元素的函数
  * @returns A tuple of two arrays: [elements that satisfy predicate, elements that don't]. 包含两个数组的元组：[满足谓词的元素, 不满足谓词的元素]

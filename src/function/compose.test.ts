@@ -15,10 +15,16 @@ describe('function > compose', () => {
   }
 
   it('should work', () => {
-    expect(compose()(1, 2)).toEqual([1, 2])
+    expect(compose()(1, 2)).toBe(1)
     expect(compose(add)(1, 2)).toBe(3)
     expect(compose(multiply, add)(1, 2)).toBe(6)
     expect(compose(subtract, add)(1, 2)).toBe(2)
     expect(compose(subtract, multiply, add)(1, 2)).toBe(5)
+  })
+
+  it('should return first argument for empty composition (identity)', () => {
+    expect(compose()('hello')).toBe('hello')
+    expect(compose()(42)).toBe(42)
+    expect(compose()(null)).toBe(null)
   })
 })

@@ -4,8 +4,9 @@ const htmlEscapes: Record<string, string> = {
   '>': '&gt;',
   '"': '&quot;',
   "'": '&#39;',
+  '`': '&#96;',
 }
-const RE_ESCAPE = /[&<>"']/g
+const RE_ESCAPE = /[&<>"'`]/g
 
 /**
  * Converts the characters "&", "<", ">", '"', and "'" in `str` to their corresponding HTML entities.
@@ -16,6 +17,9 @@ const RE_ESCAPE = /[&<>"']/g
  *
  * @param str - The string to escape. 要转义的字符串
  * @returns The escaped string. 转义后的字符串
+ *
+ * @see {@link unescape} — for the inverse operation
+ * @see {@link unescape} — 反向操作
  *
  * @example
  * ```ts
@@ -47,14 +51,17 @@ export function escapeRegExp(str: string): string {
   return str.replace(RE_ESCAPE_REGEXP, '\\$&')
 }
 
+const RE_DECIMAL = /^[0-9]+$/
+const RE_HEX = /^[0-9a-fA-F]+$/
+
 const htmlUnescapes: Record<string, string> = {
   '&amp;': '&',
   '&lt;': '<',
   '&gt;': '>',
   '&quot;': '"',
   '&#39;': "'",
+  '&#96;': '`',
 }
-const RE_UNESCAPE = /&(?:amp|lt|gt|quot|#(0+)?39);/g
 
 /**
  * Converts the HTML entities `&amp;`, `&lt;`, `&gt;`, `&quot;`, and `&#39;` in `str` to their corresponding characters.
@@ -74,5 +81,50 @@ const RE_UNESCAPE = /&(?:amp|lt|gt|quot|#(0+)?39);/g
  * ```
  */
 export function unescape(str: string): string {
-  return str.replace(RE_UNESCAPE, (match) => htmlUnescapes[match] || "'")
+  let result = ''
+  let i = 0
+  const len = str.length
+
+  while (i < len) {
+    if (str[i] === '&') {
+      const semi = str.indexOf(';', i + 1)
+      if (semi !== -1 && semi - i < 12) {
+        const entity = str.slice(i, semi + 1)
+        const replacement = htmlUnescapes[entity]
+        if (replacement != null) {
+          result += replacement
+          i = semi + 1
+          continue
+        }
+        if (entity[1] === '#') {
+          const content = entity.slice(2, -1)
+          let codePoint = -1
+          if (content[0] === 'x' || content[0] === 'X') {
+            const hex = content.slice(1)
+            if (RE_HEX.test(hex)) {
+              codePoint = Number.parseInt(hex, 16)
+            }
+          } else if (RE_DECIMAL.test(content)) {
+            codePoint = Number.parseInt(content, 10)
+          }
+          if (
+            codePoint >= 0 &&
+            // oxlint-disable-next-line unicorn/number-literal-case
+            codePoint <= 0x10ffff &&
+            // oxlint-disable-next-line unicorn/number-literal-case
+            (codePoint < 0xd800 || codePoint > 0xdfff)
+          ) {
+            try {
+              result += String.fromCodePoint(codePoint)
+              i = semi + 1
+              continue
+            } catch {}
+          }
+        }
+      }
+    }
+    result += str[i++]
+  }
+
+  return result
 }

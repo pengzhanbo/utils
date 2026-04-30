@@ -7,10 +7,11 @@ const hasOwnProperty = Object.prototype.hasOwnProperty
  *
  * @category Object
  *
+ * @typeParam T - The type of elements in the array / 数组元素的类型
  * @param obj - The object to check. 要检查的对象
  * @param key - The key to check for. 要检查的键
  * @returns True if the object has the own property, false otherwise. 如果对象具有该自有属性则返回true，否则返回false
  */
 export function hasOwn<T>(obj: T, key: keyof any): key is keyof T {
-  return obj === null ? false : hasOwnProperty.call(obj, key)
+  return obj == null ? false : hasOwnProperty.call(obj, key)
 }

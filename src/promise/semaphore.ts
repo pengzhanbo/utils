@@ -1,3 +1,5 @@
+import { isInteger } from '../predicate'
+
 /**
  * A counting semaphore for async functions that manages available permits.
  * Semaphores are mainly used to limit the number of concurrent async tasks.
@@ -41,20 +43,23 @@ export class Semaphore {
    *
    * 允许的最大并发操作数。
    */
-  public capacity: number
+  public readonly capacity: number
 
   /**
    * The number of available permits.
    *
    * 可用许可的数量。
    */
-  public available: number
-  /**
-   * The array of deferred tasks waiting for a permit.
-   *
-   * 等待许可的延期任务数组。
-   */
-  private deferredTasks: Array<() => void> = []
+  private _available: number
+
+  private _acquired: number = 0
+
+  get available(): number {
+    return this._available
+  }
+
+  private _head: _Node | null = null
+  private _tail: _Node | null = null
 
   /**
    * Creates an instance of Semaphore.
@@ -64,8 +69,11 @@ export class Semaphore {
    * ```
    */
   constructor(capacity: number) {
+    if (!isInteger(capacity) || capacity < 1) {
+      throw new RangeError('Semaphore capacity must be a positive integer')
+    }
     this.capacity = capacity
-    this.available = capacity
+    this._available = capacity
   }
 
   /**
@@ -88,13 +96,21 @@ export class Semaphore {
    * ```
    */
   async acquire(): Promise<void> {
-    if (this.available > 0) {
-      this.available--
+    if (this._available > 0) {
+      this._available--
+      this._acquired++
       return
     }
 
     return new Promise<void>((resolve) => {
-      this.deferredTasks.push(resolve)
+      const node: _Node = { value: resolve, next: null }
+      if (this._tail) {
+        this._tail.next = node
+        this._tail = node
+      } else {
+        this._head = node
+        this._tail = node
+      }
     })
   }
 
@@ -118,15 +134,28 @@ export class Semaphore {
    * ```
    */
   release(): void {
-    const deferredTask = this.deferredTasks.shift()
-
-    if (deferredTask != null) {
-      deferredTask()
+    if (this._acquired > 0) {
+      this._acquired--
+    } else {
       return
     }
 
-    if (this.available < this.capacity) {
-      this.available++
+    if (this._head) {
+      const node = this._head
+      this._head = node.next
+      if (!this._head) {
+        this._tail = null
+      }
+      this._acquired++
+      node.value()
+      return
     }
+
+    this._available++
   }
+}
+
+interface _Node {
+  value: () => void
+  next: _Node | null
 }

@@ -1,4 +1,3 @@
-import type { Finite } from '../types/numeric'
 import { toNumber } from './to-number'
 
 /**
@@ -20,5 +19,5 @@ import { toNumber } from './to-number'
  */
 export function toFinite(v: unknown): number {
   const num = toNumber(v)
-  return Number.isFinite(num) ? (num as Finite<number>) : Number.NaN
+  return Number.isFinite(num) ? num : Number.NaN
 }

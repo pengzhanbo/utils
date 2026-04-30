@@ -1,4 +1,4 @@
-import { isKeyof } from '../predicate'
+import { hasOwn } from './has-own'
 import { objectKeys } from './keys'
 
 /**
@@ -8,6 +8,9 @@ import { objectKeys } from './keys'
  *
  * @category Object
  *
+ * @see {@link omit} and {@link omitBy} — for the inverse operation
+ * @see {@link omit} 和 {@link omitBy} — 反向操作
+ *
  * @param obj - The source object. 源对象
  * @param keys - The keys to pick. 要选择的键
  * @returns A new object with only the picked properties. 仅包含所选属性的新对象
@@ -16,15 +19,16 @@ import { objectKeys } from './keys'
  * ```ts
  * pick({ a: 1, b: 2 }, ['a']) // => { a: 1 }
  * ```
+ * @typeParam T - The type of elements in the array / 数组元素的类型
  */
 export function pick<T extends Record<PropertyKey, any>, K extends keyof T = keyof T>(
   obj: T,
-  keys: K[],
+  keys: readonly K[],
 ): Pick<T, K> {
   const res = Object.create(Object.getPrototypeOf(obj)) as Pick<T, K>
 
   for (const key of keys) {
-    if (isKeyof(obj, key)) res[key] = obj[key]
+    if (hasOwn(obj, key)) res[key] = obj[key]
   }
 
   return res
@@ -37,6 +41,7 @@ export function pick<T extends Record<PropertyKey, any>, K extends keyof T = key
  *
  * @category Object
  *
+ * @typeParam T - The type of elements in the array / 数组元素的类型
  * @param obj - The source object. 源对象
  * @param predicate - The predicate function. 谓词函数
  * @returns A new object with properties that satisfy the predicate. 满足谓词的新对象
@@ -53,7 +58,7 @@ export function pickBy<T extends Record<PropertyKey, any>>(
   const res: Partial<T> = Object.create(Object.getPrototypeOf(obj))
 
   for (const key of objectKeys(obj)) {
-    if (isKeyof(obj, key) && predicate(obj[key], key)) res[key] = obj[key]
+    if (predicate(obj[key], key)) res[key] = obj[key]
   }
 
   return res

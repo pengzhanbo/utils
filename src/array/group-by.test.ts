@@ -97,4 +97,27 @@ describe('array > groupBy', () => {
     ])
     expect(result[symB]).toEqual([{ key: symB, val: 2 }])
   })
+
+  it('should handle prototype property names as keys without errors', () => {
+    const result = groupBy(['x', 'y', 'z'], () => 'toString' as PropertyKey)
+    expect(result).toEqual({ toString: ['x', 'y', 'z'] })
+    expect(Array.isArray(result.toString)).toBe(true)
+  })
+
+  it('should handle constructor as key without errors', () => {
+    const result = groupBy(['a', 'b'], () => 'constructor' as PropertyKey)
+    expect(result).toEqual({ constructor: ['a', 'b'] })
+    expect(Array.isArray(result.constructor)).toBe(true)
+  })
+
+  it('should handle hasOwnProperty as key without errors', () => {
+    const result = groupBy([1, 2], () => 'hasOwnProperty' as PropertyKey)
+    expect(result).toEqual({ hasOwnProperty: [1, 2] })
+    expect(Array.isArray(result.hasOwnProperty)).toBe(true)
+  })
+
+  it('should handle __proto__ as key without prototype pollution', () => {
+    const result = groupBy(['a', 'b'], () => '__proto__' as any)
+    expect(Object.getOwnPropertyDescriptor(result, '__proto__')!.value).toEqual(['a', 'b'])
+  })
 })

@@ -17,7 +17,7 @@ describe('promise > sleep', () => {
 
     setTimeout(() => controller.abort(), 50)
 
-    await expect(sleep(100, { signal })).rejects.toThrow('The operation was aborted')
+    await expect(sleep(100, { signal })).rejects.toThrow(DOMException)
   })
 
   it('should not call the sleep if it is already aborted by AbortSignal', async () => {
@@ -27,7 +27,7 @@ describe('promise > sleep', () => {
 
     controller.abort()
 
-    await expect(sleep(100, { signal })).rejects.toThrow('The operation was aborted')
+    await expect(sleep(100, { signal })).rejects.toThrow(DOMException)
 
     expect(spy).not.toHaveBeenCalled()
     spy.mockRestore()
@@ -41,7 +41,7 @@ describe('promise > sleep', () => {
 
     controller.abort()
 
-    await expect(promise).rejects.toThrow('The operation was aborted')
+    await expect(promise).rejects.toThrow(DOMException)
 
     expect(spy).toHaveBeenCalled()
     spy.mockRestore()
@@ -56,5 +56,19 @@ describe('promise > sleep', () => {
 
     expect(spy).toHaveBeenCalled()
     spy.mockRestore()
+  })
+
+  it('should throw RangeError when ms is NaN', () => {
+    expect(() => sleep(Number.NaN)).toThrow(RangeError)
+  })
+
+  it('should throw RangeError when ms is negative', () => {
+    expect(() => sleep(-1)).toThrow(RangeError)
+    expect(() => sleep(-1)).toThrow('ms must be a finite non-negative number')
+  })
+
+  it('should throw RangeError when ms is Infinity', () => {
+    expect(() => sleep(Infinity)).toThrow(RangeError)
+    expect(() => sleep(-Infinity)).toThrow(RangeError)
   })
 })

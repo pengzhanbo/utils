@@ -11,6 +11,9 @@ import { words } from './words'
  * @param str - The string to convert. 要转换的字符串
  * @returns The string in Title Case. Title Case 格式的字符串
  *
+ * @see {@link capitalize} — for capitalizing only the first letter
+ * @see {@link capitalize} — 仅首字母大写
+ *
  * @example
  * ```ts
  * titleCase('hello world') // => 'Hello World'

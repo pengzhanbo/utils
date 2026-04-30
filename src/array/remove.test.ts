@@ -12,6 +12,18 @@ describe('array > remove', () => {
     expect(remove(input as unknown as number[], value)).toEqual(removed)
     expect(input).toEqual(expected)
   })
+
+  it('should remove NaN from array', () => {
+    const arr = [1, Number.NaN, 3]
+    expect(remove(arr, Number.NaN)).toBe(true)
+    expect(arr).toEqual([1, 3])
+  })
+
+  it('should return false when NaN is not in array', () => {
+    const arr = [1, 2, 3]
+    expect(remove(arr, Number.NaN)).toBe(false)
+    expect(arr).toEqual([1, 2, 3])
+  })
 })
 
 describe('array > removeBy', () => {

@@ -50,5 +50,6 @@ export const CASE_SPLIT_PATTERN: RegExp =
  */
 export function words(str: string): string[] {
   if (!str) return []
-  return Array.from(str.match(CASE_SPLIT_PATTERN) ?? [])
+  str = str.normalize('NFC')
+  return str.match(CASE_SPLIT_PATTERN) ?? []
 }

@@ -8,6 +8,9 @@
  * @param degrees - The angle in degrees. 角度值
  * @returns The angle in radians. 弧度值
  *
+ * @see {@link radToDeg} — for the inverse conversion
+ * @see {@link radToDeg} — 反向转换
+ *
  * @example
  * ```ts
  * degToRad(180) // => Math.PI

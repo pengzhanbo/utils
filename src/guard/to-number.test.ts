@@ -52,4 +52,25 @@ describe('guard > toNumber', () => {
   it('should return NaN for Symbol', () => {
     expect(toNumber(Symbol('id'))).toBeNaN()
   })
+
+  it('should convert Date to timestamp', () => {
+    const date = new Date('2024-01-01T00:00:00.000Z')
+    expect(toNumber(date)).toBe(date.getTime())
+  })
+
+  it('should return NaN for Function', () => {
+    expect(toNumber(() => {})).toBeNaN()
+    expect(toNumber(function () {})).toBeNaN()
+  })
+
+  it('should handle special number strings', () => {
+    expect(toNumber('Infinity')).toBe(Number.POSITIVE_INFINITY)
+    expect(toNumber('-Infinity')).toBe(Number.NEGATIVE_INFINITY)
+    expect(toNumber('0x1F')).toBe(31)
+  })
+
+  it('should handle single-element arrays', () => {
+    expect(toNumber([5])).toBe(5)
+    expect(toNumber([1, 2])).toBeNaN()
+  })
 })

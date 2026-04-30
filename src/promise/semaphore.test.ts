@@ -110,4 +110,95 @@ describe('promise > Semaphore', () => {
     semaphore.release()
     expect(semaphore.available).toBe(2)
   })
+
+  it('should throw RangeError when capacity is 0', () => {
+    expect(() => new Semaphore(0)).toThrow(RangeError)
+    expect(() => new Semaphore(0)).toThrow('Semaphore capacity must be a positive integer')
+  })
+
+  it('should throw RangeError when capacity is negative', () => {
+    expect(() => new Semaphore(-1)).toThrow(RangeError)
+    expect(() => new Semaphore(-5)).toThrow(RangeError)
+  })
+
+  it('should throw RangeError when capacity is not an integer', () => {
+    expect(() => new Semaphore(1.5)).toThrow(RangeError)
+    expect(() => new Semaphore(0.5)).toThrow(RangeError)
+  })
+
+  it('should throw RangeError when capacity is NaN or Infinity', () => {
+    expect(() => new Semaphore(Number.NaN)).toThrow(RangeError)
+    expect(() => new Semaphore(Number.POSITIVE_INFINITY)).toThrow(RangeError)
+  })
+
+  it('should not inflate available permits with excess release calls', async () => {
+    const semaphore = new Semaphore(2)
+
+    semaphore.release()
+    semaphore.release()
+    semaphore.release()
+
+    expect(semaphore.available).toBe(2)
+
+    await semaphore.acquire()
+    await semaphore.acquire()
+
+    expect(semaphore.available).toBe(0)
+
+    semaphore.release()
+    semaphore.release()
+    semaphore.release()
+
+    expect(semaphore.available).toBe(2)
+  })
+
+  it('should not exceed capacity after over-release', async () => {
+    const semaphore = new Semaphore(2)
+
+    semaphore.release()
+    semaphore.release()
+    semaphore.release()
+
+    const spy1 = vi.fn()
+    const spy2 = vi.fn()
+    const spy3 = vi.fn()
+
+    semaphore.acquire().then(spy1)
+    semaphore.acquire().then(spy2)
+    semaphore.acquire().then(spy3)
+
+    await sleep(0)
+
+    expect(spy1).toHaveBeenCalledTimes(1)
+    expect(spy2).toHaveBeenCalledTimes(1)
+    expect(spy3).not.toHaveBeenCalled()
+  })
+
+  it('should maintain FIFO order with linked list queue', async () => {
+    const semaphore = new Semaphore(1)
+
+    await semaphore.acquire()
+
+    const order: number[] = []
+    const spy1 = vi.fn(() => order.push(1))
+    const spy2 = vi.fn(() => order.push(2))
+    const spy3 = vi.fn(() => order.push(3))
+
+    semaphore.acquire().then(spy1)
+    semaphore.acquire().then(spy2)
+    semaphore.acquire().then(spy3)
+
+    await sleep(0)
+
+    semaphore.release()
+    await sleep(0)
+
+    semaphore.release()
+    await sleep(0)
+
+    semaphore.release()
+    await sleep(0)
+
+    expect(order).toEqual([1, 2, 3])
+  })
 })

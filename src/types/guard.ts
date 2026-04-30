@@ -4,6 +4,7 @@
  * 可以是 null 或 undefined 的类型
  *
  * @category Types
+ * @typeParam T - The type of elements in the array / 数组元素的类型
  */
 export type Nullable<T> = T | null | undefined
 

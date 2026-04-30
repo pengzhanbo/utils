@@ -8,15 +8,14 @@
  * @param s - The value to get the string representation for. 要获取字符串表示的值
  * @returns The string representation of the value. 值的字符串表示
  *
- * @example
  * ```ts
- * toString(42) // => '[object Number]'
- * toString('hello') // => '[object String]'
- * toString(undefined) // => '[object Undefined]'
- * toString(null) // => '[object Null]'
+ * toString(42) // => '42'
+ * toString('hello') // => 'hello'
+ * toString(undefined) // => 'undefined'
+ * toString(null) // => 'null'
  * toString({}) // => '[object Object]'
  * ```
  */
 export function toString(s: unknown): string {
-  return Object.prototype.toString.call(s)
+  return String(s)
 }

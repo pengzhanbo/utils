@@ -402,6 +402,35 @@ describe('array > ArrayIterator', () => {
       expect(result).toEqual([8, 10, 12])
     })
 
+    it('should support drop -> take chaining', () => {
+      const result = new ArrayIterator([1, 2, 3, 4, 5]).drop(2).take(3).toArray()
+      expect(result).toEqual([3, 4, 5])
+    })
+
+    it('should support take -> drop chaining', () => {
+      const result = new ArrayIterator([1, 2, 3, 4, 5]).take(3).drop(2).toArray()
+      expect(result).toEqual([3])
+    })
+
+    it('should support drop -> take with small range', () => {
+      const result = new ArrayIterator([1, 2, 3, 4, 5]).drop(1).take(2).toArray()
+      expect(result).toEqual([2, 3])
+    })
+
+    it('should support filter -> drop -> take chaining', () => {
+      const result = new ArrayIterator([1, 2, 3, 4, 5])
+        .filter((v) => v > 2)
+        .drop(1)
+        .take(2)
+        .toArray()
+      expect(result).toEqual([4, 5])
+    })
+
+    it('should support drop -> take -> drop chaining', () => {
+      const result = new ArrayIterator([1, 2, 3, 4, 5]).drop(2).take(3).drop(1).toArray()
+      expect(result).toEqual([4, 5])
+    })
+
     it('should return new iterator instance on each operation', () => {
       const iterator1 = new ArrayIterator([1, 2, 3])
       const iterator2 = iterator1.filter(() => true)

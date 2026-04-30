@@ -1,19 +1,22 @@
 /**
- * helpers
+ * Assert utilities
  *
- * @module Assert
+ * 断言工具
+ *
+ * @module Util
  */
 
 /**
- * Asserts that a condition is true
+ * Asserts that a condition is true.
  *
- * 断言条件为真
+ * 断言条件为真。
+ *
+ * @category Util
  *
  * @param condition - The condition to assert. 要断言的条件
  * @param message - The message to display if the condition is false. 如果条件为假时显示的消息
- * @throws {Error} If the condition is false. 如果条件为假
  *
- * @category Util
+ * @throws {Error} If the condition is false. 如果条件为假
  *
  * @example
  * ```ts

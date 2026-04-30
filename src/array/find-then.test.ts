@@ -46,6 +46,35 @@ describe('findFirstThen', () => {
     expect(result).toBe(false)
     expect(then).not.toHaveBeenCalled()
   })
+
+  it('should not infinite loop when start exceeds array bounds', () => {
+    const arr = [1, 2, 3]
+    const then = vi.fn()
+
+    const result = findFirstThen(arr, (x) => x > 0, then, 100)
+
+    expect(result).toBe(true)
+    expect(then).toHaveBeenCalledWith(3, 2, arr)
+  })
+
+  it('should clamp negative start to 0 for forward search', () => {
+    const arr = [1, 2, 3]
+    const then = vi.fn()
+
+    const result = findFirstThen(arr, (x) => x > 0, then, -10)
+
+    expect(result).toBe(true)
+    expect(then).toHaveBeenCalledWith(1, 0, arr)
+  })
+
+  it('should throw TypeError when start is NaN', () => {
+    const arr = [1, 2, 3]
+    const then = vi.fn()
+    expect(() => findFirstThen(arr, (x) => x > 0, then, Number.NaN)).toThrow(TypeError)
+    expect(() => findFirstThen(arr, (x) => x > 0, then, Number.NaN)).toThrow(
+      'start must be a valid number',
+    )
+  })
 })
 
 describe('findLastThen', () => {
@@ -93,5 +122,34 @@ describe('findLastThen', () => {
 
     expect(result).toBe(false)
     expect(then).not.toHaveBeenCalled()
+  })
+
+  it('should not infinite loop when start is negative and exceeds bounds', () => {
+    const arr = [1, 2, 3]
+    const then = vi.fn()
+
+    const result = findLastThen(arr, (x) => x > 0, then, -100)
+
+    expect(result).toBe(false)
+    expect(then).not.toHaveBeenCalled()
+  })
+
+  it('should clamp start exceeding array length for backward search', () => {
+    const arr = [1, 2, 3]
+    const then = vi.fn()
+
+    const result = findLastThen(arr, (x) => x > 0, then, 100)
+
+    expect(result).toBe(true)
+    expect(then).toHaveBeenCalledWith(3, 2, arr)
+  })
+
+  it('should throw TypeError when start is NaN', () => {
+    const arr = [1, 2, 3]
+    const then = vi.fn()
+    expect(() => findLastThen(arr, (x) => x > 0, then, Number.NaN)).toThrow(TypeError)
+    expect(() => findLastThen(arr, (x) => x > 0, then, Number.NaN)).toThrow(
+      'start must be a valid number',
+    )
   })
 })

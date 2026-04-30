@@ -5,6 +5,7 @@
  *
  * @category Array
  *
+ * @typeParam T - The type of elements in the array / 数组元素的类型
  * @param array - The array to sample from. 要取样的数组
  * @returns A random element from the array, or undefined if the array is empty. 数组中的随机元素，如果数组为空则返回 undefined
  *
@@ -45,6 +46,7 @@ export function sample<T>(array: readonly T[]): T | undefined {
  *
  * @category Array
  *
+ * @typeParam T - The type of elements in the array / 数组元素的类型
  * @param array - The array to sample from. 要取样的数组
  * @param size - The number of elements to sample. 要取样的元素数量
  * @returns An array of random elements from the array. 数组中的随机元素数组
@@ -53,6 +55,10 @@ export function sample<T>(array: readonly T[]): T | undefined {
  * O(n) time complexity where n is the size parameter. Uses Fisher-Yates partial shuffle for unbiased sampling
  *
  * O(n) 时间复杂度，其中 n 为 size 参数。使用 Fisher-Yates 部分洗牌算法实现无偏取样
+ *
+ * Implementation uses Fisher-Yates partial shuffle, which requires a full shallow copy of the array (O(n) memory). When sampling a very small subset from an extremely large array, memory usage scales with array size rather than sample size.
+ *
+ * 实现基于 Fisher-Yates 部分洗牌算法，需要先对数组进行浅拷贝（O(n) 内存）。当从超大数组中抽取极小样本时，内存消耗与数组大小成正比，而非样本大小。
  *
  * @example
  * ```ts
@@ -70,7 +76,6 @@ export function sampleSize<T>(array: readonly T[], size: number): T[] {
   if (array.length === 0 || size <= 0) return []
 
   const resultLength = Math.min(size, array.length)
-
   const result = array.slice()
 
   for (let i = 0; i < resultLength; i++) {

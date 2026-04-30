@@ -1,3 +1,6 @@
+import { hasOwn } from '../object'
+import { isNil, isString } from '../predicate'
+
 /**
  * String template interpolation
  *
@@ -16,7 +19,14 @@
  * ```ts
  * template('Hello, {{name}}!', { name: 'World' }) // => 'Hello, World!'
  * template('{{greeting}}, {{name}}', { greeting: 'Hi', name: 'there' }) // => 'Hi, there'
- * template('{{a}} + {{b}} = {{c}}', { a: 1, b: 2, c: 3 }) // => '1 + 2 = 3'
+ * template('{{a}} + {{b}} = {{c}}', { a: 1, b: 2, c: 3 }) // => '1 + 2 + 3'
+ * ```
+ *
+ * @example
+ * Unclosed / overlapping placeholders are preserved as literal text:
+ * ```ts
+ * template('{{a hello {{b}}', { b: 'world' }) // => '{{a hello world'
+ * template('{{open text', {})                    // => '{{open text'
  * ```
  *
  * @example
@@ -31,31 +41,50 @@ export function template(
   options: { prefix?: string; suffix?: string } = {},
 ): string {
   const { prefix = '{{', suffix = '}}' } = options
-  const prefixLen = prefix.length
-  const suffixLen = suffix.length
-  let result = ''
-  let lastIndex = 0
+  if (!prefix || !suffix) return str
 
   let index = str.indexOf(prefix)
+  if (index === -1) return str
+
+  const parts: string[] = []
+  let lastIndex = 0
+
   while (index !== -1) {
-    result += str.slice(lastIndex, index)
-    const start = index + prefixLen
+    parts.push(str.slice(lastIndex, index))
+    const start = index + prefix.length
     const end = str.indexOf(suffix, start)
+
     if (end === -1) {
-      result += str.slice(start)
-      lastIndex = str.length
-      break
+      parts.push(str.slice(index))
+      return parts.join('')
     }
+
     const key = str.slice(start, end).trim()
-    const value = key in values ? String(values[key]) : `${prefix}${key}${suffix}`
-    result += value
-    lastIndex = end + suffixLen
+
+    if (key.includes(prefix)) {
+      parts.push(prefix)
+      lastIndex = index + prefix.length
+      index = str.indexOf(prefix, lastIndex)
+      continue
+    }
+
+    const rawValue = values[key]
+    parts.push(
+      hasOwn(values, key)
+        ? isString(rawValue)
+          ? rawValue
+          : isNil(rawValue)
+            ? ''
+            : String(rawValue)
+        : prefix + key + suffix,
+    )
+    lastIndex = end + suffix.length
     index = str.indexOf(prefix, lastIndex)
   }
 
   if (lastIndex < str.length) {
-    result += str.slice(lastIndex)
+    parts.push(str.slice(lastIndex))
   }
 
-  return result
+  return parts.join('')
 }

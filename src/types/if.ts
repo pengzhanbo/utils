@@ -12,6 +12,10 @@ import type { IsAny, IsNever, IsNull, IsUndefined, IsUnknown } from './is'
  * - 你可以将此与 `Is*` 类型结合使用，以创建类似 if-else 的能力。例如，`If<IsAny<any>, 'is any', 'not any'>`。
  *
  * @category Types
+ *
+ * @typeParam T - The condition boolean type / 条件布尔类型
+ * @typeParam Y - The type returned when the condition is true / 条件为真时返回的类型
+ * @typeParam N - The type returned when the condition is false / 条件为假时返回的类型
  */
 export type If<T extends boolean, Y, N> = IsNever<T> extends true ? N : T extends true ? Y : N
 

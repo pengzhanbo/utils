@@ -11,7 +11,7 @@
  *
  * @example
  * ```ts
- * random(5) // => an integer between 0 and 5
+ * random(5) // => an integer between 0 and 4
  * random(5, true) // => a floating-point number between 0 and 5
  * ```
  */
@@ -30,7 +30,7 @@ export function random(max: number, float?: boolean): number
  *
  * @example
  * ```ts
- * random(1, 5) // => an integer between 1 and 5
+ * random(1, 5) // => an integer between 1 and 4
  * random(1, 5, true) // => a floating-point number between 1 and 5
  * ```
  */

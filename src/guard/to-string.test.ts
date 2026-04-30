@@ -3,20 +3,20 @@ import { toString } from './to-string'
 
 describe('guard > toString', () => {
   it('should work', () => {
-    expect(toString(null)).toBe('[object Null]')
-    expect(toString('')).toBe('[object String]')
-    expect(toString(1)).toBe('[object Number]')
-    expect(toString(true)).toBe('[object Boolean]')
-    expect(toString([])).toBe('[object Array]')
+    expect(toString(null)).toBe('null')
+    expect(toString('')).toBe('')
+    expect(toString(1)).toBe('1')
+    expect(toString(true)).toBe('true')
+    expect(toString([])).toBe('')
     expect(toString({})).toBe('[object Object]')
-    expect(toString(undefined)).toBe('[object Undefined]')
-    expect(toString(() => {})).toBe('[object Function]')
-    expect(toString(Symbol(''))).toBe('[object Symbol]')
+    expect(toString(undefined)).toBe('undefined')
+    expect(toString(() => {})).toBe('() => {\n    }')
+    expect(toString(Symbol(''))).toBe('Symbol()')
   })
 
   it('should work with an object that has toString', () => {
     const obj = { toString: () => 'test' }
-    expect(toString(obj)).toBe('[object Object]')
+    expect(toString(obj)).toBe('test')
   })
 
   it('should work with a class that has toString', () => {
@@ -25,6 +25,6 @@ describe('guard > toString', () => {
         return 'test'
       }
     }
-    expect(toString(new Test())).toBe('[object Object]')
+    expect(toString(new Test())).toBe('test')
   })
 })

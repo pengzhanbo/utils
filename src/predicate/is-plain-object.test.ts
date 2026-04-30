@@ -12,6 +12,6 @@ describe('predicate > isPlainObject', () => {
     expect(isPlainObject({})).toBe(true)
     expect(isPlainObject(() => {})).toBe(false)
     expect(isPlainObject(Object.create(null))).toBe(true)
-    expect(isPlainObject(Object.create({}))).toBe(true)
+    expect(isPlainObject(Object.create({}))).toBe(false)
   })
 })

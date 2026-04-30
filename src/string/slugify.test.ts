@@ -61,4 +61,9 @@ describe('string > slugify', () => {
     expect(slugify('Hello World!!!')).toBe('hello-world')
     expect(slugify('What???')).toBe('what')
   })
+
+  it('should remove non-Latin combining marks (e.g. Vietnamese)', () => {
+    expect(slugify('Thành phố Hồ Chí Minh')).toBe('thanh-pho-ho-chi-minh')
+    expect(slugify('ngữ âm')).toBe('ngu-am')
+  })
 })

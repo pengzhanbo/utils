@@ -9,6 +9,9 @@
  * @param suffix - The suffix to ensure. 要确保的后缀
  * @returns The string with the suffix ensured. 确保后缀后的字符串
  *
+ * @see {@link ensurePrefix} — for ensuring a prefix
+ * @see {@link ensurePrefix} — 确保前缀
+ *
  * @example
  * ```ts
  * ensureSuffix('example.com', '.com') // => example.com

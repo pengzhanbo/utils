@@ -8,8 +8,8 @@ import { words } from './words'
  *
  * @category String
  *
- * @param str - 要转换的字符串
- * @returns 转换后的大驼峰命名法字符串
+ * @param str - The string to convert. 要转换的字符串
+ * @returns The string in PascalCase. 转换后的大驼峰命名法字符串
  *
  * @example
  * ```ts

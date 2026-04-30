@@ -1,4 +1,4 @@
-import { isKeyof } from '../predicate'
+import { hasOwn } from './has-own'
 import { objectKeys } from './keys'
 
 /**
@@ -8,6 +8,9 @@ import { objectKeys } from './keys'
  *
  * @category Object
  *
+ * @see {@link pick} and {@link pickBy} — for the inverse operation
+ * @see {@link pick} 和 {@link pickBy} — 反向操作
+ *
  * @param obj - The source object. 源对象
  * @param keys - The keys to omit. 要省略的键
  * @returns A new object with the specified keys omitted. 省略了指定键的新对象
@@ -16,6 +19,7 @@ import { objectKeys } from './keys'
  * ```ts
  * omit({ a: 1, b: 2 }, ['a']) // => { b: 2 }
  * ```
+ * @typeParam T - The type of elements in the array / 数组元素的类型
  */
 export function omit<T extends Record<PropertyKey, any>, K extends keyof T = keyof T>(
   obj: T,
@@ -25,7 +29,7 @@ export function omit<T extends Record<PropertyKey, any>, K extends keyof T = key
   Object.assign(res, obj)
 
   for (const key of keys) {
-    if (isKeyof(obj, key)) delete res[key]
+    if (hasOwn(obj, key)) Reflect.deleteProperty(res, key)
   }
 
   return res
@@ -38,6 +42,7 @@ export function omit<T extends Record<PropertyKey, any>, K extends keyof T = key
  *
  * @category Object
  *
+ * @typeParam T - The type of elements in the array / 数组元素的类型
  * @param obj - The source object. 源对象
  * @param predicate - The predicate function. 谓词函数
  * @returns A new object without properties that satisfy the predicate. 排除满足谓词属性的新对象
@@ -54,7 +59,7 @@ export function omitBy<T extends Record<PropertyKey, any>>(
   const res: Partial<T> = Object.create(Object.getPrototypeOf(obj))
 
   for (const key of objectKeys(obj)) {
-    if (isKeyof(obj, key) && !predicate(obj[key], key)) res[key] = obj[key]
+    if (!predicate(obj[key], key)) res[key] = obj[key]
   }
 
   return res

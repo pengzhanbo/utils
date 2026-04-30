@@ -12,6 +12,22 @@ describe('predicate > typeOf', () => {
     expect(typeOf(() => {})).toBe('function')
   })
 
+  it('should return bigint for BigInt values', () => {
+    expect(typeOf(1n)).toBe('bigint')
+    expect(typeOf(BigInt(42))).toBe('bigint')
+    expect(typeOf(BigInt('9007199254740991'))).toBe('bigint')
+  })
+
+  it('should return symbol for Symbol values', () => {
+    expect(typeOf(Symbol('test'))).toBe('symbol')
+    expect(typeOf(Symbol.iterator)).toBe('symbol')
+  })
+
+  it('should return promise for Promise values', () => {
+    expect(typeOf(Promise.resolve())).toBe('promise')
+    expect(typeOf(new Promise(() => {}))).toBe('promise')
+  })
+
   it('should return Constructor name', () => {
     expect(typeOf(/\d/)).toBe('regexp')
     expect(typeOf(new Error('message'))).toBe('error')
@@ -38,5 +54,18 @@ describe('predicate > typeOf', () => {
     expect(typeOf(new Int32Array([1]))).toBe('int32array')
     expect(typeOf(new Float32Array([1]))).toBe('float32array')
     expect(typeOf(new Float64Array([1]))).toBe('float64array')
+  })
+
+  it('should return object for custom class instances', () => {
+    class MyClass {}
+    expect(typeOf(new MyClass())).toBe('object')
+  })
+
+  it('should return arguments for arguments object', () => {
+    function getArgs() {
+      // oxlint-disable-next-line prefer-rest-params
+      return arguments
+    }
+    expect(typeOf(getArgs())).toBe('arguments')
   })
 })

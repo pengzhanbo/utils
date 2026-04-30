@@ -1,4 +1,3 @@
-import { findIndex } from '../_internal/find-index'
 import {
   OPERATION_FILTER,
   OPERATION_MAP,
@@ -49,6 +48,11 @@ type Operation<T> =
  *
  * @category Array
  *
+ * @remarks
+ * Each chained operation (.filter(), .map(), .drop(), .take()) creates a shallow copy of the current operation list (O(k) where k is the number of chained calls). Excessive chaining may cause quadratic overhead. Consider limiting chain depth and combining filter/map logic where possible.
+ *
+ * 每次链式调用（.filter()、.map()、.drop()、.take()）都会浅拷贝当前操作列表（O(k)，k 为链式调用次数）。大量链式调用可能产生平方级开销。建议控制链式调用深度，并在可能时合并 filter/map 逻辑。
+ *
  * @example
  * ```ts
  * const result = new ArrayIterator([1, 2, 3, 4, 5])
@@ -63,13 +67,13 @@ export class ArrayIterator<T = unknown> {
   /**
    * The source array to iterate over. 要迭代的源数组
    */
-  private readonly s: unknown[]
+  private readonly source: unknown[]
   /**
    * The list of operations to be applied lazily
    *
    * 要惰性应用的操作列表
    */
-  private readonly o: Operation<unknown>[]
+  private readonly operations: Operation<unknown>[]
 
   /**
    * Creates a new ArrayIterator instance
@@ -79,8 +83,8 @@ export class ArrayIterator<T = unknown> {
    * @param array - The source array to iterate. 要迭代的源数组
    */
   constructor(array: T[]) {
-    this.s = array
-    this.o = []
+    this.source = array
+    this.operations = []
   }
 
   /**
@@ -90,7 +94,7 @@ export class ArrayIterator<T = unknown> {
    */
   private static create<T>(source: unknown[], operations: Operation<unknown>[]): ArrayIterator<T> {
     const iterator = new ArrayIterator<T>(source as T[])
-    ;(iterator as unknown as { o: Operation<unknown>[] }).o = operations
+    Object.assign(iterator, { operations })
     return iterator
   }
 
@@ -100,14 +104,14 @@ export class ArrayIterator<T = unknown> {
    * 创建一个在单次遍历中应用所有操作的生成器
    */
   private *iterate(): Generator<T> {
-    const firstTakeIndex = findIndex(this.o, (op) => op.type === OPERATION_TAKE)
-    const firstDropIndex = findIndex(this.o, (op) => op.type === OPERATION_DROP)
+    const firstTakeIndex = this.operations.findIndex((op) => op.type === OPERATION_TAKE)
+    const firstDropIndex = this.operations.findIndex((op) => op.type === OPERATION_DROP)
 
     let hasFilterBeforeLimit = false
     const limitIndex = firstTakeIndex !== -1 ? firstTakeIndex : firstDropIndex
     if (limitIndex !== -1) {
       for (let i = 0; i < limitIndex; i++) {
-        const op = this.o[i]
+        const op = this.operations[i]
         if (op && op.type === OPERATION_FILTER) {
           hasFilterBeforeLimit = true
           break
@@ -117,7 +121,8 @@ export class ArrayIterator<T = unknown> {
 
     let minTakeLimit = Infinity
     let dropCount = 0
-    for (const op of this.o) {
+    let dropBeforeTake = 0
+    for (const op of this.operations) {
       if (op.type === OPERATION_TAKE) {
         minTakeLimit = Math.min(minTakeLimit, op.limit)
       }
@@ -125,15 +130,27 @@ export class ArrayIterator<T = unknown> {
         dropCount += op.count
       }
     }
+    if (firstTakeIndex !== -1) {
+      for (let i = 0; i < firstTakeIndex; i++) {
+        const op = this.operations[i]
+        if (op && op.type === OPERATION_DROP) {
+          dropBeforeTake += op.count
+        }
+      }
+    }
 
     let processedCount = 0
     let yieldedCount = 0
     let droppedCount = 0
 
-    for (let i = 0; i < this.s.length; i++) {
-      const entry = this.s[i]
+    for (let i = 0; i < this.source.length; i++) {
+      const entry = this.source[i]
 
-      if (!hasFilterBeforeLimit && firstTakeIndex !== -1 && processedCount >= minTakeLimit) {
+      if (
+        !hasFilterBeforeLimit &&
+        firstTakeIndex !== -1 &&
+        processedCount >= minTakeLimit + dropBeforeTake
+      ) {
         break
       }
 
@@ -141,7 +158,7 @@ export class ArrayIterator<T = unknown> {
       let shouldYield = true
       let shouldDrop = false
 
-      for (const op of this.o) {
+      for (const op of this.operations) {
         if (!shouldYield) break
 
         switch (op.type) {
@@ -192,6 +209,8 @@ export class ArrayIterator<T = unknown> {
    * @param predicate - The predicate function. 断言函数
    * @returns A new ArrayIterator instance with the filter operation. 带有过滤操作的新 ArrayIterator 实例
    *
+   * @throws {TypeError} When predicate is not a function. 当 predicate 不是函数时抛出。
+   *
    * @example
    * ```ts
    * new ArrayIterator([1, 2, 3, 4])
@@ -204,8 +223,8 @@ export class ArrayIterator<T = unknown> {
     if (!isFunction(predicate)) {
       throw new TypeError('predicate must be a function')
     }
-    return ArrayIterator.create<T>(this.s, [
-      ...this.o,
+    return ArrayIterator.create<T>(this.source, [
+      ...this.operations,
       {
         type: OPERATION_FILTER,
         predicate: predicate as (value: unknown, index: number) => boolean,
@@ -222,6 +241,8 @@ export class ArrayIterator<T = unknown> {
    * @param transform - The transform function. 转换函数
    * @returns A new ArrayIterator instance with the map operation. 带有映射操作的新 ArrayIterator 实例
    *
+   * @throws {TypeError} When transform is not a function. 当 transform 不是函数时抛出。
+   *
    * @example
    * ```ts
    * new ArrayIterator([1, 2, 3])
@@ -234,8 +255,8 @@ export class ArrayIterator<T = unknown> {
     if (!isFunction(transform)) {
       throw new TypeError('transform must be a function')
     }
-    return ArrayIterator.create<R>(this.s, [
-      ...this.o,
+    return ArrayIterator.create<R>(this.source, [
+      ...this.operations,
       { type: OPERATION_MAP, transform: transform as (value: unknown, index: number) => unknown },
     ])
   }
@@ -247,6 +268,8 @@ export class ArrayIterator<T = unknown> {
    *
    * @param limit - The maximum number of elements to take. 要获取的最大元素数
    * @returns A new ArrayIterator instance with the take operation. 带有获取操作的新 ArrayIterator 实例
+   *
+   * @throws {TypeError} When limit is not a non-negative integer. 当 limit 不是非负整数时抛出。
    *
    * @example
    * ```ts
@@ -260,7 +283,10 @@ export class ArrayIterator<T = unknown> {
     if (!isNumber(limit) || !isInteger(limit) || limit < 0) {
       throw new TypeError('limit must be a non-negative integer')
     }
-    return ArrayIterator.create<T>(this.s, [...this.o, { type: OPERATION_TAKE, limit }])
+    return ArrayIterator.create<T>(this.source, [
+      ...this.operations,
+      { type: OPERATION_TAKE, limit },
+    ])
   }
 
   /**
@@ -270,6 +296,8 @@ export class ArrayIterator<T = unknown> {
    *
    * @param count - The number of elements to drop. 要跳过的元素数量
    * @returns A new ArrayIterator instance with the drop operation. 带有跳过操作的新 ArrayIterator 实例
+   *
+   * @throws {TypeError} When count is not a non-negative integer. 当 count 不是非负整数时抛出。
    *
    * @example
    * ```ts
@@ -283,7 +311,10 @@ export class ArrayIterator<T = unknown> {
     if (!isNumber(count) || !isInteger(count) || count < 0) {
       throw new TypeError('count must be a non-negative integer')
     }
-    return ArrayIterator.create<T>(this.s, [...this.o, { type: OPERATION_DROP, count }])
+    return ArrayIterator.create<T>(this.source, [
+      ...this.operations,
+      { type: OPERATION_DROP, count },
+    ])
   }
 
   /**
@@ -292,6 +323,8 @@ export class ArrayIterator<T = unknown> {
    * 对数组中的每个元素执行一次提供的回调函数
    *
    * @param callback - The function to execute for each element. 为每个元素执行的函数
+   *
+   * @throws {TypeError} When callback is not a function. 当 callback 不是函数时抛出。
    *
    * @example
    * ```ts
@@ -316,6 +349,8 @@ export class ArrayIterator<T = unknown> {
    *
    * @param predicate - The function to test for each element. 用于测试每个元素的函数
    * @returns true if all elements pass the test, false otherwise. 如果所有元素都通过测试则返回 true，否则返回 false
+   *
+   * @throws {TypeError} When predicate is not a function. 当 predicate 不是函数时抛出。
    *
    * @example
    * ```ts
@@ -344,6 +379,8 @@ export class ArrayIterator<T = unknown> {
    * @param predicate - The function to test for each element. 用于测试每个元素的函数
    * @returns true if at least one element passes the test, false otherwise. 如果至少有一个元素通过测试则返回 true，否则返回 false
    *
+   * @throws {TypeError} When predicate is not a function. 当 predicate 不是函数时抛出。
+   *
    * @example
    * ```ts
    * new ArrayIterator([1, 2, 3]).some((v) => v % 2 === 0)
@@ -370,6 +407,8 @@ export class ArrayIterator<T = unknown> {
    *
    * @param predicate - The function to test for each element. 用于测试每个元素的函数
    * @returns The value of the first element that passes the test, or undefined if no element passes. 通过测试的第一个元素的值，如果没有元素通过则返回 undefined
+   *
+   * @throws {TypeError} When predicate is not a function. 当 predicate 不是函数时抛出。
    *
    * @example
    * ```ts

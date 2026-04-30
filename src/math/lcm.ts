@@ -12,6 +12,9 @@ import { gcd } from './gcd'
  * @param b - The second number. 第二个数
  * @returns The least common multiple of a and b. a和b的最小公倍数
  *
+ * @see {@link gcd} — for greatest common divisor
+ * @see {@link gcd} — 最大公约数
+ *
  * @example
  * ```ts
  * lcm(12, 8) // => 24

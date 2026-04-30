@@ -18,6 +18,8 @@
  * type PrettyType = Prettify<{ name: string } & { age: number } & { address: string }>
  * // display as -> { name: string; age: number; address: string }
  * ```
+ * @typeParam A - The input type for the A check / A 检查的输入类型
+ * @typeParam T - The type of elements in the array / 数组元素的类型
  */
 export type Prettify<T> = { [K in keyof T]: T[K] } & {}
 

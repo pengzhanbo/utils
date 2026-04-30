@@ -11,11 +11,13 @@ import { isArray } from '../predicate'
  *
  * 使用 `Reflect.deleteProperty` 从对象中删除指定的键，而不是使用 `delete` 操作符。
  *
- * @param obj - The object to delete keys from 要从中删除键的对象
- * @param key - The keys to delete 要删除的键
- * @returns Whether any keys were deleted 是否成功删除了键
- *
  * @category Object
+ *
+ * @typeParam T - The type of elements in the array / 数组元素的类型
+ * @param obj - The object to delete keys from / 要从中删除键的对象
+ * @param key - The keys to delete / 要删除的键
+ * @returns Whether any keys were deleted / 是否成功删除了键
+ *
  * @example
  * ```ts
  * const obj = { a: 1, b: 2 }
@@ -28,12 +30,11 @@ export function deleteKey<T extends object, K extends keyof T>(obj: T, key: Arra
     if (!key.length) {
       return false
     }
-    let bool = false
+    let anyDeleted = false
     for (const k of key) {
-      del(obj, k)
-      bool = true
+      if (del(obj, k)) anyDeleted = true
     }
-    return bool
+    return anyDeleted
   } else {
     return del(obj, key)
   }

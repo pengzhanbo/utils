@@ -21,5 +21,8 @@ describe('predicate > isTypedArray', () => {
     expect(isTypedArray(Symbol(''))).toBe(false)
     expect(isTypedArray([1, 2, 3])).toBe(false)
     expect(isTypedArray(false)).toBe(false)
+    // Using typeOf() instead of instanceof DataView ensures cross-realm DataView
+    // is correctly excluded, since instanceof fails across different realms
+    expect(isTypedArray(new DataView(new ArrayBuffer(8)))).toBe(false)
   })
 })

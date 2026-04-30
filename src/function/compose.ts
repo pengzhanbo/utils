@@ -4,6 +4,8 @@ import type { Fn } from '../types'
  * Get the type of the last element in the array
  *
  * 获取数组的最后一个元素类型
+ * @typeParam Fn - The type of the function / 函数的类型
+ * @typeParam T - The type of elements in the array / 数组元素的类型
  */
 type LastArray<T extends any[]> = T extends [...any[], infer U] ? U : Fn
 /**
@@ -20,6 +22,7 @@ type FirstArray<T extends any[]> = T extends [infer U, ...any[]] ? U : Fn
  *
  * @category Function
  *
+ * @typeParam T - The type of elements in the array / 数组元素的类型
  * @param fns - The functions to compose. 要组合的函数
  * @returns A new function that is the composition of the input functions. 由输入函数组合而成的新函数
  *
@@ -36,7 +39,7 @@ export function compose<T extends Fn[] = Fn[]>(
 ): (...args: Parameters<LastArray<T>>) => ReturnType<FirstArray<T>> {
   return function (...args: Parameters<LastArray<T>>) {
     const len = fns.length
-    if (len === 0) return args
+    if (len === 0) return args[0]
     if (len === 1) return fns[0]!(...args)
     return fns.slice(0, -1).reduceRight((acc, fn) => fn(acc), fns[len - 1]!(...args))
   }

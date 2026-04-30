@@ -40,13 +40,54 @@ export interface DebounceOptions {
  * 一个在延迟毫秒后执行的函数。当防抖函数执行时，`this`上下文和所有参数都会原样传递给`callback`。
  *
  * @param options - An object to configure options. 用于配置选项的对象。
- * @param options.atBegin
+ * @param options.atBegin - If true, the callback is executed at the beginning of the delay period instead of the end. 如果为 true，回调在延迟期开始时而非结束时执行。
+ * @returns A debounced version of the callback with a `.cancel()` method. 带有 `.cancel()` 方法的防抖版本回调函数。
+ *
+ * @remarks
+ * Internally delegates to {@link throttle} with `debounceMode` set. The returned function
+ * includes a `cancel(options?: CancelOptions)` method to cancel pending executions.
+ *
+ * 内部委托给设置了 `debounceMode` 的 {@link throttle}。返回的函数包含 `cancel(options?: CancelOptions)` 方法用于取消待执行的调用。
+ *
+ * @see {@link throttle} — for throttle behavior (debounce delegates to throttle internally)
+ * @see {@link throttle} — 了解节流行为（debounce 内部委托给 throttle）
+ *
+ * @example
+ * Basic debounce — input handler that fires 250ms after the last keystroke:
+ * ```ts
+ * const onInput = debounce(250, (value: string) => {
+ *   console.log('Search:', value)
+ * })
+ * // Each call resets the timer; callback runs only after 250ms of inactivity
+ * onInput('a')
+ * onInput('ab')
+ * onInput('abc') // Only this triggers the callback after 250ms
+ * ```
+ *
+ * @example
+ * atBegin mode — fires immediately on the first call, then ignores subsequent calls:
+ * ```ts
+ * const onClick = debounce(1000, () => console.log('clicked'), { atBegin: true })
+ * onClick() // => 'clicked' (immediately)
+ * onClick() // ignored (within delay)
+ * onClick() // ignored (within delay)
+ * ```
+ *
+ * @example
+ * Cancel a pending execution:
+ * ```ts
+ * const fn = debounce(500, () => console.log('done'))
+ * fn()
+ * fn.cancel() // The scheduled execution is cancelled
+ * ```
  */
 export function debounce<T extends (...args: any[]) => any>(
   delay: number,
   callback: T,
   options?: DebounceOptions,
 ): FnNoReturn<T> & Cancel {
+  if (!Number.isFinite(delay) || delay < 0)
+    throw new RangeError('delay must be a finite non-negative number')
   const { atBegin = false } = options || {}
-  return throttle(delay, callback, { debounceMode: atBegin !== false })
+  return throttle(delay, callback, { debounceMode: atBegin })
 }

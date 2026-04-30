@@ -92,4 +92,10 @@ describe('string > words', () => {
     expect(words('你好世界🚀')).toEqual(['你好世界', '🚀'])
     expect(words('你好，世界')).toEqual(['你好', '世界'])
   })
+
+  it('should handle NFD-normalized input', () => {
+    const nfdInput = 'café'.normalize('NFD')
+    expect(nfdInput).not.toBe('café')
+    expect(words(nfdInput)).toEqual(words('café'))
+  })
 })

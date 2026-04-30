@@ -8,6 +8,7 @@ describe('object > hasOwn', () => {
 
   it('should be false', () => {
     expect(hasOwn(null, 'a')).toBe(false)
+    expect(hasOwn(undefined as any, 'a')).toBe(false)
     expect(hasOwn({ a: 1 }, 'toString')).toBe(false)
     expect(hasOwn({ a: 1 }, 'length')).toBe(false)
     expect(hasOwn({ a: 1 }, '__proto__')).toBe(false)

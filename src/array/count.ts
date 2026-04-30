@@ -1,3 +1,5 @@
+import { hasOwn } from '../object'
+
 /**
  * Counts the number of elements in an array that satisfy the given predicate function.
  *
@@ -5,6 +7,7 @@
  *
  * @category Array
  *
+ * @typeParam T - The type of elements in the array / 数组元素的类型
  * @param array - The array to count elements in. 要统计元素数量的数组
  * @param predicate - The function to test each element. 用于测试每个元素的函数
  * @returns The number of elements that satisfy the predicate. 满足谓词的元素数量
@@ -28,12 +31,12 @@
  */
 export function count<T>(
   array: readonly T[],
-  predicate: (item: T, index: number) => boolean,
+  predicate: (item: T, index: number, array: readonly T[]) => boolean,
 ): number {
   let result = 0
 
   for (let i = 0; i < array.length; i++) {
-    if (predicate(array[i]!, i)) {
+    if (predicate(array[i]!, i, array)) {
       result++
     }
   }
@@ -55,14 +58,18 @@ export function count<T>(
  *
  * @category Array
  *
+ * @typeParam T - The type of elements in the array / 数组元素的类型
+ * @typeParam K - The type of the key (extends PropertyKey) / 键的类型（继承 PropertyKey）
  * @param array - The array to count. 要统计的数组
  * @param iteratee - The function to transform elements into keys. 将元素转换为键的函数
  * @returns An object with keys mapped to their counts. 键映射到其计数的对象
  *
  * @remarks
- * Uses Map for O(1) key lookup, overall O(n) time complexity
+ * Uses plain object for key lookup, overall O(n) time complexity.
+ * Key lookup is O(1) via {@link hasOwn}.
  *
- * 使用 Map 实现 O(1) 键查找，整体时间复杂度 O(n)
+ * 使用普通对象实现键查找，整体时间复杂度 O(n)。
+ * 通过 {@link hasOwn} 实现 O(1) 键查找。
  *
  * @example
  * ```ts
@@ -80,15 +87,15 @@ export function countBy<T, K extends PropertyKey>(
   array: readonly T[],
   iteratee: (item: T) => K,
 ): Record<K, number> {
-  const result = {} as Record<K, number>
+  const result = Object.create(null) as Record<K, number>
 
   for (let i = 0; i < array.length; i++) {
     const key = iteratee(array[i]!)
 
-    if (key in result) {
+    if (hasOwn(result, key)) {
       result[key]++
     } else {
-      result[key] = 1
+      result[key as K] = 1
     }
   }
 

@@ -1,3 +1,5 @@
+import { isUndefined } from '../predicate'
+
 /**
  * Check if a number is in range [0, max]
  *
@@ -36,7 +38,7 @@ export function inRange(n: number, max: number): boolean
  */
 export function inRange(n: number, min: number, max: number): boolean
 export function inRange(n: number, min: number, max?: number): boolean {
-  if (max === undefined) {
+  if (isUndefined(max)) {
     max = min
     min = 0
   }

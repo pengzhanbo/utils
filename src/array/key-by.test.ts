@@ -100,4 +100,9 @@ describe('array > keyBy', () => {
     expect(result[1]!.profile.name).toBe('Alice')
     expect(result[2]!.profile.name).toBe('Bob')
   })
+
+  it('should handle __proto__ as key without prototype pollution', () => {
+    const result = keyBy(['a', 'b'], () => '__proto__' as any)
+    expect(Object.getOwnPropertyDescriptor(result, '__proto__')!.value).toBe('b')
+  })
 })

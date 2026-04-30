@@ -12,6 +12,8 @@
  *
  * @category Array
  *
+ * @typeParam T - The type of elements in the array / 数组元素的类型
+ * @typeParam U - The type of the mapped key or second array elements / 映射键或第二个数组元素的类型
  * @param firstArr - The first array. 第一个数组
  * @param secondArr - The second array. 第二个数组
  * @returns A new array containing the elements that are present in the first array but not in the second array. 包含存在于第一个数组中但不在第二个数组中的元素的新数组

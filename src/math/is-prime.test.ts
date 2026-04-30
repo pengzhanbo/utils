@@ -31,9 +31,10 @@ describe('math > isPrime', () => {
     expect(isPrime(-5)).toBe(false)
   })
 
-  it('should truncate floating-point numbers', () => {
-    expect(isPrime(7.5)).toBe(true)
-    expect(isPrime(7.9)).toBe(true)
+  it('should return false for non-integer numbers', () => {
+    expect(isPrime(7.5)).toBe(false)
+    expect(isPrime(7.9)).toBe(false)
+    expect(isPrime(3.5)).toBe(false)
     expect(isPrime(4.5)).toBe(false)
   })
 

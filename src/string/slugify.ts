@@ -1,7 +1,7 @@
 // oxlint-disable-next-line no-control-regex
 const CONTROL_REG = /[\u0000-\u001F]/g
 const SPECIAL_REG = /[\s~`!@#$%^&*()\-_+=[\]{}|\\;:"'“”‘’<>,.?/]+/g
-const COMBINING_REG = /[\u0300-\u036F]/g
+const COMBINING_REG = /\p{Mn}/gu
 
 /**
  * Converts a string to a URL-friendly slug

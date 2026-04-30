@@ -1,19 +1,25 @@
 import type { Integer } from '../types/numeric'
 
 /**
- * Checks if the input is an integer
+ * Checks if the input is an integer.
  *
- * 检查输入是否为整数
+ * 检查输入是否为整数。
  *
  * @category Predicate
  *
+ * @typeParam T - The type of the value to check / 要检查的值的类型
+ *
  * @param v - The value to check. 要检查的值
- * @returns True if the value is an integer, false otherwise. 如果值为整数则返回true，否则返回false
+ *
+ * @returns True if the value is an integer, false otherwise. 如果值为整数则返回 true，否则返回 false
  *
  * @example
  * ```ts
  * isInteger(1) // => true
+ * isInteger(0) // => true
+ * isInteger(-1) // => true
  * isInteger(1.1) // => false
+ * isInteger(NaN) // => false
  * ```
  */
 export function isInteger<T>(v: T): v is Integer<T> {

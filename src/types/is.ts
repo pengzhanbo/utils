@@ -10,6 +10,7 @@ import type { NegativeInfinity, PositiveInfinity } from './numeric'
  *
  * @category Types
  *
+ * @typeParam T - The type to check / 要检查的类型
  */
 export type IsPrimitive<T> = [T] extends [Primitive] ? true : false
 
@@ -49,9 +50,9 @@ export type IsNever<T> = [T] extends [never] ? true : false
 export type IsNull<T> = [T] extends [null] ? true : false
 
 /**
- * If the type T accepts type `null`, output type true, otherwise output type false.
+ * If the type T is a union type containing `null` (i.e. `T` is nullable), output type true, otherwise output type false.
  *
- * 如果类型 T 包含类型 `null`，则输出 true，否则输出 false。
+ * 如果类型 T 是包含类型 `null` 的联合类型（即 T 可为空），则输出 true，否则输出 false。
  *
  * @category Types
  *

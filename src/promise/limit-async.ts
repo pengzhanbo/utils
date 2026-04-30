@@ -1,4 +1,4 @@
-import { Semaphore } from '../promise'
+import { Semaphore } from './semaphore'
 
 /**
  * Wraps an async function to limit the number of concurrent executions.
@@ -12,10 +12,13 @@ import { Semaphore } from '../promise'
  * 此函数创建一个异步回调的包装器，确保最多只有`concurrency`个执行可以同时运行。
  * 额外的调用将等待直到有可用的执行槽位。
  *
- * @category Array
- * @param callback - The async function to wrap. - 要包装的异步函数
- * @param concurrency - The maximum number of concurrent executions. - 最大并发数
- * @returns The wrapped async function. - 包装后的异步函数
+ * @category Promise
+ *
+ * @typeParam F - The type of the function / 函数的类型
+ * @param callback - The async function to wrap. / 要包装的异步函数
+ * @param concurrency - The maximum number of concurrent executions. / 最大并发数
+ * @returns The wrapped async function. / 包装后的异步函数
+ *
  * @example
  * ```ts
  * const limitedFetch = limitAsync(async (url) => {

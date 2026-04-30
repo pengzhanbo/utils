@@ -1,9 +1,12 @@
 import type { Fn } from '../types'
+import { isUndefined } from '../predicate'
 
-export interface MemoizeOptions {
+export interface MemoizeOptions<T extends Fn = Fn> {
   /**
    * Maximum number of cached entries.
    * 缓存条目最大数量
+   * @typeParam Fn - The type of the function / 函数的类型
+   * @typeParam T - The type of the function / 函数的类型
    */
   maxSize?: number
   /**
@@ -15,7 +18,7 @@ export interface MemoizeOptions {
    * Custom key resolver. By default, arguments are serialized via JSON.
    * 自定义 key 生成器。默认使用 JSON 序列化参数
    */
-  keyResolver?: Fn<string>
+  keyResolver?: (...args: Parameters<T>) => string
 }
 
 /**
@@ -41,12 +44,34 @@ type CacheValue = { readonly value: any; readonly timestamp: number }
  *
  * @category Function
  *
+ * @typeParam T - The type of elements in the array / 数组元素的类型
  * @param func - The function to memoize. 要记忆化的函数
  * @param options - Options for memoization. 记忆化配置
  * @param options.maxSize
  * @param options.ttl
  * @param options.keyResolver
  * @returns A memoized version of the function. 记忆化后的函数
+ *
+ * @remarks
+ * When neither `maxSize` nor `ttl` is set, the cache grows without bound.
+ * For long-running applications, it is strongly recommended to set at least one of these
+ * options to prevent memory leaks.
+ *
+ * 当 `maxSize` 和 `ttl` 都未设置时，缓存会无限增长。对于长期运行的应用，
+ * 强烈建议至少设置其中一个选项以防止内存泄漏。
+ *
+ * The default key resolver uses `JSON.stringify`, which has limitations:
+ * - Circular references will throw `TypeError`
+ * - Object property order affects the key (`{a:1,b:2}` ≠ `{b:2,a:1}`)
+ * - `undefined`, functions, and Symbols are ignored or converted to `null`
+ * - Cannot distinguish certain types (`JSON.stringify([1])` vs `JSON.stringify({"0":1})`)
+ * Use `keyResolver` for more robust key generation.
+ *
+ * 默认的 key 生成器使用 `JSON.stringify`，存在以下限制：
+ * - 循环引用会抛出 `TypeError`
+ * - 对象属性顺序影响 key（`{a:1,b:2}` ≠ `{b:2,a:1}`）
+ * - `undefined`、函数和 Symbol 会被忽略或转为 `null`
+ * - 无法区分某些类型。请使用 `keyResolver` 进行更健壮的 key 生成。
  *
  * @example
  * ```ts
@@ -88,40 +113,49 @@ type CacheValue = { readonly value: any; readonly timestamp: number }
  * fn.clear()
  * ```
  */
-export function memoize<T extends Fn>(func: T, options?: MemoizeOptions): MemoizedFn<T> {
+export function memoize<T extends Fn>(func: T, options?: MemoizeOptions<T>): MemoizedFn<T> {
   const { maxSize, ttl, keyResolver } = options ?? {}
 
-  const cache = new Map<string, CacheValue>()
-  const keys: string[] = []
+  if (maxSize !== undefined && maxSize < 0)
+    throw new RangeError('maxSize must be a non-negative integer')
+  if (ttl !== undefined && ttl < 0) throw new RangeError('ttl must be a non-negative number')
 
-  const memoized = (...args: Parameters<T>): ReturnType<T> => {
+  if (maxSize === 0) {
+    const noCacheFn = function (this: any, ...args: Parameters<T>): ReturnType<T> {
+      return func.apply(this, args)
+    }
+    noCacheFn.clear = () => {}
+    return noCacheFn as MemoizedFn<T>
+  }
+
+  const cache = new Map<string, CacheValue>()
+
+  const memoized = function (this: any, ...args: Parameters<T>): ReturnType<T> {
     const key = keyResolver ? keyResolver(...args) : JSON.stringify(args)
 
     const entry = cache.get(key)
     if (entry) {
-      if (ttl === undefined || Date.now() - entry.timestamp < ttl) {
+      if (isUndefined(ttl) || Date.now() - entry.timestamp < ttl) {
+        cache.delete(key)
+        cache.set(key, entry)
         return entry.value
       }
       cache.delete(key)
     }
 
-    const value = func(...args)
+    const value = func.apply(this, args)
+
+    if (!isUndefined(maxSize) && cache.size >= maxSize) {
+      const oldestKey = cache.keys().next().value as string
+      cache.delete(oldestKey)
+    }
 
     cache.set(key, { value, timestamp: Date.now() })
-    keys.push(key)
-
-    if (maxSize !== undefined && cache.size > maxSize) {
-      const oldest = keys.shift()
-      if (oldest) cache.delete(oldest)
-    }
 
     return value
   }
 
-  memoized.clear = () => {
-    cache.clear()
-    keys.length = 0
-  }
+  memoized.clear = () => cache.clear()
 
   return memoized as MemoizedFn<T>
 }

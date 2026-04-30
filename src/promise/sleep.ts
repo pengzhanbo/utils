@@ -1,5 +1,3 @@
-import { AbortError } from '../error/AbortError'
-
 export interface SleepOptions {
   /**
    * The signal to abort the sleep.
@@ -16,11 +14,15 @@ export interface SleepOptions {
  *
  * @category Promise
  *
- * @param ms - The number of milliseconds to sleep. 睡眠的毫秒数
- * @param options - The options for the sleep. 睡眠的配置项
- * @param options.signal - The signal to abort the sleep. 睡眠的中止信号
- * @returns A promise that resolves after the specified delay. 在指定延迟后解析的Promise
- * @throws {AbortError} If the sleep is aborted via the signal. 如果通过信号中止睡眠
+ * @param ms - The number of milliseconds to sleep. / 睡眠的毫秒数
+ * @param options - The options for the sleep. / 睡眠的配置项
+ * @param options.signal - The signal to abort the sleep. / 睡眠的中止信号
+ * @returns A promise that resolves after the specified delay. / 在指定延迟后解析的Promise
+ *
+ * @throws {DOMException} If the sleep is aborted via the signal. / 如果通过信号中止睡眠
+ *
+ * @see {@link timeout} — for rejecting after a delay
+ * @see {@link timeout} — 在延迟后拒绝
  *
  * @example
  * ```ts
@@ -42,11 +44,13 @@ export interface SleepOptions {
  * }
  * ```
  */
-export async function sleep(ms: number, { signal }: SleepOptions = {}): Promise<void> {
+export function sleep(ms: number, { signal }: SleepOptions = {}): Promise<void> {
+  if (!Number.isFinite(ms) || ms < 0)
+    throw new RangeError('ms must be a finite non-negative number')
   return new Promise<void>((resolve, reject) => {
-    let timeoutId: NodeJS.Timeout | undefined
+    let timeoutId: ReturnType<typeof setTimeout> | undefined
     const abortError = () => {
-      reject(new AbortError())
+      reject(new DOMException('Aborted', 'AbortError'))
     }
     const abortHandler = () => {
       clearTimeout(timeoutId)
@@ -57,7 +61,7 @@ export async function sleep(ms: number, { signal }: SleepOptions = {}): Promise<
       return abortError()
     }
 
-    timeoutId = setTimeout(async () => {
+    timeoutId = setTimeout(() => {
       signal?.removeEventListener('abort', abortHandler)
       resolve()
     }, ms)

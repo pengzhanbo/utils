@@ -23,10 +23,20 @@ describe('string > indent', () => {
   })
 
   it('should handle string with trailing newline', () => {
-    expect(indent('hello\nworld\n')).toBe('  hello\n  world\n  ')
+    expect(indent('hello\nworld\n')).toBe('  hello\n  world\n')
   })
 
   it('should handle multiline with empty lines', () => {
-    expect(indent('hello\n\nworld')).toBe('  hello\n  \n  world')
+    expect(indent('hello\n\nworld')).toBe('  hello\n\n  world')
+  })
+
+  it('should not indent empty lines', () => {
+    expect(indent('hello\n\nworld', '  ')).toBe('  hello\n\n  world')
+    expect(indent('a\n\nb\nc', '\t')).toBe('\ta\n\n\tb\n\tc')
+  })
+
+  it('should handle CRLF (\\r\\n) line endings', () => {
+    expect(indent('hello\r\nworld', '  ')).toBe('  hello\n  world')
+    expect(indent('foo\r\nbar\r\nbaz', '\t')).toBe('\tfoo\n\tbar\n\tbaz')
   })
 })

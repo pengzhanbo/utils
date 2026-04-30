@@ -1,4 +1,4 @@
-import { isFunction } from '../predicate'
+import { isFunction, isInteger } from '../predicate'
 
 /**
  * Executes an array of promises in parallel with a given concurrency. The function
@@ -21,31 +21,41 @@ import { isFunction } from '../predicate'
  * console.log(result) // [1, 2, 3]
  * ```
  */
-export function promiseParallel(
-  promises: (PromiseLike<any> | (() => PromiseLike<any>))[],
+export function promiseParallel<T>(
+  promises: (PromiseLike<T> | (() => PromiseLike<T>))[],
   concurrency: number = Number.POSITIVE_INFINITY,
-): Promise<any[]> {
+): Promise<Awaited<T>[]> {
   promises = Array.from(promises)
 
+  if (
+    concurrency <= 0 ||
+    (concurrency !== Number.POSITIVE_INFINITY && !Number.isInteger(concurrency))
+  )
+    throw new RangeError('concurrency must be a positive integer')
   if (promises.length === 0) {
     return Promise.resolve([])
   }
+  let settled = false
   let current = 0
-  const result: any[] = []
+  const result: Awaited<T>[] = []
   let resolvedCount = 0
   const len = promises.length
   return new Promise((resolve, reject) => {
     function next() {
       const index = current++
-      const promise = promises[index]
+      const promise = promises[index]!
       Promise.resolve(isFunction(promise) ? promise() : promise)
         .then((res) => {
+          if (settled) return
           result[index] = res
           if (++resolvedCount === len) resolve(result)
 
           if (current < len) next()
         })
-        .catch((reason) => reject(reason))
+        .catch((reason) => {
+          settled = true
+          reject(reason)
+        })
     }
     for (let i = 0; i < concurrency && i < len; i++) next()
   })
@@ -64,9 +74,10 @@ export function promiseParallel(
  *
  * @category Promise
  *
- * @param promises - The array of promises or promise-returning functions to execute. 要执行的promise数组或返回promise的函数数组
- * @param concurrency - (optional) The maximum number of promises to execute in parallel. Defaults to infinity. 最大并发数，默认为无穷大
- * @returns A Promise that resolves with an array of promise settlement results. 一个Promise，它解析为一个包含每个promise解析状态和值的数组
+ * @param promises - The array of promises or promise-returning functions to execute. / 要执行的promise数组或返回promise的函数数组
+ * @param concurrency - (optional) The maximum number of promises to execute in parallel. Defaults to infinity. / 最大并发数，默认为无穷大
+ * @returns A Promise that resolves with an array of promise settlement results. / 一个Promise，它解析为一个包含每个promise解析状态和值的数组
+ *
  * @example
  * ```ts
  * const promises = [Promise.resolve(1), Promise.resolve(2), Promise.reject('error')]
@@ -74,18 +85,20 @@ export function promiseParallel(
  * console.log(result) // [{ status: 'fulfilled', value: 1 }, { status: 'fulfilled', value: 2 }, { status: 'rejected', reason: 'error' }]
  * ```
  */
-export function promiseParallelSettled(
-  promises: (PromiseLike<any> | (() => PromiseLike<any>))[],
+export function promiseParallelSettled<T>(
+  promises: (PromiseLike<T> | (() => PromiseLike<T>))[],
   concurrency: number = Number.POSITIVE_INFINITY,
-): Promise<PromiseSettledResult<any>[]> {
+): Promise<PromiseSettledResult<Awaited<T>>[]> {
   promises = Array.from(promises)
 
+  if (concurrency <= 0 || (concurrency !== Number.POSITIVE_INFINITY && !isInteger(concurrency)))
+    throw new RangeError('concurrency must be a positive integer')
   if (promises.length === 0) {
     return Promise.resolve([])
   }
 
   let current = 0
-  const result: PromiseSettledResult<any>[] = []
+  const result: PromiseSettledResult<Awaited<T>>[] = []
   let resolvedCount = 0
   const len = promises.length
   return new Promise((resolve) => {
@@ -96,7 +109,7 @@ export function promiseParallelSettled(
     }
     function next() {
       const index = current++
-      const promise = promises[index]
+      const promise = promises[index]!
       Promise.resolve(isFunction(promise) ? promise() : promise)
         .then((value) => {
           result[index] = { status: 'fulfilled', value }

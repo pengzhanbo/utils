@@ -37,7 +37,8 @@ export function range(start: number, stop: number, step?: number): number[]
  * 生成一个数字范围的数组, `stop` 是不包含的。
  *
  * @param args
- * @returns - a range array of numbers / 返回一个数字范围的数组
+ * @returns a range array of numbers / 返回一个数字范围的数组
+ * @throws {RangeError} When `step` is zero. 当 `step` 为零时抛出。
  */
 export function range(...args: [number] | [number, number, number?]): number[] {
   let start, stop, step
@@ -49,10 +50,22 @@ export function range(...args: [number] | [number, number, number?]): number[] {
     ;[start, stop, step = 1] = args
   }
   const arr: number[] = []
-  let current = start
-  while (current < stop) {
-    arr.push(current)
-    current += step || 1
+  if (step === 0) throw new RangeError('step must not be zero')
+  if (!Number.isFinite(start) || !Number.isFinite(stop) || !Number.isFinite(step)) {
+    throw new RangeError('start, stop and step must be finite numbers')
+  }
+  if (step > 0) {
+    let i = 0
+    while (start + i * step < stop) {
+      arr.push(start + i * step)
+      i++
+    }
+  } else {
+    let i = 0
+    while (start + i * step > stop) {
+      arr.push(start + i * step)
+      i++
+    }
   }
 
   return arr

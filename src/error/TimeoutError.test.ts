@@ -40,6 +40,13 @@ describe('error > TimeoutError', () => {
     expect(new TimeoutError('Timeout after 5000ms').message).toBe('Timeout after 5000ms')
   })
 
+  it('should support ErrorOptions with cause', () => {
+    const cause = new Error('original error')
+    const error = new TimeoutError('timed out', { cause })
+    expect(error.message).toBe('timed out')
+    expect(error.cause).toBe(cause)
+  })
+
   it('should extend Error class', () => {
     const error = new TimeoutError()
     expect(error).toBeInstanceOf(Error)

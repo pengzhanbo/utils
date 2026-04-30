@@ -38,6 +38,35 @@ describe('decimalAdd', () => {
     // oxlint-disable-next-line no-loss-of-precision
     expect(result).toBe(900719925474099.2)
   })
+
+  it('should return NaN when integer overflow occurs', () => {
+    expect(decimalAdd(1e15, 0.123456789)).toBeNaN()
+  })
+
+  it('should handle scientific notation with negative exponent', () => {
+    expect(decimalAdd(1e-7, 2e-7)).toBeCloseTo(3e-7, 10)
+    expect(decimalAdd(1.5e-3, 2.5e-3)).toBeCloseTo(0.004, 10)
+  })
+
+  it('should handle scientific notation with positive exponent', () => {
+    expect(decimalAdd(1e7, 2e7)).toBe(3e7)
+  })
+
+  it('should return NaN when adding with NaN', () => {
+    expect(decimalAdd(Number.NaN, 1)).toBeNaN()
+    expect(decimalAdd(1, Number.NaN)).toBeNaN()
+  })
+
+  it('should return NaN when adding with Infinity', () => {
+    expect(decimalAdd(Number.POSITIVE_INFINITY, 1)).toBeNaN()
+    expect(decimalAdd(1, Number.POSITIVE_INFINITY)).toBeNaN()
+    expect(decimalAdd(Number.NEGATIVE_INFINITY, 1)).toBeNaN()
+    expect(decimalAdd(Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY)).toBeNaN()
+  })
+
+  it('should return NaN when integer overflow to Infinity occurs', () => {
+    expect(decimalAdd(1e200, 1e200)).toBeNaN()
+  })
 })
 
 describe('decimalSubtract', () => {
@@ -72,6 +101,21 @@ describe('decimalSubtract', () => {
   it('should handle different decimal places', () => {
     expect(decimalSubtract(1.5, 0.25)).toBe(1.25)
     expect(decimalSubtract(10.001, 5.1)).toBe(4.901)
+  })
+
+  it('should handle scientific notation with negative exponent', () => {
+    expect(decimalSubtract(3e-7, 1e-7)).toBeCloseTo(2e-7, 10)
+  })
+
+  it('should return NaN when subtracting with NaN', () => {
+    expect(decimalSubtract(Number.NaN, 1)).toBeNaN()
+    expect(decimalSubtract(1, Number.NaN)).toBeNaN()
+  })
+
+  it('should return NaN when subtracting with Infinity', () => {
+    expect(decimalSubtract(Number.POSITIVE_INFINITY, 1)).toBeNaN()
+    expect(decimalSubtract(1, Number.POSITIVE_INFINITY)).toBeNaN()
+    expect(decimalSubtract(Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY)).toBeNaN()
   })
 })
 
@@ -113,6 +157,25 @@ describe('decimalMultiply', () => {
     expect(decimalMultiply(0.1, 0.25)).toBe(0.025)
     expect(decimalMultiply(0.01, 0.001)).toBe(0.00001)
   })
+
+  it('should handle scientific notation with negative exponent', () => {
+    expect(decimalMultiply(1e-7, 2)).toBeCloseTo(2e-7, 10)
+  })
+
+  it('should return NaN when multiplying with NaN', () => {
+    expect(decimalMultiply(Number.NaN, 1)).toBeNaN()
+    expect(decimalMultiply(1, Number.NaN)).toBeNaN()
+  })
+
+  it('should return NaN when multiplying with Infinity', () => {
+    expect(decimalMultiply(Number.POSITIVE_INFINITY, 2)).toBeNaN()
+    expect(decimalMultiply(2, Number.POSITIVE_INFINITY)).toBeNaN()
+    expect(decimalMultiply(Number.POSITIVE_INFINITY, 0)).toBeNaN()
+  })
+
+  it('should return NaN when integer overflow occurs', () => {
+    expect(decimalMultiply(1e16, 0.1)).toBeNaN()
+  })
 })
 
 describe('decimalDivide', () => {
@@ -151,12 +214,17 @@ describe('decimalDivide', () => {
     expect(decimalDivide(1, 3, 2)).toBe(0.33)
     expect(decimalDivide(1, 3, 4)).toBe(0.3333)
     expect(decimalDivide(10, 3, 0)).toBe(3)
-    expect(decimalDivide(10, 3, -1)).toBeCloseTo(3.3333333333333335, 15)
   })
 
-  it('should handle negative precision', () => {
-    const result = decimalDivide(100, 3, -1)
-    expect(result).toBeCloseTo(33.333333333333336, 15)
+  it('should throw TypeError when precision is not an integer', () => {
+    expect(() => decimalDivide(1, 3, 1.5)).toThrow(TypeError)
+    expect(() => decimalDivide(1, 3, 1.5)).toThrow('precision must be a non-negative integer')
+    expect(() => decimalDivide(1, 3, Number.NaN)).toThrow(TypeError)
+  })
+
+  it('should throw TypeError when precision is negative', () => {
+    expect(() => decimalDivide(100, 3, -1)).toThrow(TypeError)
+    expect(() => decimalDivide(100, 3, -1)).toThrow('precision must be a non-negative integer')
   })
 
   it('should handle same decimal places', () => {
@@ -167,5 +235,20 @@ describe('decimalDivide', () => {
   it('should handle different decimal places', () => {
     expect(decimalDivide(0.1, 0.25, 10)).toBe(0.4)
     expect(decimalDivide(0.01, 0.001, 10)).toBe(10)
+  })
+
+  it('should handle scientific notation with negative exponent', () => {
+    expect(decimalDivide(2e-7, 2, 10)).toBeCloseTo(1e-7, 10)
+  })
+
+  it('should return NaN when dividing with NaN', () => {
+    expect(decimalDivide(Number.NaN, 1, 10)).toBeNaN()
+    expect(decimalDivide(1, Number.NaN, 10)).toBeNaN()
+  })
+
+  it('should return NaN when dividing by Infinity', () => {
+    expect(decimalDivide(1, Number.POSITIVE_INFINITY, 10)).toBeNaN()
+    expect(decimalDivide(Number.POSITIVE_INFINITY, 1, 10)).toBeNaN()
+    expect(decimalDivide(Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY, 10)).toBeNaN()
   })
 })

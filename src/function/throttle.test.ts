@@ -203,4 +203,137 @@ describe('function > throttle', () => {
 
     expect(fn).toHaveBeenCalledTimes(2)
   })
+
+  it('should handle noLeading with elapsed > delay (line 156)', () => {
+    const fn = vi.fn()
+    const throttled = throttle(100, fn, { noLeading: true, noTrailing: false })
+
+    // First call
+    throttled()
+    expect(fn).not.toHaveBeenCalled() // noLeading = true
+
+    // Advance past delay
+    vi.advanceTimersByTime(150)
+
+    // Should execute trailing callback
+    expect(fn).toHaveBeenCalledTimes(1)
+
+    // Call again immediately
+    throttled()
+    expect(fn).toHaveBeenCalledTimes(1) // Still no leading
+
+    // Advance past delay again
+    vi.advanceTimersByTime(150)
+    expect(fn).toHaveBeenCalledTimes(2) // Trailing execution
+  })
+
+  it('should handle cancel with options parameter (line 95)', () => {
+    const fn = vi.fn()
+    const throttled = throttle(100, fn)
+
+    throttled()
+    throttled()
+
+    // Cancel with default options (upcomingOnly=false)
+    ;(throttled as any).cancel({})
+    vi.advanceTimersByTime(100)
+    expect(fn).toHaveBeenCalledTimes(1) // Only first call executed
+
+    // Further calls should not work (cancelled=true)
+    throttled()
+    vi.advanceTimersByTime(100)
+    expect(fn).toHaveBeenCalledTimes(1)
+  })
+
+  it('should execute trailing callback when noLeading and debounceMode are both true', () => {
+    const fn = vi.fn()
+    const throttled = throttle(100, fn, { noLeading: true, debounceMode: true })
+
+    // First call: noLeading prevents leading exec, trailing schedules exec
+    throttled()
+    expect(fn).not.toHaveBeenCalled()
+
+    // After delay, trailing exec fires
+    vi.advanceTimersByTime(100)
+    expect(fn).toHaveBeenCalledTimes(1)
+
+    // Call again
+    throttled()
+    expect(fn).toHaveBeenCalledTimes(1)
+
+    // Trailing exec fires again after delay
+    vi.advanceTimersByTime(100)
+    expect(fn).toHaveBeenCalledTimes(2)
+  })
+
+  it('should handle cancel with no arguments (line 95 options || {})', () => {
+    const fn = vi.fn()
+    const throttled = throttle(100, fn)
+
+    throttled()
+    throttled()
+
+    // Cancel with undefined - options || {} should use {}
+    ;(throttled as any).cancel(undefined)
+    vi.advanceTimersByTime(100)
+    expect(fn).toHaveBeenCalledTimes(1)
+  })
+
+  it('should handle cancel with upcomingOnly=true', () => {
+    const fn = vi.fn()
+    const throttled = throttle(50, fn)
+
+    throttled()
+    expect(fn).toHaveBeenCalledTimes(1)
+
+    // Advance past delay so elapsed > delay
+    vi.advanceTimersByTime(60)
+
+    throttled()
+    expect(fn).toHaveBeenCalledTimes(2)
+
+    // Cancel upcoming only
+    ;(throttled as any).cancel({ upcomingOnly: true })
+
+    // Advance and call again - should work since cancelled=false
+    vi.advanceTimersByTime(60)
+    throttled()
+    expect(fn).toHaveBeenCalledTimes(3)
+  })
+
+  it('should execute callback immediately after cancel({ upcomingOnly: true }) in debounce at-begin mode', () => {
+    const fn = vi.fn()
+    const throttled = throttle(100, fn, { debounceMode: true })
+
+    throttled()
+    expect(fn).toHaveBeenCalledTimes(1)
+
+    throttled()
+    expect(fn).toHaveBeenCalledTimes(1)
+
+    ;(throttled as any).cancel({ upcomingOnly: true })
+
+    throttled()
+    expect(fn).toHaveBeenCalledTimes(2)
+  })
+
+  it('should throw RangeError when delay is NaN', () => {
+    const fn = vi.fn()
+    expect(() => throttle(Number.NaN, fn)).toThrow(RangeError)
+    expect(() => throttle(Number.NaN, fn)).toThrow('delay must be a finite non-negative number')
+  })
+
+  it('should throw RangeError when delay is negative', () => {
+    const fn = vi.fn()
+    expect(() => throttle(-1, fn)).toThrow(RangeError)
+    expect(() => throttle(-1, fn)).toThrow('delay must be a finite non-negative number')
+  })
+
+  it('should throw RangeError when delay is Infinity', () => {
+    const fn = vi.fn()
+    expect(() => throttle(Number.POSITIVE_INFINITY, fn)).toThrow(RangeError)
+    expect(() => throttle(Number.POSITIVE_INFINITY, fn)).toThrow(
+      'delay must be a finite non-negative number',
+    )
+  })
 })

@@ -1,3 +1,5 @@
+import { hasOwn } from '../object'
+
 /**
  * Groups the elements of an array based on the given function.
  *
@@ -12,14 +14,18 @@
  *
  * @category Array
  *
+ * @typeParam K - The type of the key (extends PropertyKey) / 键的类型（继承 PropertyKey）
+ * @typeParam T - The type of elements in the array / 数组元素的类型
  * @param array - The array to group. 要分组的数组
  * @param iteratee - The function to transform elements into group keys. 将元素转换为分组键的函数
  * @returns An object with grouped elements. 分组后的对象
  *
  * @remarks
- * Uses Map for O(1) key lookup, overall O(n) time complexity
+ * Uses plain object for key lookup, overall O(n) time complexity.
+ * Key lookup is O(1) via {@link hasOwn}.
  *
- * 使用 Map 实现 O(1) 键查找，整体时间复杂度 O(n)
+ * 使用普通对象实现键查找，整体时间复杂度 O(n)。
+ * 通过 {@link hasOwn} 实现 O(1) 键查找。
  *
  * @example
  * ```ts
@@ -43,16 +49,16 @@ export function groupBy<T, K extends PropertyKey>(
   array: readonly T[],
   iteratee: (item: T) => K,
 ): Record<K, T[]> {
-  const result = {} as Record<K, T[]>
+  const result = Object.create(null) as Record<K, T[]>
 
   for (let i = 0; i < array.length; i++) {
     const item = array[i]!
     const key = iteratee(item)
 
-    if (key in result) {
+    if (hasOwn(result, key)) {
       result[key].push(item)
     } else {
-      result[key] = [item]
+      result[key as K] = [item]
     }
   }
 

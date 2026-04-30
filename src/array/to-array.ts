@@ -1,5 +1,5 @@
 import type { Arrayable, Nullable } from '../types'
-import { isArray } from '../predicate'
+import { isArray, isNil } from '../predicate'
 
 /**
  * Convert `Arrayable<T>` to `Array<T>`
@@ -8,6 +8,7 @@ import { isArray } from '../predicate'
  *
  * @category Array
  *
+ * @typeParam T - The type of elements in the array / 数组元素的类型
  * @param v - The value to convert to array / 要转换为数组的值
  * @returns The array / 数组
  *
@@ -21,7 +22,7 @@ import { isArray } from '../predicate'
  * ```
  */
 export function toArray<T>(v: Nullable<Arrayable<T>>): T[] {
-  if (v === null || v === undefined) return []
+  if (isNil(v)) return []
   if (isArray(v)) return v
   return [v]
 }

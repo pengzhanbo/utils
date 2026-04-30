@@ -2,14 +2,30 @@ import { hasOwn } from '../object'
 import { isPrimitive, isTypedArray } from '../predicate'
 import { T_OBJECT, T_UNDEFINED } from './tags'
 
+function copyRegExpMatchProps(target: any, source: any, stack: Map<any, any>): void {
+  if (hasOwn(source, 'index')) {
+    // @ts-ignore
+    target.index = source.index
+  }
+  if (hasOwn(source, 'input')) {
+    // @ts-ignore
+    target.input = source.input
+  }
+  if (hasOwn(source, 'groups')) {
+    // @ts-ignore
+    target.groups = deepCloneImpl(source.groups, stack)
+  }
+  if (hasOwn(source, 'indices')) {
+    // @ts-ignore
+    target.indices = deepCloneImpl(source.indices, stack)
+  }
+}
+
 /**
  * @internal
+ * @typeParam T - The type of elements in the array / 数组元素的类型
  */
-export function deepCloneImpl<T>(
-  valueToClone: any,
-  objectToClone: T,
-  stack: Map<any, any> = new Map(),
-): T {
+export function deepCloneImpl<T>(valueToClone: any, stack: Map<any, any> = new Map()): T {
   if (isPrimitive(valueToClone)) {
     return valueToClone as T
   }
@@ -20,34 +36,48 @@ export function deepCloneImpl<T>(
   }
 
   if (Array.isArray(valueToClone)) {
-    const result: any = Array.from({ length: valueToClone.length })
+    const len = valueToClone.length
+    let isPrimitiveArray = true
+    for (let i = 0; i < len; i++) {
+      const v = valueToClone[i]
+      if (v != null && typeof v === 'object') {
+        isPrimitiveArray = false
+        break
+      }
+    }
+
+    if (isPrimitiveArray) {
+      const result = valueToClone.slice()
+      stack.set(valueToClone, result)
+
+      copyRegExpMatchProps(result, valueToClone, stack)
+
+      return result as T
+    }
+
+    const result: any = Array.from({ length: len })
     stack.set(valueToClone, result)
 
-    for (let i = 0; i < valueToClone.length; i++) {
-      result[i] = deepCloneImpl(valueToClone[i], objectToClone, stack)
+    for (let i = 0; i < len; i++) {
+      result[i] = deepCloneImpl(valueToClone[i], stack)
     }
 
-    // For RegExpArrays
-    if (Object.hasOwn(valueToClone, 'index')) {
-      // @ts-ignore
-      result.index = valueToClone.index
-    }
-    if (Object.hasOwn(valueToClone, 'input')) {
-      // @ts-ignore
-      result.input = valueToClone.input
-    }
+    copyRegExpMatchProps(result, valueToClone, stack)
 
     return result as T
   }
 
   if (valueToClone instanceof Date) {
-    return new Date(valueToClone.getTime()) as T
+    const result = new Date(valueToClone.getTime())
+    stack.set(valueToClone, result)
+    return result as T
   }
 
   if (valueToClone instanceof RegExp) {
     const result = new RegExp(valueToClone.source, valueToClone.flags)
 
     result.lastIndex = valueToClone.lastIndex
+    stack.set(valueToClone, result)
 
     return result as T
   }
@@ -57,7 +87,7 @@ export function deepCloneImpl<T>(
     stack.set(valueToClone, result)
 
     for (const [key, value] of valueToClone) {
-      result.set(key, deepCloneImpl(value, objectToClone, stack))
+      result.set(deepCloneImpl(key, stack), deepCloneImpl(value, stack))
     }
 
     return result as T
@@ -68,7 +98,7 @@ export function deepCloneImpl<T>(
     stack.set(valueToClone, result)
 
     for (const value of valueToClone) {
-      result.add(deepCloneImpl(value, objectToClone, stack))
+      result.add(deepCloneImpl(value, stack))
     }
 
     return result as T
@@ -76,18 +106,16 @@ export function deepCloneImpl<T>(
 
   // oxlint-disable-next-line valid-typeof
   if (typeof Buffer !== T_UNDEFINED && Buffer.isBuffer(valueToClone)) {
+    const result = Buffer.from(valueToClone)
+    stack.set(valueToClone, result)
     // @ts-ignore
-    return valueToClone.subarray() as T
+    return result as T
   }
 
   if (isTypedArray(valueToClone)) {
-    // oxlint-disable-next-line new-cap
-    const result = new (Object.getPrototypeOf(valueToClone).constructor)(valueToClone.length)
+    const Constructor = Object.getPrototypeOf(valueToClone).constructor
+    const result = new Constructor(valueToClone)
     stack.set(valueToClone, result)
-
-    for (let i = 0; i < valueToClone.length; i++) {
-      result[i] = deepCloneImpl(valueToClone[i], objectToClone, stack)
-    }
 
     return result as T
   }
@@ -97,7 +125,9 @@ export function deepCloneImpl<T>(
     // eslint-disable-next-line valid-typeof
     (typeof SharedArrayBuffer !== T_UNDEFINED && valueToClone instanceof SharedArrayBuffer)
   ) {
-    return valueToClone.slice(0) as T
+    const result = valueToClone.slice(0)
+    stack.set(valueToClone, result)
+    return result as T
   }
 
   if (valueToClone instanceof DataView) {
@@ -108,7 +138,7 @@ export function deepCloneImpl<T>(
     )
     stack.set(valueToClone, result)
 
-    copyProperties(result, valueToClone, objectToClone, stack)
+    copyProperties(result, valueToClone, stack)
 
     return result as T
   }
@@ -118,10 +148,11 @@ export function deepCloneImpl<T>(
   if (typeof File !== T_UNDEFINED && valueToClone instanceof File) {
     const result = new File([valueToClone], valueToClone.name, {
       type: valueToClone.type,
+      lastModified: valueToClone.lastModified,
     })
     stack.set(valueToClone, result)
 
-    copyProperties(result, valueToClone, objectToClone, stack)
+    copyProperties(result, valueToClone, stack)
 
     return result as T
   }
@@ -130,7 +161,7 @@ export function deepCloneImpl<T>(
     const result = new Blob([valueToClone], { type: valueToClone.type })
     stack.set(valueToClone, result)
 
-    copyProperties(result, valueToClone, objectToClone, stack)
+    copyProperties(result, valueToClone, stack)
 
     return result as T
   }
@@ -138,7 +169,7 @@ export function deepCloneImpl<T>(
   if (valueToClone instanceof Error) {
     const result = new (valueToClone.constructor as { new (...args: any[]): Error })(
       valueToClone.message,
-      { cause: valueToClone.cause },
+      { cause: deepCloneImpl(valueToClone.cause, stack) },
     )
     stack.set(valueToClone, result)
 
@@ -146,7 +177,7 @@ export function deepCloneImpl<T>(
 
     result.stack = valueToClone.stack
 
-    copyProperties(result, valueToClone, objectToClone, stack)
+    copyProperties(result, valueToClone, stack)
 
     return result as T
   }
@@ -158,7 +189,7 @@ export function deepCloneImpl<T>(
 
     stack.set(valueToClone, result)
 
-    copyProperties(result, valueToClone, objectToClone, stack)
+    copyProperties(result, valueToClone, stack)
 
     return result as T
   }
@@ -170,20 +201,24 @@ export function deepCloneImpl<T>(
 /**
  * @internal
  */
-export function copyProperties<T>(
-  target: any,
-  source: any,
-  objectToClone: T = target,
-  stack?: Map<any, any> | undefined,
-): void {
-  const keys = [...Object.keys(source), ...getSymbols(source)]
+export function copyProperties(target: any, source: any, stack?: Map<any, any> | undefined): void {
+  const stringKeys = Object.keys(source)
+  const symbolKeys = getSymbols(source)
 
-  for (let i = 0; i < keys.length; i++) {
-    const key = keys[i]!
-    const descriptor = Object.getOwnPropertyDescriptor(target, key)
+  for (let i = 0; i < stringKeys.length; i++) copyKey(source, target, stringKeys[i]!, stack)
+  for (let i = 0; i < symbolKeys.length; i++) copyKey(source, target, symbolKeys[i]!, stack)
+}
 
-    if (descriptor == null || descriptor.writable) {
-      target[key] = deepCloneImpl(source[key], objectToClone, stack)
+/**
+ * @internal
+ */
+function copyKey(source: any, target: any, key: string | symbol, stack?: Map<any, any>) {
+  if (key === '__proto__') return
+  const sourceDescriptor = Object.getOwnPropertyDescriptor(source, key)
+  if (sourceDescriptor != null && 'value' in sourceDescriptor) {
+    const targetDescriptor = Object.getOwnPropertyDescriptor(target, key)
+    if (targetDescriptor == null || targetDescriptor.writable) {
+      target[key] = deepCloneImpl(sourceDescriptor.value, stack)
     }
   }
 }

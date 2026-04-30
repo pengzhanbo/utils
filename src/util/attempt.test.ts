@@ -24,4 +24,14 @@ describe('util > attempt', () => {
     expect(error).toBeNull()
     expect(await result).toBe(1)
   })
+
+  it('should wrap non-Error thrown objects', () => {
+    const [error, result] = attempt(() => {
+      // eslint-disable-next-line no-throw-literal
+      throw 'string error'
+    })
+    expect(error).toBeInstanceOf(Error)
+    expect(error instanceof Error && error.message).toBe('string error')
+    expect(result).toBeNull()
+  })
 })

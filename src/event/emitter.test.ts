@@ -118,4 +118,70 @@ describe('event > emitter', () => {
     emitter.emit('event')
     expect(listener).toHaveBeenCalledTimes(1)
   })
+
+  it('should only emit once for wildcard event with once', () => {
+    const emitter = createEmitter()
+    const listener = vi.fn()
+    emitter.once('*', listener)
+    emitter.emit('event')
+    emitter.emit('event')
+    expect(listener).toHaveBeenCalledTimes(1)
+  })
+
+  it('should remove only the specified listener with off', () => {
+    const emitter = createEmitter()
+    const listener1 = vi.fn()
+    const listener2 = vi.fn()
+    emitter.on('event', listener1)
+    emitter.on('event', listener2)
+    emitter.off('event', listener1)
+    emitter.emit('event')
+    expect(listener1).toHaveBeenCalledTimes(0)
+    expect(listener2).toHaveBeenCalledTimes(1)
+  })
+
+  it('should not remove once listener via off with original listener', () => {
+    const emitter = createEmitter()
+    const listener = vi.fn()
+    emitter.once('event', listener)
+    emitter.off('event', listener)
+    emitter.emit('event')
+    expect(listener).toHaveBeenCalledTimes(1)
+  })
+
+  it('should silently pass when emitting event with no listeners', () => {
+    const emitter = createEmitter()
+    expect(() => emitter.emit('nonexistent')).not.toThrow()
+  })
+
+  it('should call all listeners even when one throws an error', () => {
+    const emitter = createEmitter()
+    const listener1 = vi.fn(() => {
+      throw new Error('test error')
+    })
+    const listener2 = vi.fn()
+    emitter.on('event', listener1)
+    emitter.on('event', listener2)
+    expect(() => emitter.emit('event')).toThrow('test error')
+    expect(listener1).toHaveBeenCalledTimes(1)
+    expect(listener2).toHaveBeenCalledTimes(0)
+  })
+
+  it('should call the same listener multiple times when registered multiple times', () => {
+    const emitter = createEmitter()
+    const listener = vi.fn()
+    emitter.on('event', listener)
+    emitter.on('event', listener)
+    emitter.emit('event')
+    expect(listener).toHaveBeenCalledTimes(2)
+  })
+
+  it('should create emitter with pre-existing listeners map', () => {
+    const listeners = new Map()
+    const listener = vi.fn()
+    listeners.set('event', [listener])
+    const emitter = createEmitter(listeners as any)
+    emitter.emit('event')
+    expect(listener).toHaveBeenCalledTimes(1)
+  })
 })

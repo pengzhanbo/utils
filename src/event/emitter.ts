@@ -84,6 +84,13 @@ export interface EventEmitter<Events extends Record<EventType, unknown>> {
    *
    * 为指定的事件添加一个监听器，该监听器只会被调用一次。
    *
+   * **Note**: Listeners registered via `once` are wrapped internally and cannot be removed
+   * using `off(type, originalListener)`. To remove a `once` listener, use `off(type)` to
+   * remove all listeners for that event.
+   *
+   * **注意**：通过 `once` 注册的监听器会被内部包装，无法通过 `off(type, originalListener)` 移除。
+   * 要移除 `once` 监听器，请使用 `off(type)` 移除该事件的所有监听器。
+   *
    * @param type - The event to listen for, use '*' to listen for wildcard event. 要监听的事件，使用'*'监听通配符事件
    * @param listener - The listener function to be called when the event is triggered. 事件触发时要调用的监听器函数
    */
@@ -103,13 +110,14 @@ export interface EventEmitter<Events extends Record<EventType, unknown>> {
 }
 
 /**
- * Create an event emitter
+ * Create an event emitter.
  *
- * 创建一个事件发射器
+ * 创建一个事件发射器。
  *
  * @category Event
  *
  * @param listeners - Optional pre-existing listener map to initialize with. 可选的预设监听器映射
+ *
  * @returns A new event emitter instance. 新的事件发射器实例
  *
  * @example
@@ -146,10 +154,10 @@ export function createEmitter<Events extends Record<EventType, unknown>>(
 
   const emit = <Key extends keyof Events>(type: Key, event?: Events[Key]) => {
     const list = listeners.get(type) as unknown as EventListenerList<Events[Key]>
-    if (list?.length) invoke(list, event!)
+    if (list?.length) invoke([...list], event!)
 
     const wildcardList = listeners.get('*') as unknown as EventWildcardListenerList<Events>
-    if (wildcardList?.length) invoke(wildcardList, type as string, event!)
+    if (wildcardList?.length) invoke([...wildcardList], type as string, event!)
   }
 
   const once = <Key extends keyof Events>(type: Key, listener: Listener) => {

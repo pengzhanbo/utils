@@ -28,13 +28,12 @@ export interface ThrottleOptions {
    */
   noLeading?: boolean
   /**
-   * If `debounceMode` is true (at begin), schedule
-   * `callback` to execute after `delay` ms. If `debounceMode` is false (at end),
-   * schedule `callback` to execute after `delay` ms.
+   * If `debounceMode` is true (at begin), the callback is executed at the beginning
+   * of the delay period. If `debounceMode` is false (at end), the callback is executed
+   * at the end of the delay period.
    *
-   * 如果 `debounceMode` 为 true（在开始时），则安排
-   * `callback` 在 `delay` 毫秒后执行。如果 `debounceMode` 为 false（在结束时），
-   * 安排 `callback` 在 `delay` 毫秒后执行。
+   * 如果 `debounceMode` 为 true（前缘模式），回调函数在延迟期开始时执行。
+   * 如果 `debounceMode` 为 false（后缘模式），回调函数在延迟期结束时执行。
    */
   debounceMode?: boolean
 }
@@ -58,11 +57,54 @@ export interface ThrottleOptions {
  * 一个在延迟毫秒后执行的函数。当节流函数执行时，`this`上下文和所有参数都会原样传递给`callback`。
  *
  * @param options - An object to configure options. 用于配置选项的对象。
- * @param options.noTrailing
- * @param options.noLeading
- * @param options.debounceMode
+ * @param options.noTrailing - If true, suppresses the trailing edge execution. 如果为 true，抑制后缘执行。
+ * @param options.noLeading - If true, suppresses the leading edge (first) execution. 如果为 true，抑制前缘（首次）执行。
+ * @param options.debounceMode - If true, runs the callback at the beginning of the delay (debounce behavior). 如果为 true，在延迟期开始时执行回调（防抖行为）。
  *
- * @returns A new throttled function. 新的节流函数
+ * @returns A throttled version of the callback with a `.cancel()` method. 带有 `.cancel()` 方法的节流版本回调函数。
+ *
+ * @remarks
+ * The returned function includes a `cancel(options?: CancelOptions)` method:
+ * - `cancel()` — cancels all future executions
+ * - `cancel({ upcomingOnly: true })` — cancels only the next scheduled execution, but allows subsequent calls
+ *
+ * When both `noLeading=true` and `noTrailing=true`, the callback will never execute.
+ *
+ * 返回的函数包含 `cancel(options?: CancelOptions)` 方法：
+ * - `cancel()` — 取消所有未来执行
+ * - `cancel({ upcomingOnly: true })` — 仅取消下次计划执行，允许后续调用
+ *
+ * 当 `noLeading=true` 和 `noTrailing=true` 同时设置时，回调永远不会执行。
+ *
+ * @see {@link debounce} — for debounce behavior (use debounceMode option or debounce wrapper)
+ * @see {@link debounce} — 了解防抖行为（使用 debounceMode 选项或 debounce 包装器）
+ *
+ * @example
+ * Basic throttle — scroll handler that fires at most once every 100ms:
+ * ```ts
+ * const onScroll = throttle(100, () => {
+ *   console.log('scrolled')
+ * })
+ * window.addEventListener('scroll', onScroll)
+ * ```
+ *
+ * @example
+ * With noLeading — skip the first call, execute after 200ms of inactivity:
+ * ```ts
+ * const fn = throttle(200, () => console.log('tick'), { noLeading: true })
+ * fn() // skipped (noLeading)
+ * fn() // scheduled for trailing edge
+ * ```
+ *
+ * @example
+ * Debounce mode — execute at the beginning of the delay period:
+ * ```ts
+ * const fn = throttle(300, () => console.log('debounced'), { debounceMode: true })
+ * fn() // => 'debounced' (immediately)
+ * fn() // ignored (within delay)
+ * fn() // ignored (within delay)
+ * // After 300ms of inactivity, next call triggers immediately again
+ * ```
  */
 export function throttle<T extends (...args: any[]) => any>(
   delay: number,
@@ -70,16 +112,10 @@ export function throttle<T extends (...args: any[]) => any>(
   options?: ThrottleOptions,
 ): FnNoReturn<T> & Cancel {
   const { noTrailing = false, noLeading = false, debounceMode = undefined } = options || {}
-  /**
-   * After wrapper has stopped being called, this timeout ensures that
-   * `callback` is executed at the proper times in `throttle` and `end`
-   * debounce modes.
-   *
-   * 在包装器停止调用后，此超时确保
-   * 在节流和结束模式中，`callback` 在适当的时间执行
-   * 防抖模式。
-   */
-  let timeoutID: NodeJS.Timeout | undefined
+  if (!Number.isFinite(delay) || delay < 0) {
+    throw new RangeError('delay must be a finite non-negative number')
+  }
+  let timeoutID: ReturnType<typeof setTimeout> | undefined
   let cancelled = false
 
   // Keep track of the last time `callback` was executed.
@@ -87,12 +123,15 @@ export function throttle<T extends (...args: any[]) => any>(
 
   // Function to clear existing timeout
   function clearExistingTimeout() {
-    if (timeoutID) clearTimeout(timeoutID)
+    if (timeoutID) {
+      clearTimeout(timeoutID)
+      timeoutID = undefined
+    }
   }
 
   // Function to cancel next exec
   function cancel(options: CancelOptions = {}) {
-    const { upcomingOnly = false } = options || {}
+    const { upcomingOnly = false } = options
     clearExistingTimeout()
     cancelled = !upcomingOnly
   }
@@ -153,7 +192,7 @@ export function throttle<T extends (...args: any[]) => any>(
          * 在`delay`毫秒后执行。
          */
         lastExec = Date.now()
-        if (!noTrailing) timeoutID = setTimeout(debounceMode ? clear : exec, delay)
+        if (!noTrailing) timeoutID = setTimeout(exec, delay)
       } else {
         /**
          * In throttle mode without noLeading, if `delay` time has been exceeded, execute
@@ -182,7 +221,7 @@ export function throttle<T extends (...args: any[]) => any>(
        * 如果`debounceMode`为false（在结束时），安排`callback`在 `delay`毫秒后执行。
        */
       timeoutID = setTimeout(
-        debounceMode ? clear : exec,
+        debounceMode && !noLeading ? clear : exec,
         debounceMode === undefined ? delay - elapsed : delay,
       )
     }

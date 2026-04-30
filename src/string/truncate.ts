@@ -12,20 +12,20 @@
  *
  * @example
  * ```ts
- * truncate('hello world', 5) // => 'hello...'
- * truncate('hello world', 8, '~~') // => 'hello w~~'
+ * truncate('hello world', 5) // => 'he...'
+ * truncate('hello world', 8, '~~') // => 'hello ~~'
  * truncate('hi', 10) // => 'hi'
  * ```
  */
 export function truncate(str: string, length: number, omission: string = '...'): string {
-  if (str.length <= length) {
+  if (Number.isNaN(length) || length < 0) return str
+  const chars = [...str]
+  const omissionChars = [...omission]
+  if (chars.length <= length) {
     return str
   }
-
-  const omissionLen = omission.length
-  if (length <= omissionLen) {
-    return omission.slice(0, length)
+  if (length <= omissionChars.length) {
+    return omissionChars.slice(0, length).join('')
   }
-
-  return str.slice(0, length - omissionLen) + omission
+  return chars.slice(0, length - omissionChars.length).join('') + omission
 }

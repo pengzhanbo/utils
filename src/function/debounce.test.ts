@@ -90,15 +90,20 @@ describe('function > debounce', () => {
     expect(fn).toHaveBeenCalledTimes(1)
   })
 
-  it('should handle negative delay as zero', () => {
+  it('should throw RangeError when delay is negative', () => {
     const fn = vi.fn()
-    const debounced = debounce(-100, fn)
+    expect(() => debounce(-100, fn)).toThrow(RangeError)
+  })
 
-    debounced()
+  it('should throw RangeError when delay is Infinity', () => {
+    const fn = vi.fn()
+    expect(() => debounce(Infinity, fn)).toThrow(RangeError)
+    expect(() => debounce(-Infinity, fn)).toThrow(RangeError)
+  })
 
-    vi.advanceTimersByTime(0)
-
-    expect(fn).toHaveBeenCalledTimes(1)
+  it('should throw RangeError when delay is NaN', () => {
+    const fn = vi.fn()
+    expect(() => debounce(Number.NaN, fn)).toThrow(RangeError)
   })
 
   it('should handle concurrent debounced functions', () => {
@@ -114,5 +119,49 @@ describe('function > debounce', () => {
 
     expect(fn1).toHaveBeenCalledTimes(1)
     expect(fn2).toHaveBeenCalledTimes(1)
+  })
+
+  it('should re-trigger after delay period with atBegin=true', () => {
+    const fn = vi.fn()
+    const debounced = debounce(100, fn, { atBegin: true })
+
+    debounced()
+    expect(fn).toHaveBeenCalledTimes(1)
+
+    vi.advanceTimersByTime(100)
+
+    debounced()
+    expect(fn).toHaveBeenCalledTimes(2)
+  })
+
+  it('should use last call arguments when debouncing', () => {
+    const fn = vi.fn()
+    const debounced = debounce(100, fn)
+
+    debounced('first')
+    debounced('second')
+    debounced('third')
+
+    vi.advanceTimersByTime(100)
+
+    expect(fn).toHaveBeenCalledTimes(1)
+    expect(fn).toHaveBeenCalledWith('third')
+  })
+
+  it('should resume normal behavior after cancel with upcomingOnly', () => {
+    const fn = vi.fn()
+    const debounced = debounce(100, fn)
+
+    debounced()
+    ;(debounced as any).cancel({ upcomingOnly: true })
+
+    vi.advanceTimersByTime(100)
+    expect(fn).toHaveBeenCalledTimes(0)
+
+    debounced('after-cancel')
+    vi.advanceTimersByTime(100)
+
+    expect(fn).toHaveBeenCalledTimes(1)
+    expect(fn).toHaveBeenCalledWith('after-cancel')
   })
 })
