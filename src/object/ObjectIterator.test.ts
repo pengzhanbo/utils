@@ -9,11 +9,13 @@ describe('object > ObjectIterator', () => {
         ['a', 1],
         ['b', 2],
       ])
+      expect(iterator.toObject()).toEqual({ a: 1, b: 2 })
     })
 
     it('should handle empty object', () => {
       const iterator = new ObjectIterator({})
       expect(iterator.toArray()).toEqual([])
+      expect(iterator.toObject()).toEqual({})
     })
 
     it('should not modify the original object', () => {

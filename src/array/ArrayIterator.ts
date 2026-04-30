@@ -67,13 +67,13 @@ export class ArrayIterator<T = unknown> {
   /**
    * The source array to iterate over. 要迭代的源数组
    */
-  private readonly source: unknown[]
+  protected readonly source: unknown[]
   /**
    * The list of operations to be applied lazily
    *
    * 要惰性应用的操作列表
    */
-  private readonly operations: Operation<unknown>[]
+  protected readonly operations: Operation<unknown>[]
 
   /**
    * Creates a new ArrayIterator instance

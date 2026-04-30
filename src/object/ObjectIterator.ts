@@ -51,13 +51,13 @@ export class ObjectIterator<K extends string = string, V = unknown> {
   /**
    * The source object to iterate over. 要迭代的源对象
    */
-  private readonly s: Array<[string, unknown]>
+  protected readonly source: Array<[string, unknown]>
   /**
    * The list of operations to be applied lazily
    *
    * 要惰性应用的操作列表
    */
-  private readonly o: Operation<string, unknown>[]
+  protected readonly operations: Operation<string, unknown>[]
 
   /**
    * Creates a new ObjectIterator instance
@@ -67,8 +67,8 @@ export class ObjectIterator<K extends string = string, V = unknown> {
    * @param obj - The source object to iterate. 要迭代的源对象
    */
   constructor(obj: Record<K, V>) {
-    this.s = objectEntries(obj)
-    this.o = []
+    this.source = objectEntries(obj)
+    this.operations = []
   }
 
   /**
@@ -81,8 +81,8 @@ export class ObjectIterator<K extends string = string, V = unknown> {
     operations: Operation<string, unknown>[],
   ): ObjectIterator<K, V> {
     const iterator = new ObjectIterator<K, V>({} as Record<K, V>)
-    ;(iterator as unknown as { s: Array<[string, unknown]> }).s = source
-    ;(iterator as unknown as { o: Operation<string, unknown>[] }).o = operations
+    ;(iterator as unknown as { source: Array<[string, unknown]> }).source = source
+    ;(iterator as unknown as { operations: Operation<string, unknown>[] }).operations = operations
     return iterator
   }
 
@@ -92,11 +92,11 @@ export class ObjectIterator<K extends string = string, V = unknown> {
    * 创建一个在单次遍历中应用所有操作的生成器
    */
   private *iterate(): Generator<[K, V]> {
-    for (const entry of this.s) {
+    for (const entry of this.source) {
       let current: [PropertyKey, unknown] = entry
       let shouldYield = true
 
-      for (const op of this.o) {
+      for (const op of this.operations) {
         if (!shouldYield) break
 
         switch (op.type) {
@@ -138,8 +138,8 @@ export class ObjectIterator<K extends string = string, V = unknown> {
     if (!isFunction(predicate)) {
       throw new TypeError('predicate must be a function')
     }
-    return ObjectIterator.create<K, V>(this.s, [
-      ...this.o,
+    return ObjectIterator.create<K, V>(this.source, [
+      ...this.operations,
       { type: OPERATION_FILTER, predicate: predicate as (key: string, value: unknown) => boolean },
     ])
   }
@@ -168,8 +168,8 @@ export class ObjectIterator<K extends string = string, V = unknown> {
     if (!isFunction(transform)) {
       throw new TypeError('transform must be a function')
     }
-    return ObjectIterator.create<NK extends string ? NK : string, NV>(this.s, [
-      ...this.o,
+    return ObjectIterator.create<NK extends string ? NK : string, NV>(this.source, [
+      ...this.operations,
       {
         type: OPERATION_MAP,
         transform: transform as unknown as (key: string, value: unknown) => [NK, NV],
@@ -190,8 +190,30 @@ export class ObjectIterator<K extends string = string, V = unknown> {
    * // => [['a', 1], ['b', 2]]
    * ```
    */
-  toArray(): Array<[K, V]> {
+  toArray(): [K, V][] {
     return [...this.iterate()]
+  }
+
+  /**
+   * Executes all chained operations and returns the final result object
+   *
+   * 执行所有链式操作并返回最终结果对象
+   *
+   * @returns The final result object. 最终结果对象
+   *
+   * @example
+   * ```ts
+   * new ObjectIterator({ a: 1, b: 2 })
+   * .map((k, v) => [k.toUpperCase(), v * 2] as const).toObject()
+   * // => { A: 2, B: 4 }
+   * ```
+   */
+  toObject(): Record<K, V> {
+    const result = {} as Record<K, V>
+    for (const [key, value] of this.iterate()) {
+      result[key] = value
+    }
+    return result
   }
 
   /**
