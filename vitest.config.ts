@@ -4,10 +4,17 @@ export default defineConfig({
   test: {
     include: ['**/*.test.[tj]s'],
     exclude: ['**/node_modules/**', '**/dist/**', '**/lib/**'],
+    env: { TZ: 'Etc/UTC' },
     coverage: {
       enabled: true,
       provider: 'v8',
       reporter: ['text', 'clover', 'json'],
+      thresholds: {
+        statements: 99,
+        branches: 99,
+        functions: 99,
+        lines: 100,
+      },
     },
   },
 })
