@@ -7,3 +7,6 @@ trustPolicyExclude:
 onlyBuiltDependencies:
   - esbuild
   - unrs-resolver
+
+allowBuilds:
+  esbuild: true
