@@ -20,7 +20,9 @@ import { isTypeof } from './is-typeof'
  * isPlainObject(Object.create(null)) // => true
  * ```
  */
-export function isPlainObject(v: unknown): v is Record<PropertyKey, unknown> {
+export function isPlainObject<
+  T extends Record<PropertyKey, unknown> = Record<PropertyKey, unknown>,
+>(v: unknown): v is T {
   if (!isTypeof(v, T_OBJECT)) return false
   const proto = Object.getPrototypeOf(v)
   return isNull(proto) || proto === Object.prototype
