@@ -6,6 +6,7 @@
   "oxc.typeAware": true,
   "oxc.unusedDisableDirectives": "deny",
   "editor.codeActionsOnSave": {
+    "source.fixAll.oxc": "explicit",
     "source.organizeImports": "never" // let oxfmt handle import organization
   }
 }
