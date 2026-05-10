@@ -7,3 +7,4 @@
 export * from './assert'
 export * from './attempt'
 export * from './attempt-async'
+export * from './LRUCache'
