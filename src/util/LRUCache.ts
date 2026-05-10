@@ -415,11 +415,11 @@ export class LRUCache<K, V> extends Map<K, V> implements Iterable<[K, V]> {
     }
   }
 
-  get [Symbol.toStringTag]() {
+  get [Symbol.toStringTag](): string {
     return 'LRUCache'
   }
 
-  toString() {
+  toString(): string {
     return `LRUCache(${this.size}/${this.maxSize})`
   }
 
