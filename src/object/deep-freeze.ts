@@ -69,7 +69,7 @@ function freezeImpl(value: unknown, visited: Set<unknown>): void {
     const allKeys = [...Object.getOwnPropertyNames(value), ...Object.getOwnPropertySymbols(value)]
 
     for (let i = 0; i < allKeys.length; i++) {
-      freezeImpl(value[allKeys[i]!], visited)
+      freezeImpl(value[allKeys[i]! as string], visited)
     }
     freeze(value)
   }
