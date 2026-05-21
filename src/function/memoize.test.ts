@@ -252,4 +252,24 @@ describe('functions > memoize', () => {
 
     Date.now = originalDateNow
   })
+
+  it('should work with async function', async () => {
+    const fn = vi.fn(async (x: number) => x * 2)
+    const memoizedFn = memoize(fn, { maxSize: 2 })
+
+    memoizedFn(1)
+    memoizedFn(2)
+    memoizedFn(3)
+    memoizedFn(1)
+    expect(fn).toHaveBeenCalledTimes(4)
+    expect(await memoizedFn(1)).toBe(2)
+    expect(await memoizedFn(2)).toBe(4)
+    expect(await memoizedFn(3)).toBe(6)
+    expect(await memoizedFn(1)).toBe(2)
+    expect(await memoizedFn(2)).toBe(4)
+    expect(await memoizedFn(3)).toBe(6)
+    expect(await memoizedFn(1)).toBe(2)
+    expect(await memoizedFn(2)).toBe(4)
+    expect(await memoizedFn(3)).toBe(6)
+  })
 })
