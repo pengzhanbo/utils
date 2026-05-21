@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "include": ["tsdown.config.ts", "shim.d.ts"],
+  "exclude": ["node_modules", "dist"],
+  "compilerOptions": {
+    "composite": true,
+    "isolatedDeclarations": true,
+    "types": ["node"]
+  }
+}
