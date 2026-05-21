@@ -1,6 +1,6 @@
 {
   "name": "@pengzhanbo/utils",
-  "version": "3.7.2",
+  "version": "3.7.3",
   "exports": {
     ".": "./src/index.ts"
   },
