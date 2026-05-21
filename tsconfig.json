@@ -1,6 +1,6 @@
 {
   "extends": ["@pengzhanbo/tsconfig/tsconfig.json", "@pengzhanbo/tsconfig/tsconfig.lib.json"],
-  "include": ["./src"],
+  "include": ["./src", "./tsdown.config.ts", "./shim.d.ts"],
   "exclude": ["node_modules", "dist"],
   "compilerOptions": {
     "isolatedDeclarations": true,
