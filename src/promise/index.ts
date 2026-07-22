@@ -6,6 +6,7 @@
  * @module Promise
  */
 
+export * from './deferred'
 export * from './controlled'
 export * from './limit-async'
 export * from './lock'
