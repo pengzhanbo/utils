@@ -37,10 +37,15 @@ type FirstArray<T extends any[]> = T extends [infer U, ...any[]] ? U : Fn
 export function compose<T extends Fn[] = Fn[]>(
   ...fns: T
 ): (...args: Parameters<LastArray<T>>) => ReturnType<FirstArray<T>> {
-  return function (...args: Parameters<LastArray<T>>) {
+  return function (this: unknown, ...args: Parameters<LastArray<T>>) {
     const len = fns.length
     if (len === 0) return args[0]
-    if (len === 1) return fns[0]!(...args)
-    return fns.slice(0, -1).reduceRight((acc, fn) => fn(acc), fns[len - 1]!(...args))
+    if (len === 1) return fns[0]!.apply(this, args)
+
+    let result = fns[len - 1]!.apply(this, args)
+    for (let i = len - 2; i >= 0; i--) {
+      result = fns[i]!.call(this, result)
+    }
+    return result
   }
 }

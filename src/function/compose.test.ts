@@ -27,4 +27,30 @@ describe('function > compose', () => {
     expect(compose()(42)).toBe(42)
     expect(compose()(null)).toBe(null)
   })
+
+  it('should preserve `this` context', () => {
+    const obj = {
+      prefix: '> ',
+      wrap(this: { prefix: string }, s: string) {
+        return `${this.prefix}${s}`
+      },
+    }
+    const exclaim = (s: string) => `${s}!`
+    const composed = compose(exclaim, obj.wrap)
+    expect(composed.call(obj, 'hello')).toBe('> hello!')
+  })
+
+  it('should preserve `this` through multiple functions', () => {
+    const obj = {
+      sep: '-',
+      addSep(this: { sep: string }, s: string) {
+        return `${s}${this.sep}`
+      },
+      wrap(this: { sep: string }, s: string) {
+        return `[${s}]`
+      },
+    }
+    const composed = compose(obj.addSep, obj.wrap)
+    expect(composed.call(obj, 'x')).toBe('[x]-')
+  })
 })
