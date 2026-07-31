@@ -82,6 +82,7 @@ describe('isError', () => {
 
   it('should return false for other objects', () => {
     expect(isError(new Date())).toBe(false)
+    // oxlint-disable-next-line prefer-regex-literals
     expect(isError(new RegExp('test'))).toBe(false)
     expect(isError({})).toBe(false)
   })

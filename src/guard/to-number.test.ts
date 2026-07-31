@@ -60,6 +60,7 @@ describe('guard > toNumber', () => {
 
   it('should return NaN for Function', () => {
     expect(toNumber(() => {})).toBeNaN()
+    // oxlint-disable-next-line prefer-arrow-callback
     expect(toNumber(function () {})).toBeNaN()
   })
 

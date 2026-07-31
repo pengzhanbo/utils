@@ -503,13 +503,13 @@ describe('clone > deepClone', () => {
 
   it('should skip __proto__ own property during deep clone', () => {
     const source = Object.create(null)
-    // oxlint-disable-next-line no-proto
+    // oxlint-disable-next-line no-restricted-properties no-proto
     source.__proto__ = { tainted: true }
     source.safe = { value: 1 }
     const cloned = deepClone(source)
     expect(cloned.safe).toEqual({ value: 1 })
     expect(cloned.safe).not.toBe(source.safe)
-    // oxlint-disable-next-line no-proto
+    // oxlint-disable-next-line no-restricted-properties no-proto
     expect(cloned.__proto__).toBeUndefined()
   })
 })

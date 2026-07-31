@@ -12,6 +12,7 @@ describe('predicate > isRegexp', () => {
     expect(isRegexp({})).toBe(false)
     expect(isRegexp(() => {})).toBe(false)
     expect(isRegexp(/a/)).toBe(true)
+    // oxlint-disable-next-line prefer-regex-literals
     expect(isRegexp(new RegExp('a'))).toBe(true)
   })
 })

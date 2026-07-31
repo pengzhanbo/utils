@@ -11,6 +11,7 @@ describe('predicate > isFunction', () => {
     expect(isFunction(false)).toBe(false)
     expect(isFunction({})).toBe(false)
     expect(isFunction(() => {})).toBe(true)
+    // oxlint-disable-next-line prefer-arrow-callback
     expect(isFunction(function () {})).toBe(true)
   })
 })
