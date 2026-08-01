@@ -90,7 +90,7 @@ function deepEqualWithStack(v1: any, v2: any, stack: Map<any, any>): boolean {
     if (v1.size !== v2.size) return false
     const v2Items = [...v2]
     for (const item of v1) {
-      if (!v2Items.some((v2Item) => deepEqualWithStack(item, v2Item, new Map(stack)))) return false
+      if (!v2Items.some((v2Item) => deepEqualWithStack(item, v2Item, new Map()))) return false
     }
     return true
   }
@@ -109,13 +109,13 @@ function deepEqualWithStack(v1: any, v2: any, stack: Map<any, any>): boolean {
     for (const [key, value] of v1) {
       if (isString(key) || isNumber(key)) {
         if (!primitiveKeyMap.has(key)) return false
-        if (!deepEqualWithStack(value, primitiveKeyMap.get(key), new Map(stack))) return false
+        if (!deepEqualWithStack(value, primitiveKeyMap.get(key), new Map())) return false
       } else {
         let found = false
         for (const [v2Key, v2Value] of complexEntries) {
           if (
-            deepEqualWithStack(key, v2Key, new Map(stack)) &&
-            deepEqualWithStack(value, v2Value, new Map(stack))
+            deepEqualWithStack(key, v2Key, new Map()) &&
+            deepEqualWithStack(value, v2Value, new Map())
           ) {
             found = true
             break

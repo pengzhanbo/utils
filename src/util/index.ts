@@ -7,5 +7,6 @@
 export * from './assert'
 export * from './attempt'
 export * from './attempt-async'
+export * from './format-bytes'
 export * from './timing'
 export * from './LRUCache'

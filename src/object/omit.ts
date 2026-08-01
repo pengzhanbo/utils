@@ -1,3 +1,4 @@
+import { del } from '../_internal/reflect'
 import { hasOwn } from './has-own'
 import { objectKeys } from './keys'
 
@@ -29,7 +30,7 @@ export function omit<T extends Record<PropertyKey, any>, K extends keyof T = key
   Object.assign(res, obj)
 
   for (const key of keys) {
-    if (hasOwn(obj, key)) Reflect.deleteProperty(res, key)
+    if (hasOwn(obj, key)) del(res, key)
   }
 
   return res
