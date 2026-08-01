@@ -12,14 +12,16 @@
     ".editorconfig",
     ".github",
     ".vscode",
-    ".husky",
     "docs",
-    ".oxfmtrc.json",
-    ".oxlintrc.json",
+    "oxfmt.config.ts",
+    "oxlint.config.ts",
+    "AGENTS.md",
     "CLAUDE.md",
+    "pnpm.lock.yaml",
     "pnpm-workspace.yaml",
     "tsdown.config.ts",
     "vitest.config.ts",
-    "typedoc.json"
+    "typedoc.json",
+    "renovate.json"
   ]
 }
