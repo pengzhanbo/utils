@@ -16,7 +16,7 @@
  * ```
  */
 export function chunk<T>(input: readonly T[], size = 1): T[][] {
-  size = Number.parseInt(String(size), 10)
+  size = Number.parseInt(`${size}`, 10)
   if (Number.isNaN(size) || size < 1) size = 1
   const chunks: T[][] = []
   for (let i = 0; i < input.length; i += size) chunks.push(input.slice(i, i + size))

@@ -512,4 +512,99 @@ describe('clone > deepClone', () => {
     // oxlint-disable-next-line no-restricted-properties no-proto
     expect(cloned.__proto__).toBeUndefined()
   })
+
+  it('should throw RangeError when nesting depth exceeds 1000', () => {
+    let nested: any = { leaf: 1 }
+    for (let i = 0; i < 1001; i++) nested = { next: nested }
+
+    let error: unknown
+    try {
+      deepClone(nested)
+    } catch (e) {
+      error = e
+    }
+
+    expect(error).toBeInstanceOf(RangeError)
+    expect((error as RangeError).message).toMatch(/deepClone.*1000/)
+  })
+
+  it('should clone 500-level nested objects successfully', () => {
+    let nested: any = { leaf: 1 }
+    for (let i = 0; i < 500; i++) nested = { next: nested }
+
+    const cloned = deepClone(nested)
+
+    expect(cloned).toEqual(nested)
+    expect(cloned).not.toBe(nested)
+  })
+
+  it('should throw RangeError for deeply nested arrays', () => {
+    let nested: any[] = [1]
+    for (let i = 0; i < 1001; i++) nested = [nested]
+
+    expect(() => deepClone(nested)).toThrow(RangeError)
+  })
+
+  it('should preserve holes in sparse arrays with object elements', () => {
+    const source: any[] = []
+    source[0] = { a: 1 }
+    source[2] = { b: 2 }
+
+    const cloned = deepClone(source)
+
+    expect(cloned.length).toBe(3)
+    expect(0 in cloned).toBe(true)
+    expect(1 in cloned).toBe(false)
+    expect(2 in cloned).toBe(true)
+    expect(cloned[0]).toEqual({ a: 1 })
+    expect(cloned[0]).not.toBe(source[0])
+    expect(cloned[2]).toEqual({ b: 2 })
+    expect(cloned[2]).not.toBe(source[2])
+  })
+
+  it('should preserve trailing holes in sparse arrays with object elements', () => {
+    const source: any[] = [{ a: 1 }]
+    source.length = 3
+
+    const cloned = deepClone(source)
+
+    expect(cloned.length).toBe(3)
+    expect(0 in cloned).toBe(true)
+    expect(1 in cloned).toBe(false)
+    expect(2 in cloned).toBe(false)
+    expect(cloned[0]).toEqual({ a: 1 })
+    expect(cloned[0]).not.toBe(source[0])
+  })
+
+  it('should preserve holes in sparse arrays of primitives', () => {
+    const source: number[] = []
+    source[0] = 1
+    source[2] = 3
+
+    const cloned = deepClone(source)
+
+    expect(cloned.length).toBe(3)
+    expect(0 in cloned).toBe(true)
+    expect(1 in cloned).toBe(false)
+    expect(2 in cloned).toBe(true)
+  })
+
+  it('should preserve holes in nested sparse arrays', () => {
+    const inner: any[] = []
+    inner[0] = { a: 1 }
+    inner[2] = { b: 2 }
+    const matrix: any[] = []
+    matrix[0] = inner
+    matrix[2] = [inner]
+    const source = { list: inner, matrix }
+
+    const cloned = deepClone(source)
+
+    expect(1 in cloned.list).toBe(false)
+    expect(1 in cloned.matrix).toBe(false)
+    expect(1 in cloned.matrix[2]).toBe(false)
+    expect(cloned.list).toEqual(inner)
+    expect(cloned.list).not.toBe(inner)
+    expect(cloned.matrix[0]).not.toBe(inner)
+  })
 })
