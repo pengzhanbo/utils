@@ -1,7 +1,7 @@
 node_modules
 .DS_Store
 dist
-.diea
+.idea
 coverage
 
 npm-debug.log*
@@ -10,4 +10,4 @@ pnpm-debug.log*
 .claude
 .agent
 
-!.claude/skills
+!.*/skills
