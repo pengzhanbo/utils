@@ -5,6 +5,7 @@
  */
 
 export * from './is-array'
+export * from './is-async-function'
 export * from './is-blob'
 export * from './is-boolean'
 export * from './is-browser'

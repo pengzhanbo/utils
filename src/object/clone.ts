@@ -142,11 +142,14 @@ export function shallowClone<T = any>(source: T): T {
  * @typeParam T - The type of elements in the array / 数组元素的类型
  * @param source - The source data to clone. 要克隆的源数据
  * @returns The deeply cloned data. 深度克隆后的数据
+ * @throws {RangeError} Throws if the nesting depth exceeds 1000. 嵌套深度超过 1000 时抛出
  *
  * @remarks
  * This function uses an internal `Map` to handle circular references safely, preventing infinite recursion during deep cloning.
+ * The cloning depth is limited to 1000; deeper structures throw a `RangeError`. Holes in sparse arrays are preserved.
  *
  * 此函数使用内部的 `Map` 来安全处理循环引用，防止深度克隆过程中的无限递归。
+ * 克隆深度上限为 1000，超出后抛出 `RangeError`；稀疏数组中的空洞会被保留。
  */
 export function deepClone<T = any>(source: T): T {
   return deepCloneImpl(source, new Map())
