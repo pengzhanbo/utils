@@ -51,8 +51,8 @@ export function escapeRegExp(str: string): string {
   return str.replace(RE_ESCAPE_REGEXP, '\\$&')
 }
 
-const RE_DECIMAL = /^[0-9]+$/
-const RE_HEX = /^[0-9a-fA-F]+$/
+const RE_DECIMAL = /^\d+$/
+const RE_HEX = /^[0-9a-f]+$/i
 
 const htmlUnescapes: Record<string, string> = {
   '&amp;': '&',

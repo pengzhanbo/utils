@@ -152,7 +152,7 @@ export function decimalDivide(a: number, b: number, precision?: number): number 
  * */
 function getDecimalPlaces(num: number): number {
   const str = String(num)
-  const match = str.match(/(?:\.(\d+))?(?:[eE]([+-]?\d+))?$/)!
+  const match = str.match(/(?:\.(\d+))?(?:e([+-]?\d+))?$/i)!
   const decimals = (match[1] ?? '').length
   const exponent = Number.parseInt(match[2] ?? '0', 10)
   return Math.max(0, decimals - exponent)

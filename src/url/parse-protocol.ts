@@ -1,4 +1,4 @@
-const RE_PROTOCOL_MATCH = /^([-+\w]{1,25})(?::?\/\/|:)/i
+const RE_PROTOCOL_MATCH = /^([-+\w]{1,25})(?::?\/\/|:)/
 
 /**
  * Parse protocol from URL.
