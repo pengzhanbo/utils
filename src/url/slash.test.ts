@@ -5,7 +5,7 @@ import {
   removeLeadingSlash,
   removeTrailingSlash,
   slash,
-} from './slash'
+} from './slash.js'
 
 describe('url > slash', () => {
   it('should work', () => {

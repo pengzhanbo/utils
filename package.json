@@ -42,8 +42,8 @@
     "docs:preview": "http-server docs/dist"
   },
   "devDependencies": {
-    "@pengzhanbo/oxc-config": "^2.8.1",
-    "@pengzhanbo/tsconfig": "^2.8.1",
+    "@pengzhanbo/oxc-config": "^2.8.2",
+    "@pengzhanbo/tsconfig": "^2.8.2",
     "@types/node": "^26.1.2",
     "@vitest/coverage-v8": "^4.1.10",
     "bumpp": "^12.1.1",
@@ -73,5 +73,5 @@
     "*": "oxfmt --no-error-on-unmatched-pattern",
     "*.{js,ts}": "vitest related --run"
   },
-  "packageManager": "pnpm@11.18.0"
+  "packageManager": "pnpm@11.19.0"
 }

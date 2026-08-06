@@ -1,7 +1,7 @@
 import { describe, bench } from 'vitest'
-import { zip } from '../../array/zip'
+import { zip } from '../../array/zip.js'
 
-describe('Performance > Array > Zip', () => {
+describe('performance > Array > Zip', () => {
   // ZP-01: Two arrays / 两个数组
   bench(
     'zip | 2 arrays (10K items)',
@@ -19,9 +19,9 @@ describe('Performance > Array > Zip', () => {
     () => {
       const a = Array.from({ length: 10000 }, (_, i) => i)
       const b = Array.from({ length: 10000 }, (_, i) => `item_${i}`)
-      const c = Array.from({ length: 10000 }, (_, i) => i % 2 === 0)
-      const d = Array.from({ length: 10000 }, (_, i) => ({ id: i }))
-      zip(a, b, c, d)
+      const x = Array.from({ length: 10000 }, (_, i) => i % 2 === 0)
+      const y = Array.from({ length: 10000 }, (_, i) => ({ id: i }))
+      zip(a, b, x, y)
     },
     { time: 1000, iterations: 100 },
   )
@@ -48,6 +48,7 @@ describe('Performance > Array > Zip', () => {
       for (let i = 0; i < minLength; i++) {
         result.push([a[i], b[i]])
       }
+
       void result
     },
     { time: 1000, iterations: 200 },

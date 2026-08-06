@@ -1,8 +1,8 @@
-import type { DeepPartial, DeepRequired, DeepReadonly, RequiredKeys, OptionalKeys } from './deep'
+import type { DeepPartial, DeepRequired, DeepReadonly, RequiredKeys, OptionalKeys } from './deep.js'
 import { describe, expectTypeOf, it } from 'vitest'
 
 describe('types > deep', () => {
-  it('DeepPartial should make all nested properties optional', () => {
+  it('deepPartial should make all nested properties optional', () => {
     interface Person {
       name: string
       address: { city: string; zip: string }
@@ -15,7 +15,7 @@ describe('types > deep', () => {
     }>()
   })
 
-  it('DeepPartial should handle arrays', () => {
+  it('deepPartial should handle arrays', () => {
     interface Person {
       hobbies: string[]
     }
@@ -26,7 +26,7 @@ describe('types > deep', () => {
     }>()
   })
 
-  it('DeepRequired should make all nested properties required', () => {
+  it('deepRequired should make all nested properties required', () => {
     interface Person {
       name?: string
       address?: { city?: string; zip?: string }
@@ -39,7 +39,7 @@ describe('types > deep', () => {
     }>()
   })
 
-  it('DeepReadonly should make all nested properties readonly', () => {
+  it('deepReadonly should make all nested properties readonly', () => {
     interface Person {
       name: string
       address: { city: string }
@@ -52,7 +52,7 @@ describe('types > deep', () => {
     }>()
   })
 
-  it('RequiredKeys should extract required keys', () => {
+  it('requiredKeys should extract required keys', () => {
     interface Person {
       name: string
       age?: number
@@ -63,7 +63,7 @@ describe('types > deep', () => {
     expectTypeOf<Result>().toEqualTypeOf<'name' | 'address'>()
   })
 
-  it('OptionalKeys should extract optional keys', () => {
+  it('optionalKeys should extract optional keys', () => {
     interface Person {
       name: string
       age?: number

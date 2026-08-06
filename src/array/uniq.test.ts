@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { uniq, uniqBy, uniqWith } from './uniq'
+import { uniq, uniqBy, uniqWith } from './uniq.js'
 
 describe('array > uniq', () => {
   it.each([

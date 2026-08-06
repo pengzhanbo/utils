@@ -1,4 +1,4 @@
-import { isError } from '../predicate'
+import { isError } from '../predicate/is-error.js'
 
 /**
  * Attempt to execute a function and return the result or error.
@@ -20,6 +20,8 @@ import { isError } from '../predicate'
  *
  * @param func - The function to execute. 要执行的函数
  * @param args - The arguments to pass to the function. 要传递给函数的参数
+ *
+ * @returns The tuple containing the error or result. 包含错误或结果的元组
  *
  * @example
  * ```ts

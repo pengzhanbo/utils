@@ -1,5 +1,5 @@
-import { capitalize } from './capitalize'
-import { words } from './words'
+import { capitalize } from './capitalize.js'
+import { words } from './words.js'
 
 /**
  * Converts a string to Title Case (first letter of each word capitalized)
@@ -22,7 +22,9 @@ import { words } from './words'
  * ```
  */
 export function titleCase(str: string): string {
-  if (!str) return ''
+  if (!str) {
+    return ''
+  }
 
   return words(str)
     .map((word) => capitalize(word))

@@ -4,11 +4,11 @@
  * @module Types
  */
 
-export * from './basic'
-export * from './deep'
-export * from './fn'
-export * from './guard'
-export * from './if'
-export * from './is'
-export * from './numeric'
-export * from './union'
+export type * from './basic.js'
+export type * from './deep.js'
+export type * from './fn.js'
+export type * from './guard.js'
+export type * from './if.js'
+export type * from './is.js'
+export type * from './numeric.js'
+export type * from './union.js'

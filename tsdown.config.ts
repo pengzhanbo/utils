@@ -1,12 +1,13 @@
 import type { Token as JSToken } from 'js-tokens'
+import type { UserConfig } from 'tsdown'
 import fs from 'node:fs'
 import path from 'node:path'
 import process from 'node:process'
 import jsTokens from 'js-tokens'
 import { format } from 'oxfmt'
-import { defineConfig, type UserConfig } from 'tsdown'
+import { defineConfig } from 'tsdown'
 
-export default defineConfig({
+const config: UserConfig = defineConfig({
   entry: 'src/index.ts',
   clean: true,
   dts: true,
@@ -26,10 +27,12 @@ export default defineConfig({
     ).code
     await fs.promises.writeFile(file, stripped, 'utf-8')
   },
-}) as UserConfig
+})
 
 /**
  * 移除代码中的注释，保留代码本身
+ * @param code - 要处理的代码
+ * @returns 处理后的代码
  */
 export function strip(code: string): string {
   let result = ''
@@ -42,7 +45,11 @@ export function strip(code: string): string {
 }
 
 function stripFromToken(token: JSToken): string {
-  if (token.type === 'SingleLineComment' || token.type === 'MultiLineComment') return ''
+  if (token.type === 'SingleLineComment' || token.type === 'MultiLineComment') {
+    return ''
+  }
 
   return token.value
 }
+
+export default config

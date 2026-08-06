@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isSymbol } from './is-symbol'
+import { isSymbol } from './is-symbol.js'
 
 describe('predicate > isSymbol', () => {
   it('should work', () => {

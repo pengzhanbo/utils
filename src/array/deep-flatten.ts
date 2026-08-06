@@ -1,3 +1,5 @@
+import { isArray } from '../predicate/is-array.js'
+
 /**
  * Flattens an array to an arbitrary depth.
  *
@@ -41,8 +43,8 @@ export function deepFlatten<T>(arr: readonly (T | readonly any[])[]): T[] {
 
   for (let i = 0; i < arr.length; i++) {
     const value = arr[i]!
-    if (Array.isArray(value)) {
-      result.push(...deepFlatten(value))
+    if (isArray(value)) {
+      result.push(...deepFlatten<T>(value as T[]))
     } else {
       // Array.isArray's guard cannot exclude `readonly any[]` from the union, cast is safe here
       result.push(value as T)

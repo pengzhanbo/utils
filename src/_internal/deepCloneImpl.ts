@@ -1,24 +1,26 @@
-import { hasOwn } from '../object'
-import { isPrimitive, isTypedArray } from '../predicate'
-import { T_OBJECT, T_UNDEFINED } from './tags'
+// oxlint-disable complexity max-lines-per-function
+
+import { hasOwn } from '../object/has-own.js'
+import { isPrimitive } from '../predicate/is-primitive.js'
+import { isTypedArray } from '../predicate/is-typed-array.js'
+import { T_OBJECT, T_UNDEFINED } from './tags.js'
 
 const DEEP_CLONE_MAX_DEPTH = 1000
 
 function copyRegExpMatchProps(target: any, source: any, stack: Map<any, any>, depth = 0): void {
   if (hasOwn(source, 'index')) {
-    // @ts-ignore
     target.index = source.index
   }
+
   if (hasOwn(source, 'input')) {
-    // @ts-ignore
     target.input = source.input
   }
+
   if (hasOwn(source, 'groups')) {
-    // @ts-ignore
     target.groups = deepCloneImpl(source.groups, stack, depth + 1)
   }
+
   if (hasOwn(source, 'indices')) {
-    // @ts-ignore
     target.indices = deepCloneImpl(source.indices, stack, depth + 1)
   }
 }
@@ -26,10 +28,14 @@ function copyRegExpMatchProps(target: any, source: any, stack: Map<any, any>, de
 /**
  * @internal
  * @typeParam T - The type of elements in the array / 数组元素的类型
+ * @param valueToClone - The value to clone. 要克隆的值
+ * @param stack - The stack of cloned values. 已克隆值的栈
+ * @param depth - The current depth. 当前深度
+ * @returns The cloned value. 克隆后的值
  */
 export function deepCloneImpl<T>(
-  valueToClone: any,
-  stack: Map<any, any> = new Map(),
+  valueToClone: unknown,
+  stack: Map<any, any> = new Map<any, any>(),
   depth = 0,
 ): T {
   if (isPrimitive(valueToClone)) {
@@ -70,7 +76,9 @@ export function deepCloneImpl<T>(
     stack.set(valueToClone, result)
 
     for (let i = 0; i < len; i++) {
-      if (hasOwn(valueToClone, i)) result[i] = deepCloneImpl(valueToClone[i], stack, depth + 1)
+      if (hasOwn(valueToClone, i)) {
+        result[i] = deepCloneImpl(valueToClone[i], stack, depth + 1)
+      }
     }
 
     copyRegExpMatchProps(result, valueToClone, stack, depth)
@@ -119,7 +127,6 @@ export function deepCloneImpl<T>(
   if (typeof Buffer !== T_UNDEFINED && Buffer.isBuffer(valueToClone)) {
     const result = Buffer.from(valueToClone)
     stack.set(valueToClone, result)
-    // @ts-ignore
     return result as T
   }
 
@@ -184,7 +191,9 @@ export function deepCloneImpl<T>(
     )
     stack.set(valueToClone, result)
 
-    if (hasOwn(valueToClone, 'name')) result.name = valueToClone.name
+    if (hasOwn(valueToClone, 'name')) {
+      result.name = valueToClone.name
+    }
 
     result.stack = valueToClone.stack
 
@@ -194,9 +203,9 @@ export function deepCloneImpl<T>(
   }
 
   /* istanbul ignore if -- @preserve */
-  // eslint-disable-next-line valid-typeof
-  if (typeof valueToClone === T_OBJECT && valueToClone !== null) {
-    const result = Object.create(Object.getPrototypeOf(valueToClone))
+  // oxlint-disable-next-line valid-typeof
+  if (typeof valueToClone === T_OBJECT) {
+    const result: object = Object.create(Object.getPrototypeOf(valueToClone))
 
     stack.set(valueToClone, result)
 
@@ -206,30 +215,51 @@ export function deepCloneImpl<T>(
   }
 
   /* istanbul ignore next -- @preserve */
-  return valueToClone
+  return valueToClone as T
 }
 
 /**
  * @internal
+ * @param target - The target object. 目标对象
+ * @param source - The source object. 源对象
+ * @param stack - The stack of objects to avoid circular references. 避免循环引用的对象栈
+ * @param depth - The current depth of the recursion. 当前递归深度
  */
 export function copyProperties(
-  target: any,
-  source: any,
-  stack?: Map<any, any> | undefined,
+  target: object,
+  source: object,
+  stack?: Map<any, any>,
   depth = 0,
 ): void {
   const stringKeys = Object.keys(source)
   const symbolKeys = getSymbols(source)
 
-  for (let i = 0; i < stringKeys.length; i++) copyKey(source, target, stringKeys[i]!, stack, depth)
-  for (let i = 0; i < symbolKeys.length; i++) copyKey(source, target, symbolKeys[i]!, stack, depth)
+  for (let i = 0; i < stringKeys.length; i++) {
+    copyKey(source, target, stringKeys[i]!, stack, depth)
+  }
+  for (let i = 0; i < symbolKeys.length; i++) {
+    copyKey(source, target, symbolKeys[i]!, stack, depth)
+  }
 }
 
 /**
  * @internal
+ * @param source - The source object. 源对象
+ * @param target - The target object. 目标对象
+ * @param key - The key to copy. 要复制的键
+ * @param stack - The stack of objects to avoid circular references. 避免循环引用的对象栈
+ * @param depth - The current depth of the recursion. 当前递归深度
  */
-function copyKey(source: any, target: any, key: string | symbol, stack?: Map<any, any>, depth = 0) {
-  if (key === '__proto__') return
+function copyKey(
+  source: any,
+  target: any,
+  key: string | symbol,
+  stack?: Map<any, any>,
+  depth = 0,
+): void {
+  if (key === '__proto__') {
+    return
+  }
   const sourceDescriptor = Object.getOwnPropertyDescriptor(source, key)
   if (sourceDescriptor != null && 'value' in sourceDescriptor) {
     const targetDescriptor = Object.getOwnPropertyDescriptor(target, key)
@@ -241,8 +271,11 @@ function copyKey(source: any, target: any, key: string | symbol, stack?: Map<any
 
 /**
  * @internal
+ *
+ * @param object - The object to get symbols from. 要获取符号的对象
+ * @returns The symbols on the object. 对象上的符号
  */
-export function getSymbols(object: any): symbol[] {
+export function getSymbols(object: unknown): symbol[] {
   return Object.getOwnPropertySymbols(object).filter((symbol) =>
     Object.prototype.propertyIsEnumerable.call(object, symbol),
   )

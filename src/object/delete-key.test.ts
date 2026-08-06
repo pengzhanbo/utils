@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { deleteKey } from './delete-key'
+import { deleteKey } from './delete-key.js'
 
 describe('deleteKey', () => {
   it('should delete a single key', () => {

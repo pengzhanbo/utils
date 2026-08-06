@@ -1,5 +1,5 @@
-import { hasOwn } from './has-own'
-import { objectKeys } from './keys'
+import { hasOwn } from './has-own.js'
+import { objectKeys } from './keys.js'
 
 /**
  * Creates a new object composed of the picked object properties.
@@ -25,10 +25,12 @@ export function pick<T extends Record<PropertyKey, any>, K extends keyof T = key
   obj: T,
   keys: readonly K[],
 ): Pick<T, K> {
-  const res = Object.create(Object.getPrototypeOf(obj)) as Pick<T, K>
+  const res = Object.create(Object.getPrototypeOf(obj) as object) as Pick<T, K>
 
   for (const key of keys) {
-    if (hasOwn(obj, key)) res[key] = obj[key]
+    if (hasOwn(obj, key)) {
+      res[key] = obj[key]
+    }
   }
 
   return res
@@ -55,10 +57,12 @@ export function pickBy<T extends Record<PropertyKey, any>>(
   obj: T,
   predicate: (value: T[keyof T], key: keyof T) => boolean,
 ): Partial<T> {
-  const res: Partial<T> = Object.create(Object.getPrototypeOf(obj))
+  const res: Partial<T> = Object.create(Object.getPrototypeOf(obj) as object) as Partial<T>
 
   for (const key of objectKeys(obj)) {
-    if (predicate(obj[key], key)) res[key] = obj[key]
+    if (predicate(obj[key], key)) {
+      res[key] = obj[key]
+    }
   }
 
   return res

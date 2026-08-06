@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { mapKeys } from './map-keys'
+import { mapKeys } from './map-keys.js'
 
 describe('object > map-keys', () => {
   it('should map keys with a transform function', () => {
@@ -26,7 +26,7 @@ describe('object > map-keys', () => {
 
   it('should ignore symbol keys of the source object', () => {
     const sym = Symbol('s')
-    const result = mapKeys({ [sym]: 1, a: 2 } as Record<PropertyKey, number>, (k) => String(k))
+    const result = mapKeys({ [sym]: 1, a: 2 }, (k) => String(k))
     expect(result).toEqual({ a: 2 })
   })
 

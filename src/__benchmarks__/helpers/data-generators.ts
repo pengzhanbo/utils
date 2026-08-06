@@ -6,16 +6,28 @@
 
 // ==================== Object Generators ====================
 
-/** Generate a flat object with specified number of properties / 生成指定属性数量的扁平对象 */
+/**
+ * Generate a flat object with specified number of properties / 生成指定属性数量的扁平对象
+ * @param propCount - 属性数量
+ * @param prefix - 属性前缀
+ * @returns - 生成的扁平对象
+ */
 export function generateFlatObject(propCount: number, prefix = 'prop'): Record<string, any> {
   const obj: Record<string, any> = {}
   for (let i = 0; i < propCount; i++) {
     obj[`${prefix}_${i}`] = generateRandomValue(i)
   }
+
   return obj
 }
 
-/** Generate a nested object with specified depth and width / 生成指定深度和宽度的嵌套对象 */
+/**
+ * Generate a nested object with specified depth and width / 生成指定深度和宽度的嵌套对象
+ * @param depth - 嵌套深度
+ * @param width - 嵌套宽度
+ * @param currentDepth - 当前嵌套深度
+ * @returns - 生成的嵌套对象
+ */
 export function generateNestedObject(
   depth: number,
   width: number,
@@ -29,18 +41,25 @@ export function generateNestedObject(
   for (let i = 0; i < width; i++) {
     obj[`level${currentDepth}_${i}`] = generateNestedObject(depth, width, currentDepth + 1)
   }
+
   return obj
 }
 
-/** Generate an object with circular references / 生成包含循环引用的对象 */
+/**
+ * Generate an object with circular references / 生成包含循环引用的对象
+ * @returns - 生成的包含循环引用的对象
+ */
 export function generateCircularObject(): Record<string, any> {
-  const obj: any = { a: 1, b: 2 }
+  const obj: Record<string, any> = { a: 1, b: 2 }
   obj.self = obj
   obj.nested = { parent: obj, value: 3 }
   return obj
 }
 
-/** Generate an object with mixed types (Date, RegExp, Map, Set, etc.) / 生成包含特殊类型的混合对象 */
+/**
+ * Generate an object with mixed types (Date, RegExp, Map, Set, etc.) / 生成包含特殊类型的混合对象
+ * @returns - 生成的包含特殊类型的混合对象
+ */
 export function generateMixedTypeObject(): Record<string, any> {
   return {
     date: new Date(),
@@ -48,7 +67,7 @@ export function generateMixedTypeObject(): Record<string, any> {
     map: new Map([['key', 'value']]),
     set: new Set([1, 2, 3]),
     array: [1, 2, 3],
-    nested: { a: { b: { c: 1 } } },
+    nested: { foo: { bar: { baz: 1 } } },
     nullValue: null,
     undefinedValue: undefined,
     number: 42,
@@ -59,12 +78,23 @@ export function generateMixedTypeObject(): Record<string, any> {
 
 // ==================== Array Generators ====================
 
-/** Generate a random number array / 生成随机数字数组 */
+/**
+ * Generate a random number array / 生成随机数字数组
+ * @param length - 数组长度
+ * @param min - 数组元素的最小值
+ * @param max - 数组元素的最大值
+ * @returns - 生成的随机数字数组
+ */
 export function generateNumberArray(length: number, min = 0, max = 10000): number[] {
   return Array.from({ length }, () => Math.floor(Math.random() * (max - min)) + min)
 }
 
-/** Generate an array of objects using a factory function / 使用工厂函数生成对象数组 */
+/**
+ * Generate an array of objects using a factory function / 使用工厂函数生成对象数组
+ * @param length - 数组长度
+ * @param factory - 用于创建数组元素的工厂函数
+ * @returns - 生成的对象数组
+ */
 export function generateObjectArray<T extends Record<string, any>>(
   length: number,
   factory: (index: number) => T,
@@ -72,7 +102,11 @@ export function generateObjectArray<T extends Record<string, any>>(
   return Array.from({ length }, (_, i) => factory(i))
 }
 
-/** Generate an array of user-like objects for sorting tests / 生成用于排序测试的用户数据数组 */
+/**
+ * Generate an array of user-like objects for sorting tests / 生成用于排序测试的用户数据数组
+ * @param length - 数组长度
+ * @returns - 生成的用户数据数组
+ */
 export function generateUserArray(length: number): Array<{
   id: number
   name: string
@@ -94,18 +128,26 @@ export function generateUserArray(length: number): Array<{
 
 // ==================== String Generators ====================
 
-/** Generate a long string with specified length / 生成长度指定的长字符串 */
+/**
+ * Generate a long string with specified length / 生成长度指定的长字符串
+ * @param length - 字符串长度
+ * @param charSet - 字符集
+ * @returns - 生成的长字符串
+ */
 export function generateLongString(length: number, charSet = 'abcdefghijklmnopqrstuvwxyz'): string {
   let result = ''
   for (let i = 0; i < length; i++) {
     result += charSet[Math.floor(Math.random() * charSet.length)]
   }
+
   return result
 }
 
 /**
  * Generate a template string with variables / 生成带变量的模板字符串
- * @returns An object containing the template and the values to fill it
+ * @param variableCount - 变量数量
+ * @param textLength - 变量文本长度
+ * @returns - 生成的模板字符串和变量值对象的组合
  */
 export function generateTemplateString(
   variableCount: number,
@@ -115,7 +157,9 @@ export function generateTemplateString(
   let template = ''
 
   for (let i = 0; i < variableCount; i++) {
-    if (i > 0) template += ' '
+    if (i > 0) {
+      template += ' '
+    }
     template += generateLongString(textLength)
     template += `{{var_${i}}}`
     values[`var_${i}`] = `value_${i}`
@@ -127,10 +171,14 @@ export function generateTemplateString(
 
 // ==================== Utility Functions ====================
 
-/** Generate a random value based on seed / 根据种子生成随机值 */
-function generateRandomValue(seed: number): any {
+/**
+ * Generate a random value based on seed / 根据种子生成随机值
+ * @param seed - 随机数种子
+ * @returns - 生成的随机值
+ */
+function generateRandomValue(seed: number): string | number | boolean | null {
   const types = ['string', 'number', 'boolean', 'null']
-  const type = types[seed % types.length]
+  const type = types[seed % types.length]!
 
   switch (type) {
     case 'string':

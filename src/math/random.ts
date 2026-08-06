@@ -40,7 +40,7 @@ export function random(min: number, max: number, float?: boolean): number
  *
  * 返回一个介于 min 和 max 之间的随机数
  *
- * @param args
+ * @param args - The arguments. 参数
  * @returns a random number / 返回一个随机数
  */
 export function random(

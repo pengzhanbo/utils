@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { combineURLs } from './combine-urls'
+import { combineURLs } from './combine-urls.js'
 
 describe('url > combineURLs', () => {
   it('should work', () => {

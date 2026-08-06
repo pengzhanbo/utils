@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { remove, removeBy } from './remove'
+import { remove, removeBy } from './remove.js'
 
 describe('array > remove', () => {
   it.each([

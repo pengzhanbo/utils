@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { sortBy } from './sort-by'
+import { sortBy } from './sort-by.js'
 
 describe('array > sortBy', () => {
   it('should return an empty array if the input array is empty', () => {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { RetryError } from './RetryError'
+import { RetryError } from './RetryError.js'
 
 describe('error > RetryError', () => {
   it('should create error with default message', () => {

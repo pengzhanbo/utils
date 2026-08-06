@@ -1,5 +1,5 @@
-import { getTypeName } from '../_internal/get-type-name'
-import { T_NULL, T_OBJECT, T_FUNCTION } from '../_internal/tags'
+import { getTypeName } from '../_internal/get-type-name.js'
+import { T_NULL, T_OBJECT, T_FUNCTION } from '../_internal/tags.js'
 
 /**
  * Get the type of a value.
@@ -8,7 +8,7 @@ import { T_NULL, T_OBJECT, T_FUNCTION } from '../_internal/tags'
  *
  * @category Predicate
  *
- * @param s - The value to get the type of. 要获取类型的值
+ * @param v - The value to get the type of. 要获取类型的值
  *
  * @returns The type of the value as a string. 值的类型字符串
  *
@@ -23,11 +23,12 @@ import { T_NULL, T_OBJECT, T_FUNCTION } from '../_internal/tags'
  * typeOf(() => {}) // => 'function'
  * ```
  */
-export function typeOf(s: unknown): string {
-  const type = typeof s
-  return s === null
+export function typeOf(v: unknown): string {
+  const type = typeof v
+  // oxlint-disable-next-line eqeqeq
+  return v === null
     ? T_NULL
     : type === T_OBJECT || type === T_FUNCTION
-      ? getTypeName(s).slice(8, -1).toLowerCase()
+      ? getTypeName(v).slice(8, -1).toLowerCase()
       : type
 }

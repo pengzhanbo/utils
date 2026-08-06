@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { sumBy } from './sum-by'
+import { sumBy } from './sum-by.js'
 
 describe('array > sum-by', () => {
   it('should return 0 for an empty array', () => {

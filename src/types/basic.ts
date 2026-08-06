@@ -50,6 +50,7 @@ export type BuiltIns = Primitive | void | Date | RegExp
  */
 export type NonRecursiveType =
   | BuiltIns
+  // oxlint-disable-next-line typescript/no-unsafe-function-type
   | Function
   | (new (...arguments_: any[]) => unknown)
   | Promise<unknown>
@@ -72,7 +73,7 @@ export type Constructor<T = void> = new (...arg: any[]) => T
  * @category Types
  *
  */
-export type ElementOf<T> = T extends (infer E)[] ? E : never
+export type ElementOf<T> = T extends (infer U)[] ? U : never
 
 /**
  * make keys required but keep undefined values
@@ -92,4 +93,4 @@ export type LooseRequired<T> = { [P in keyof (T & Required<T>)]: T[P] }
  * @category Types
  *
  */
-export type Not<A extends boolean> = A extends true ? false : A extends false ? true : never
+export type Not<T extends boolean> = T extends true ? false : T extends false ? true : never

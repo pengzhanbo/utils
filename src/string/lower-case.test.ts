@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { lowerCase } from './lower-case'
+import { lowerCase } from './lower-case.js'
 
 describe('string > lowerCase', () => {
   it('should work', () => {

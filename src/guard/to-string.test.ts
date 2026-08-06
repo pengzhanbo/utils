@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { toString } from './to-string'
+import { toString } from './to-string.js'
 
 describe('guard > toString', () => {
   it('should work', () => {

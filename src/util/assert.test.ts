@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { assert } from './assert'
+import { assert } from './assert.js'
 
 describe('util > assert', () => {
   it('should throw error when condition is false', () => {
@@ -41,8 +41,8 @@ describe('util > assert', () => {
   })
 
   it('should handle multiple assertions', () => {
-    const a = 1,
-      b = 2
+    const a = 1
+    const b = 2
     assert(a > 0)
     assert(b > 0)
     expect(a + b).toBe(3)

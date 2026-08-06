@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { gcd } from './gcd'
+import { gcd } from './gcd.js'
 
 describe('math > gcd', () => {
   it('should return the GCD of two positive numbers', () => {

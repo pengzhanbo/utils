@@ -1,4 +1,4 @@
-import { isArray } from '../predicate'
+import { isArray } from '../predicate/is-array.js'
 
 /**
  * Remove value from array
@@ -30,7 +30,9 @@ import { isArray } from '../predicate'
  * @typeParam T - The type of elements in the array / 数组元素的类型
  */
 export function remove<T>(array: T[], value: T): boolean {
-  if (!isArray(array)) return false
+  if (!isArray(array)) {
+    return false
+  }
   const index = array.findIndex((item) => Object.is(item, value))
   if (index !== -1) {
     array.splice(index, 1)
@@ -80,7 +82,9 @@ export function removeBy<T>(
   array: T[],
   predicate: (item: T, index: number, array: readonly T[]) => boolean,
 ): boolean {
-  if (!isArray(array)) return false
+  if (!isArray(array)) {
+    return false
+  }
   const index = array.findIndex(predicate)
   if (index !== -1) {
     array.splice(index, 1)

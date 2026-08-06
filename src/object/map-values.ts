@@ -1,4 +1,4 @@
-import { objectMap } from './map'
+import { objectMap } from './map.js'
 
 /**
  * Maps the values of an object and constructs a new object with the same keys.
@@ -42,5 +42,5 @@ export function mapValues<T, U>(
   obj: Record<string, T>,
   fn: (value: T, key: string) => U,
 ): Record<string, U> {
-  return objectMap(obj, (key, value) => [key, fn(value, key)]) as Record<string, U>
+  return objectMap(obj, (key, value) => [key, fn(value, key)])
 }

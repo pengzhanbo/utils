@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { notUndefined } from './not-undefined'
+import { notUndefined } from './not-undefined.js'
 
 describe('guard > notUndefined', () => {
   it('should work', () => {

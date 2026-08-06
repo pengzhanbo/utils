@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { findFirstThen, findLastThen } from './find-then'
+import { findFirstThen, findLastThen } from './find-then.js'
 
 describe('findFirstThen', () => {
   it('should find the first matching element and execute callback', () => {

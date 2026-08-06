@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { memoize } from './memoize'
+import { memoize } from './memoize.js'
 
 describe('functions > memoize', () => {
   it('should return cached result for same arguments', () => {
@@ -159,7 +159,7 @@ describe('functions > memoize', () => {
   it('should preserve this context', () => {
     const obj = {
       multiplier: 2,
-      method: memoize(function (this: any, n: number) {
+      method: memoize(function method(this: typeof obj, n: number) {
         return n * this.multiplier
       }),
     }
@@ -209,9 +209,9 @@ describe('functions > memoize', () => {
   })
 
   it('should throw TypeError for circular reference arguments with default keyResolver', () => {
-    const fn = vi.fn((obj: any) => obj.x)
+    const fn = vi.fn((obj: Record<string, any>) => obj.x)
     const memoizedFn = memoize(fn)
-    const circular: any = { x: 1 }
+    const circular: Record<string, any> = { x: 1 }
     circular.self = circular
 
     expect(() => memoizedFn(circular)).toThrow(TypeError)
@@ -254,13 +254,14 @@ describe('functions > memoize', () => {
   })
 
   it('should work with async function', async () => {
+    // oxlint-disable-next-line typescript/require-await
     const fn = vi.fn(async (x: number) => x * 2)
     const memoizedFn = memoize(fn, { maxSize: 2 })
 
-    memoizedFn(1)
-    memoizedFn(2)
-    memoizedFn(3)
-    memoizedFn(1)
+    await memoizedFn(1)
+    await memoizedFn(2)
+    await memoizedFn(3)
+    await memoizedFn(1)
     expect(fn).toHaveBeenCalledTimes(4)
     expect(await memoizedFn(1)).toBe(2)
     expect(await memoizedFn(2)).toBe(4)

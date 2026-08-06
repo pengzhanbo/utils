@@ -1,7 +1,7 @@
 import { describe, bench } from 'vitest'
-import { random } from '../../math/random'
+import { random } from '../../math/random.js'
 
-describe('Performance > Math > Random', () => {
+describe('performance > Math > Random', () => {
   // RN-01: Simple integer range / 简单整数范围
   bench(
     'random | integer [0, 100)',
@@ -40,7 +40,7 @@ describe('Performance > Math > Random', () => {
 
   // RN-05: vs raw Math.random baseline / 与原生Math.random对比
   bench(
-    'Math.random baseline | scaled to [0, 100)',
+    'math.random baseline | scaled to [0, 100)',
     () => {
       Math.floor(Math.random() * 100)
     },

@@ -7,5 +7,5 @@
  * @module Date
  */
 
-export * from './is-same-day'
-export * from './timestamp'
+export * from './is-same-day.js'
+export * from './timestamp.js'

@@ -1,4 +1,4 @@
-import { hasOwn } from '../object'
+import { hasOwn } from '../object/has-own.js'
 
 /**
  * Counts the number of elements in an array that satisfy the given predicate function.

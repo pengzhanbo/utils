@@ -1,7 +1,7 @@
 import { performance } from 'node:perf_hooks'
 import { describe, expect, it, vi } from 'vitest'
-import { TimeoutError } from '../error/TimeoutError'
-import { until } from './until'
+import { TimeoutError } from '../error/TimeoutError.js'
+import { until } from './until.js'
 
 // These tests deliberately exercise `until` against the real platform clock: the
 // function under test is a polling primitive built on real `setTimeout` timers,
@@ -37,7 +37,7 @@ describe('promise > until', () => {
     const promise = until(
       async () => {
         count++
-        return Promise.resolve(count >= 2)
+        return count >= 2
       },
       { interval: 10 },
     )

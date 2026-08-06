@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { ensureSuffix } from './ensure-suffix'
+import { ensureSuffix } from './ensure-suffix.js'
 
 describe('string > ensureSuffix', () => {
   it('should work with empty', () => {

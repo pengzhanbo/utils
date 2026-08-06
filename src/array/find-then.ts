@@ -56,6 +56,7 @@ export function findLastThen<T>(
   return _findThen(array, predicate, then, start, true)
 }
 
+// oxlint-disable-next-line max-params
 function _findThen<T>(
   array: readonly T[],
   predicate: (value: T, index: number, array: readonly T[]) => boolean,
@@ -63,7 +64,9 @@ function _findThen<T>(
   start: number = 0,
   lastIndex = false,
 ): boolean {
-  if (Number.isNaN(start)) throw new TypeError('start must be a valid number')
+  if (Number.isNaN(start)) {
+    throw new TypeError('start must be a valid number')
+  }
 
   const end = lastIndex ? -1 : array.length
   const step = lastIndex ? -1 : 1

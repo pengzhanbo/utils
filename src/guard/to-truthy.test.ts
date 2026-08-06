@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { toTruthy } from './to-truthy'
+import { toTruthy } from './to-truthy.js'
 
 describe('guard > toTruthy', () => {
   it('should work', () => {

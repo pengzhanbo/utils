@@ -21,7 +21,9 @@ const COMBINING_REG = /\p{Mn}/gu
  * ```
  */
 export function slugify(str: string): string {
-  if (!str) return ''
+  if (!str) {
+    return ''
+  }
 
   return (
     str

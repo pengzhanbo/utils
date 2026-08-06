@@ -1,4 +1,4 @@
-import { isUndefined } from '../predicate'
+import { isUndefined } from '../predicate/is-undefined.js'
 
 /**
  * Precisely add two floating-point numbers
@@ -137,16 +137,40 @@ export function decimalDivide(a: number, b: number, precision?: number): number 
   return result
 }
 
-/** @internal */
+/**
+ * 获取 the number of decimal places in a number
+ * 获取数字的小数位数
+ *
+ * @param num - The number to check. 要检查的数字
+ * @returns The number of decimal places. 小数位数
+ * @example
+ * ```ts
+ * getDecimalPlaces(1.2345) // => 4
+ * getDecimalPlaces(12345.0) // => 0
+ * ```
+ * @internal
+ * */
 function getDecimalPlaces(num: number): number {
   const str = String(num)
   const match = str.match(/(?:\.(\d+))?(?:[eE]([+-]?\d+))?$/)!
-  const decimals = (match[1] || '').length
-  const exponent = Number.parseInt(match[2] || '0', 10)
+  const decimals = (match[1] ?? '').length
+  const exponent = Number.parseInt(match[2] ?? '0', 10)
   return Math.max(0, decimals - exponent)
 }
 
-/** @internal */
+/**
+ * 将数字转换为整数
+ *
+ * @param num - The number to convert. 要转换的数字
+ * @param multiplier - The multiplier to apply. 要应用的乘数
+ * @returns The converted integer, or NaN if conversion is not possible. 转换后的整数，如果无法转换则返回 NaN
+ * @example
+ * ```ts
+ * toInteger(1.2345, 100) // => 123
+ * toInteger(12345.0, 100) // => 12345
+ * ```
+ * @internal
+ * */
 function toInteger(num: number, multiplier: number): number {
   const product = num * multiplier
   if (!Number.isFinite(product) || Math.abs(product) > Number.MAX_SAFE_INTEGER) {

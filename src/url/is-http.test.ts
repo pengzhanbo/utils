@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isHttp } from './is-http'
+import { isHttp } from './is-http.js'
 
 describe('url > isHttp', () => {
   it('should be true', () => {

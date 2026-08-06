@@ -1,4 +1,4 @@
-import type { IsAny, IsNever, IsNull, IsUndefined, IsUnknown } from './is'
+import type { IsAny, IsNever, IsNull, IsUndefined, IsUnknown } from './is.js'
 
 /**
  * An if-else-like type that resolves depending on whether the given `boolean` type is `true` or `false`.
@@ -88,8 +88,8 @@ export type IfUnknown<T, Y = true, N = false> = If<IsUnknown<T>, Y, N>
  * //=> 'IS_NEVER'
  * ```
  */
-export type IfNotAnyOrNever<T, IfNotAnyOrNever, IfAny = any, IfNever = never> = If<
+export type IfNotAnyOrNever<T, IIfNotAnyOrNever, IIfAny = any, IIfNever = never> = If<
   IsAny<T>,
-  IfAny,
-  If<IsNever<T>, IfNever, IfNotAnyOrNever>
+  IIfAny,
+  If<IsNever<T>, IIfNever, IIfNotAnyOrNever>
 >

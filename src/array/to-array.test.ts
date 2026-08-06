@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { toArray } from './to-array'
+import { toArray } from './to-array.js'
 
 describe('array > toArray', () => {
   it.each([

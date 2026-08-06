@@ -1,7 +1,11 @@
-import { T_ARRAY, T_DATE, T_MAP, T_OBJECT, T_REGEXP, T_SET } from '../_internal/tags'
-import { isNumber, isString, typeOf } from '../predicate'
-import { hasOwn } from './has-own'
-import { objectKeys } from './keys'
+// oxlint-disable typescript/explicit-module-boundary-types
+
+import { T_ARRAY, T_DATE, T_MAP, T_OBJECT, T_REGEXP, T_SET } from '../_internal/tags.js'
+import { isNumber } from '../predicate/is-number.js'
+import { isString } from '../predicate/is-string.js'
+import { typeOf } from '../predicate/type-of.js'
+import { hasOwn } from './has-own.js'
+import { objectKeys } from './keys.js'
 
 /**
  * Deep equality two values, support array / object / date / set / map / regexp
@@ -45,15 +49,24 @@ export function deepEqual(v1: any, v2: any): boolean {
   return deepEqualWithStack(v1, v2, new Map())
 }
 
+// oxlint-disable-next-line complexity max-lines-per-function
 function deepEqualWithStack(v1: any, v2: any, stack: Map<any, any>): boolean {
-  if (Object.is(v1, v2)) return true
-  if (v1 == null || v2 == null) return false
+  if (Object.is(v1, v2)) {
+    return true
+  }
+  if (v1 == null || v2 == null) {
+    return false
+  }
 
   const vt1 = typeof v1
   const vt2 = typeof v2
-  if (vt1 !== vt2) return false
+  if (vt1 !== vt2) {
+    return false
+  }
 
-  if (vt1 !== T_OBJECT) return false
+  if (vt1 !== T_OBJECT) {
+    return false
+  }
 
   if (stack.has(v1)) {
     return stack.get(v1) === v2
@@ -61,23 +74,33 @@ function deepEqualWithStack(v1: any, v2: any, stack: Map<any, any>): boolean {
   stack.set(v1, v2)
 
   const t1 = typeOf(v1)
-  if (t1 !== typeOf(v2)) return false
+  if (t1 !== typeOf(v2)) {
+    return false
+  }
 
   if (t1 === T_ARRAY) {
     const len = v1.length
-    if (len !== v2.length) return false
+    if (len !== v2.length) {
+      return false
+    }
     for (let i = 0; i < len; i++) {
-      if (!deepEqualWithStack(v1[i], v2[i], stack)) return false
+      if (!deepEqualWithStack(v1[i], v2[i], stack)) {
+        return false
+      }
     }
     return true
   }
 
   if (t1 === T_OBJECT) {
     const keys = objectKeys(v1)
-    if (keys.length !== objectKeys(v2).length) return false
+    if (keys.length !== objectKeys(v2).length) {
+      return false
+    }
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i]!
-      if (!hasOwn(v2, key) || !deepEqualWithStack(v1[key], v2[key], stack)) return false
+      if (!hasOwn(v2, key) || !deepEqualWithStack(v1[key], v2[key], stack)) {
+        return false
+      }
     }
     return true
   }
@@ -87,16 +110,22 @@ function deepEqualWithStack(v1: any, v2: any, stack: Map<any, any>): boolean {
   }
 
   if (t1 === T_SET) {
-    if (v1.size !== v2.size) return false
+    if (v1.size !== v2.size) {
+      return false
+    }
     const v2Items = [...v2]
     for (const item of v1) {
-      if (!v2Items.some((v2Item) => deepEqualWithStack(item, v2Item, new Map()))) return false
+      if (!v2Items.some((v2Item) => deepEqualWithStack(item, v2Item, new Map()))) {
+        return false
+      }
     }
     return true
   }
 
   if (t1 === T_MAP) {
-    if (v1.size !== v2.size) return false
+    if (v1.size !== v2.size) {
+      return false
+    }
     const primitiveKeyMap = new Map()
     const complexEntries: [any, any][] = []
     for (const [v2Key, v2Value] of v2) {
@@ -108,8 +137,12 @@ function deepEqualWithStack(v1: any, v2: any, stack: Map<any, any>): boolean {
     }
     for (const [key, value] of v1) {
       if (isString(key) || isNumber(key)) {
-        if (!primitiveKeyMap.has(key)) return false
-        if (!deepEqualWithStack(value, primitiveKeyMap.get(key), new Map())) return false
+        if (!primitiveKeyMap.has(key)) {
+          return false
+        }
+        if (!deepEqualWithStack(value, primitiveKeyMap.get(key), new Map())) {
+          return false
+        }
       } else {
         let found = false
         for (const [v2Key, v2Value] of complexEntries) {
@@ -121,13 +154,17 @@ function deepEqualWithStack(v1: any, v2: any, stack: Map<any, any>): boolean {
             break
           }
         }
-        if (!found) return false
+        if (!found) {
+          return false
+        }
       }
     }
     return true
   }
 
-  if (t1 === T_REGEXP) return v1.source === v2.source && v1.flags === v2.flags
+  if (t1 === T_REGEXP) {
+    return v1.source === v2.source && v1.flags === v2.flags
+  }
 
   return false
 }

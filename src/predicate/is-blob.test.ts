@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isBlob } from './is-blob'
+import { isBlob } from './is-blob.js'
 
 describe('predicate > isBlob', () => {
   it('should work', () => {

@@ -1,7 +1,7 @@
 import { describe, bench } from 'vitest'
-import { invert } from '../../object/invert'
+import { invert } from '../../object/invert.js'
 
-describe('Performance > Object > Invert', () => {
+describe('performance > Object > Invert', () => {
   // INV-01: Number values / 数值
   bench(
     'number values | 10K keys',

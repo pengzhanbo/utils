@@ -1,6 +1,7 @@
-import type { Arrayable } from '../types'
-import { isFunction, isUndefined } from '../predicate'
-import { toArray } from './to-array'
+import type { Arrayable } from '../types/guard.js'
+import { isFunction } from '../predicate/is-function.js'
+import { isUndefined } from '../predicate/is-undefined.js'
+import { toArray } from './to-array.js'
 
 /**
  * Sorts an array of (objects | strings | numbers) based on the given `accords` and their corresponding order directions.
@@ -54,7 +55,9 @@ export function orderBy<T>(
   accords: Arrayable<((item: T) => unknown) | (T extends object ? keyof T : never)>,
   orders: Arrayable<'asc' | 'desc'> = 'asc',
 ): T[] {
-  if (arr.length <= 1) return arr.length === 0 ? [] : [...arr]
+  if (arr.length <= 1) {
+    return arr.length === 0 ? [] : [...arr]
+  }
 
   const accordList = toArray(accords)
   const orderList = toArray(orders)
@@ -71,7 +74,7 @@ export function orderBy<T>(
       extractors.push(accord)
     } else {
       const key = accord
-      extractors.push((item: T) => (item as any)[key])
+      extractors.push((item: T) => item[key])
     }
     const order = i < ol ? orderList[i]! : lastOrder
     dirs.push(order === 'desc' ? -1 : 1)
@@ -85,11 +88,21 @@ export function orderBy<T>(
       const bIsNaN = Number.isNaN(valueB)
       const aIsUndef = isUndefined(valueA)
       const bIsUndef = isUndefined(valueB)
-      if ((aIsNaN || aIsUndef) && (bIsNaN || bIsUndef)) return 0
-      if (aIsNaN || aIsUndef) return 1
-      if (bIsNaN || bIsUndef) return -1
-      if (valueA! < valueB!) return -dirs[i]!
-      if (valueA! > valueB!) return dirs[i]!
+      if ((aIsNaN || aIsUndef) && (bIsNaN || bIsUndef)) {
+        return 0
+      }
+      if (aIsNaN || aIsUndef) {
+        return 1
+      }
+      if (bIsNaN || bIsUndef) {
+        return -1
+      }
+      if (valueA! < valueB!) {
+        return -dirs[i]!
+      }
+      if (valueA! > valueB!) {
+        return dirs[i]!
+      }
     }
     return 0
   })

@@ -18,8 +18,6 @@
  * new RetryError(3)
  * // => RetryError: The retry operation failed
  * ```
- *
- * @augments Error
  */
 export class RetryError extends Error {
   readonly attempts: number

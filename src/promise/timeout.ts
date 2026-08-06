@@ -1,6 +1,6 @@
-import { TimeoutError } from '../error/TimeoutError'
-import { isKeyof, isUndefined } from '../predicate'
-import { sleep } from './sleep'
+import { TimeoutError } from '../error/TimeoutError.js'
+import { isKeyof, isUndefined } from '../predicate/index.js'
+import { sleep } from './sleep.js'
 
 /**
  * Returns a promise that rejects with a `TimeoutError` after a specified delay.
@@ -133,8 +133,9 @@ export function withTimeout<T>(
   ms: number,
   options: WithTimeoutOptions<T> = {},
 ): WithTimeoutResult<T> {
-  if (!Number.isFinite(ms) || ms < 0)
+  if (!Number.isFinite(ms) || ms < 0) {
     throw new RangeError('ms must be a finite non-negative number')
+  }
   const { message, signal: externalSignal } = options
 
   const controller = new AbortController()
@@ -161,17 +162,24 @@ export function withTimeout<T>(
   }
 
   const finish = (type: 'timeout' | 'abort' | 'error' | 'success', value?: unknown): void => {
-    if (settled) return
+    if (settled) {
+      return
+    }
     settled = true
     cleanup()
 
-    if (type === 'success') return _resolve(value as T)
+    if (type === 'success') {
+      return _resolve(value as T)
+    }
     if (type === 'timeout') {
-      if (isKeyof(options, 'fallback') && !isUndefined(options.fallback))
-        return _resolve(options.fallback as T)
+      if (isKeyof(options, 'fallback') && !isUndefined(options.fallback)) {
+        return _resolve(options.fallback)
+      }
       return _reject(new TimeoutError(message))
     }
-    if (type === 'abort') return _reject(new DOMException('Aborted', 'AbortError'))
+    if (type === 'abort') {
+      return _reject(new DOMException('Aborted', 'AbortError'))
+    }
     _reject(value)
   }
 
@@ -179,7 +187,9 @@ export function withTimeout<T>(
     _resolve = resolve
     _reject = reject
 
-    if (runSignal.aborted) return finish('abort')
+    if (runSignal.aborted) {
+      return finish('abort')
+    }
 
     // Only listen for abort on the external signal.
     // With AbortSignal.any(), the combined signal (runSignal) will also be
@@ -193,7 +203,7 @@ export function withTimeout<T>(
     // 但需要区分外部中止和超时/取消。仅在外部信号上监听确保只有外部中止
     // 触发 finish('abort')，而超时/取消由 controller.abort() → finish() 处理。
     if (externalSignal) {
-      abortHandler = () => finish('abort')
+      abortHandler = (): void => finish('abort')
       externalSignal.addEventListener('abort', abortHandler, { once: true })
     }
 
@@ -202,14 +212,15 @@ export function withTimeout<T>(
       finish('timeout')
     }, ms)
 
-    run(runSignal).then(
-      (result) => finish('success', result),
-      (e) => finish('error', e),
-    )
+    run(runSignal)
+      .then((result) => finish('success', result))
+      .catch((err) => finish('error', err))
   }) as WithTimeoutResult<T>
 
   promise.cancel = (): void => {
-    if (settled) return
+    if (settled) {
+      return
+    }
     controller.abort()
     finish('abort')
   }

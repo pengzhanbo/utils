@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isPrimitive } from './is-primitive'
+import { isPrimitive } from './is-primitive.js'
 
 describe('predicate > isPrimitive', () => {
   it('should work', () => {

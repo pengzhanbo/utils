@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { snakeCase } from './snake-case'
+import { snakeCase } from './snake-case.js'
 
 describe('string > snakeCase', () => {
   it('should work', () => {

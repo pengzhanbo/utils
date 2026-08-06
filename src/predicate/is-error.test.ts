@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isError } from './is-error'
+import { isError } from './is-error.js'
 
 describe('isError', () => {
   it('should return true for native Error instances', () => {
@@ -104,7 +104,7 @@ describe('isError', () => {
 
     // This should still return false because the type check won't pass
     // (Object.prototype.toString won't return '[object Error]' for this object)
-    expect(isError(crossRealmError as any)).toBe(false)
+    expect(isError(crossRealmError)).toBe(false)
   })
 
   it('should handle objects with non-string message or stack', () => {

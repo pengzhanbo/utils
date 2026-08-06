@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { timing } from './timing'
+import { timing } from './timing.js'
 
 describe('util > timing', () => {
   afterEach(() => {

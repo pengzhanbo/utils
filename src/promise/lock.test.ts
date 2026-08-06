@@ -1,15 +1,15 @@
 import { describe, expect, it, vi } from 'vitest'
-import { createPromiseLock } from './lock'
-import { sleep } from './sleep'
+import { createPromiseLock } from './lock.js'
+import { sleep } from './sleep.js'
 
 describe('promise > createPromiseLock', () => {
   it('should work', async () => {
     const lock = createPromiseLock()
-    const fn = vi.fn(() => sleep(100))
+    const fn = vi.fn(async () => sleep(100))
 
     expect(lock.isWaiting()).toBe(false)
 
-    lock.run(fn)
+    void lock.run(fn)
 
     expect(lock.isWaiting()).toBe(true)
 

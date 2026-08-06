@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isDate } from './is-date'
+import { isDate } from './is-date.js'
 
 describe('predicate > isDate', () => {
   it('should work', () => {

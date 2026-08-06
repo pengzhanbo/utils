@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { decimalAdd, decimalSubtract, decimalMultiply, decimalDivide } from './decimal'
+import { decimalAdd, decimalSubtract, decimalMultiply, decimalDivide } from './decimal.js'
 
 describe('decimalAdd', () => {
   it('should add two floats precisely', () => {

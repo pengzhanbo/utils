@@ -1,4 +1,4 @@
-import { isSymbol } from '../predicate'
+import { isSymbol } from '../predicate/is-symbol.js'
 
 /**
  * Converts a value to a number

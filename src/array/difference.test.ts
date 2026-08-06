@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { difference, differenceBy } from './difference'
+import { difference, differenceBy } from './difference.js'
 
 describe('array > difference', () => {
   it('should return the difference of two arrays', () => {

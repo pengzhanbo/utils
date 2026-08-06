@@ -1,26 +1,28 @@
 import { describe, bench } from 'vitest'
-import { retry } from '../../promise/retry'
+import { retry } from '../../promise/retry.js'
 
-describe('Performance > Promise > Retry', () => {
+describe('performance > Promise > Retry', () => {
   // RT-01: Immediate success / 即时成功
   bench(
-    'Immediate success | no retries needed',
+    'immediate success | no retries needed',
     async () => {
-      await retry(() => Promise.resolve(42), { limit: 3, delay: 0 })
+      await retry(async () => 42, { limit: 3, delay: 0 })
     },
     { time: 2000, iterations: 100 },
   )
 
   // RT-02: One retry then success / 一次重试后成功
   bench(
-    'One retry then success | delay=1ms',
+    'one retry then success | delay=1ms',
     async () => {
       let attempts = 0
       await retry(
-        () => {
+        async () => {
           attempts++
-          if (attempts < 2) return Promise.reject(new Error('fail'))
-          return Promise.resolve('success')
+          if (attempts < 2) {
+            throw new Error('fail')
+          }
+          return 'success'
         },
         { limit: 3, delay: 1 },
       )
@@ -30,12 +32,12 @@ describe('Performance > Promise > Retry', () => {
 
   // RT-03: Max retries reached / 达到最大重试次数
   bench(
-    'Max retries reached | limit=3, delay=1ms',
+    'max retries reached | limit=3, delay=1ms',
     async () => {
       try {
         await retry(
-          () => {
-            return Promise.reject(new Error('always fails'))
+          async () => {
+            throw new Error('always fails')
           },
           { limit: 3, delay: 1 },
         )
@@ -48,13 +50,13 @@ describe('Performance > Promise > Retry', () => {
 
   // RT-04: Cancellation response / 取消响应时间
   bench(
-    'Cancellation | immediate abort',
+    'cancellation | immediate abort',
     async () => {
       const controller = new AbortController()
       controller.abort()
 
       try {
-        await retry(() => Promise.resolve(1), {
+        await retry(async () => 1, {
           limit: 3,
           signal: controller.signal,
         })
@@ -67,9 +69,9 @@ describe('Performance > Promise > Retry', () => {
 
   // RT-05: Timeout overhead / 超时检查开销
   bench(
-    'Timeout check | timeout=50ms with fast function',
+    'timeout check | timeout=50ms with fast function',
     async () => {
-      await retry(() => Promise.resolve(1), {
+      await retry(async () => 1, {
         limit: 5,
         timeout: 50,
       })
@@ -79,12 +81,12 @@ describe('Performance > Promise > Retry', () => {
 
   // RT-06: Retry with longer delay / 较长delay的重试
   bench(
-    'Longer delay | delay=10ms, limit=3',
+    'longer delay | delay=10ms, limit=3',
     async () => {
       try {
         await retry(
-          () => {
-            return Promise.reject(new Error('fail'))
+          async () => {
+            throw new Error('fail')
           },
           { limit: 3, delay: 10 },
         )

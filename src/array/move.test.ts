@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { move } from './move'
+import { move } from './move.js'
 
 describe('array > move', () => {
   it.each([

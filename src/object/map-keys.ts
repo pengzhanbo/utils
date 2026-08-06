@@ -1,4 +1,4 @@
-import { objectMap } from './map'
+import { objectMap } from './map.js'
 
 /**
  * Maps the keys of an object and constructs a new object with the mapped keys.

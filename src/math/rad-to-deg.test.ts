@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { radToDeg } from './rad-to-deg'
+import { radToDeg } from './rad-to-deg.js'
 
 describe('math > radToDeg', () => {
   it('should convert radians to degrees correctly', () => {

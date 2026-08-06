@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { indent } from './indent'
+import { indent } from './indent.js'
 
 describe('string > indent', () => {
   it('should indent each line with default two spaces', () => {

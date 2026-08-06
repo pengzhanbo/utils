@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { lcm } from './lcm'
+import { lcm } from './lcm.js'
 
 describe('math > lcm', () => {
   it('should return the LCM of two positive numbers', () => {

@@ -1,4 +1,4 @@
-import type { IsNever } from './is'
+import type { IsNever } from './is.js'
 /**
  * Convert a union type to an intersection type using [distributive conditional types](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-8.html#distributive-conditional-types).
  *

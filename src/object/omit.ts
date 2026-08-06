@@ -1,6 +1,6 @@
-import { del } from '../_internal/reflect'
-import { hasOwn } from './has-own'
-import { objectKeys } from './keys'
+import { del } from '../_internal/reflect.js'
+import { hasOwn } from './has-own.js'
+import { objectKeys } from './keys.js'
 
 /**
  * Creates a new object with specified keys omitted.
@@ -26,11 +26,13 @@ export function omit<T extends Record<PropertyKey, any>, K extends keyof T = key
   obj: T,
   keys: readonly K[],
 ): Omit<T, K> {
-  const res = Object.create(Object.getPrototypeOf(obj))
+  const res = Object.create(Object.getPrototypeOf(obj) as object) as T
   Object.assign(res, obj)
 
   for (const key of keys) {
-    if (hasOwn(obj, key)) del(res, key)
+    if (hasOwn(obj, key)) {
+      del(res, key)
+    }
   }
 
   return res
@@ -57,10 +59,12 @@ export function omitBy<T extends Record<PropertyKey, any>>(
   obj: T,
   predicate: (value: T[keyof T], key: keyof T) => boolean,
 ): Partial<T> {
-  const res: Partial<T> = Object.create(Object.getPrototypeOf(obj))
+  const res: Partial<T> = Object.create(Object.getPrototypeOf(obj) as object) as Partial<T>
 
   for (const key of objectKeys(obj)) {
-    if (!predicate(obj[key], key)) res[key] = obj[key]
+    if (!predicate(obj[key], key)) {
+      res[key] = obj[key]
+    }
   }
 
   return res

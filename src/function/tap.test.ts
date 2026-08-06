@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { tap } from './tap'
+import { tap } from './tap.js'
 
 describe('function > tap', () => {
   describe('tap(value, fn)', () => {

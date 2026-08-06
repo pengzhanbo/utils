@@ -1,4 +1,4 @@
-import { typeOf } from './type-of'
+import { typeOf } from './type-of.js'
 
 /**
  * Checks if the input is an async function.

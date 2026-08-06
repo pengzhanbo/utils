@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isMap } from './is-map'
+import { isMap } from './is-map.js'
 
 describe('predicate > isMap', () => {
   it('should return true for Map instances', () => {

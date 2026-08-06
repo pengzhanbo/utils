@@ -1,11 +1,11 @@
 import { describe, expect, it, vi } from 'vitest'
-import { TimeoutError } from '../error/TimeoutError'
-import { sleep } from './sleep'
-import { timeout, withTimeout } from './timeout'
+import { TimeoutError } from '../error/TimeoutError.js'
+import { sleep } from './sleep.js'
+import { timeout, withTimeout } from './timeout.js'
 
 describe('promise > timeout', () => {
   it('should reject after delay', async () => {
-    await expect(timeout(1000)).rejects.toThrowError('The operation was timed out')
+    await expect(timeout(1000)).rejects.toThrow('The operation was timed out')
   })
 })
 
@@ -18,7 +18,7 @@ describe('promise > withTimeout', () => {
     })
 
     it('should reject on timeout (no-signal signature)', async () => {
-      await expect(withTimeout(() => sleep(1000), 50)).rejects.toThrowError(
+      await expect(withTimeout(() => sleep(1000), 50)).rejects.toThrow(
         'The operation was timed out',
       )
     })
@@ -308,6 +308,7 @@ describe('promise > withTimeout', () => {
   // ===== Resource Cleanup / 资源清理 =====
 
   describe('resource cleanup', () => {
+    // oxlint-disable-next-line vitest/expect-expect
     it('should clean up timer on successful completion', async () => {
       await withTimeout(() => Promise.resolve('ok'), 1000)
     })
@@ -362,7 +363,9 @@ describe('promise > withTimeout', () => {
 
     it('should handle run function that checks abort signal', async () => {
       const result = await withTimeout(async (signal) => {
-        if (signal.aborted) throw new DOMException('Aborted', 'AbortError')
+        if (signal.aborted) {
+          throw new DOMException('Aborted', 'AbortError')
+        }
         return 'completed'
       }, 100)
       expect(result).toBe('completed')

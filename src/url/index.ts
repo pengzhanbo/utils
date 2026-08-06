@@ -4,8 +4,8 @@
  * @module URL
  */
 
-export * from './combine-urls'
-export * from './is-http'
-export * from './is-url'
-export * from './parse-protocol'
-export * from './slash'
+export * from './combine-urls.js'
+export * from './is-http.js'
+export * from './is-url.js'
+export * from './parse-protocol.js'
+export * from './slash.js'

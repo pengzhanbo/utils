@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { partition } from './partition'
+import { partition } from './partition.js'
 
 describe('array > partition', () => {
   it('should partition array by predicate', () => {

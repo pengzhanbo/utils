@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { truncate } from './truncate'
+import { truncate } from './truncate.js'
 
 describe('string > truncate', () => {
   it('should return original string if shorter than length', () => {

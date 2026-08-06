@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isEmptyObject } from './is-empty-object'
+import { isEmptyObject } from './is-empty-object.js'
 
 describe('predicate > isEmptyObject', () => {
   it('should work', () => {

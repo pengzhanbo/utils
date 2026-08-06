@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { compact } from './compact'
+import { compact } from './compact.js'
 
 describe('array > compact', () => {
   it('should remove all falsy values', () => {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isString } from './is-string'
+import { isString } from './is-string.js'
 
 describe('predicate > isString', () => {
   it('should work', () => {

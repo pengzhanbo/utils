@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
-import { Semaphore } from './semaphore'
-import { sleep } from './sleep'
+import { Semaphore } from './semaphore.js'
+import { sleep } from './sleep.js'
 
 describe('promise > Semaphore', () => {
   it('should allow acquisition when a permit is available', async () => {
@@ -16,7 +16,10 @@ describe('promise > Semaphore', () => {
 
     const spy = vi.fn()
 
-    sema.acquire().then(spy)
+    sema
+      .acquire()
+      .then(spy)
+      .catch(() => {})
 
     await sleep(0)
 
@@ -39,13 +42,16 @@ describe('promise > Semaphore', () => {
 
     const spy = vi.fn()
 
-    sema.acquire().then(spy)
+    sema
+      .acquire()
+      .then(spy)
+      .catch(() => {})
 
     sema.release()
 
     await sleep(100)
 
-    expect(spy).toBeCalledTimes(1)
+    expect(spy).toHaveBeenCalledTimes(1)
   })
 
   it('should resolve requests in the order they were made when permits are released', async () => {
@@ -57,8 +63,19 @@ describe('promise > Semaphore', () => {
     const spy1 = vi.fn()
     const spy2 = vi.fn()
 
-    semaphore.acquire().then(spy1)
-    semaphore.acquire().then(spy2)
+    semaphore
+      .acquire()
+      .then(spy1)
+      .catch(() => {})
+    semaphore
+      .acquire()
+      .then(spy2)
+      .catch(() => {})
+
+    semaphore
+      .acquire()
+      .then(spy2)
+      .catch(() => {})
 
     await sleep(0)
 
@@ -81,8 +98,8 @@ describe('promise > Semaphore', () => {
   it('should not allow acquiring more permits than the capacity', async () => {
     const semaphore = new Semaphore(1)
 
-    semaphore.acquire()
-    semaphore.acquire()
+    void semaphore.acquire()
+    void semaphore.acquire()
 
     semaphore.release()
     semaphore.release()
@@ -90,8 +107,14 @@ describe('promise > Semaphore', () => {
     const spy1 = vi.fn()
     const spy2 = vi.fn()
 
-    semaphore.acquire().then(spy1)
-    semaphore.acquire().then(spy2)
+    void semaphore
+      .acquire()
+      .then(spy1)
+      .catch(() => {})
+    void semaphore
+      .acquire()
+      .then(spy2)
+      .catch(() => {})
 
     await sleep(0)
 
@@ -163,9 +186,18 @@ describe('promise > Semaphore', () => {
     const spy2 = vi.fn()
     const spy3 = vi.fn()
 
-    semaphore.acquire().then(spy1)
-    semaphore.acquire().then(spy2)
-    semaphore.acquire().then(spy3)
+    void semaphore
+      .acquire()
+      .then(spy1)
+      .catch(() => {})
+    void semaphore
+      .acquire()
+      .then(spy2)
+      .catch(() => {})
+    void semaphore
+      .acquire()
+      .then(spy3)
+      .catch(() => {})
 
     await sleep(0)
 
@@ -184,9 +216,18 @@ describe('promise > Semaphore', () => {
     const spy2 = vi.fn(() => order.push(2))
     const spy3 = vi.fn(() => order.push(3))
 
-    semaphore.acquire().then(spy1)
-    semaphore.acquire().then(spy2)
-    semaphore.acquire().then(spy3)
+    void semaphore
+      .acquire()
+      .then(spy1)
+      .catch(() => {})
+    void semaphore
+      .acquire()
+      .then(spy2)
+      .catch(() => {})
+    void semaphore
+      .acquire()
+      .then(spy3)
+      .catch(() => {})
 
     await sleep(0)
 

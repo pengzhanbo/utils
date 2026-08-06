@@ -1,18 +1,22 @@
+// oxlint-disable vitest/expect-expect
+
 import { describe, expect, it, vi } from 'vitest'
-import { TimeoutError } from '../error/TimeoutError'
-import { retry } from './retry'
+import { TimeoutError } from '../error/TimeoutError.js'
+import { retry } from './retry.js'
 
 describe('promise > retry', () => {
   describe('重试次数限制 (limit)', () => {
     it('should work', async () => {
       const limit = 3
-      const fn = vi.fn(() => Promise.reject(new Error('error')))
-      await expect(retry(fn, { limit, delay: 0 })).rejects.toThrowError('error')
+      const fn = vi.fn(async () => {
+        throw new Error('error')
+      })
+      await expect(retry(fn, { limit, delay: 0 })).rejects.toThrow('error')
       expect(fn).toHaveBeenCalledTimes(limit)
     })
 
     it('should work with once resolve', async () => {
-      const fn = vi.fn(() => Promise.resolve(1))
+      const fn = vi.fn(async () => 1)
       const result = await retry(fn)
       expect(result).toBe(1)
       expect(fn).toHaveBeenCalledTimes(1)
@@ -21,12 +25,12 @@ describe('promise > retry', () => {
     it('should work with less than limit resolve', async () => {
       const limit = 4
       let attempts = 0
-      const fn = vi.fn(() => {
+      const fn = vi.fn(async () => {
         attempts++
         if (attempts < limit) {
-          return Promise.reject(new Error('error'))
+          throw new Error('error')
         }
-        return Promise.resolve(1)
+        return 1
       })
       const result = await retry(fn, { limit: 5 })
       expect(result).toBe(1)
@@ -34,7 +38,9 @@ describe('promise > retry', () => {
     })
 
     it('should work with limit of 1', async () => {
-      const fn = vi.fn(() => Promise.reject(new Error('error')))
+      const fn = vi.fn(async () => {
+        throw new Error('error')
+      })
       await expect(retry(fn, { limit: 1 })).rejects.toThrow()
       expect(fn).toHaveBeenCalledTimes(1)
     })
@@ -45,7 +51,7 @@ describe('promise > retry', () => {
       const controller = new AbortController()
       controller.abort()
 
-      const fn = vi.fn(() => Promise.resolve(1))
+      const fn = vi.fn(async () => 1)
       const promise = retry(fn, { signal: controller.signal })
 
       await expect(promise).rejects.toThrow('Aborted')
@@ -56,7 +62,7 @@ describe('promise > retry', () => {
       const controller = new AbortController()
       controller.abort()
 
-      const fn = vi.fn(() => Promise.resolve(1))
+      const fn = vi.fn(async () => 1)
       const promise = retry(fn, { signal: controller.signal })
 
       // Call the no-op cancel — should not throw
@@ -71,9 +77,9 @@ describe('promise > retry', () => {
 
       const controller = new AbortController()
       let attempts = 0
-      const fn = vi.fn(() => {
+      const fn = vi.fn(async () => {
         attempts++
-        return Promise.reject(new Error('error'))
+        throw new Error('error')
       })
 
       const promise = retry(fn, { limit: 10, delay: 50, signal: controller.signal })
@@ -105,9 +111,9 @@ describe('promise > retry', () => {
 
       const controller = new AbortController()
       let attempts = 0
-      const fn = vi.fn(() => {
+      const fn = vi.fn(async () => {
         attempts++
-        return Promise.reject(new Error('error'))
+        throw new Error('error')
       })
 
       const promise = retry(fn, { limit: 5, delay: 200, signal: controller.signal })
@@ -131,9 +137,9 @@ describe('promise > retry', () => {
   describe('通过 cancel() 方法取消', () => {
     it('should support cancel method to stop retries', async () => {
       let attempts = 0
-      const fn = vi.fn(() => {
+      const fn = vi.fn(async () => {
         attempts++
-        return Promise.reject(new Error('error'))
+        throw new Error('error')
       })
 
       const promise = retry(fn, { limit: 10, delay: 10 })
@@ -162,14 +168,18 @@ describe('promise > retry', () => {
     }, 10000)
 
     it('should be safe to call cancel multiple times', async () => {
-      const fn = vi.fn(() => Promise.reject(new Error('error')))
+      const fn = vi.fn(async () => {
+        throw new Error('error')
+      })
 
       const promise = retry(fn, { limit: 3, delay: 10 })
 
       // 多次调用 cancel 不应报错
-      promise.cancel()
-      promise.cancel()
-      promise.cancel()
+      expect(() => {
+        promise.cancel()
+        promise.cancel()
+        promise.cancel()
+      }).not.toThrow()
 
       // 需要 catch promise 以避免 unhandled rejection
       await promise.catch(() => {})
@@ -179,9 +189,9 @@ describe('promise > retry', () => {
       vi.useFakeTimers()
 
       let attempts = 0
-      const fn = vi.fn(() => {
+      const fn = vi.fn(async () => {
         attempts++
-        return Promise.reject(new Error('error'))
+        throw new Error('error')
       })
 
       const promise = retry(fn, { limit: 5, delay: 100 })
@@ -206,9 +216,9 @@ describe('promise > retry', () => {
   describe('超时限制 (timeout)', () => {
     it('should support timeout option and reject with TimeoutError', async () => {
       let attempts = 0
-      const fn = vi.fn(() => {
+      const fn = vi.fn(async () => {
         attempts++
-        return Promise.reject(new Error('error'))
+        throw new Error('error')
       })
 
       const promise = retry(fn, { limit: 100, delay: 10, timeout: 50 })
@@ -224,7 +234,9 @@ describe('promise > retry', () => {
     }, 10000)
 
     it('should timeout before reaching limit for slow operations', async () => {
-      const fn = vi.fn(() => Promise.reject(new Error('always fails')))
+      const fn = vi.fn(async () => {
+        throw new Error('always fails')
+      })
 
       const promise = retry(fn, { limit: 1000, delay: 5, timeout: 30 })
 
@@ -243,12 +255,12 @@ describe('promise > retry', () => {
   describe('边界情况和通用行为', () => {
     it('should handle successful retry after some failures', async () => {
       let callCount = 0
-      const fn = vi.fn(() => {
+      const fn = vi.fn(async () => {
         callCount++
         if (callCount < 3) {
-          return Promise.reject(new Error(`attempt ${callCount}`))
+          throw new Error(`attempt ${callCount}`)
         }
-        return Promise.resolve(`success on attempt ${callCount}`)
+        return `success on attempt ${callCount}`
       })
 
       const result = await retry(fn, { limit: 5, delay: 0 })
@@ -258,7 +270,7 @@ describe('promise > retry', () => {
 
     it('should pass through the resolved value correctly', async () => {
       const testData = { data: 'test', nested: { value: 123 } }
-      const fn = vi.fn(() => Promise.resolve(testData))
+      const fn = vi.fn(async () => testData)
 
       const result = await retry(fn)
       expect(result).toEqual(testData)
@@ -266,8 +278,8 @@ describe('promise > retry', () => {
     })
 
     it('should work with zero delay', async () => {
-      const fn = vi.fn(() => {
-        return Promise.reject(new Error('fail'))
+      const fn = vi.fn(async () => {
+        throw new Error('fail')
       })
 
       const start = Date.now()
@@ -280,7 +292,9 @@ describe('promise > retry', () => {
 
     it('should reject with RetryError containing correct message on final failure', async () => {
       const errorMessage = 'custom error message'
-      const fn = vi.fn(() => Promise.reject(new Error(errorMessage)))
+      const fn = vi.fn(async () => {
+        throw new Error(errorMessage)
+      })
 
       try {
         await retry(fn, { limit: 2, delay: 0 })
@@ -292,13 +306,13 @@ describe('promise > retry', () => {
     })
 
     it('should work with empty options object', async () => {
-      const fn = vi.fn(() => Promise.resolve('ok'))
+      const fn = vi.fn(async () => 'ok')
       const result = await retry(fn, {})
       expect(result).toBe('ok')
     })
 
     it('should not leak timers when resolved immediately', async () => {
-      const fn = vi.fn(() => Promise.resolve('ok'))
+      const fn = vi.fn(async () => 'ok')
 
       await retry(fn, { limit: 5, delay: 1000 })
 
@@ -312,7 +326,9 @@ describe('promise > retry', () => {
       vi.useFakeTimers()
 
       const controller = new AbortController()
-      const fn = vi.fn(() => Promise.reject(new Error('error')))
+      const fn = vi.fn(async () => {
+        throw new Error('error')
+      })
 
       const promise = retry(fn, {
         limit: 20,
@@ -333,9 +349,9 @@ describe('promise > retry', () => {
 
     it('should handle cancelled state in retry function (line 111)', async () => {
       let attempts = 0
-      const fn = vi.fn(() => {
+      const fn = vi.fn(async () => {
         attempts++
-        return Promise.reject(new Error('error'))
+        throw new Error('error')
       })
 
       const promise = retry(fn, { limit: 5, delay: 10 })
@@ -355,9 +371,9 @@ describe('promise > retry', () => {
 
     it('should work with delay=0 and timeout', async () => {
       let attempts = 0
-      const fn = vi.fn(() => {
+      const fn = vi.fn(async () => {
         attempts++
-        return Promise.reject(new Error('error'))
+        throw new Error('error')
       })
 
       try {
@@ -373,9 +389,9 @@ describe('promise > retry', () => {
 
     it('should not execute fn after cancellation (line 111)', async () => {
       let attempts = 0
-      const fn = vi.fn(() => {
+      const fn = vi.fn(async () => {
         attempts++
-        return Promise.reject(new Error('error'))
+        throw new Error('error')
       })
 
       const promise = retry(fn, { limit: 3, delay: 50 })
@@ -399,7 +415,7 @@ describe('promise > retry', () => {
     it('should remove abort listener after successful completion', async () => {
       const controller = new AbortController()
       const removeSpy = vi.spyOn(AbortSignal.prototype, 'removeEventListener')
-      const fn = vi.fn(() => Promise.resolve('ok'))
+      const fn = vi.fn(async () => 'ok')
 
       await retry(fn, { signal: controller.signal })
 
@@ -410,7 +426,9 @@ describe('promise > retry', () => {
     it('should remove abort listener after all retries exhausted', async () => {
       const controller = new AbortController()
       const removeSpy = vi.spyOn(AbortSignal.prototype, 'removeEventListener')
-      const fn = vi.fn(() => Promise.reject(new Error('fail')))
+      const fn = vi.fn(async () => {
+        throw new Error('fail')
+      })
 
       await retry(fn, { limit: 2, delay: 0, signal: controller.signal }).catch(() => {})
 
@@ -444,10 +462,11 @@ describe('promise > retry', () => {
     }, 10000)
 
     it('should handle non-Error rejection values in RetryError message', async () => {
-      // oxlint-disable-next-line prefer-promise-reject-errors
-      const fn = vi.fn(async () => Promise.reject('string error'))
+      const fn = vi.fn(async () => {
+        throw new Error('string error')
+      })
 
-      const { RetryError } = await import('../error/RetryError')
+      const { RetryError } = await import('../error/RetryError.js')
       try {
         await retry(fn, { limit: 1, delay: 0 })
       } catch (e) {
@@ -457,10 +476,11 @@ describe('promise > retry', () => {
     })
 
     it('should handle number rejection values in RetryError message', async () => {
-      // oxlint-disable-next-line prefer-promise-reject-errors
-      const fn = vi.fn(async () => Promise.reject(42))
+      const fn = vi.fn(async () => {
+        throw new Error('42')
+      })
 
-      const { RetryError } = await import('../error/RetryError')
+      const { RetryError } = await import('../error/RetryError.js')
       try {
         await retry(fn, { limit: 1, delay: 0 })
       } catch (e) {
@@ -473,7 +493,7 @@ describe('promise > retry', () => {
       let attempts = 0
       const fn = vi.fn(async () => {
         attempts++
-        return Promise.reject(new Error('fail'))
+        throw new Error('fail')
       })
 
       const promise = retry(fn, { limit: 100, delay: 0, timeout: 30 })
@@ -491,7 +511,7 @@ describe('promise > retry', () => {
     it('should handle cancelled state during retry execution (line 113)', async () => {
       const controller = new AbortController()
       const fn = vi.fn(async () => {
-        return Promise.reject(new Error('fail'))
+        throw new Error('fail')
       })
 
       const promise = retry(fn, { limit: 10, delay: 50, signal: controller.signal })
@@ -504,7 +524,7 @@ describe('promise > retry', () => {
 
     it('should support cancel method on returned promise', async () => {
       const fn = vi.fn(async () => {
-        return Promise.reject(new Error('fail'))
+        throw new Error('fail')
       })
 
       const promise = retry(fn, { limit: 10, delay: 50 })
@@ -517,7 +537,7 @@ describe('promise > retry', () => {
 
     it('should reject with TimeoutError when remaining time <= 0 after delay (lines 129-131)', async () => {
       const fn = vi.fn(async () => {
-        return Promise.reject(new Error('fail'))
+        throw new Error('fail')
       })
 
       const promise = retry(fn, { limit: 100, delay: 0, timeout: 30 })
@@ -541,7 +561,9 @@ describe('promise > retry', () => {
 
     it('should preserve original error as cause in RetryError', async () => {
       const originalError = new Error('original error')
-      const fn = vi.fn(async () => Promise.reject(originalError))
+      const fn = vi.fn(async () => {
+        throw originalError
+      })
 
       const { RetryError } = await import('../error/RetryError')
       try {
@@ -574,10 +596,12 @@ describe('promise > retry', () => {
 
     it('should retry sync throw and eventually succeed', async () => {
       let attempts = 0
-      const fn = vi.fn(() => {
+      const fn = vi.fn(async () => {
         attempts++
-        if (attempts < 2) throw new Error('sync error')
-        return Promise.resolve('ok')
+        if (attempts < 2) {
+          throw new Error('sync error')
+        }
+        return 'ok'
       })
 
       const result = await retry(fn, { limit: 3, delay: 0 })
@@ -624,7 +648,9 @@ describe('promise > retry', () => {
     it('should clear both delay timer and timeout timer on cancel', async () => {
       vi.useFakeTimers()
 
-      const fn = vi.fn(() => Promise.reject(new Error('error')))
+      const fn = vi.fn(async () => {
+        throw new Error('error')
+      })
       const promise = retry(fn, { limit: 10, delay: 100, timeout: 500 })
 
       // Let first attempt fail and enter delay period
@@ -649,7 +675,7 @@ describe('promise > retry', () => {
       vi.useFakeTimers()
       let resolveFn: (v: string) => void
       const fn = vi.fn(
-        () =>
+        async () =>
           new Promise<string>((resolve) => {
             resolveFn = resolve
           }),
@@ -664,11 +690,12 @@ describe('promise > retry', () => {
 
     it('should reject with AbortError when cancelled before async fn rejects', async () => {
       let rejectFn: (e: Error) => void
-      const fn = vi.fn(async () => {
-        return new Promise<never>((_, reject) => {
-          rejectFn = reject
-        })
-      })
+      const fn = vi.fn(
+        async () =>
+          new Promise<never>((_, reject) => {
+            rejectFn = reject
+          }),
+      )
 
       const promise = retry(fn, { limit: 3, delay: 10 })
 
@@ -683,11 +710,12 @@ describe('promise > retry', () => {
 
     it('should guard handleSuccess when cancel precedes fn resolve callback', async () => {
       let resolveFn: (v: string) => void
-      const fn = vi.fn(() => {
-        return new Promise<string>((resolve) => {
-          resolveFn = resolve
-        })
-      })
+      const fn = vi.fn(
+        async () =>
+          new Promise<string>((resolve) => {
+            resolveFn = resolve
+          }),
+      )
 
       const promise = retry(fn, { limit: 3 })
 
@@ -701,37 +729,37 @@ describe('promise > retry', () => {
 
   describe('参数校验', () => {
     it('should throw RangeError when limit is 0', () => {
-      const fn = vi.fn(() => Promise.resolve(1))
+      const fn = vi.fn(async () => 1)
       expect(() => retry(fn, { limit: 0 })).toThrow(RangeError)
       expect(() => retry(fn, { limit: 0 })).toThrow('limit must be at least 1')
     })
 
     it('should throw RangeError when limit is negative', () => {
-      const fn = vi.fn(() => Promise.resolve(1))
+      const fn = vi.fn(async () => 1)
       expect(() => retry(fn, { limit: -1 })).toThrow(RangeError)
       expect(() => retry(fn, { limit: -1 })).toThrow('limit must be at least 1')
     })
 
     it('should throw RangeError when delay is negative', () => {
-      const fn = vi.fn(() => Promise.resolve(1))
+      const fn = vi.fn(async () => 1)
       expect(() => retry(fn, { delay: -1 })).toThrow(RangeError)
       expect(() => retry(fn, { delay: -1 })).toThrow('delay must be non-negative')
     })
 
     it('should throw RangeError when timeout is 0', () => {
-      const fn = vi.fn(() => Promise.resolve(1))
+      const fn = vi.fn(async () => 1)
       expect(() => retry(fn, { timeout: 0 })).toThrow(RangeError)
       expect(() => retry(fn, { timeout: 0 })).toThrow('timeout must be positive')
     })
 
     it('should throw RangeError when timeout is negative', () => {
-      const fn = vi.fn(() => Promise.resolve(1))
+      const fn = vi.fn(async () => 1)
       expect(() => retry(fn, { timeout: -100 })).toThrow(RangeError)
       expect(() => retry(fn, { timeout: -100 })).toThrow('timeout must be positive')
     })
 
     it('should accept valid timeout', async () => {
-      const fn = vi.fn(() => Promise.resolve('ok'))
+      const fn = vi.fn(async () => 'ok')
       const result = await retry(fn, { timeout: 5000 })
       expect(result).toBe('ok')
     })
@@ -739,7 +767,7 @@ describe('promise > retry', () => {
 
   describe('cleanup settled 检查', () => {
     it('should be no-op when cancel is called after promise is already settled', async () => {
-      const fn = vi.fn(() => Promise.resolve('ok'))
+      const fn = vi.fn(async () => 'ok')
       const promise = retry(fn, { limit: 3 })
 
       const result = await promise
@@ -751,7 +779,7 @@ describe('promise > retry', () => {
     })
 
     it('should not reject again when cancel is called after success', async () => {
-      const fn = vi.fn(() => Promise.resolve('ok'))
+      const fn = vi.fn(async () => 'ok')
       const promise = retry(fn, { limit: 3 })
 
       const result = await promise

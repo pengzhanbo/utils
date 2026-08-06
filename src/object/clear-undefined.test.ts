@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { clearUndefined } from './clear-undefined'
+import { clearUndefined } from './clear-undefined.js'
 
 describe('clearUndefined', () => {
   it('should remove keys with undefined values', () => {

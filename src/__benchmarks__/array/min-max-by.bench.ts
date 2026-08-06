@@ -1,14 +1,14 @@
 import { describe, bench } from 'vitest'
-import { maxBy } from '../../array/max-by'
-import { minBy } from '../../array/min-by'
+import { maxBy } from '../../array/max-by.js'
+import { minBy } from '../../array/min-by.js'
 
-describe('Performance > Array > MinMaxBy', () => {
+describe('performance > Array > MinMaxBy', () => {
   // MM-01: Numbers / 数字
   bench(
     'minBy | numbers (10K items)',
     () => {
       const arr = Array.from({ length: 10000 }, (_, i) => i)
-      minBy(arr, (n) => n)
+      minBy(arr, (item) => item)
     },
     { time: 1000, iterations: 200 },
   )
@@ -18,7 +18,7 @@ describe('Performance > Array > MinMaxBy', () => {
     'maxBy | numbers (10K items)',
     () => {
       const arr = Array.from({ length: 10000 }, (_, i) => i)
-      maxBy(arr, (n) => n)
+      maxBy(arr, (item) => item)
     },
     { time: 1000, iterations: 200 },
   )
@@ -28,7 +28,7 @@ describe('Performance > Array > MinMaxBy', () => {
     'minBy | strings (10K items)',
     () => {
       const arr = Array.from({ length: 10000 }, (_, i) => `item_${i}`)
-      minBy(arr, (s) => s)
+      minBy(arr, (item) => item)
     },
     { time: 1000, iterations: 200 },
   )
@@ -38,7 +38,7 @@ describe('Performance > Array > MinMaxBy', () => {
     'maxBy | strings (10K items)',
     () => {
       const arr = Array.from({ length: 10000 }, (_, i) => `item_${i}`)
-      maxBy(arr, (s) => s)
+      maxBy(arr, (item) => item)
     },
     { time: 1000, iterations: 200 },
   )

@@ -16,8 +16,9 @@
  *   --output <path>      Path to output report (default: stdout)
  */
 
-const fs = require('node:fs')
-const path = require('node:path')
+import { existsSync, readFileSync, writeFileSync } from 'node:fs'
+import { resolve } from 'node:path'
+import process from 'node:process'
 
 // ==================== Configuration ====================
 
@@ -49,6 +50,7 @@ function parseArgs(argv) {
       case '--help':
         printHelp()
         process.exit(0)
+      // no default
     }
   }
   return args
@@ -77,23 +79,29 @@ Exit codes:
 // ==================== Core Logic ====================
 
 function loadJson(filePath) {
-  const resolved = path.resolve(filePath)
-  if (!fs.existsSync(resolved)) {
+  const resolved = resolve(filePath)
+  if (!existsSync(resolved)) {
     console.warn(`Warning: File not found: ${resolved}`)
     return null
   }
   try {
-    return JSON.parse(fs.readFileSync(resolved, 'utf8'))
-  } catch (e) {
-    console.error(`Error parsing ${resolved}: ${e.message}`)
+    return JSON.parse(readFileSync(resolved, 'utf8'))
+  } catch (err) {
+    console.error(`Error parsing ${resolved}: ${err.message}`)
     return null
   }
 }
 
 function extractBenchmarks(data) {
-  if (!data) return []
-  if (Array.isArray(data)) return data
-  if (data.results && Array.isArray(data.results)) return data.results
+  if (!data) {
+    return []
+  }
+  if (Array.isArray(data)) {
+    return data
+  }
+  if (data.results && Array.isArray(data.results)) {
+    return data.results
+  }
   if (data.suites) {
     const benchmarks = []
     for (const suite of data.suites) {
@@ -109,7 +117,7 @@ function extractBenchmarks(data) {
 function buildLookup(benchmarks) {
   const map = new Map()
   for (const b of benchmarks) {
-    const key = b.name || b.id || b.fullName || String(b)
+    const key = b.name ?? b.id ?? b.fullName ?? String(b)
     map.set(key, b)
   }
   return map
@@ -122,12 +130,16 @@ function compareBenchmarks(baselineMap, currentMap, threshold) {
 
   for (const [key, current] of currentMap) {
     const baseline = baselineMap.get(key)
-    if (!baseline) continue
+    if (!baseline) {
+      continue
+    }
 
     const baseMean = baseline.mean ?? baseline.average ?? 0
     const currMean = current.mean ?? current.average ?? 0
 
-    if (baseMean <= 0) continue
+    if (baseMean <= 0) {
+      continue
+    }
 
     const changePercent = ((currMean - baseMean) / baseMean) * 100
     const entry = {
@@ -170,10 +182,10 @@ function generateReport(comparison, options) {
     )
     lines.push('  '.repeat(45) + '(ms/op)'.padStart(12) + '(ms/op)'.padStart(10) + ''.padStart(10))
 
-    for (const r of comparison.regressions) {
-      const arrow = r.changePercent > 0 ? '▴' : ''
+    for (const regression of comparison.regressions) {
+      const arrow = regression.changePercent > 0 ? '▴' : ''
       lines.push(
-        `  ${r.name.slice(0, 44).padEnd(45)} ${String(r.baseline.toFixed(3)).padStart(12)} ${String(r.current.toFixed(3)).padStart(12)} ${`${arrow}${Math.abs(r.changePercent).toFixed(1)}%`.padStart(10)}`,
+        `  ${regression.name.slice(0, 44).padEnd(45)} ${String(regression.baseline.toFixed(3)).padStart(12)} ${String(regression.current.toFixed(3)).padStart(12)} ${`${arrow}${Math.abs(regression.changePercent).toFixed(1)}%`.padStart(10)}`,
       )
     }
   }
@@ -181,9 +193,12 @@ function generateReport(comparison, options) {
   lines.push('')
   if (comparison.improvements.length > 0) {
     lines.push(`🟢 IMPROVEMENTS (${comparison.improvements.length}):`)
-    for (const r of comparison.improvements) {
-      lines.push(`  ✓ ${r.name}: ${r.changePercent > 0 ? '+' : ''}${r.changePercent.toFixed(1)}%`)
+    for (const improvement of comparison.improvements) {
+      lines.push(
+        `  ✓ ${improvement.name}: ${improvement.changePercent > 0 ? '+' : ''}${improvement.changePercent.toFixed(1)}%`,
+      )
     }
+
     lines.push('')
   }
 
@@ -227,8 +242,9 @@ function main() {
   const comparison = compareBenchmarks(baselineMap, currentMap, options.threshold)
   const report = generateReport(comparison, options)
 
+  // oxlint-disable-next-line typescript/no-unnecessary-condition
   if (options.outputPath) {
-    fs.writeFileSync(path.resolve(options.outputPath), `${report}\n`, 'utf8')
+    writeFileSync(resolve(options.outputPath), `${report}\n`, 'utf8')
     // eslint-disable-next-line no-console
     console.log(`Report written to ${String(options.outputPath)}`)
   } else {

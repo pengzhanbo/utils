@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { clamp } from './clamp'
+import { clamp } from './clamp.js'
 
 describe('math > clamp', () => {
   it('should work', () => {

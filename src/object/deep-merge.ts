@@ -1,5 +1,7 @@
-import { DANGEROUS_KEYS, T_OBJECT } from '../_internal/tags'
-import { isArray, isNil, isNull } from '../predicate'
+import { DANGEROUS_KEYS, T_OBJECT } from '../_internal/tags.js'
+import { isArray } from '../predicate/is-array.js'
+import { isNil } from '../predicate/is-nil.js'
+import { isNull } from '../predicate/is-null.js'
 
 /**
  * Deep merge
@@ -34,15 +36,21 @@ export function deepMerge<
   T extends Record<PropertyKey, any>,
   S extends Record<PropertyKey, any> = T,
 >(target: T, ...sources: S[]): DeepMerge<T, S> {
-  for (let s = 0; s < sources.length; s++) {
-    const source = sources[s]
-    if (!isMergableObject(source)) continue
-    if (!isMergableObject(target)) continue
+  for (let i = 0; i < sources.length; i++) {
+    const source = sources[i]
+    if (!isMergableObject(source)) {
+      continue
+    }
+    if (!isMergableObject(target)) {
+      continue
+    }
 
     const keys = Object.keys(source)
-    for (let i = 0; i < keys.length; i++) {
-      const key = keys[i]!
-      if (DANGEROUS_KEYS.has(key)) continue
+    for (let j = 0; j < keys.length; j++) {
+      const key = keys[j]!
+      if (DANGEROUS_KEYS.has(key)) {
+        continue
+      }
 
       const sourceVal = source[key]
       if (isMergableObject(sourceVal)) {
@@ -88,18 +96,26 @@ export function deepMergeWithArray<
   T extends Record<PropertyKey, any>,
   S extends Record<PropertyKey, any> = T,
 >(target: T, ...sources: S[]): DeepMerge<T, S> {
-  for (let s = 0; s < sources.length; s++) {
-    const source = sources[s]
-    if (isNil(source)) continue
+  for (let i = 0; i < sources.length; i++) {
+    const source = sources[i]
+    if (isNil(source)) {
+      continue
+    }
 
-    if (isArray(target) && isArray(source)) target.push(...source)
+    if (isArray(target) && isArray(source)) {
+      target.push(...source)
+    }
 
-    if (!isMergableObject(target) || !isMergableObject(source)) continue
+    if (!isMergableObject(target) || !isMergableObject(source)) {
+      continue
+    }
 
     const keys = Object.keys(source)
-    for (let i = 0; i < keys.length; i++) {
-      const key = keys[i]!
-      if (DANGEROUS_KEYS.has(key)) continue
+    for (let j = 0; j < keys.length; j++) {
+      const key = keys[j]!
+      if (DANGEROUS_KEYS.has(key)) {
+        continue
+      }
 
       const sourceVal = source[key]
       if (isArray(sourceVal)) {
@@ -135,9 +151,13 @@ export function deepMergeWithArray<
 
 function isMergableObject(item: any): item is Record<PropertyKey, any> {
   // oxlint-disable-next-line valid-typeof
-  if (typeof item !== T_OBJECT || isNull(item)) return false
+  if (typeof item !== T_OBJECT || isNull(item)) {
+    return false
+  }
   const proto = Object.getPrototypeOf(item)
-  if (isNull(proto)) return true
+  if (isNull(proto)) {
+    return true
+  }
   return proto === Object.prototype
 }
 

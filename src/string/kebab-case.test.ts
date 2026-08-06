@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { kebabCase } from './kebab-case'
+import { kebabCase } from './kebab-case.js'
 
 describe('string > kebabCase', () => {
   it('should work', () => {

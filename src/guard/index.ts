@@ -4,10 +4,10 @@
  * @module Guard
  */
 
-export * from './not-nullish'
-export * from './not-undefined'
-export * from './to-error'
-export * from './to-finite'
-export * from './to-number'
-export * from './to-string'
-export * from './to-truthy'
+export * from './not-nullish.js'
+export * from './not-undefined.js'
+export * from './to-error.js'
+export * from './to-finite.js'
+export * from './to-number.js'
+export * from './to-string.js'
+export * from './to-truthy.js'

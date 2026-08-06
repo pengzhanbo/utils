@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { dropRight } from './drop-right'
+import { dropRight } from './drop-right.js'
 
 describe('array > drop-right', () => {
   it('should drop the last n elements', () => {

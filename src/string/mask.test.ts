@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { mask } from './mask'
+import { mask } from './mask.js'
 
 describe('string > mask', () => {
   it('should mask middle of phone number by default', () => {

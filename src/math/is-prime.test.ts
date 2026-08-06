@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isPrime } from './is-prime'
+import { isPrime } from './is-prime.js'
 
 describe('math > isPrime', () => {
   it('should return true for prime numbers', () => {

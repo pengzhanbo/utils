@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { sample, sampleSize } from './sample'
+import { sample, sampleSize } from './sample.js'
 
 describe('array > sample', () => {
   it('should return a random element from the array', () => {
@@ -75,7 +75,7 @@ describe('array > sampleSize', () => {
     const array = [1, 2, 3]
     const result = sampleSize(array, 5)
     expect(result.length).toBe(3)
-    expect(result.sort()).toEqual([1, 2, 3])
+    expect(result.sort((a, b) => a - b)).toEqual([1, 2, 3])
   })
 
   it('should not modify the original array', () => {
@@ -97,7 +97,11 @@ describe('array > sampleSize', () => {
     const results = new Set<string>()
 
     for (let i = 0; i < 50; i++) {
-      results.add(sampleSize(array, 2).sort().join(','))
+      results.add(
+        sampleSize(array, 2)
+          .sort((a, b) => a - b)
+          .join(','),
+      )
     }
 
     expect(results.size).toBeGreaterThan(1)
@@ -133,7 +137,7 @@ describe('array > sampleSize', () => {
     const array = [1, 2, 3]
     const result = sampleSize(array, 3)
     expect(result.length).toBe(3)
-    expect(result.sort()).toEqual([1, 2, 3])
+    expect(result.sort((a, b) => a - b)).toEqual([1, 2, 3])
   })
 
   it('should mock Math.random for deterministic behavior', () => {

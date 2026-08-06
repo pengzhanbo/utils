@@ -1,5 +1,5 @@
-import { remove } from '../array/remove'
-import { invoke } from '../function/invoke'
+import { remove } from '../array/remove.js'
+import { invoke } from '../function/invoke.js'
 
 /**
  * Event type
@@ -138,29 +138,41 @@ export function createEmitter<Events extends Record<EventType, unknown>>(
 
   listeners ??= new Map()
 
-  const on = <Key extends keyof Events>(type: Key, listener: Listener) => {
+  const on = <Key extends keyof Events>(type: Key, listener: Listener): void => {
     const list: Listener[] | undefined = listeners.get(type)
-    if (list) list.push(listener)
-    else listeners.set(type, [listener as EventListener<Events[keyof Events]>])
-  }
-
-  const off = <Key extends keyof Events>(type: Key, listener?: Listener) => {
-    const list = listeners.get(type)
-    if (list?.length) {
-      if (listener) remove(list, listener)
-      else listeners.delete(type)
+    if (list) {
+      list.push(listener)
+    } else {
+      listeners.set(type, [listener] as EventWildcardListener<Events>[])
     }
   }
 
-  const emit = <Key extends keyof Events>(type: Key, event?: Events[Key]) => {
-    const list = listeners.get(type) as unknown as EventListenerList<Events[Key]>
-    if (list?.length) invoke([...list], event!)
-
-    const wildcardList = listeners.get('*') as unknown as EventWildcardListenerList<Events>
-    if (wildcardList?.length) invoke([...wildcardList], type as string, event!)
+  const off = <Key extends keyof Events>(type: Key, listener?: Listener): void => {
+    const list = listeners.get(type)
+    if (list?.length) {
+      if (listener) {
+        remove(list, listener)
+      } else {
+        listeners.delete(type)
+      }
+    }
   }
 
-  const once = <Key extends keyof Events>(type: Key, listener: Listener) => {
+  const emit = <Key extends keyof Events>(type: Key, event?: Events[Key]): void => {
+    const list = listeners.get(type) as unknown as EventListenerList<Events[Key]> | undefined
+    if (list?.length) {
+      invoke([...list], event!)
+    }
+
+    const wildcardList = listeners.get('*') as unknown as
+      | EventWildcardListenerList<Events>
+      | undefined
+    if (wildcardList?.length) {
+      invoke([...wildcardList], type as string, event!)
+    }
+  }
+
+  const once = <Key extends keyof Events>(type: Key, listener: Listener): void => {
     const wrapped: Listener = (...args: Parameters<Listener>) => {
       invoke(listener, ...args)
       off(type, wrapped)

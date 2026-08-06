@@ -1,4 +1,4 @@
-import type { Fn } from '../types'
+import type { Fn } from '../types/index.js'
 
 /**
  * Get the type of the last element in the array
@@ -37,14 +37,18 @@ type FirstArray<T extends any[]> = T extends [infer U, ...any[]] ? U : Fn
 export function compose<T extends Fn[] = Fn[]>(
   ...fns: T
 ): (...args: Parameters<LastArray<T>>) => ReturnType<FirstArray<T>> {
-  return function (this: unknown, ...args: Parameters<LastArray<T>>) {
+  return function func(this: unknown, ...args: Parameters<LastArray<T>>) {
     const len = fns.length
-    if (len === 0) return args[0]
-    if (len === 1) return fns[0]!.apply(this, args)
+    if (len === 0) {
+      return args[0]
+    }
+    if (len === 1) {
+      return fns[0]!.apply(this, args)
+    }
 
-    let result = fns[len - 1]!.apply(this, args)
+    let result = fns[len - 1]!.apply(this, args) as ReturnType<FirstArray<T>>
     for (let i = len - 2; i >= 0; i--) {
-      result = fns[i]!.call(this, result)
+      result = fns[i]!.call(this, result) as ReturnType<FirstArray<T>>
     }
     return result
   }

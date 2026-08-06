@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { pipe } from './pipe'
+import { pipe } from './pipe.js'
 
 describe('function > pipe', () => {
   function add(a: number, b: number) {

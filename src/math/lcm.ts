@@ -1,5 +1,5 @@
-import { isFinite } from '../predicate'
-import { gcd } from './gcd'
+import { isFinite } from '../predicate/is-finite.js'
+import { gcd } from './gcd.js'
 
 /**
  * Least Common Multiple (LCM) of two numbers
@@ -23,9 +23,13 @@ import { gcd } from './gcd'
  * ```
  */
 export function lcm(a: number, b: number): number {
-  if (!isFinite(a) || !isFinite(b)) return Number.NaN
+  if (!isFinite(a) || !isFinite(b)) {
+    return Number.NaN
+  }
 
-  if (a === 0 || b === 0) return 0
+  if (a === 0 || b === 0) {
+    return 0
+  }
 
   const absA = Math.abs(Math.floor(a))
   const absB = Math.abs(Math.floor(b))

@@ -1,4 +1,5 @@
-import { isArray, isInteger } from '../predicate'
+import { isArray } from '../predicate/is-array.js'
+import { isInteger } from '../predicate/is-integer.js'
 
 /**
  * Move item in an array, change the original array.
@@ -27,17 +28,25 @@ export function move<T>(arr: T[], from: number, to: number): T[] {
   if (!isArray(arr) || arr.length === 0) {
     return arr
   }
-  if (!isInteger(from) || !isInteger(to)) throw new TypeError('from and to must be integers')
+  if (!isInteger(from) || !isInteger(to)) {
+    throw new TypeError('from and to must be integers')
+  }
 
   const len = arr.length
 
-  from = from < 0 ? Math.max(from + len, 0) : from
-  to = to < 0 ? Math.max(to + len, 0) : to
+  from = from < 0 ? Math.max((from as number) + len, 0) : from
+  to = to < 0 ? Math.max((to as number) + len, 0) : to
 
-  if (from >= len) from = len - 1
-  if (to > len) to = len
+  if (from >= len) {
+    from = len - 1
+  }
+  if (to > len) {
+    to = len
+  }
 
-  if (from === to) return arr
+  if (from === to) {
+    return arr
+  }
 
   arr.splice(to, 0, arr.splice(from, 1)[0]!)
   return arr

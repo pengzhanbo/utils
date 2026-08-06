@@ -1,5 +1,5 @@
-import type { Fn, Nullable } from '../types'
-import { isArray } from '../predicate'
+import type { Fn, Nullable } from '../types/index.js'
+import { isArray } from '../predicate/index.js'
 
 /**
  * call the function
@@ -44,6 +44,9 @@ export function invoke<F extends Fn>(
   fns: Nullable<F>[] | F,
   ...args: Parameters<F>
 ): ReturnType<F> | void {
-  if (isArray(fns)) fns.forEach((fn) => fn?.(...args))
-  else return fns(...args)
+  if (isArray(fns)) {
+    fns.forEach((fn) => fn?.(...args))
+  } else {
+    return fns(...args)
+  }
 }

@@ -1,5 +1,5 @@
-import { TimeoutError } from '../error/TimeoutError'
-import { sleep } from './sleep'
+import { TimeoutError } from '../error/TimeoutError.js'
+import { sleep } from './sleep.js'
 
 export interface UntilOptions {
   /**
@@ -55,12 +55,20 @@ export async function until(
   options: UntilOptions = {},
 ): Promise<void> {
   const { interval = 100, timeout: timeoutMs, signal } = options
-  if (interval < 0) throw new RangeError('interval must be a non-negative number')
+  if (interval < 0) {
+    throw new RangeError('interval must be a non-negative number')
+  }
   const deadline = timeoutMs == null ? Number.POSITIVE_INFINITY : Date.now() + timeoutMs
   for (;;) {
-    if (signal?.aborted) throw new DOMException('Aborted', 'AbortError')
-    if (await condition()) return
-    if (Date.now() >= deadline) throw new TimeoutError()
+    if (signal?.aborted) {
+      throw new DOMException('Aborted', 'AbortError')
+    }
+    if (await condition()) {
+      return
+    }
+    if (Date.now() >= deadline) {
+      throw new TimeoutError()
+    }
     await sleep(interval, { signal })
   }
 }

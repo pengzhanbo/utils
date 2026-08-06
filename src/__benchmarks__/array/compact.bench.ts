@@ -1,7 +1,7 @@
 import { describe, bench } from 'vitest'
-import { compact } from '../../array/compact'
+import { compact } from '../../array/compact.js'
 
-describe('Performance > Array > Compact', () => {
+describe('performance > Array > Compact', () => {
   // CT-01: Small array / 小数组
   bench(
     'compact | small array (100 items, 50% falsy)',

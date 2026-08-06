@@ -13,5 +13,5 @@ allowBuilds:
   simple-git-hooks: true
 
 minimumReleaseAgeExclude:
-  - '@pengzhanbo/oxc-config@ 2.8.1'
-  - '@pengzhanbo/tsconfig@2.8.1'
+  - '@pengzhanbo/oxc-config'
+  - '@pengzhanbo/tsconfig'

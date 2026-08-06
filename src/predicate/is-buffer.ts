@@ -1,4 +1,4 @@
-import { T_UNDEFINED } from '../_internal/tags'
+import { T_UNDEFINED } from '../_internal/tags.js'
 
 declare let Buffer: undefined | typeof globalThis.Buffer
 

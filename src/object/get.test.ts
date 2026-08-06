@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { objectGet } from './get'
+import { objectGet } from './get.js'
 
 describe('object > objectGet', () => {
   it('should work', () => {

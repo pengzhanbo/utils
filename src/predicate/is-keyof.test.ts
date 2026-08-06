@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isKeyof } from './is-keyof'
+import { isKeyof } from './is-keyof.js'
 
 describe('predicate > isKeyof', () => {
   it('should work', () => {

@@ -1,5 +1,5 @@
-import { capitalize } from './capitalize'
-import { words } from './words'
+import { capitalize } from './capitalize.js'
+import { words } from './words.js'
 
 /**
  * Convert string to camelCase
@@ -21,11 +21,15 @@ import { words } from './words'
  * ```
  */
 export function camelCase(str: string): string {
-  if (!str) return ''
+  if (!str) {
+    return ''
+  }
 
   const parts = words(str)
 
-  if (parts.length === 0) return ''
+  if (parts.length === 0) {
+    return ''
+  }
 
   const [first, ...rest] = parts
 

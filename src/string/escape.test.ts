@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { escape, escapeRegExp, unescape } from './escape'
+import { escape, escapeRegExp, unescape } from './escape.js'
 
 describe('string > escape', () => {
   it('should escape HTML special characters', () => {

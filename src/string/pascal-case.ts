@@ -1,5 +1,5 @@
-import { capitalize } from './capitalize'
-import { words } from './words'
+import { capitalize } from './capitalize.js'
+import { words } from './words.js'
 
 /**
  * Converts a string to Pascal case
@@ -18,11 +18,15 @@ import { words } from './words'
  * ```
  */
 export function pascalCase(str: string): string {
-  if (!str) return ''
+  if (!str) {
+    return ''
+  }
 
   const parts = words(str)
 
-  if (parts.length === 0) return ''
+  if (parts.length === 0) {
+    return ''
+  }
 
   return parts.map((word) => capitalize(word)).join('')
 }

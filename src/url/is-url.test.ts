@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isUrl } from './is-url'
+import { isUrl } from './is-url.js'
 
 describe('url > isUrl', () => {
   it('should be true', () => {

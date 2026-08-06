@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { toFinite } from './to-finite'
+import { toFinite } from './to-finite.js'
 
 describe('guard > toFinite', () => {
   it('should convert string to finite number', () => {

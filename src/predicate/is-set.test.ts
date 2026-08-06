@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isSet } from './is-set'
+import { isSet } from './is-set.js'
 
 describe('predicate > isSet', () => {
   it('should return true for Set instances', () => {

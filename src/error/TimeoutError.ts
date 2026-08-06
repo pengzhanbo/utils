@@ -13,8 +13,6 @@
  * new TimeoutError()
  * // => TimeoutError: The operation was timed out
  * ```
- *
- * @augments Error
  */
 export class TimeoutError extends Error {
   constructor(message = 'The operation was timed out', options?: ErrorOptions) {

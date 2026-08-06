@@ -1,7 +1,9 @@
-import { T_BOOLEAN, T_NUMBER, T_OBJECT, T_STRING } from '../_internal/tags'
-import { isFinite } from './is-finite'
-import { isJSONArray } from './is-json-array'
-import { isJSONObject } from './is-json-object'
+import { T_BOOLEAN, T_NUMBER, T_OBJECT, T_STRING } from '../_internal/tags.js'
+import { isFinite } from './is-finite.js'
+// oxlint-disable-next-line import/no-cycle
+import { isJSONArray } from './is-json-array.js'
+// oxlint-disable-next-line import/no-cycle
+import { isJSONObject } from './is-json-object.js'
 
 /**
  * Checks if a given value is a valid JSON value.
@@ -42,9 +44,10 @@ import { isJSONObject } from './is-json-object'
 export function isJSONValue(
   value: unknown,
 ): value is Record<string, any> | any[] | string | number | boolean | null {
+  // oxlint-disable-next-line typescript/switch-exhaustiveness-check
   switch (typeof value) {
     case T_OBJECT: {
-      return value === null || isJSONArray(value) || isJSONObject(value)
+      return value == null || isJSONArray(value) || isJSONObject(value)
     }
     case T_NUMBER:
       return isFinite(value as number)

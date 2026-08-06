@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { formatBytes } from './format-bytes'
+import { formatBytes } from './format-bytes.js'
 
 describe('util > format-bytes', () => {
   it('should format zero as 0 B', () => {

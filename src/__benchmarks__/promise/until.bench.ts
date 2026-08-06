@@ -1,7 +1,7 @@
 import { describe, bench } from 'vitest'
-import { until } from '../../promise/until'
+import { until } from '../../promise/until.js'
 
-describe('Performance > Promise > Until', () => {
+describe('performance > Promise > Until', () => {
   // UT-01: Condition immediately true / 条件立即为真
   bench(
     'until | condition true immediately',

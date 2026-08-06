@@ -18,8 +18,12 @@
  * ```
  */
 export function truncate(str: string, length: number, omission: string = '...'): string {
-  if (Number.isNaN(length) || length < 0) return str
+  if (Number.isNaN(length) || length < 0) {
+    return str
+  }
+  // oxlint-disable-next-line typescript/no-misused-spread
   const chars = [...str]
+  // oxlint-disable-next-line typescript/no-misused-spread
   const omissionChars = [...omission]
   if (chars.length <= length) {
     return str

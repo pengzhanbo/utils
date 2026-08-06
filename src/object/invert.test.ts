@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { invert } from './invert'
+import { invert } from './invert.js'
 
 describe('object > invert', () => {
   it('should swap keys and values', () => {
@@ -27,7 +27,7 @@ describe('object > invert', () => {
 
   it('should ignore symbol keys of the source object', () => {
     const sym = Symbol('s')
-    const result = invert({ [sym]: 1, a: 2 } as Record<PropertyKey, number>)
+    const result = invert({ [sym]: 1, a: 2 })
     expect(result).toEqual({ 2: 'a' })
   })
 

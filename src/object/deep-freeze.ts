@@ -1,5 +1,7 @@
-import { T_OBJECT } from '../_internal/tags'
-import { isArray, isNull, isPlainObject } from '../predicate'
+import { T_OBJECT } from '../_internal/tags.js'
+import { isArray } from '../predicate/is-array.js'
+import { isNull } from '../predicate/is-null.js'
+import { isPlainObject } from '../predicate/is-plain-object.js'
 
 /**
  * Deeply freeze an object recursively — the object and all its nested objects become immutable.
@@ -55,8 +57,12 @@ export function deepFreeze<T>(obj: T): T {
 
 function freezeImpl(value: unknown, visited: Set<unknown>): void {
   // oxlint-disable-next-line valid-typeof
-  if (isNull(value) || typeof value !== T_OBJECT) return
-  if (visited.has(value)) return
+  if (isNull(value) || typeof value !== T_OBJECT) {
+    return
+  }
+  if (visited.has(value)) {
+    return
+  }
   visited.add(value)
   const freeze = Object.freeze
 

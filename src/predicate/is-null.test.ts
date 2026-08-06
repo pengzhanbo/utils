@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isNull } from './is-null'
+import { isNull } from './is-null.js'
 
 describe('predicate > isNull', () => {
   it('should work', () => {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isFunction } from './is-function'
+import { isFunction } from './is-function.js'
 
 describe('predicate > isFunction', () => {
   it('should work', () => {
@@ -12,6 +12,6 @@ describe('predicate > isFunction', () => {
     expect(isFunction({})).toBe(false)
     expect(isFunction(() => {})).toBe(true)
     // oxlint-disable-next-line prefer-arrow-callback
-    expect(isFunction(function () {})).toBe(true)
+    expect(isFunction(function foo() {})).toBe(true)
   })
 })

@@ -1,5 +1,5 @@
-import type { Arrayable } from '../types'
-import { orderBy } from './order-by'
+import type { Arrayable } from '../types/guard.js'
+import { orderBy } from './order-by.js'
 
 /**
  * Sorts an array of (objects | strings | numbers) based on the given `accords`.

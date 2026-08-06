@@ -1,6 +1,6 @@
 import { performance } from 'node:perf_hooks'
 import { describe, expect, it, vi } from 'vitest'
-import { sleep } from './sleep'
+import { sleep } from './sleep.js'
 
 describe('promise > sleep', () => {
   it('pauses an async function for a given time', async () => {

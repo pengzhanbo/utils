@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { toError } from './to-error'
+import { toError } from './to-error.js'
 
 describe('guard > toError', () => {
   it('should return Error instances as-is', () => {

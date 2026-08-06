@@ -1,4 +1,4 @@
-import { isUndefined } from '../predicate'
+import { isUndefined } from '../predicate/is-undefined.js'
 
 /**
  * Returns the first element of an array with the maximum value according to an iteratee function.

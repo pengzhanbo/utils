@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { ensurePrefix } from './ensure-prefix'
+import { ensurePrefix } from './ensure-prefix.js'
 
 describe('string > ensurePrefix', () => {
   it('should work with empty', () => {

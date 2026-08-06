@@ -58,9 +58,13 @@ export interface MaskOptions {
 export function mask(value: string, options: MaskOptions = {}): string {
   const { start = 3, end = -4, maskChar = '*' } = options
   const s = Math.max(Number.isFinite(start) ? Math.trunc(start) : 0, 0)
-  let e = Number.isFinite(end) ? Math.trunc(end) : value.length
-  if (e < 0) e = value.length + e
-  e = Math.min(e, value.length)
-  if (s >= e || s >= value.length) return value
-  return value.slice(0, s) + maskChar.repeat(e - s) + value.slice(e)
+  let v = Number.isFinite(end) ? Math.trunc(end) : value.length
+  if (v < 0) {
+    v = value.length + v
+  }
+  v = Math.min(v, value.length)
+  if (s >= v || s >= value.length) {
+    return value
+  }
+  return value.slice(0, s) + maskChar.repeat(v - s) + value.slice(v)
 }

@@ -1,4 +1,4 @@
-import { isNil } from '../predicate'
+import { isNil } from '../predicate/is-nil.js'
 
 /**
  * guard function that returns if val is not null or undefined

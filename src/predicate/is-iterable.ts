@@ -1,6 +1,6 @@
-import { T_FUNCTION } from '../_internal/tags'
-import { isNil } from './is-nil'
-import { isTypeof } from './is-typeof'
+import { T_FUNCTION } from '../_internal/tags.js'
+import { isNil } from './is-nil.js'
+import { isTypeof } from './is-typeof.js'
 
 /**
  * Checks if the input is an iterable object.

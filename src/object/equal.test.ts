@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { deepEqual } from './equal'
+import { deepEqual } from './equal.js'
 
 describe('deepEqual', () => {
   it('should return true for primitives', () => {

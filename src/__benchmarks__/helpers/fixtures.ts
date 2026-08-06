@@ -7,7 +7,7 @@
 // ==================== Small Datasets (for quick tests) ====================
 
 /** Small flat object with 5 properties / 小型扁平对象（5个属性） */
-export const SMALL_OBJECT = { a: 1, b: 'test', c: { d: 2 }, e: [1, 2, 3] } as const
+export const SMALL_OBJECT = { foo: 'test', bar: { baz: 2 }, qux: [1, 2, 3] } as const
 
 /** Small array of numbers / 小型数字数组 */
 export const SMALL_ARRAY = [1, 2, 3, 4, 5] as const
@@ -27,7 +27,7 @@ export const MEDIUM_FLAT_OBJECT: Record<string, any> = Object.fromEntries(
 
 /** Medium nested object (10 sections × 10 items) / 中型嵌套对象 */
 export const MEDIUM_NESTED_OBJECT: Record<string, any> = (() => {
-  const obj: any = {}
+  const obj: Record<string, any> = {}
   for (let i = 0; i < 10; i++) {
     obj[`section_${i}`] = Object.fromEntries(
       Array.from({ length: 10 }, (_, j) => [`item_${j}`, i * 10 + j]),
@@ -40,7 +40,13 @@ export const MEDIUM_NESTED_OBJECT: Record<string, any> = (() => {
 export const MEDIUM_ARRAY: number[] = Array.from({ length: 1000 }, (_, i) => i)
 
 /** Medium user array for sorting (100 users) / 中型用户数组（用于排序测试，100个用户） */
-export const MEDIUM_USER_ARRAY: any[] = (() => {
+export const MEDIUM_USER_ARRAY: {
+  id: number
+  name: string
+  age: number
+  score: number
+  department: string
+}[] = (() => {
   const names: string[] = ['Alice', 'Bob', 'Charlie', 'David', 'Eve']
   const departments: string[] = ['Engineering', 'Marketing', 'Sales']
   return Array.from({ length: 100 }, (_, i) => ({
@@ -79,7 +85,7 @@ export const SPECIAL_TYPE_OBJECT: Record<string, any> = {
 }
 
 /** Circular reference object for deep clone testing / 用于深度克隆测试的循环引用对象 */
-export const CIRCULAR_OBJECT: any = { id: 1 }
+export const CIRCULAR_OBJECT: Record<string, any> = { id: 1 }
 CIRCULAR_OBJECT.self = CIRCULAR_OBJECT
 CIRCULAR_OBJECT.children = [{ parent: CIRCULAR_OBJECT }]
 
@@ -91,7 +97,9 @@ export const MEDIUM_TEMPLATE: Record<string, any> = (() => {
   const values: Record<string, string> = {}
 
   for (let i = 0; i < 10; i++) {
-    if (i > 0) template += ' '
+    if (i > 0) {
+      template += ' '
+    }
     template += 'abcdefghijklmnopqrstuvwxyz'.slice(0, 20)
     template += `{{var_${i}}}`
     values[`var_${i}`] = `value_${i}`
@@ -118,13 +126,13 @@ export const DENSE_TEMPLATE: Record<string, any> = (() => {
 
 /** Multiple source objects for merge testing / 多源对象合并测试数据 */
 export const MERGE_SOURCES: any[] = [
-  { a: 1, b: 2, c: { d: 3 } },
-  { b: 20, e: 5, f: { g: 6 } },
-  { a: 10, h: 7, i: { j: 8 } },
+  { foo: 1, bar: 2, baz: { qux: 3 } },
+  { bar: 20, baz: 5, qux: { gus: 6 } },
+  { foo: 10, hax: 7, iox: { gop: 8 } },
 ]
 
 /** Source objects with arrays for deepMergeWithArray testing / 包含数组的源对象 */
-export const MERGE_WITH_ARRAY_SOURCES: any[] = [
+export const MERGE_WITH_ARRAY_SOURCES: Record<string, any>[] = [
   { arr: [1, 2], obj: { x: 1 } },
   { arr: [3, 4], obj: { y: 2 } },
   { arr: [5], obj: { z: 3 } },

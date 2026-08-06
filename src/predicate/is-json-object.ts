@@ -1,6 +1,7 @@
-import { objectKeys } from '../object'
-import { isJSONValue } from './is-json-value'
-import { isPlainObject } from './is-plain-object'
+import { objectKeys } from '../object/keys.js'
+// oxlint-disable-next-line import/no-cycle
+import { isJSONValue } from './is-json-value.js'
+import { isPlainObject } from './is-plain-object.js'
 
 /**
  * Checks if a value is a JSON object.

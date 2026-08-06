@@ -26,9 +26,11 @@
 export function once<T extends (...args: any[]) => any>(func: T): T {
   let called = false
   let res: ReturnType<T>
-  return function (this: any, ...args: Parameters<T>) {
-    if (called) return res
-    res = func.apply(this, args)
+  return function cb(this: any, ...args: Parameters<T>) {
+    if (called) {
+      return res
+    }
+    res = func.apply(this, args) as ReturnType<T>
     called = true
     return res
   } as T

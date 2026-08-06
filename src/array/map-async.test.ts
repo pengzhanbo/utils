@@ -1,11 +1,12 @@
 import { describe, expect, it, vi } from 'vitest'
-import { sleep } from '../promise'
-import { mapAsync } from './map-async'
+import { sleep } from '../promise/sleep.js'
+import { mapAsync } from './map-async.js'
 
 describe('array >mapAsync', () => {
   it('maps array asynchronously', async () => {
     const arr = [1, 2, 3]
 
+    // oxlint-disable-next-line typescript/require-await
     const callback = vi.fn(async (n) => n * 2)
     const result = await mapAsync(arr, callback)
 
@@ -19,6 +20,7 @@ describe('array >mapAsync', () => {
 
   it('returns empty array if given empty array', async () => {
     const arr: number[] = []
+    // oxlint-disable-next-line typescript/require-await
     const callback = vi.fn(async (n) => n * 2)
 
     const result = await mapAsync(arr, callback)
@@ -29,6 +31,7 @@ describe('array >mapAsync', () => {
 
   it('propagates rejection if any callback throws', async () => {
     const arr = [1, 2, 3]
+    // oxlint-disable-next-line typescript/require-await
     const errorFn = async (item: number) => {
       if (item === 2) {
         throw new Error('fail')
@@ -86,6 +89,7 @@ describe('array >mapAsync', () => {
 
   it('should support type transformation from T to R', async () => {
     const arr = [1, 2, 3]
+    // oxlint-disable-next-line typescript/require-await
     const result = await mapAsync(arr, async (n) => String(n))
     expect(result).toEqual(['1', '2', '3'])
   })
@@ -95,6 +99,7 @@ describe('array >mapAsync', () => {
       { id: 1, name: 'Alice' },
       { id: 2, name: 'Bob' },
     ]
+    // oxlint-disable-next-line typescript/require-await
     const result = await mapAsync(users, async (user) => user.name)
     expect(result).toEqual(['Alice', 'Bob'])
   })

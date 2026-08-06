@@ -7,6 +7,10 @@ const RE_PROTOCOL_MATCH = /^([-+\w]{1,25})(?::?\/\/|:)/i
  *
  * @category URL
  *
+ * @param url - The URL to parse the protocol from.
+ * @returns The protocol extracted from the URL.
+ * @throws {Error} If the URL is not a valid URL.
+ *
  * @example
  * ```ts
  * parseProtocol('http://example.com') // => http
@@ -15,5 +19,5 @@ const RE_PROTOCOL_MATCH = /^([-+\w]{1,25})(?::?\/\/|:)/i
  */
 export function parseProtocol(url: string): string {
   const match = RE_PROTOCOL_MATCH.exec(url)
-  return match?.[1] || ''
+  return match?.[1] ?? ''
 }

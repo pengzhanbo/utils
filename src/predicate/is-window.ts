@@ -1,5 +1,5 @@
-import { T_UNDEFINED } from '../_internal/tags'
-import { isTypeof } from './is-typeof'
+import { T_UNDEFINED } from '../_internal/tags.js'
+import { isTypeof } from './is-typeof.js'
 
 /**
  * Checks if the current runtime is a window environment.

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isDef } from './is-def'
+import { isDef } from './is-def.js'
 
 describe('predicate > isDef', () => {
   it('should work', () => {

@@ -5,7 +5,7 @@
  *
  * @category Guard
  *
- * @param s - The value to get the string representation for. 要获取字符串表示的值
+ * @param v - The value to get the string representation for. 要获取字符串表示的值
  * @returns The string representation of the value. 值的字符串表示
  *
  * ```ts
@@ -16,6 +16,6 @@
  * toString({}) // => '[object Object]'
  * ```
  */
-export function toString(s: unknown): string {
-  return String(s)
+export function toString(v: unknown): string {
+  return String(v)
 }

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { timestamp } from './timestamp'
+import { timestamp } from './timestamp.js'
 
 describe('date > timestamp', () => {
   it('should return current timestamp in milliseconds', () => {

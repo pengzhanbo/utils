@@ -1,4 +1,4 @@
-import { T_FUNCTION } from '../_internal/tags'
+import { T_FUNCTION } from '../_internal/tags.js'
 
 /**
  * Checks if the input is a function.

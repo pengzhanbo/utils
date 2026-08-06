@@ -1,4 +1,4 @@
-import { isPlainObject } from './is-plain-object'
+import { isPlainObject } from './is-plain-object.js'
 
 /**
  * Checks if the input is an empty object.
@@ -26,8 +26,12 @@ import { isPlainObject } from './is-plain-object'
  * ```
  */
 export function isEmptyObject(v: unknown): boolean {
-  if (!isPlainObject(v)) return false
-  for (const _ in v) return false
+  if (!isPlainObject(v)) {
+    return false
+  }
+  for (const _ in v) {
+    return false
+  }
 
   return true
 }

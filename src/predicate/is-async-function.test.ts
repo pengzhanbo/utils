@@ -1,6 +1,6 @@
 import vm from 'node:vm'
 import { describe, expect, it } from 'vitest'
-import { isAsyncFunction } from './is-async-function'
+import { isAsyncFunction } from './is-async-function.js'
 
 describe('predicate > is-async-function', () => {
   it('should return true for async function declarations', () => {
@@ -15,7 +15,7 @@ describe('predicate > is-async-function', () => {
 
   it('should return false for regular functions', () => {
     // oxlint-disable-next-line prefer-arrow-callback
-    expect(isAsyncFunction(function () {})).toBe(false)
+    expect(isAsyncFunction(function foo() {})).toBe(false)
   })
 
   it('should return false for arrow functions', () => {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { omit, omitBy } from './omit'
+import { omit, omitBy } from './omit.js'
 
 describe('object > omit', () => {
   it('should work', () => {

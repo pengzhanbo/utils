@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { mean } from './mean'
+import { mean } from './mean.js'
 
 describe('math > mean', () => {
   it('should return the mean of positive numbers', () => {

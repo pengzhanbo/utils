@@ -1,5 +1,5 @@
-import type { Fn } from '../types'
-import { isUndefined } from '../predicate'
+import type { Fn } from '../types/index.js'
+import { isUndefined } from '../predicate/index.js'
 
 export interface MemoizeOptions<T extends Fn = Fn> {
   /**
@@ -34,7 +34,10 @@ export type MemoizedFn<T extends Fn> = T & {
   clear: () => void
 }
 
-type CacheValue = { readonly value: any; readonly timestamp: number }
+interface CacheValue {
+  readonly value: any
+  readonly timestamp: number
+}
 
 /**
  * Memoize a function, caching its results based on arguments.
@@ -47,9 +50,9 @@ type CacheValue = { readonly value: any; readonly timestamp: number }
  * @typeParam T - The type of elements in the array / 数组元素的类型
  * @param func - The function to memoize. 要记忆化的函数
  * @param options - Options for memoization. 记忆化配置
- * @param options.maxSize
- * @param options.ttl
- * @param options.keyResolver
+ * @param options.maxSize - Maximum number of cached entries. 缓存条目最大数量
+ * @param options.ttl - Time-to-live in milliseconds. If set, cache expires after this duration. 缓存有效期（毫秒）。设置后缓存将在此时间后过期
+ * @param options.keyResolver - Custom key resolver. By default, arguments are serialized via JSON. 自定义 key 生成器。默认使用 JSON 序列化参数
  * @returns A memoized version of the function. 记忆化后的函数
  *
  * @remarks
@@ -116,15 +119,18 @@ type CacheValue = { readonly value: any; readonly timestamp: number }
 export function memoize<T extends Fn>(func: T, options?: MemoizeOptions<T>): MemoizedFn<T> {
   const { maxSize, ttl, keyResolver } = options ?? {}
 
-  if (maxSize !== undefined && maxSize < 0)
+  if (maxSize !== undefined && maxSize < 0) {
     throw new RangeError('maxSize must be a non-negative integer')
-  if (ttl !== undefined && ttl < 0) throw new RangeError('ttl must be a non-negative number')
+  }
+  if (ttl !== undefined && ttl < 0) {
+    throw new RangeError('ttl must be a non-negative number')
+  }
 
   if (maxSize === 0) {
     const noCacheFn = function (this: any, ...args: Parameters<T>): ReturnType<T> {
       return func.apply(this, args)
     }
-    noCacheFn.clear = () => {}
+    noCacheFn.clear = (): void => {}
     return noCacheFn as MemoizedFn<T>
   }
 
@@ -143,7 +149,7 @@ export function memoize<T extends Fn>(func: T, options?: MemoizeOptions<T>): Mem
       cache.delete(key)
     }
 
-    const value = func.apply(this, args)
+    const value = func.apply(this, args) as ReturnType<T>
 
     if (!isUndefined(maxSize) && cache.size >= maxSize) {
       const oldestKey = cache.keys().next().value as string
@@ -155,7 +161,7 @@ export function memoize<T extends Fn>(func: T, options?: MemoizeOptions<T>): Mem
     return value
   }
 
-  memoized.clear = () => cache.clear()
+  memoized.clear = (): void => cache.clear()
 
   return memoized as MemoizedFn<T>
 }

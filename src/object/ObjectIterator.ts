@@ -1,6 +1,6 @@
-import { OPERATION_FILTER, OPERATION_MAP } from '../_internal/iterator'
-import { isFunction } from '../predicate'
-import { objectEntries } from './entries'
+import { OPERATION_FILTER, OPERATION_MAP } from '../_internal/iterator.js'
+import { isFunction } from '../predicate/is-function.js'
+import { objectEntries } from './entries.js'
 
 /**
  * Predicate function type for filtering object entries
@@ -75,6 +75,10 @@ export class ObjectIterator<K extends string = string, V = unknown> {
    * Creates a new iterator with existing source and operations
    *
    * 使用源数据和操作创建新迭代器
+   *
+   * @param source - The source data to iterate over. 要迭代的源数据
+   * @param operations - The operations to apply lazily. 要惰性应用的操作
+   * @returns A new ObjectIterator instance. 新 ObjectIterator 实例
    */
   private static create<K extends string, V>(
     source: Array<[string, unknown]>,
@@ -90,6 +94,11 @@ export class ObjectIterator<K extends string = string, V = unknown> {
    * Creates a generator that applies all operations in a single pass
    *
    * 创建一个在单次遍历中应用所有操作的生成器
+   *
+   * @param source - The source data to iterate over. 要迭代的源数据
+   * @returns A new ObjectIterator instance. 新 ObjectIterator 实例
+   *
+   * @yields {[K, V]} The transformed entry. 转换后的条目
    */
   private *iterate(): Generator<[K, V]> {
     for (const entry of this.source) {
@@ -97,7 +106,9 @@ export class ObjectIterator<K extends string = string, V = unknown> {
       let shouldYield = true
 
       for (const op of this.operations) {
-        if (!shouldYield) break
+        if (!shouldYield) {
+          break
+        }
 
         switch (op.type) {
           case OPERATION_FILTER:
@@ -109,6 +120,7 @@ export class ObjectIterator<K extends string = string, V = unknown> {
           case OPERATION_MAP:
             current = op.transform(current[0] as string, current[1])
             break
+          // no default
         }
       }
 

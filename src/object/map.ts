@@ -1,5 +1,5 @@
-import { DANGEROUS_KEYS } from '../_internal/tags'
-import { isUndefined } from '../predicate'
+import { DANGEROUS_KEYS } from '../_internal/tags.js'
+import { isUndefined } from '../predicate/is-undefined.js'
 
 /**
  * Map key/value pairs for an object, and construct a new one

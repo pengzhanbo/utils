@@ -1,4 +1,4 @@
-import { isUndefined } from '../predicate'
+import { isUndefined } from '../predicate/is-undefined.js'
 
 /**
  * Check if a number is in range [0, max]

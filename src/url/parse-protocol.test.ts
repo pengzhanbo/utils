@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { parseProtocol } from './parse-protocol'
+import { parseProtocol } from './parse-protocol.js'
 
 describe('url > parseProtocol', () => {
   it('should work', () => {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isBoolean } from './is-boolean'
+import { isBoolean } from './is-boolean.js'
 
 describe('predicate > isBoolean', () => {
   it('should work', () => {

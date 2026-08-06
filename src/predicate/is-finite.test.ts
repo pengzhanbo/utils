@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isFinite } from './is-finite'
+import { isFinite } from './is-finite.js'
 
 describe('predicate > isFinite', () => {
   it('should work', () => {

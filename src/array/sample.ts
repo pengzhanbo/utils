@@ -27,7 +27,9 @@
  * ```
  */
 export function sample<T>(array: readonly T[]): T | undefined {
-  if (array.length === 0) return undefined
+  if (array.length === 0) {
+    return undefined
+  }
 
   const randomIndex = Math.floor(Math.random() * array.length)
   return array[randomIndex]
@@ -73,7 +75,9 @@ export function sample<T>(array: readonly T[]): T | undefined {
  * ```
  */
 export function sampleSize<T>(array: readonly T[], size: number): T[] {
-  if (array.length === 0 || size <= 0) return []
+  if (array.length === 0 || size <= 0) {
+    return []
+  }
 
   const resultLength = Math.min(size, array.length)
   const result = array.slice()

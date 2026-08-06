@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { pick, pickBy } from './pick'
+import { pick, pickBy } from './pick.js'
 
 describe('object > pick', () => {
   it('should work', () => {

@@ -1,7 +1,7 @@
 import { describe, bench } from 'vitest'
-import { mapValues } from '../../object/map-values'
+import { mapValues } from '../../object/map-values.js'
 
-describe('Performance > Object > MapValues', () => {
+describe('performance > Object > MapValues', () => {
   // MV-01: Numeric transform / 数值转换
   bench(
     'numeric transform | 10K keys',

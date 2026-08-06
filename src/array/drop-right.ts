@@ -14,7 +14,7 @@
  *
  * @typeParam T - The type of elements in the array / 数组元素的类型
  * @param arr - The array to drop from. 要丢弃元素的数组
- * @param n - The number of elements to drop. Defaults to 1. 要丢弃的元素个数，默认为 1
+ * @param num - The number of elements to drop. Defaults to 1. 要丢弃的元素个数，默认为 1
  * @returns A new array without the last n elements. 去除最后 n 个元素后的新数组
  *
  * @remarks
@@ -28,8 +28,8 @@
  * // => [1]
  * ```
  */
-export function dropRight<T>(arr: readonly T[], n = 1): T[] {
-  const count = Number.isFinite(n) ? Math.max(Math.trunc(n), 0) : 0
+export function dropRight<T>(arr: readonly T[], num = 1): T[] {
+  const count = Number.isFinite(num) ? Math.max(Math.trunc(num), 0) : 0
   const k = Math.min(count, arr.length)
   return arr.slice(0, arr.length - k)
 }

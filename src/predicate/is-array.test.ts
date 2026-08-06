@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isArray } from './is-array'
+import { isArray } from './is-array.js'
 
 describe('predicate > isArray', () => {
   it('should work', () => {

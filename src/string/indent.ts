@@ -6,7 +6,7 @@
  * @category String
  *
  * @param str - The string to indent. 要缩进的字符串
- * @param indent - The indentation string. Default is '  ' (two spaces). 缩进字符串，默认为两个空格
+ * @param indentStr - The indentation string. Default is '  ' (two spaces). 缩进字符串，默认为两个空格
  * @returns The indented string. 缩进后的字符串
  *
  * @example
@@ -15,9 +15,11 @@
  * indent('foo\nbar', '\t') // => '\tfoo\n\tbar'
  * ```
  */
-export function indent(str: string, indent: string = '  '): string {
-  if (!str) return str
+export function indent(str: string, indentStr: string = '  '): string {
+  if (!str) {
+    return str
+  }
 
   const lines = str.split(/\r?\n/)
-  return lines.map((line) => (line ? `${indent}${line}` : line)).join('\n')
+  return lines.map((line) => (line ? `${indentStr}${line}` : line)).join('\n')
 }

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { capitalize } from './capitalize'
+import { capitalize } from './capitalize.js'
 
 describe('string > capitalize', () => {
   it('should work', () => {

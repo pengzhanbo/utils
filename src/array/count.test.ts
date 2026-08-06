@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { count, countBy } from './count'
+import { count, countBy } from './count.js'
 
 describe('array > count', () => {
   it('should count elements that satisfy the predicate', () => {
@@ -95,24 +95,25 @@ describe('array > countBy', () => {
   })
 
   it('should handle prototype property names as keys without errors', () => {
-    const result = countBy(['x', 'y', 'z'], () => 'toString' as PropertyKey)
+    const result = countBy(['x', 'y', 'z'], () => 'toString')
     expect(result).toEqual({ toString: 3 })
     expect(typeof result.toString).toBe('number')
   })
 
   it('should handle constructor as key without errors', () => {
-    const result = countBy(['a', 'b'], () => 'constructor' as PropertyKey)
+    const result = countBy(['a', 'b'], () => 'constructor')
     expect(result).toEqual({ constructor: 2 })
     expect(typeof result.constructor).toBe('number')
   })
 
   it('should handle hasOwnProperty as key without errors', () => {
-    const result = countBy([1, 2], () => 'hasOwnProperty' as PropertyKey)
+    const result = countBy([1, 2], () => 'hasOwnProperty')
     expect(result).toEqual({ hasOwnProperty: 2 })
     expect(typeof result.hasOwnProperty).toBe('number')
   })
 
   it('should handle __proto__ as key without prototype pollution', () => {
+    // oxlint-disable-next-line typescript/no-unsafe-return
     const result = countBy(['a', 'b'], () => '__proto__' as any)
     expect(Object.getOwnPropertyDescriptor(result, '__proto__')!.value).toBe(2)
   })

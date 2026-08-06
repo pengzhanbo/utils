@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { range } from './range'
+import { range } from './range.js'
 
 describe('array > range', () => {
   it.each([

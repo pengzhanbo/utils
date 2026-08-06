@@ -1,4 +1,4 @@
-import { isInteger } from '../predicate'
+import { isInteger } from '../predicate/is-integer.js'
 
 /**
  * A counting semaphore for async functions that manages available permits.
@@ -43,7 +43,7 @@ export class Semaphore {
    *
    * 允许的最大并发操作数。
    */
-  public readonly capacity: number
+  readonly capacity: number
 
   /**
    * The number of available permits.
@@ -63,6 +63,12 @@ export class Semaphore {
 
   /**
    * Creates an instance of Semaphore.
+   *
+   * 创建一个信号量实例。
+   * @param capacity - 允许的最大并发操作数。
+   *
+   * @throws {RangeError} 如果 `capacity` 不是正整数。
+   *
    * @example
    * ```ts
    * const sema = new Semaphore(3); // Allows up to 3 concurrent operations.
@@ -106,11 +112,10 @@ export class Semaphore {
       const node: _Node = { value: resolve, next: null }
       if (this._tail) {
         this._tail.next = node
-        this._tail = node
       } else {
         this._head = node
-        this._tail = node
       }
+      this._tail = node
     })
   }
 

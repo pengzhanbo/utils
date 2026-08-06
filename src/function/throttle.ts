@@ -1,4 +1,4 @@
-import type { Cancel, CancelOptions, FnNoReturn } from '../_internal/types'
+import type { Cancel, CancelOptions, FnNoReturn } from '../_internal/types.js'
 
 /**
  * Throttle Options
@@ -109,9 +109,9 @@ export interface ThrottleOptions {
 export function throttle<T extends (...args: any[]) => any>(
   delay: number,
   callback: T,
-  options?: ThrottleOptions,
+  options: ThrottleOptions = {},
 ): FnNoReturn<T> & Cancel {
-  const { noTrailing = false, noLeading = false, debounceMode = undefined } = options || {}
+  const { noTrailing = false, noLeading = false, debounceMode } = options
   if (!Number.isFinite(delay) || delay < 0) {
     throw new RangeError('delay must be a finite non-negative number')
   }
@@ -122,7 +122,7 @@ export function throttle<T extends (...args: any[]) => any>(
   let lastExec = 0
 
   // Function to clear existing timeout
-  function clearExistingTimeout() {
+  function clearExistingTimeout(): void {
     if (timeoutID) {
       clearTimeout(timeoutID)
       timeoutID = undefined
@@ -130,8 +130,8 @@ export function throttle<T extends (...args: any[]) => any>(
   }
 
   // Function to cancel next exec
-  function cancel(options: CancelOptions = {}) {
-    const { upcomingOnly = false } = options
+  function cancel(opt: CancelOptions = {}): void {
+    const { upcomingOnly = false } = opt
     clearExistingTimeout()
     cancelled = !upcomingOnly
   }
@@ -143,16 +143,16 @@ export function throttle<T extends (...args: any[]) => any>(
    *
    * `wrapper`函数封装了所有的节流/防抖功能，执行时将限制`callback`的回调执行频率。
    */
-  function wrapper(this: any, ...args: Parameters<T>) {
-    const self = this as any
+  function wrapper(this: unknown, ...args: Parameters<T>): void {
     const elapsed = Date.now() - lastExec
 
-    if (cancelled) return
-
+    if (cancelled) {
+      return
+    }
     // Execute `callback` and update the `lastExec` timestamp.
-    function exec() {
+    const exec = (): void => {
       lastExec = Date.now()
-      callback.apply(self, args)
+      callback.apply(this, args)
     }
 
     /**
@@ -162,7 +162,7 @@ export function throttle<T extends (...args: any[]) => any>(
      * 如果`debounceMode`为真（在开始时），这用于清除标志
      * 以允许未来的`callback`执行。
      */
-    function clear() {
+    function clear(): void {
       timeoutID = undefined
     }
 
@@ -192,7 +192,9 @@ export function throttle<T extends (...args: any[]) => any>(
          * 在`delay`毫秒后执行。
          */
         lastExec = Date.now()
-        if (!noTrailing) timeoutID = setTimeout(exec, delay)
+        if (!noTrailing) {
+          timeoutID = setTimeout(exec, delay)
+        }
       } else {
         /**
          * In throttle mode without noLeading, if `delay` time has been exceeded, execute
@@ -202,7 +204,7 @@ export function throttle<T extends (...args: any[]) => any>(
          */
         exec()
       }
-    } else if (noTrailing !== true) {
+    } else if (!noTrailing) {
       /**
        * In trailing throttle mode, since `delay` time has not been
        * exceeded, schedule `callback` to execute `delay` ms after most

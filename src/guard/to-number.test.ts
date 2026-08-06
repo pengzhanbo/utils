@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { toNumber } from './to-number'
+import { toNumber } from './to-number.js'
 
 describe('guard > toNumber', () => {
   it('should convert string to number', () => {
@@ -61,7 +61,7 @@ describe('guard > toNumber', () => {
   it('should return NaN for Function', () => {
     expect(toNumber(() => {})).toBeNaN()
     // oxlint-disable-next-line prefer-arrow-callback
-    expect(toNumber(function () {})).toBeNaN()
+    expect(toNumber(function foo() {})).toBeNaN()
   })
 
   it('should handle special number strings', () => {

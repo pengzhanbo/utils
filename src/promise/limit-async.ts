@@ -1,4 +1,4 @@
-import { Semaphore } from './semaphore'
+import { Semaphore } from './semaphore.js'
 
 /**
  * Wraps an async function to limit the number of concurrent executions.
@@ -36,7 +36,7 @@ export function limitAsync<F extends (...args: any[]) => Promise<any>>(
 ): F {
   const semaphore = new Semaphore(concurrency)
 
-  return async function (this: ThisType<F>, ...args: Parameters<F>): Promise<ReturnType<F>> {
+  return async function func(this: ThisType<F>, ...args: Parameters<F>): Promise<ReturnType<F>> {
     try {
       await semaphore.acquire()
       return await callback.apply(this, args)

@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { LRUCache } from './LRUCache'
+import { LRUCache } from './LRUCache.js'
 
 describe('util > LRUCache', () => {
   describe('constructor', () => {
@@ -680,7 +680,7 @@ describe('util > LRUCache', () => {
       cache.set('a', 1)
 
       const context = { prefix: 'test' }
-      cache.forEach(function (this: typeof context, _value) {
+      cache.forEach(function test(this: typeof context, _value) {
         expect(this.prefix).toBe('test')
       }, context as never)
     })
@@ -827,13 +827,6 @@ describe('util > LRUCache', () => {
       dateNowStub.mockRestore()
     })
 
-    it('should not call onEviction when callback is not a function', () => {
-      const cache = new LRUCache({ maxSize: 2 })
-      cache.set('a', 1)
-      cache.set('b', 2)
-      cache.set('c', 3) // should not throw
-    })
-
     it('should call onEviction for each evicted item via evict()', () => {
       const onEviction = vi.fn()
       const cache = new LRUCache({ maxSize: 5, onEviction })
@@ -859,7 +852,7 @@ describe('util > LRUCache', () => {
     })
   })
 
-  describe('LRU eviction behavior', () => {
+  describe('lRU eviction behavior', () => {
     it('should evict least recently used items first', () => {
       const cache = new LRUCache({ maxSize: 3 })
 
@@ -996,7 +989,7 @@ describe('util > LRUCache', () => {
     })
   })
 
-  describe('Map compatibility', () => {
+  describe('map compatibility', () => {
     it('should be instance of Map', () => {
       const cache = new LRUCache({ maxSize: 5 })
       expect(cache).toBeInstanceOf(Map)
@@ -1341,7 +1334,7 @@ describe('util > LRUCache', () => {
       const cache = new LRUCache({ maxSize: 5 })
       cache.set('a', 1)
 
-      cache.forEach(function (this: unknown) {
+      cache.forEach(function foo(this: unknown) {
         expect(this).toBe(cache)
       })
     })

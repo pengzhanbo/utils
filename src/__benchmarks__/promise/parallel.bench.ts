@@ -1,12 +1,12 @@
 import { describe, bench } from 'vitest'
-import { promiseParallel, promiseParallelSettled } from '../../promise/parallel'
+import { promiseParallel, promiseParallelSettled } from '../../promise/parallel.js'
 
-describe('Performance > Promise > Parallel', () => {
+describe('performance > Promise > Parallel', () => {
   // PL-01: Small batch parallel / 小批量并行
   bench(
     'promiseParallel | 10 promises, unlimited concurrency',
     async () => {
-      const promises = Array.from({ length: 10 }, (_, i) => Promise.resolve(i * 2))
+      const promises = Array.from({ length: 10 }, async (_, i) => i * 2)
       await promiseParallel(promises)
     },
     { time: 2000, iterations: 200 },
@@ -16,7 +16,7 @@ describe('Performance > Promise > Parallel', () => {
   bench(
     'promiseParallel | 100 promises, concurrency=10',
     async () => {
-      const promises = Array.from({ length: 100 }, (_, i) => Promise.resolve(i))
+      const promises = Array.from({ length: 100 }, async (_, i) => i)
       await promiseParallel(promises, 10)
     },
     { time: 2000, iterations: 100 },
@@ -26,7 +26,7 @@ describe('Performance > Promise > Parallel', () => {
   bench(
     'promiseParallel | 500 promises, concurrency=5',
     async () => {
-      const promises = Array.from({ length: 500 }, (_, i) => Promise.resolve(i))
+      const promises = Array.from({ length: 500 }, async (_, i) => i)
       await promiseParallel(promises, 5)
     },
     { time: 3000, iterations: 50 },
@@ -36,7 +36,7 @@ describe('Performance > Promise > Parallel', () => {
   bench(
     'promiseParallel | function factories (100 items)',
     async () => {
-      const factories = Array.from({ length: 100 }, (_, i) => () => Promise.resolve(i))
+      const factories = Array.from({ length: 100 }, (_, i) => async () => i)
       await promiseParallel(factories, 10)
     },
     { time: 2000, iterations: 100 },
@@ -46,7 +46,7 @@ describe('Performance > Promise > Parallel', () => {
   bench(
     'promiseParallelSettled | mixed results (100 items)',
     async () => {
-      const promises = Array.from({ length: 100 }, (_, i) =>
+      const promises = Array.from({ length: 100 }, async (_, i) =>
         i % 3 === 0 ? Promise.reject(new Error(`err_${i}`)) : Promise.resolve(i),
       )
       await promiseParallelSettled(promises, 10)
@@ -56,9 +56,9 @@ describe('Performance > Promise > Parallel', () => {
 
   // PL-06: vs Promise.all baseline / 与Promise.all对比
   bench(
-    'Promise.all baseline | 100 promises',
+    'promise.all baseline | 100 promises',
     async () => {
-      const promises = Array.from({ length: 100 }, (_, i) => Promise.resolve(i))
+      const promises = Array.from({ length: 100 }, async (_, i) => i)
       await Promise.all(promises)
     },
     { time: 2000, iterations: 100 },
@@ -66,9 +66,9 @@ describe('Performance > Promise > Parallel', () => {
 
   // PL-07: vs Promise.allSettled baseline / 与Promise.allSettled对比
   bench(
-    'Promise.allSettled baseline | 100 promises',
+    'promise.allSettled baseline | 100 promises',
     async () => {
-      const promises = Array.from({ length: 100 }, (_, i) => Promise.resolve(i))
+      const promises = Array.from({ length: 100 }, async (_, i) => i)
       await Promise.allSettled(promises)
     },
     { time: 2000, iterations: 100 },

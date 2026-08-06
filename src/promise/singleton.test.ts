@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { createSingletonPromise } from './singleton'
-import { sleep } from './sleep'
+import { createSingletonPromise } from './singleton.js'
+import { sleep } from './sleep.js'
 
 describe('promise > createSingletonPromise', () => {
   it('should work', async () => {
@@ -22,7 +22,7 @@ describe('promise > createSingletonPromise', () => {
 
     expect(await promise()).toBe(1)
 
-    promise.reset()
+    void promise.reset()
 
     expect(await promise()).toBe(2)
   })
@@ -35,7 +35,7 @@ describe('promise > createSingletonPromise', () => {
       counter++
       return counter
     })
-    promise.reset()
+    void promise.reset()
     await promise()
     expect(await promise()).toBe(1)
   })
@@ -44,7 +44,9 @@ describe('promise > createSingletonPromise', () => {
     let callCount = 0
     const promise = createSingletonPromise(async () => {
       callCount++
-      if (callCount === 1) throw new Error('first call failed')
+      if (callCount === 1) {
+        throw new Error('first call failed')
+      }
       return 'success'
     })
 
@@ -76,7 +78,9 @@ describe('promise > createSingletonPromise', () => {
 
     const promise = createSingletonPromise(async () => {
       concurrentCount++
-      if (concurrentCount > maxConcurrent) maxConcurrent = concurrentCount
+      if (concurrentCount > maxConcurrent) {
+        maxConcurrent = concurrentCount
+      }
       callCount++
       await sleep(50)
       concurrentCount--

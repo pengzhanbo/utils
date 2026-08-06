@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { deepFlatten } from './deep-flatten'
+import { deepFlatten } from './deep-flatten.js'
 
 describe('array > deepFlatten', () => {
   it('should flatten deeply nested arrays', () => {

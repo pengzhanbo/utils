@@ -1,4 +1,4 @@
-import { toTruthy } from '../guard'
+import { toTruthy } from '../guard/to-truthy.js'
 
 /**
  * Removes falsy values from an array.

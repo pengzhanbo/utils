@@ -1,13 +1,13 @@
 import { describe, bench } from 'vitest'
-import { sumBy } from '../../array/sum-by'
+import { sumBy } from '../../array/sum-by.js'
 
-describe('Performance > Array > SumBy', () => {
+describe('performance > Array > SumBy', () => {
   // SM-01: Small array / 小数组
   bench(
     'sumBy | small array (100 items)',
     () => {
       const arr = Array.from({ length: 100 }, (_, i) => i)
-      sumBy(arr, (n) => n)
+      sumBy(arr, (item) => item)
     },
     { time: 1000, iterations: 500 },
   )
@@ -17,7 +17,7 @@ describe('Performance > Array > SumBy', () => {
     'sumBy | medium array (10K items)',
     () => {
       const arr = Array.from({ length: 10000 }, (_, i) => i)
-      sumBy(arr, (n) => n)
+      sumBy(arr, (item) => item)
     },
     { time: 1000, iterations: 200 },
   )
@@ -27,7 +27,7 @@ describe('Performance > Array > SumBy', () => {
     'sumBy | large array (100K items)',
     () => {
       const arr = Array.from({ length: 100000 }, (_, i) => i)
-      sumBy(arr, (n) => n)
+      sumBy(arr, (item) => item)
     },
     { time: 2000, iterations: 50 },
   )
@@ -37,7 +37,7 @@ describe('Performance > Array > SumBy', () => {
     'reduce baseline | 10K items',
     () => {
       const arr = Array.from({ length: 10000 }, (_, i) => i)
-      arr.reduce((acc, n) => acc + n, 0)
+      arr.reduce((acc, item) => acc + item, 0)
     },
     { time: 1000, iterations: 200 },
   )

@@ -1,5 +1,5 @@
-import { T_FUNCTION, T_OBJECT } from '../_internal/tags'
-import { isFunction } from './is-function'
+import { T_FUNCTION, T_OBJECT } from '../_internal/tags.js'
+import { isFunction } from './is-function.js'
 
 /**
  * Checks if the input is a Promise.
@@ -57,12 +57,18 @@ export function isPromise<T = unknown>(v: unknown): v is Promise<T> {
  * ```
  */
 export function isPromiseLike<T = unknown>(v: unknown): v is PromiseLike<T> {
-  if (isPromise(v)) return true
+  if (isPromise(v)) {
+    return true
+  }
 
-  if (v == null) return false
+  if (v == null) {
+    return false
+  }
 
   const type = typeof v
-  if (type !== T_OBJECT && type !== T_FUNCTION) return false
+  if (type !== T_OBJECT && type !== T_FUNCTION) {
+    return false
+  }
 
   return isFunction((v as PromiseLike<T>).then)
 }

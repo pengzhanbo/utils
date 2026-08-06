@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { typeOf } from './type-of'
+import { typeOf } from './type-of.js'
 
 describe('predicate > typeOf', () => {
   it('should return type name', () => {

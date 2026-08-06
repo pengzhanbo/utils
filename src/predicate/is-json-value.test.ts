@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isJSONValue } from './is-json-value'
+import { isJSONValue } from './is-json-value.js'
 
 describe('predicate > isJSONValue', () => {
   it('should work', () => {

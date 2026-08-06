@@ -1,4 +1,4 @@
-import { isFunction, isInteger } from '../predicate'
+import { isFunction, isInteger } from '../predicate/index.js'
 
 /**
  * Executes an array of promises in parallel with a given concurrency. The function
@@ -30,8 +30,9 @@ export function promiseParallel<T>(
   if (
     concurrency <= 0 ||
     (concurrency !== Number.POSITIVE_INFINITY && !Number.isInteger(concurrency))
-  )
+  ) {
     throw new RangeError('concurrency must be a positive integer')
+  }
   if (promises.length === 0) {
     return Promise.resolve([])
   }
@@ -41,23 +42,31 @@ export function promiseParallel<T>(
   let resolvedCount = 0
   const len = promises.length
   return new Promise((resolve, reject) => {
-    function next() {
+    function next(): void {
       const index = current++
       const promise = promises[index]!
       Promise.resolve(isFunction(promise) ? promise() : promise)
         .then((res) => {
-          if (settled) return
+          if (settled) {
+            return
+          }
           result[index] = res
-          if (++resolvedCount === len) resolve(result)
+          if (++resolvedCount === len) {
+            resolve(result)
+          }
 
-          if (current < len) next()
+          if (current < len) {
+            next()
+          }
         })
         .catch((reason) => {
           settled = true
-          reject(reason)
+          reject(reason as Error)
         })
     }
-    for (let i = 0; i < concurrency && i < len; i++) next()
+    for (let i = 0; i < concurrency && i < len; i++) {
+      next()
+    }
   })
 }
 
@@ -91,8 +100,9 @@ export function promiseParallelSettled<T>(
 ): Promise<PromiseSettledResult<Awaited<T>>[]> {
   promises = Array.from(promises)
 
-  if (concurrency <= 0 || (concurrency !== Number.POSITIVE_INFINITY && !isInteger(concurrency)))
+  if (concurrency <= 0 || (concurrency !== Number.POSITIVE_INFINITY && !isInteger(concurrency))) {
     throw new RangeError('concurrency must be a positive integer')
+  }
   if (promises.length === 0) {
     return Promise.resolve([])
   }
@@ -102,12 +112,16 @@ export function promiseParallelSettled<T>(
   let resolvedCount = 0
   const len = promises.length
   return new Promise((resolve) => {
-    function resolved() {
-      if (++resolvedCount === len) resolve(result)
+    function resolved(): void {
+      if (++resolvedCount === len) {
+        resolve(result)
+      }
 
-      if (current < len) next()
+      if (current < len) {
+        next()
+      }
     }
-    function next() {
+    function next(): void {
       const index = current++
       const promise = promises[index]!
       Promise.resolve(isFunction(promise) ? promise() : promise)
@@ -120,6 +134,8 @@ export function promiseParallelSettled<T>(
           resolved()
         })
     }
-    for (let i = 0; i < concurrency && i < len; i++) next()
+    for (let i = 0; i < concurrency && i < len; i++) {
+      next()
+    }
   })
 }

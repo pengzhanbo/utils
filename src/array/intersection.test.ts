@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { intersection, intersectionBy } from './intersection'
+import { intersection, intersectionBy } from './intersection.js'
 
 describe('array > intersection', () => {
   it('should the intersection of two arrays', () => {

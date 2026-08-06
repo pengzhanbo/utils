@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { groupBy } from './group-by'
+import { groupBy } from './group-by.js'
 
 describe('array > groupBy', () => {
   it('should group elements by iteratee function', () => {
@@ -99,24 +99,25 @@ describe('array > groupBy', () => {
   })
 
   it('should handle prototype property names as keys without errors', () => {
-    const result = groupBy(['x', 'y', 'z'], () => 'toString' as PropertyKey)
+    const result = groupBy(['x', 'y', 'z'], () => 'toString')
     expect(result).toEqual({ toString: ['x', 'y', 'z'] })
     expect(Array.isArray(result.toString)).toBe(true)
   })
 
   it('should handle constructor as key without errors', () => {
-    const result = groupBy(['a', 'b'], () => 'constructor' as PropertyKey)
+    const result = groupBy(['a', 'b'], () => 'constructor')
     expect(result).toEqual({ constructor: ['a', 'b'] })
     expect(Array.isArray(result.constructor)).toBe(true)
   })
 
   it('should handle hasOwnProperty as key without errors', () => {
-    const result = groupBy([1, 2], () => 'hasOwnProperty' as PropertyKey)
+    const result = groupBy([1, 2], () => 'hasOwnProperty')
     expect(result).toEqual({ hasOwnProperty: [1, 2] })
     expect(Array.isArray(result.hasOwnProperty)).toBe(true)
   })
 
   it('should handle __proto__ as key without prototype pollution', () => {
+    // oxlint-disable-next-line typescript/no-unsafe-return
     const result = groupBy(['a', 'b'], () => '__proto__' as any)
     expect(Object.getOwnPropertyDescriptor(result, '__proto__')!.value).toEqual(['a', 'b'])
   })

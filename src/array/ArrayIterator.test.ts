@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { ArrayIterator } from './ArrayIterator'
+import { ArrayIterator } from './ArrayIterator.js'
 
 describe('array > ArrayIterator', () => {
   describe('constructor', () => {
@@ -515,13 +515,14 @@ describe('array > ArrayIterator', () => {
     })
   })
 
-  describe('Symbol.iterator', () => {
+  describe('symbol.iterator', () => {
     it('should be iterable with for...of loop', () => {
       const iterator = new ArrayIterator([1, 2, 3])
       const values: number[] = []
       for (const value of iterator) {
         values.push(value)
       }
+
       expect(values).toEqual([1, 2, 3])
     })
 
@@ -552,6 +553,7 @@ describe('array > ArrayIterator', () => {
       for (const value of iterator) {
         values.push(value)
       }
+
       expect(values).toEqual([6, 8, 10])
     })
 
@@ -592,7 +594,7 @@ describe('array > ArrayIterator', () => {
     })
 
     it('should work with null values', () => {
-      const result = new ArrayIterator([1, null, 3]).filter((v) => v !== null).toArray()
+      const result = new ArrayIterator([1, null, 3]).filter((v) => v != null).toArray()
       expect(result).toEqual([1, 3])
     })
 

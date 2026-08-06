@@ -3,7 +3,7 @@
  *
  * 获取变量的类型字符串表示
  *
- * @param s - The value to get the type name for. 要获取类型的值
+ * @param v - The value to get the type name for. 要获取类型的值
  * @returns The type name of the value. 值的类型字符串表示
  *
  * @remarks
@@ -21,6 +21,6 @@
  * ```
  * @internal
  */
-export function getTypeName(s: unknown): string {
-  return Object.prototype.toString.call(s)
+export function getTypeName(v: unknown): string {
+  return Object.prototype.toString.call(v)
 }

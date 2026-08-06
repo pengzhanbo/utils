@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { noop } from './noop'
+import { noop } from './noop.js'
 
 describe('function > noop', () => {
   it('should return undefined', () => {
@@ -8,8 +8,11 @@ describe('function > noop', () => {
   })
 
   it('should not throw any error when called with arguments', () => {
+    // oxlint-disable-next-line typescript/no-unsafe-call
     expect(() => (noop as any)(1, 2, 3)).not.toThrow()
+    // oxlint-disable-next-line typescript/no-unsafe-call
     expect(() => (noop as any)('a', 'b')).not.toThrow()
+    // oxlint-disable-next-line typescript/no-unsafe-call
     expect(() => (noop as any)({}, [], null)).not.toThrow()
   })
 

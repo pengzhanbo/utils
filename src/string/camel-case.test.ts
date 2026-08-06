@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { camelCase } from './camel-case'
+import { camelCase } from './camel-case.js'
 
 describe('string > camelCase', () => {
   it('should work', () => {

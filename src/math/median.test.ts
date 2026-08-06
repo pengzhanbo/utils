@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { median } from './median'
+import { median } from './median.js'
 
 describe('math > median', () => {
   it('should return the median of odd-length array', () => {

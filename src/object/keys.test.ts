@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { objectKeys } from './keys'
+import { objectKeys } from './keys.js'
 
 describe('object > objectKeys', () => {
   it('should work', () => {

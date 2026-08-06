@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { take } from './take'
+import { take } from './take.js'
 
 describe('array > take', () => {
   it('should take the first n elements', () => {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { words } from './words'
+import { words } from './words.js'
 
 describe('string > words', () => {
   it('should work with empty', () => {

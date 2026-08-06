@@ -1,5 +1,5 @@
-import { T_FUNCTION, T_OBJECT } from '../_internal/tags'
-import { isNil } from './is-nil'
+import { T_FUNCTION, T_OBJECT } from '../_internal/tags.js'
+import { isNil } from './is-nil.js'
 
 /**
  * Checks if the input is a primitive.

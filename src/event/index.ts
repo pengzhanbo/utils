@@ -6,4 +6,4 @@
  * @module Event
  */
 
-export * from './emitter'
+export * from './emitter.js'

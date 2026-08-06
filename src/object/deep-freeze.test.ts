@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { deepFreeze } from './deep-freeze'
+import { deepFreeze } from './deep-freeze.js'
 
 describe('object > deepFreeze', () => {
   it('should work', () => {
@@ -7,7 +7,7 @@ describe('object > deepFreeze', () => {
     deepFreeze(obj)
     expect(() => {
       obj.a = 2
-    }).toThrowError()
+    }).toThrow()
   })
 
   it('should work with nested object', () => {
@@ -15,16 +15,15 @@ describe('object > deepFreeze', () => {
     deepFreeze(obj)
     expect(() => {
       obj.a.b = 2
-    }).toThrowError()
+    }).toThrow()
   })
 
   it('should work with array', () => {
     const obj = [{ a: { b: 1 } }, { a: { b: 1 } }]
     deepFreeze(obj)
     expect(() => {
-      // @ts-expect-error
-      obj[1].a.b = 2
-    }).toThrowError()
+      ;(obj[1] as any).a.b = 2
+    }).toThrow()
   })
 
   it('should freeze the array itself so push/splice fail', () => {
@@ -33,13 +32,13 @@ describe('object > deepFreeze', () => {
     expect(Object.isFrozen(arr)).toBe(true)
     expect(() => {
       arr.push(4)
-    }).toThrowError()
+    }).toThrow()
     expect(() => {
       arr.splice(0, 1)
-    }).toThrowError()
+    }).toThrow()
     expect(() => {
       arr[0] = 99
-    }).toThrowError()
+    }).toThrow()
     expect(arr).toEqual([1, 2, 3])
   })
 
@@ -49,7 +48,7 @@ describe('object > deepFreeze', () => {
     expect(Object.isFrozen(obj.items)).toBe(true)
     expect(() => {
       obj.items.push(4)
-    }).toThrowError()
+    }).toThrow()
   })
 
   it('should freeze empty array', () => {
@@ -58,7 +57,7 @@ describe('object > deepFreeze', () => {
     expect(Object.isFrozen(arr)).toBe(true)
     expect(() => {
       arr.push(1)
-    }).toThrowError()
+    }).toThrow()
   })
 
   it('should freeze Symbol key properties', () => {
@@ -68,7 +67,7 @@ describe('object > deepFreeze', () => {
     expect(Object.isFrozen(obj)).toBe(true)
     expect(() => {
       obj[sym].a = 2
-    }).toThrowError()
+    }).toThrow()
   })
 
   it('should handle circular references', () => {
@@ -90,7 +89,7 @@ describe('object > deepFreeze', () => {
     expect(Object.isFrozen(obj)).toBe(true)
     expect(() => {
       obj.hidden.a = 2
-    }).toThrowError()
+    }).toThrow()
   })
 
   it('should skip non-plain object values like Date and RegExp', () => {

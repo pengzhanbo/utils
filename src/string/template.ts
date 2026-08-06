@@ -1,5 +1,6 @@
-import { hasOwn } from '../object'
-import { isNil, isString } from '../predicate'
+import { hasOwn } from '../object/has-own.js'
+import { isNil } from '../predicate/is-nil.js'
+import { isString } from '../predicate/is-string.js'
 
 /**
  * String template interpolation
@@ -41,10 +42,14 @@ export function template(
   options: { prefix?: string; suffix?: string } = {},
 ): string {
   const { prefix = '{{', suffix = '}}' } = options
-  if (!prefix || !suffix) return str
+  if (!prefix || !suffix) {
+    return str
+  }
 
   let index = str.indexOf(prefix)
-  if (index === -1) return str
+  if (index === -1) {
+    return str
+  }
 
   const parts: string[] = []
   let lastIndex = 0
@@ -75,8 +80,10 @@ export function template(
           ? rawValue
           : isNil(rawValue)
             ? ''
-            : String(rawValue)
-        : prefix + key + suffix,
+            : // oxlint-disable-next-line typescript/no-base-to-string
+              String(rawValue)
+        : // oxlint-disable-next-line typescript/restrict-plus-operands
+          prefix + key + suffix,
     )
     lastIndex = end + suffix.length
     index = str.indexOf(prefix, lastIndex)

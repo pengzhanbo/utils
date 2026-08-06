@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { takeRight } from './take-right'
+import { takeRight } from './take-right.js'
 
 describe('array > take-right', () => {
   it('should take the last n elements', () => {

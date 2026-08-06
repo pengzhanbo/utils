@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { constantCase } from './constant-case'
+import { constantCase } from './constant-case.js'
 
 describe('string > constantCase', () => {
   it('should work', () => {

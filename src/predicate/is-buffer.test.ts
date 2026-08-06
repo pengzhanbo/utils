@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isBuffer } from './is-buffer'
+import { isBuffer } from './is-buffer.js'
 
 describe('predicate > isBuffer', () => {
   it('should return false in Node.js environment when Buffer is not available', () => {

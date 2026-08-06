@@ -1,7 +1,7 @@
 import { describe, bench } from 'vitest'
-import { escape, unescape, escapeRegExp } from '../../string/escape'
+import { escape, unescape, escapeRegExp } from '../../string/escape.js'
 
-describe('Performance > String > Escape', () => {
+describe('performance > String > Escape', () => {
   // ES-01: Short HTML string / 短HTML字符串
   bench(
     'escape | short string (50 chars, 5 special chars)',

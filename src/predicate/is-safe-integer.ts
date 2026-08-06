@@ -1,4 +1,4 @@
-import type { Integer } from '../types/numeric'
+import type { Integer } from '../types/numeric.js'
 
 /**
  * A strongly-typed version of `Number.isSafeInteger()`.

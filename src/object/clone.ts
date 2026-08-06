@@ -7,10 +7,15 @@
  * @typeParam T - The type of elements in the array / 数组元素的类型
  */
 
-import { deepCloneImpl } from '../_internal/deepCloneImpl'
-import { T_DATAVIEW, T_DATE, T_MAP, T_REGEXP, T_SET, T_UNDEFINED } from '../_internal/tags'
-import { isArray, isError, isPlainObject, isPrimitive, isTypedArray, typeOf } from '../predicate'
-import { hasOwn } from './has-own'
+import { deepCloneImpl } from '../_internal/deepCloneImpl.js'
+import { T_DATAVIEW, T_DATE, T_MAP, T_REGEXP, T_SET, T_UNDEFINED } from '../_internal/tags.js'
+import { isArray } from '../predicate/is-array.js'
+import { isError } from '../predicate/is-error.js'
+import { isPlainObject } from '../predicate/is-plain-object.js'
+import { isPrimitive } from '../predicate/is-primitive.js'
+import { isTypedArray } from '../predicate/is-typed-array.js'
+import { typeOf } from '../predicate/type-of.js'
+import { hasOwn } from './has-own.js'
 
 /**
  * simple clone, use JSON.parse and JSON.stringify
@@ -46,7 +51,9 @@ import { hasOwn } from './has-own'
  * @see {@link deepClone} 和 {@link shallowClone} — 其他克隆策略
  */
 export function simpleClone<T = any>(source: T): T {
-  if (isPrimitive(source)) return source
+  if (isPrimitive(source)) {
+    return source
+  }
   return JSON.parse(JSON.stringify(source))
 }
 
@@ -65,7 +72,9 @@ export function simpleClone<T = any>(source: T): T {
  * 此函数会保留原型链，并针对 Date、Map、Set、RegExp、Error 和 File 对象进行特殊处理，通过构造新实例来完成克隆。数组、TypedArrays、ArrayBuffer 和 SharedArrayBuffer 通过 `.slice()` 克隆。普通对象通过 `Object.assign` 克隆并保留原型。
  */
 export function shallowClone<T = any>(source: T): T {
-  if (isPrimitive(source)) return source
+  if (isPrimitive(source)) {
+    return source
+  }
 
   if (
     isArray(source) ||
@@ -87,9 +96,9 @@ export function shallowClone<T = any>(source: T): T {
     }
 
     if (type === T_REGEXP) {
-      const newRegExp = new Constructor(source)
+      const newRegExp = new Constructor(source) as RegExp
       newRegExp.lastIndex = (source as RegExp).lastIndex
-      return newRegExp
+      return newRegExp as T
     }
 
     if (type === T_DATAVIEW) {
@@ -103,13 +112,15 @@ export function shallowClone<T = any>(source: T): T {
     if (isError(source)) {
       const newError = new Constructor(source.message, {
         cause: source.cause,
-      })
+      }) as Error
 
-      if (hasOwn(source, 'name')) newError.name = source.name
+      if (hasOwn(source, 'name')) {
+        newError.name = source.name
+      }
 
       newError.stack = source.stack
 
-      return newError
+      return newError as T
     }
 
     /* istanbul ignore if -- @preserve */
@@ -125,7 +136,7 @@ export function shallowClone<T = any>(source: T): T {
 
   /* istanbul ignore if -- @preserve */
   if (isPlainObject(source)) {
-    return Object.assign(Object.create(prototype), source)
+    return Object.assign(Object.create(prototype as object), source)
   }
 
   /* istanbul ignore next -- @preserve */

@@ -1,6 +1,8 @@
-import { timestamp } from '../date'
-import { RetryError, TimeoutError } from '../error'
-import { isError } from '../predicate'
+// oxlint-disable max-lines-per-function
+
+import { timestamp } from '../date/index.js'
+import { RetryError, TimeoutError } from '../error/index.js'
+import { isError } from '../predicate/index.js'
 
 export interface RetryOptions {
   /**
@@ -43,10 +45,12 @@ export type RetryablePromise<T> = Promise<T> & {
  * @typeParam T - The type of the resolved value / 解析值的类型
  * @param fn - the function to retry / 重试的异步函数
  * @param options - the options for retry / 重试选项
- * @param options.limit
- * @param options.delay
+ * @param options.limit - The total number of attempts (including the initial call), default is 3 / 总尝试次数（包含初始调用），默认 3
+ * @param options.delay - The delay between retries, default is 0 / 重试间隔，默认为 0
  * @param options.signal - AbortSignal for cancellation (optional) / 用于取消的 AbortSignal（可选）
  * @param options.timeout - Maximum total time in milliseconds (optional) / 最大总时间（毫秒，可选）
+ *
+ * @returns The promise that resolves to the result of the function / 返回解析到函数结果的 promise
  *
  * @example
  * ```ts
@@ -81,9 +85,15 @@ export function retry<T>(
   fn: (signal?: AbortSignal) => Promise<T>,
   { limit = 3, delay = 0, signal, timeout }: RetryOptions = {},
 ): RetryablePromise<T> {
-  if (limit < 1) throw new RangeError('limit must be at least 1')
-  if (delay < 0) throw new RangeError('delay must be non-negative')
-  if (timeout !== undefined && timeout <= 0) throw new RangeError('timeout must be positive')
+  if (limit < 1) {
+    throw new RangeError('limit must be at least 1')
+  }
+  if (delay < 0) {
+    throw new RangeError('delay must be non-negative')
+  }
+  if (timeout !== undefined && timeout <= 0) {
+    throw new RangeError('timeout must be positive')
+  }
 
   let cancelled = false
   let settled = false
@@ -92,8 +102,10 @@ export function retry<T>(
   let rejectFn: (reason?: unknown) => void
   let timeoutController: AbortController | undefined
 
-  const cleanup = () => {
-    if (settled) return
+  const cleanup = (): void => {
+    if (settled) {
+      return
+    }
     if (timer) {
       clearTimeout(timer)
       timer = undefined
@@ -126,9 +138,11 @@ export function retry<T>(
     rejectFn = reject
     let attempts = 0
 
-    const retry = () => {
+    const retryFn = (): void => {
       /* istanbul ignore if -- @preserve */
-      if (cancelled) return
+      if (cancelled) {
+        return
+      }
 
       if (timeout && timestamp() - startTime > timeout) {
         settled = true
@@ -158,8 +172,10 @@ export function retry<T>(
         }, remaining)
       }
 
-      const handleSuccess = (value: T) => {
-        if (settled) return
+      const handleSuccess = (value: T): void => {
+        if (settled) {
+          return
+        }
         settled = true
         if (timeoutTimer) {
           clearTimeout(timeoutTimer)
@@ -170,8 +186,10 @@ export function retry<T>(
         resolve(value)
       }
 
-      const handleError = (error: unknown) => {
-        if (settled) return
+      const handleError = (error: unknown): void => {
+        if (settled) {
+          return
+        }
         if (timeoutTimer) {
           clearTimeout(timeoutTimer)
           timeoutTimer = undefined
@@ -179,7 +197,7 @@ export function retry<T>(
         timeoutController = undefined
         attempts++
         if (attempts < limit && !cancelled) {
-          timer = setTimeout(retry, delay)
+          timer = setTimeout(retryFn, delay)
         } else {
           settled = true
           signal?.removeEventListener('abort', cleanup)
@@ -192,13 +210,13 @@ export function retry<T>(
       }
 
       try {
-        fn(combinedSignal).then(handleSuccess, handleError)
+        fn(combinedSignal).then(handleSuccess).catch(handleError)
       } catch (syncError) {
         handleError(syncError)
       }
     }
 
-    retry()
+    retryFn()
   })
 
   return Object.assign(promise, { cancel: cleanup })

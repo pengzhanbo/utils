@@ -1,13 +1,13 @@
 import { describe, bench } from 'vitest'
-import { partition } from '../../array/partition'
+import { partition } from '../../array/partition.js'
 
-describe('Performance > Array > Partition', () => {
+describe('performance > Array > Partition', () => {
   // PT-01: Small array / 小数组
   bench(
     'partition | small array (100 items, 50% pass)',
     () => {
       const arr = Array.from({ length: 100 }, (_, i) => i)
-      partition(arr, (n) => n % 2 === 0)
+      partition(arr, (item) => item % 2 === 0)
     },
     { time: 1000, iterations: 500 },
   )
@@ -17,7 +17,7 @@ describe('Performance > Array > Partition', () => {
     'partition | medium array (10K items)',
     () => {
       const arr = Array.from({ length: 10000 }, (_, i) => i)
-      partition(arr, (n) => n % 2 === 0)
+      partition(arr, (item) => item % 2 === 0)
     },
     { time: 1000, iterations: 200 },
   )
@@ -27,7 +27,7 @@ describe('Performance > Array > Partition', () => {
     'partition | large array (100K items)',
     () => {
       const arr = Array.from({ length: 100000 }, (_, i) => i)
-      partition(arr, (n) => n < 50000)
+      partition(arr, (item) => item < 50000)
     },
     { time: 2000, iterations: 50 },
   )
@@ -52,7 +52,7 @@ describe('Performance > Array > Partition', () => {
     'partition | string length check (10K strings)',
     () => {
       const arr = Array.from({ length: 10000 }, (_, i) => 'x'.repeat((i % 10) + 1))
-      partition(arr, (s) => s.length > 5)
+      partition(arr, (item) => item.length > 5)
     },
     { time: 1000, iterations: 100 },
   )
@@ -62,8 +62,8 @@ describe('Performance > Array > Partition', () => {
     'filter×2 baseline | two filter calls (10K items)',
     () => {
       const arr = Array.from({ length: 10000 }, (_, i) => i)
-      const pass = arr.filter((n) => n % 2 === 0)
-      void arr.filter((n) => n % 2 !== 0)
+      const pass = arr.filter((item) => item % 2 === 0)
+      void arr.filter((item) => item % 2 !== 0)
       void pass.length
     },
     { time: 1000, iterations: 200 },

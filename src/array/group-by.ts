@@ -1,4 +1,4 @@
-import { hasOwn } from '../object'
+import { hasOwn } from '../object/has-own.js'
 
 /**
  * Groups the elements of an array based on the given function.

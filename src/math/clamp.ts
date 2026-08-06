@@ -17,7 +17,9 @@
  * ```
  */
 export function clamp(n: number, min: number, max: number): number {
-  if (min > max) [max, min] = [min, max]
+  if (min > max) {
+    ;[max, min] = [min, max]
+  }
 
   return Math.min(max, Math.max(n, min))
 }

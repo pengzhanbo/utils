@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { copyProperties } from '../_internal/deepCloneImpl'
-import { deepClone, shallowClone, simpleClone } from './clone'
+import { copyProperties } from '../_internal/deepCloneImpl.js'
+import { deepClone, shallowClone, simpleClone } from './clone.js'
 
 describe('clone > simpleClone', () => {
   it('should work', () => {
@@ -503,19 +503,21 @@ describe('clone > deepClone', () => {
 
   it('should skip __proto__ own property during deep clone', () => {
     const source = Object.create(null)
-    // oxlint-disable-next-line no-restricted-properties no-proto
+    // oxlint-disable-next-line no-proto no-restricted-properties
     source.__proto__ = { tainted: true }
     source.safe = { value: 1 }
     const cloned = deepClone(source)
     expect(cloned.safe).toEqual({ value: 1 })
     expect(cloned.safe).not.toBe(source.safe)
-    // oxlint-disable-next-line no-restricted-properties no-proto
+    // oxlint-disable-next-line no-proto no-restricted-properties
     expect(cloned.__proto__).toBeUndefined()
   })
 
   it('should throw RangeError when nesting depth exceeds 1000', () => {
     let nested: any = { leaf: 1 }
-    for (let i = 0; i < 1001; i++) nested = { next: nested }
+    for (let i = 0; i < 1001; i++) {
+      nested = { next: nested }
+    }
 
     let error: unknown
     try {
@@ -530,7 +532,9 @@ describe('clone > deepClone', () => {
 
   it('should clone 500-level nested objects successfully', () => {
     let nested: any = { leaf: 1 }
-    for (let i = 0; i < 500; i++) nested = { next: nested }
+    for (let i = 0; i < 500; i++) {
+      nested = { next: nested }
+    }
 
     const cloned = deepClone(nested)
 
@@ -540,7 +544,9 @@ describe('clone > deepClone', () => {
 
   it('should throw RangeError for deeply nested arrays', () => {
     let nested: any[] = [1]
-    for (let i = 0; i < 1001; i++) nested = [nested]
+    for (let i = 0; i < 1001; i++) {
+      nested = [nested]
+    }
 
     expect(() => deepClone(nested)).toThrow(RangeError)
   })

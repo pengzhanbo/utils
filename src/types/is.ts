@@ -1,5 +1,5 @@
-import type { Not, Primitive } from './basic'
-import type { NegativeInfinity, PositiveInfinity } from './numeric'
+import type { Not, Primitive } from './basic.js'
+import type { NegativeInfinity, PositiveInfinity } from './numeric.js'
 
 /**
  * If the type T accepts type `Primitive`, output type true, otherwise output type false.

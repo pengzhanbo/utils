@@ -1,4 +1,4 @@
-import type { IsFloat, IsInteger } from './is'
+import type { IsFloat, IsInteger } from './is.js'
 
 /**
  * Numeric type, includes number and bigint

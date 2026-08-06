@@ -1,4 +1,4 @@
-import { T_UNDEFINED } from '../_internal/tags'
+import { T_UNDEFINED } from '../_internal/tags.js'
 
 /**
  * Checks if the current runtime is a browser environment.
@@ -17,6 +17,6 @@ import { T_UNDEFINED } from '../_internal/tags'
  */
 export function isBrowser(): boolean {
   /* istanbul ignore next -- @preserve */
-  // eslint-disable-next-line valid-typeof
+  // oxlint-disable-next-line valid-typeof typescript/no-unnecessary-condition
   return typeof window !== T_UNDEFINED && window.document != null
 }

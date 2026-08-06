@@ -1,6 +1,6 @@
-import { del } from '../_internal/reflect'
-import { isUndefined } from '../predicate'
-import { objectKeys } from './keys'
+import { del } from '../_internal/reflect.js'
+import { isUndefined } from '../predicate/is-undefined.js'
+import { objectKeys } from './keys.js'
 
 /**
  * Remove keys with undefined values from an object
@@ -26,8 +26,9 @@ import { objectKeys } from './keys'
  */
 export function clearUndefined<T extends object>(obj: T): T {
   for (const key of objectKeys(obj)) {
-    // @ts-expect-error
-    if (isUndefined(obj[key])) del(obj, key)
+    if (isUndefined(obj[key])) {
+      del(obj, key)
+    }
   }
   return obj
 }

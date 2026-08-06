@@ -1,5 +1,5 @@
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest'
-import { debounce } from './debounce'
+import { debounce } from './debounce.js'
 
 describe('function > debounce', () => {
   beforeEach(() => {
@@ -10,7 +10,7 @@ describe('function > debounce', () => {
     vi.restoreAllMocks()
   })
 
-  it('should debounce function execution at end (default)', async () => {
+  it('should debounce function execution at end (default)', () => {
     const fn = vi.fn()
     const debounced = debounce(100, fn)
 
@@ -25,7 +25,7 @@ describe('function > debounce', () => {
     expect(fn).toHaveBeenCalledTimes(1)
   })
 
-  it('should debounce function execution at beginning when atBegin is true', async () => {
+  it('should debounce function execution at beginning when atBegin is true', () => {
     const fn = vi.fn()
     const debounced = debounce(100, fn, { atBegin: true })
 
@@ -53,7 +53,7 @@ describe('function > debounce', () => {
 
   it('should preserve this context', () => {
     const context = { value: 42 }
-    const fn = vi.fn(function (this: any) {
+    const fn = vi.fn(function fn(this: any) {
       expect(this).toBe(context)
     })
     const debounced = debounce(100, fn)
@@ -70,7 +70,7 @@ describe('function > debounce', () => {
     const debounced = debounce(100, fn)
 
     debounced()
-    ;(debounced as any).cancel()
+    debounced.cancel()
 
     vi.advanceTimersByTime(100)
 
@@ -153,7 +153,7 @@ describe('function > debounce', () => {
     const debounced = debounce(100, fn)
 
     debounced()
-    ;(debounced as any).cancel({ upcomingOnly: true })
+    debounced.cancel({ upcomingOnly: true })
 
     vi.advanceTimersByTime(100)
     expect(fn).toHaveBeenCalledTimes(0)

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { objectMap } from './map'
+import { objectMap } from './map.js'
 
 describe('object > objectMap', () => {
   it('should work', () => {

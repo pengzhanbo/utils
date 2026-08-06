@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isPromise, isPromiseLike } from './is-promise'
+import { isPromise, isPromiseLike } from './is-promise.js'
 
 describe('predicate > isPromise', () => {
   it('should return true for Promise instances', () => {

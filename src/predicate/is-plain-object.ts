@@ -1,6 +1,6 @@
-import { T_OBJECT } from '../_internal/tags'
-import { isNull } from './is-null'
-import { isTypeof } from './is-typeof'
+import { T_OBJECT } from '../_internal/tags.js'
+import { isNull } from './is-null.js'
+import { isTypeof } from './is-typeof.js'
 
 /**
  * Checks if the input is an object.
@@ -21,7 +21,9 @@ import { isTypeof } from './is-typeof'
  * ```
  */
 export function isPlainObject<T extends Record<any, any> = Record<any, any>>(v: unknown): v is T {
-  if (!isTypeof(v, T_OBJECT)) return false
+  if (!isTypeof(v, T_OBJECT)) {
+    return false
+  }
   const proto = Object.getPrototypeOf(v)
   return isNull(proto) || proto === Object.prototype
 }

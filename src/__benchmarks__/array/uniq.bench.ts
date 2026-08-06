@@ -1,7 +1,7 @@
 import { describe, bench } from 'vitest'
-import { uniq, uniqBy, uniqWith } from '../../array/uniq'
+import { uniq, uniqBy, uniqWith } from '../../array/uniq.js'
 
-describe('Performance > Array > Uniq', () => {
+describe('performance > Array > Uniq', () => {
   // UQ-01: Small array with many duplicates / 小数组多重复
   bench(
     'uniq | small array (100 items, 50% duplicates)',
@@ -91,7 +91,7 @@ describe('Performance > Array > Uniq', () => {
 
   // UQ-09: vs manual Set conversion / 与手动Set转换对比
   bench(
-    'Manual Set | Array.from(new Set()) (100K items)',
+    'manual Set | Array.from(new Set()) (100K items)',
     () => {
       const arr = Array.from({ length: 100000 }, (_, i) => i % 10000)
       Array.from(new Set(arr))

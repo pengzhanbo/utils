@@ -3,8 +3,8 @@ import {
   OPERATION_MAP,
   OPERATION_TAKE,
   OPERATION_DROP,
-} from '../_internal/iterator'
-import { isFunction, isInteger, isNumber } from '../predicate'
+} from '../_internal/iterator.js'
+import { isFunction, isInteger, isNumber } from '../predicate/index.js'
 
 /**
  * Predicate function type for filtering array elements
@@ -91,6 +91,10 @@ export class ArrayIterator<T = unknown> {
    * Creates a new iterator with existing source and operations
    *
    * 使用现有源数据和操作创建新迭代器
+   *
+   * @param source - The source array to iterate over. 要迭代的源数组
+   * @param operations - The list of operations to be applied lazily. 要惰性应用的操作列表
+   * @returns A new ArrayIterator instance with the source and operations. 包含源和操作的新 ArrayIterator 实例
    */
   private static create<T>(source: unknown[], operations: Operation<unknown>[]): ArrayIterator<T> {
     const iterator = new ArrayIterator<T>(source as T[])
@@ -102,6 +106,9 @@ export class ArrayIterator<T = unknown> {
    * Creates a generator that applies all operations in a single pass
    *
    * 创建一个在单次遍历中应用所有操作的生成器
+   *
+   * @yields {T} The next value in the sequence. 序列中的下一个值
+   * @throws {Error} If the sequence is infinite. 如果序列无限无限，则抛出错误
    */
   private *iterate(): Generator<T> {
     const firstTakeIndex = this.operations.findIndex((op) => op.type === OPERATION_TAKE)
@@ -126,6 +133,7 @@ export class ArrayIterator<T = unknown> {
       if (op.type === OPERATION_TAKE) {
         minTakeLimit = Math.min(minTakeLimit, op.limit)
       }
+
       if (op.type === OPERATION_DROP) {
         dropCount += op.count
       }
@@ -159,13 +167,16 @@ export class ArrayIterator<T = unknown> {
       let shouldDrop = false
 
       for (const op of this.operations) {
-        if (!shouldYield) break
+        if (!shouldYield) {
+          break
+        }
 
         switch (op.type) {
           case OPERATION_FILTER:
             if (!op.predicate(current, processedCount)) {
               shouldYield = false
             }
+
             break
 
           case OPERATION_MAP:
@@ -179,7 +190,9 @@ export class ArrayIterator<T = unknown> {
             if (droppedCount < dropCount) {
               shouldDrop = true
             }
+
             break
+          // no default
         }
       }
 
@@ -223,6 +236,7 @@ export class ArrayIterator<T = unknown> {
     if (!isFunction(predicate)) {
       throw new TypeError('predicate must be a function')
     }
+
     return ArrayIterator.create<T>(this.source, [
       ...this.operations,
       {
@@ -255,6 +269,7 @@ export class ArrayIterator<T = unknown> {
     if (!isFunction(transform)) {
       throw new TypeError('transform must be a function')
     }
+
     return ArrayIterator.create<R>(this.source, [
       ...this.operations,
       { type: OPERATION_MAP, transform: transform as (value: unknown, index: number) => unknown },
@@ -283,6 +298,7 @@ export class ArrayIterator<T = unknown> {
     if (!isNumber(limit) || !isInteger(limit) || limit < 0) {
       throw new TypeError('limit must be a non-negative integer')
     }
+
     return ArrayIterator.create<T>(this.source, [
       ...this.operations,
       { type: OPERATION_TAKE, limit },
@@ -311,6 +327,7 @@ export class ArrayIterator<T = unknown> {
     if (!isNumber(count) || !isInteger(count) || count < 0) {
       throw new TypeError('count must be a non-negative integer')
     }
+
     return ArrayIterator.create<T>(this.source, [
       ...this.operations,
       { type: OPERATION_DROP, count },
@@ -336,6 +353,7 @@ export class ArrayIterator<T = unknown> {
     if (!isFunction(callback)) {
       throw new TypeError('callback must be a function')
     }
+
     let index = 0
     for (const value of this.iterate()) {
       callback(value, index++)
@@ -362,12 +380,14 @@ export class ArrayIterator<T = unknown> {
     if (!isFunction(predicate)) {
       throw new TypeError('predicate must be a function')
     }
+
     let index = 0
     for (const value of this.iterate()) {
       if (!predicate(value, index++)) {
         return false
       }
     }
+
     return true
   }
 
@@ -391,12 +411,14 @@ export class ArrayIterator<T = unknown> {
     if (!isFunction(predicate)) {
       throw new TypeError('predicate must be a function')
     }
+
     let index = 0
     for (const value of this.iterate()) {
       if (predicate(value, index++)) {
         return true
       }
     }
+
     return false
   }
 
@@ -420,12 +442,14 @@ export class ArrayIterator<T = unknown> {
     if (!isFunction(predicate)) {
       throw new TypeError('predicate must be a function')
     }
+
     let index = 0
     for (const value of this.iterate()) {
       if (predicate(value, index++)) {
         return value
       }
     }
+
     return undefined
   }
 

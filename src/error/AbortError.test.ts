@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { AbortError } from './AbortError'
+import { AbortError } from './AbortError.js'
 
 describe('error > AbortError', () => {
   it('should create AbortError with default message', () => {

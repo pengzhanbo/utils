@@ -1,5 +1,5 @@
-import type { Arrayable, Nullable } from '../types'
-import { isArray, isNil } from '../predicate'
+import type { Arrayable, Nullable } from '../types/index.js'
+import { isArray, isNil } from '../predicate/index.js'
 
 /**
  * Convert `Arrayable<T>` to `Array<T>`
@@ -22,7 +22,11 @@ import { isArray, isNil } from '../predicate'
  * ```
  */
 export function toArray<T>(v: Nullable<Arrayable<T>>): T[] {
-  if (isNil(v)) return []
-  if (isArray(v)) return v
+  if (isNil(v)) {
+    return []
+  }
+  if (isArray(v)) {
+    return v
+  }
   return [v]
 }

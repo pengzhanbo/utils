@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isSameDay } from './is-same-day'
+import { isSameDay } from './is-same-day.js'
 
 describe('date > isSameDay', () => {
   it('should return true for same day dates', () => {

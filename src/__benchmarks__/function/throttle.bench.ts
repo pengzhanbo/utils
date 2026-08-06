@@ -1,7 +1,7 @@
 import { describe, bench } from 'vitest'
-import { throttle } from '../../function/throttle'
+import { throttle } from '../../function/throttle.js'
 
-describe('Performance > Function > Throttle', () => {
+describe('performance > Function > Throttle', () => {
   // TH-01: Creation overhead / 创建开销
   bench(
     'throttle creation | delay=100ms',
@@ -24,7 +24,7 @@ describe('Performance > Function > Throttle', () => {
         fn()
       }
 
-      await new Promise((resolve) => setTimeout(resolve, 50))
+      await new Promise((resolve) => void setTimeout(resolve, 50))
       void count
     },
     { time: 2000, iterations: 100 },
@@ -47,7 +47,7 @@ describe('Performance > Function > Throttle', () => {
         fn()
       }
 
-      await new Promise((resolve) => setTimeout(resolve, 30))
+      await new Promise((resolve) => void setTimeout(resolve, 30))
       void count
     },
     { time: 2000, iterations: 100 },
@@ -70,7 +70,7 @@ describe('Performance > Function > Throttle', () => {
         fn()
       }
 
-      await new Promise((resolve) => setTimeout(resolve, 50))
+      await new Promise((resolve) => void setTimeout(resolve, 50))
       void count
     },
     { time: 2000, iterations: 100 },
@@ -98,7 +98,7 @@ describe('Performance > Function > Throttle', () => {
       fn()
       fn.cancel()
 
-      await new Promise((resolve) => setTimeout(resolve, 80))
+      await new Promise((resolve) => void setTimeout(resolve, 80))
       void count
     },
     { time: 1000, iterations: 100 },
@@ -117,7 +117,7 @@ describe('Performance > Function > Throttle', () => {
         fn(i, i * 2, i * 3)
       }
 
-      await new Promise((resolve) => setTimeout(resolve, 50))
+      await new Promise((resolve) => void setTimeout(resolve, 50))
       void results.length
     },
     { time: 2000, iterations: 100 },

@@ -1,4 +1,4 @@
-import type { Integer } from '../types/numeric'
+import type { Integer } from '../types/numeric.js'
 
 /**
  * Checks if the input is an integer.

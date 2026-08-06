@@ -1,5 +1,5 @@
-import type { Cancel, FnNoReturn } from '../_internal/types'
-import { throttle } from './throttle'
+import type { Cancel, FnNoReturn } from '../_internal/types.js'
+import { throttle } from './throttle.js'
 
 /**
  * Debounce Options
@@ -86,8 +86,9 @@ export function debounce<T extends (...args: any[]) => any>(
   callback: T,
   options?: DebounceOptions,
 ): FnNoReturn<T> & Cancel {
-  if (!Number.isFinite(delay) || delay < 0)
+  if (!Number.isFinite(delay) || delay < 0) {
     throw new RangeError('delay must be a finite non-negative number')
-  const { atBegin = false } = options || {}
+  }
+  const { atBegin = false } = options ?? {}
   return throttle(delay, callback, { debounceMode: atBegin })
 }

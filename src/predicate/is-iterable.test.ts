@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isIterable } from './is-iterable'
+import { isIterable } from './is-iterable.js'
 
 describe('predicate > isIterable', () => {
   it('should return true for built-in iterables', () => {

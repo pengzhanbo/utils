@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
-import { sleep } from '../promise'
-import { limitAsync } from './limit-async'
+import { sleep } from '../promise/sleep.js'
+import { limitAsync } from './limit-async.js'
 
 describe('promise > limitAsync', () => {
   it('limits concurrency of async callbacks', async () => {
@@ -46,7 +46,7 @@ describe('promise > limitAsync', () => {
 
     expect(results).toEqual([3, 1, 4, 2])
 
-    expect(callback).toBeCalledTimes(4)
+    expect(callback).toHaveBeenCalledTimes(4)
     expect(callback.mock.calls[0]![0]).toBe(3)
     expect(callback.mock.calls[1]![0]).toBe(1)
     expect(callback.mock.calls[2]![0]).toBe(4)

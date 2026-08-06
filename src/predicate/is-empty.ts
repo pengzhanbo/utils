@@ -1,11 +1,11 @@
-import { isArray } from './is-array'
-import { isBuffer } from './is-buffer'
-import { isEmptyObject } from './is-empty-object'
-import { isMap } from './is-map'
-import { isNil } from './is-nil'
-import { isSet } from './is-set'
-import { isString } from './is-string'
-import { isTypedArray } from './is-typed-array'
+import { isArray } from './is-array.js'
+import { isBuffer } from './is-buffer.js'
+import { isEmptyObject } from './is-empty-object.js'
+import { isMap } from './is-map.js'
+import { isNil } from './is-nil.js'
+import { isSet } from './is-set.js'
+import { isString } from './is-string.js'
+import { isTypedArray } from './is-typed-array.js'
 
 /**
  * Checks if a value is empty.
@@ -38,11 +38,17 @@ import { isTypedArray } from './is-typed-array'
  * ```
  */
 export function isEmpty(v: unknown): boolean {
-  if (isNil(v)) return true
+  if (isNil(v)) {
+    return true
+  }
 
-  if (isString(v) || isArray(v) || isBuffer(v) || isTypedArray(v)) return v.length === 0
+  if (isString(v) || isArray(v) || isBuffer(v) || isTypedArray(v)) {
+    return v.length === 0
+  }
 
-  if (isMap(v) || isSet(v)) return v.size === 0
+  if (isMap(v) || isSet(v)) {
+    return v.size === 0
+  }
 
   return isEmptyObject(v)
 }

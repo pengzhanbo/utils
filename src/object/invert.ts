@@ -1,4 +1,4 @@
-import { objectMap } from './map'
+import { objectMap } from './map.js'
 
 /**
  * Inverts the keys and values of an object.

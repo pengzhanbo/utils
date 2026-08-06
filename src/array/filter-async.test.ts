@@ -1,11 +1,12 @@
 import { describe, expect, it, vi } from 'vitest'
-import { sleep } from '../promise'
-import { filterAsync } from './filter-async'
+import { sleep } from '../promise/sleep.js'
+import { filterAsync } from './filter-async.js'
 
 describe('array > filterAsync', () => {
   it('filters array asynchronously', async () => {
     const arr = [1, 2, 3, 4, 5]
 
+    // oxlint-disable-next-line typescript/require-await
     const predicate = vi.fn(async (n: number) => n % 2 === 0)
     const result = await filterAsync(arr, predicate)
 
@@ -19,6 +20,7 @@ describe('array > filterAsync', () => {
 
   it('returns empty array if given empty array', async () => {
     const arr: number[] = []
+    // oxlint-disable-next-line typescript/require-await
     const predicate = vi.fn(async () => true)
 
     const result = await filterAsync(arr, predicate)
@@ -29,6 +31,7 @@ describe('array > filterAsync', () => {
 
   it('returns empty array if all elements fail predicate', async () => {
     const arr = [1, 3, 5]
+    // oxlint-disable-next-line typescript/require-await
     const predicate = async (n: number) => n % 2 === 0
 
     const result = await filterAsync(arr, predicate)
@@ -37,6 +40,7 @@ describe('array > filterAsync', () => {
 
   it('returns all elements if all pass predicate', async () => {
     const arr = [2, 4, 6]
+    // oxlint-disable-next-line typescript/require-await
     const predicate = async (n: number) => n % 2 === 0
 
     const result = await filterAsync(arr, predicate)
@@ -45,6 +49,7 @@ describe('array > filterAsync', () => {
 
   it('propagates rejection if any predicate throws', async () => {
     const arr = [1, 2, 3]
+    // oxlint-disable-next-line typescript/require-await
     const errorFn = async (item: number) => {
       if (item === 2) {
         throw new Error('fail')

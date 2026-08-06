@@ -22,10 +22,13 @@ export function objectGet<T extends Record<PropertyKey, any>, P extends ObjectKe
   path: P,
 ): ObjectGet<T, P> {
   const keys = parseObjectPath(path)
-  let res: any = source
-  for (const k of keys) res = res?.[k]
+  let res: Record<PropertyKey, any> = source
+  for (const k of keys) {
+    // oxlint-disable-next-line typescript/no-unnecessary-condition
+    res = res?.[k]
+  }
 
-  return res
+  return res as ObjectGet<T, P>
 }
 
 function parseObjectPath(path: string): string[] {
@@ -38,7 +41,9 @@ function parseObjectPath(path: string): string[] {
     }
     if (path[i] === '[') {
       const end = path.indexOf(']', i)
-      if (end === -1) break
+      if (end === -1) {
+        break
+      }
       const content = path.slice(i + 1, end)
       if (content === '') {
         i = end + 1
@@ -54,7 +59,9 @@ function parseObjectPath(path: string): string[] {
       i = end + 1
     } else {
       let end = i
-      while (end < path.length && path[end] !== '.' && path[end] !== '[') end++
+      while (end < path.length && path[end] !== '.' && path[end] !== '[') {
+        end++
+      }
       keys.push(path.slice(i, end))
       i = end
     }

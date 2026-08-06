@@ -1,6 +1,6 @@
-import type { Arrayable } from '../types'
-import { del } from '../_internal/reflect'
-import { isArray } from '../predicate'
+import type { Arrayable } from '../types/index.js'
+import { del } from '../_internal/reflect.js'
+import { isArray } from '../predicate/is-array.js'
 
 /**
  * Delete keys from object
@@ -32,7 +32,9 @@ export function deleteKey<T extends object, K extends keyof T>(obj: T, key: Arra
     }
     let anyDeleted = false
     for (const k of key) {
-      if (del(obj, k)) anyDeleted = true
+      if (del(obj, k)) {
+        anyDeleted = true
+      }
     }
     return anyDeleted
   } else {

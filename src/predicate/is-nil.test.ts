@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isNil } from './is-nil'
+import { isNil } from './is-nil.js'
 
 describe('predicate > isNil', () => {
   it('should return true for null', () => {

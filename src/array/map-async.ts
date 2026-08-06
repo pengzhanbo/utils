@@ -1,4 +1,4 @@
-import { promiseParallel } from '../promise'
+import { promiseParallel } from '../promise/parallel.js'
 
 /**
  * Transforms each element in an array using an async callback function and returns
@@ -55,7 +55,7 @@ export async function mapAsync<T, R = T>(
   const result: R[] = await promiseParallel(
     array.map(
       (...args) =>
-        () =>
+        async () =>
           transform(...args),
     ),
     concurrency,

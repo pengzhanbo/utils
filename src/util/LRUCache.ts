@@ -1,5 +1,6 @@
-import { timestamp } from '../date'
-import { isFunction, isNumber } from '../predicate'
+import { timestamp } from '../date/timestamp.js'
+import { isFunction } from '../predicate/is-function.js'
+import { isNumber } from '../predicate/is-number.js'
 
 /**
  * LRU Cache Options
@@ -112,7 +113,7 @@ export class LRUCache<K, V> extends Map<K, V> implements Iterable<[K, V]> {
     }
 
     this.#maxSize = options.maxSize
-    this.#maxAge = options.maxAge || Number.POSITIVE_INFINITY
+    this.#maxAge = options.maxAge ?? Number.POSITIVE_INFINITY
     this.#size = 0
     this.#onEviction = options.onEviction
   }
@@ -121,7 +122,7 @@ export class LRUCache<K, V> extends Map<K, V> implements Iterable<[K, V]> {
     for (const item of this.#cache) {
       const [key, value] = item
       const deleted = this.#deleteIfExpired(key, value)
-      if (deleted === false) {
+      if (!deleted) {
         yield [key, value.value]
       }
     }
@@ -130,7 +131,7 @@ export class LRUCache<K, V> extends Map<K, V> implements Iterable<[K, V]> {
       const [key, value] = item
       if (!this.#cache.has(key)) {
         const deleted = this.#deleteIfExpired(key, value)
-        if (deleted === false) {
+        if (!deleted) {
           yield [key, value.value]
         }
       }
@@ -156,7 +157,7 @@ export class LRUCache<K, V> extends Map<K, V> implements Iterable<[K, V]> {
    * @returns instance  实例
    */
   override set(key: K, value: V, options?: LRUCacheSetOptions): this {
-    const maxAge = options?.maxAge || this.#maxAge
+    const maxAge = options?.maxAge ?? this.#maxAge
     const expiry =
       isNumber(maxAge) && maxAge !== Number.POSITIVE_INFINITY ? timestamp() + maxAge : undefined
 
@@ -187,7 +188,7 @@ export class LRUCache<K, V> extends Map<K, V> implements Iterable<[K, V]> {
 
     if (this.#oldCache.has(key)) {
       const item = this.#oldCache.get(key)!
-      if (this.#deleteIfExpired(key, item) === false) {
+      if (!this.#deleteIfExpired(key, item)) {
         this.#moveToRecent(key, item)
         return item.value
       }
@@ -293,7 +294,7 @@ export class LRUCache<K, V> extends Map<K, V> implements Iterable<[K, V]> {
    * @param size cache size 缓存大小
    */
   resize(size?: number): void {
-    if (!(size && size > 0)) {
+    if (!(size !== undefined && size > 0)) {
       throw new TypeError('`maxSize` must be a number greater than 0')
     }
 
@@ -350,6 +351,8 @@ export class LRUCache<K, V> extends Map<K, V> implements Iterable<[K, V]> {
 
   /**
    * Iterable for all the keys. 所有键的迭代器。
+   *
+   * @yields {K} key  项目的键
    */
   override *keys(): MapIterator<K> {
     for (const [key] of this) {
@@ -359,6 +362,8 @@ export class LRUCache<K, V> extends Map<K, V> implements Iterable<[K, V]> {
 
   /**
    * Iterable for all the values. 所有值的迭代器。
+   *
+   * @yields {V} value  项目的值
    */
   override *values(): MapIterator<V> {
     for (const [, value] of this) {
@@ -368,6 +373,8 @@ export class LRUCache<K, V> extends Map<K, V> implements Iterable<[K, V]> {
 
   /**
    * Iterable for all the entries. 所有条目的迭代器。
+   *
+   * @yields {[K, V]} entry  项目的键值对
    */
   override *entries(): MapIterator<[K, V]> {
     for (const [key, value] of this.#entriesAscending()) {
@@ -387,7 +394,7 @@ export class LRUCache<K, V> extends Map<K, V> implements Iterable<[K, V]> {
       const item = items[i]!
       const [key, value] = item
       const deleted = this.#deleteIfExpired(key, value)
-      if (deleted === false) {
+      if (!deleted) {
         yield [key, value.value]
       }
     }
@@ -398,7 +405,7 @@ export class LRUCache<K, V> extends Map<K, V> implements Iterable<[K, V]> {
       const [key, value] = item
       if (!this.#cache.has(key)) {
         const deleted = this.#deleteIfExpired(key, value)
-        if (deleted === false) {
+        if (!deleted) {
           yield [key, value.value]
         }
       }
@@ -452,7 +459,7 @@ export class LRUCache<K, V> extends Map<K, V> implements Iterable<[K, V]> {
     this.#size = 0
   }
 
-  #emitEvictions(cache: InternalLRUCache<K, V> | (readonly [K, LRUCacheItem<V>])[]) {
+  #emitEvictions(cache: InternalLRUCache<K, V> | (readonly [K, LRUCacheItem<V>])[]): void {
     if (!isFunction(this.#onEviction)) {
       return
     }
@@ -472,7 +479,7 @@ export class LRUCache<K, V> extends Map<K, V> implements Iterable<[K, V]> {
 
   #getOrDeleteIfExpired(key: K, item: LRUCacheItem<V>): V | undefined {
     const deleted = this.#deleteIfExpired(key, item)
-    if (deleted === false) {
+    if (!deleted) {
       return item.value
     }
   }
@@ -486,7 +493,7 @@ export class LRUCache<K, V> extends Map<K, V> implements Iterable<[K, V]> {
     return this.#getItemValue(key, item)
   }
 
-  #set(key: K, value: LRUCacheItem<V>) {
+  #set(key: K, value: LRUCacheItem<V>): void {
     this.#cache.set(key, value)
     this.#size++
 
@@ -498,17 +505,17 @@ export class LRUCache<K, V> extends Map<K, V> implements Iterable<[K, V]> {
     }
   }
 
-  #moveToRecent(key: K, item: LRUCacheItem<V>) {
+  #moveToRecent(key: K, item: LRUCacheItem<V>): void {
     this.#oldCache.delete(key)
     this.#set(key, item)
   }
 
-  *#entriesAscending() {
+  *#entriesAscending(): IterableIterator<[K, LRUCacheItem<V>]> {
     for (const item of this.#oldCache) {
       const [key, value] = item
       if (!this.#cache.has(key)) {
         const deleted = this.#deleteIfExpired(key, value)
-        if (deleted === false) {
+        if (!deleted) {
           yield item
         }
       }
@@ -517,7 +524,7 @@ export class LRUCache<K, V> extends Map<K, V> implements Iterable<[K, V]> {
     for (const item of this.#cache) {
       const [key, value] = item
       const deleted = this.#deleteIfExpired(key, value)
-      if (deleted === false) {
+      if (!deleted) {
         yield item
       }
     }

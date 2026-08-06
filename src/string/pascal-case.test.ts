@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { pascalCase } from './pascal-case'
+import { pascalCase } from './pascal-case.js'
 
 describe('string > pascalCase', () => {
   it('should work', () => {

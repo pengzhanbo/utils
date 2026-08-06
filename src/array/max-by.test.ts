@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { maxBy } from './max-by'
+import { maxBy } from './max-by.js'
 
 describe('array > max-by', () => {
   it('should return undefined for an empty array', () => {

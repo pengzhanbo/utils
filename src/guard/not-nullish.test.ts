@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { notNullish } from './not-nullish'
+import { notNullish } from './not-nullish.js'
 
 describe('guard > notNullish', () => {
   it('should work', () => {

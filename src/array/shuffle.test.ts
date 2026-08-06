@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { shuffle } from './shuffle'
+import { shuffle } from './shuffle.js'
 
 describe('array > shuffle', () => {
   it('should handle empty array', () => {
@@ -36,6 +36,7 @@ describe('array > shuffle', () => {
     const input = [1, 'a', true, null, undefined]
     const result = shuffle([...input])
     expect(result).toHaveLength(input.length)
+    // oxlint-disable-next-line typescript/require-array-sort-compare
     expect(result.sort()).toEqual([...input].sort())
   })
 

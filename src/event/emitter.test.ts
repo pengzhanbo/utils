@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
-import { hasOwn } from '../object/has-own'
-import { createEmitter } from './emitter'
+import { hasOwn } from '../object/has-own.js'
+import { createEmitter } from './emitter.js'
 
 describe('event > emitter', () => {
   it('should create an event emitter', () => {

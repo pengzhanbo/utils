@@ -1,5 +1,5 @@
-import type { AsyncReturnType } from '../types'
-import { isError } from '../predicate'
+import type { AsyncReturnType } from '../types/index.js'
+import { isError } from '../predicate/is-error.js'
 
 /**
  * Attempt to execute a function and return the result or error.
@@ -21,6 +21,8 @@ import { isError } from '../predicate'
  *
  * @param func - The asynchronous function to execute. 要执行的异步函数
  * @param args - The arguments to pass to the function. 要传递给函数的参数
+ *
+ * @returns A tuple of [Error, null] if the function throws an error, or [null, Result] if it resolves successfully 如果函数抛出错误，则返回 [Error, null] 元组；如果成功解析，则返回 [null, Result] 元组。
  *
  * @example
  * ```ts

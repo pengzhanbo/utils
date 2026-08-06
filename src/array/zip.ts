@@ -33,7 +33,9 @@
  * ```
  */
 export function zip(...arrays: readonly unknown[][]): unknown[][] {
-  if (arrays.length === 0) return []
+  if (arrays.length === 0) {
+    return []
+  }
 
   const minLength = Math.min(...arrays.map((arr) => arr.length))
   const result: unknown[][] = []

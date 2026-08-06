@@ -1,4 +1,4 @@
-import { remove } from '../array/remove'
+import { remove } from '../array/remove.js'
 
 /**
  * Create a promise task execution lock
@@ -6,6 +6,8 @@ import { remove } from '../array/remove'
  * 创建一个 promise 任务执行锁
  *
  * @category Promise
+ *
+ * @returns The promise task execution lock. / promise 任务执行锁
  *
  * @example
  * ```

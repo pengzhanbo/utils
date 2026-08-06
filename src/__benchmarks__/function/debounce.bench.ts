@@ -1,7 +1,7 @@
 import { describe, bench } from 'vitest'
-import { debounce } from '../../function/debounce'
+import { debounce } from '../../function/debounce.js'
 
-describe('Performance > Function > Debounce', () => {
+describe('performance > Function > Debounce', () => {
   // DB-01: Creation overhead / 创建开销
   bench(
     'debounce creation | delay=100ms',
@@ -24,7 +24,7 @@ describe('Performance > Function > Debounce', () => {
         fn()
       }
 
-      await new Promise((resolve) => setTimeout(resolve, 50))
+      await new Promise((resolve) => void setTimeout(resolve, 50))
       void count
     },
     { time: 2000, iterations: 100 },
@@ -47,7 +47,7 @@ describe('Performance > Function > Debounce', () => {
         fn()
       }
 
-      await new Promise((resolve) => setTimeout(resolve, 30))
+      await new Promise((resolve) => void setTimeout(resolve, 30))
       void count
     },
     { time: 2000, iterations: 100 },
@@ -84,7 +84,7 @@ describe('Performance > Function > Debounce', () => {
       })
       fn()
 
-      await new Promise((resolve) => setTimeout(resolve, 10))
+      await new Promise((resolve) => void setTimeout(resolve, 10))
       void executed
     },
     { time: 1000, iterations: 50 },

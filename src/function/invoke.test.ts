@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { invoke } from './invoke'
+import { invoke } from './invoke.js'
 
 describe('function invoke', () => {
   it('should work with once', () => {

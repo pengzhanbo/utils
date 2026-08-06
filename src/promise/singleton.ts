@@ -40,17 +40,20 @@ export function createSingletonPromise<T>(fn: () => Promise<T>): SingletonPromis
   let _promise: Promise<T> | undefined
   let _resetting: Promise<unknown> | undefined
 
-  function wrapper() {
+  function wrapper(): Promise<T> {
     if (_resetting) {
       const resettingPromise = _resetting
       _resetting = undefined
       _promise = resettingPromise.then(() => fn())
       return _promise
     }
-    if (!_promise) _promise = fn()
+    // oxlint-disable-next-line typescript/prefer-nullish-coalescing
+    if (!_promise) {
+      _promise = fn()
+    }
     return _promise
   }
-  wrapper.reset = async () => {
+  wrapper.reset = async (): Promise<void> => {
     const _prev = _promise
     _promise = undefined
     if (_prev) {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isUndefined } from './is-undefined'
+import { isUndefined } from './is-undefined.js'
 
 describe('predicate > isUndefined', () => {
   it('should work', () => {

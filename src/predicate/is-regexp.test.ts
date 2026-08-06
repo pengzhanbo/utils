@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isRegexp } from './is-regexp'
+import { isRegexp } from './is-regexp.js'
 
 describe('predicate > isRegexp', () => {
   it('should work', () => {

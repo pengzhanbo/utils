@@ -1,7 +1,7 @@
 import { describe, bench } from 'vitest'
-import { mask } from '../../string/mask'
+import { mask } from '../../string/mask.js'
 
-describe('Performance > String > Mask', () => {
+describe('performance > String > Mask', () => {
   // MK-01: Short string (default options) / 短字符串（默认选项）
   bench(
     'mask | short phone number (11 chars, default)',

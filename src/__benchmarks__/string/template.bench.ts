@@ -1,16 +1,16 @@
 import { describe, bench } from 'vitest'
-import { template } from '../../string/template'
+import { template } from '../../string/template.js'
 import {
   SMALL_TEMPLATE,
   SMALL_TEMPLATE_VALUES,
   MEDIUM_TEMPLATE,
   DENSE_TEMPLATE,
-} from '../helpers/fixtures'
+} from '../helpers/fixtures.js'
 
-describe('Performance > String > Template', () => {
+describe('performance > String > Template', () => {
   // TM-01: Short template / 简短模板
   bench(
-    'Short template | 50 chars, 2 variables',
+    'short template | 50 chars, 2 variables',
     () => {
       template(SMALL_TEMPLATE, SMALL_TEMPLATE_VALUES)
     },
@@ -19,7 +19,7 @@ describe('Performance > String > Template', () => {
 
   // TM-02: Medium template / 中等模板
   bench(
-    'Medium template | ~250 chars, 10 variables',
+    'medium template | ~250 chars, 10 variables',
     () => {
       template(MEDIUM_TEMPLATE.template, MEDIUM_TEMPLATE.values)
     },
@@ -28,7 +28,7 @@ describe('Performance > String > Template', () => {
 
   // TM-03: Long template / 长模板
   bench(
-    'Long template | 500 chars, 20 variables',
+    'long template | 500 chars, 20 variables',
     () => {
       let longTemplate =
         'Hello {{name}}, welcome to {{app}}. Your {{role}} dashboard shows {{count}} {{items}}.'
@@ -50,7 +50,7 @@ describe('Performance > String > Template', () => {
 
   // TM-04: High variable density / 高密度变量
   bench(
-    'High variable density | 20 variables in compact string',
+    'high variable density | 20 variables in compact string',
     () => {
       template(DENSE_TEMPLATE.template, DENSE_TEMPLATE.values)
     },
@@ -59,7 +59,7 @@ describe('Performance > String > Template', () => {
 
   // TM-05: No variables (fast path) / 无变量（快速路径）
   bench(
-    'No variables | plain string (no replacement needed)',
+    'no variables | plain string (no replacement needed)',
     () => {
       template('This is a plain string without any variables', {})
     },
@@ -68,7 +68,7 @@ describe('Performance > String > Template', () => {
 
   // TM-06: String values fast path / 字符串值快速路径（typeof 优化）
   bench(
-    'String values only | typeof fast path (20 vars)',
+    'string values only | typeof fast path (20 vars)',
     () => {
       const str = Array.from({ length: 20 }, (_, i) => `{{var_${i}}}`).join(' | ')
       const values: Record<string, string> = {}
@@ -82,7 +82,7 @@ describe('Performance > String > Template', () => {
 
   // TM-07: Mixed type values / 混合类型值（需要 String() 转换）
   bench(
-    'Mixed type values | number/boolean/string (10 vars)',
+    'mixed type values | number/boolean/string (10 vars)',
     () => {
       const str =
         '{{a}} + {{b}} = {{c}}, {{d}} is {{e}}, count={{f}}, flag={{g}}, nil={{h}}, {{i}} and {{j}}'

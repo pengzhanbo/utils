@@ -1,4 +1,4 @@
-import type { Fn } from '../types'
+import type { Fn } from '../types/index.js'
 
 /**
  * Get the type of the first element in the array
@@ -37,14 +37,18 @@ type LastArray<T extends any[]> = T extends [...any[], infer U] ? U : Fn
 export function pipe<T extends Fn[] = Fn[]>(
   ...fns: T
 ): (...args: Parameters<FirstArray<T>>) => ReturnType<LastArray<T>> {
-  return function (this: unknown, ...args: Parameters<FirstArray<T>>) {
+  return function func(this: unknown, ...args: Parameters<FirstArray<T>>) {
     const len = fns.length
-    if (len === 0) return args[0] as ReturnType<LastArray<T>>
-    if (len === 1) return fns[0]!.apply(this, args)
+    if (len === 0) {
+      return args[0] as ReturnType<LastArray<T>>
+    }
+    if (len === 1) {
+      return fns[0]!.apply(this, args)
+    }
 
-    let result = fns[0]!.apply(this, args)
+    let result = fns[0]!.apply(this, args) as ReturnType<FirstArray<T>>
     for (let i = 1; i < len; i++) {
-      result = fns[i]!.call(this, result)
+      result = fns[i]!.call(this, result) as ReturnType<FirstArray<T>>
     }
     return result
   }

@@ -19,8 +19,12 @@
  * ```
  */
 export function ensureSuffix(str: string, suffix: string): string {
-  if (!suffix) return str
+  if (!suffix) {
+    return str
+  }
 
-  if (str.endsWith(suffix)) return str
+  if (str.endsWith(suffix)) {
+    return str
+  }
   return str + suffix
 }

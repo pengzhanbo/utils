@@ -1,4 +1,4 @@
-import { isFinite } from '../predicate'
+import { isFinite } from '../predicate/is-finite.js'
 
 /**
  * Greatest Common Divisor (GCD) of two numbers
@@ -22,13 +22,19 @@ import { isFinite } from '../predicate'
  * ```
  */
 export function gcd(a: number, b: number): number {
-  if (!isFinite(a) || !isFinite(b)) return Number.NaN
+  if (!isFinite(a) || !isFinite(b)) {
+    return Number.NaN
+  }
 
   a = Math.abs(Math.floor(a))
   b = Math.abs(Math.floor(b))
 
-  if (a === 0) return b
-  if (b === 0) return a
+  if (a === 0) {
+    return b
+  }
+  if (b === 0) {
+    return a
+  }
 
   while (b !== 0) {
     ;[a, b] = [b, a % b]

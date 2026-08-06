@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { isBrowser } from './is-browser'
+import { isBrowser } from './is-browser.js'
 
 describe('predicate > isBrowser', () => {
   it('should return false in Node.js environment', () => {

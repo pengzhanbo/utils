@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { inRange } from './in-range'
+import { inRange } from './in-range.js'
 
 describe('inRange', () => {
   it('should return true if the number is in range [min, max]', () => {

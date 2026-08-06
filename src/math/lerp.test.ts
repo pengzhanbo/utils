@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { lerp } from './lerp'
+import { lerp } from './lerp.js'
 
 describe('math > lerp', () => {
   it('should return start when t is 0', () => {

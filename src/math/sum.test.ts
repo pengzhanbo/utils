@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { sum } from './sum'
+import { sum } from './sum.js'
 
 describe('math > sum', () => {
   it('should return the sum of positive numbers', () => {

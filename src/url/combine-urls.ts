@@ -1,4 +1,4 @@
-import { removeLeadingSlash, removeTrailingSlash, slash } from './slash'
+import { removeLeadingSlash, removeTrailingSlash, slash } from './slash.js'
 
 const MULTI_SLASH = /(?<!:)\/+/g
 
@@ -22,9 +22,13 @@ const MULTI_SLASH = /(?<!:)\/+/g
  * ```
  */
 export function combineURLs(baseUrl: string, ...urls: string[]): string {
-  if (urls.length === 0) return baseUrl
+  if (urls.length === 0) {
+    return baseUrl
+  }
   const url = slash(removeLeadingSlash(urls.join('/'))).replace(MULTI_SLASH, '/')
-  if (!baseUrl) return url
+  if (!baseUrl) {
+    return url
+  }
   baseUrl = removeTrailingSlash(baseUrl)
   return `${baseUrl}/${url}`
 }

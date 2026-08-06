@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { mapRange } from './map-range'
+import { mapRange } from './map-range.js'
 
 describe('math > mapRange', () => {
   it('should map value correctly', () => {

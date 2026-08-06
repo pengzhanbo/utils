@@ -1,7 +1,7 @@
 import { describe, bench } from 'vitest'
-import { formatBytes } from '../../util/format-bytes'
+import { formatBytes } from '../../util/format-bytes.js'
 
-describe('Performance > Util > FormatBytes', () => {
+describe('performance > Util > FormatBytes', () => {
   // UB-01: Small bytes / 小字节数
   bench(
     'formatBytes | small bytes (500)',

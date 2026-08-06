@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { minBy } from './min-by'
+import { minBy } from './min-by.js'
 
 describe('array > min-by', () => {
   it('should return undefined for an empty array', () => {

@@ -1,5 +1,5 @@
-import { T_BLOB, T_UNDEFINED } from '../_internal/tags'
-import { isTypeof } from './is-typeof'
+import { T_BLOB, T_UNDEFINED } from '../_internal/tags.js'
+import { isTypeof } from './is-typeof.js'
 
 /**
  * Checks if the input is a Blob.
@@ -27,8 +27,10 @@ import { isTypeof } from './is-typeof'
  */
 export function isBlob(v: unknown): v is Blob {
   /* istanbul ignore if -- @preserve */
-  // eslint-disable-next-line valid-typeof
-  if (typeof Blob === T_UNDEFINED) return false
+  // oxlint-disable-next-line valid-typeof
+  if (typeof Blob === T_UNDEFINED) {
+    return false
+  }
 
   return isTypeof(v, T_BLOB)
 }

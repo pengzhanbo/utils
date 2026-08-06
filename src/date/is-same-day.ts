@@ -1,4 +1,4 @@
-import { isDate, isNil, isNull } from '../predicate'
+import { isDate, isNil, isNull } from '../predicate/index.js'
 
 /**
  * Check if two dates are on the same day (ignores time components).
@@ -20,7 +20,9 @@ import { isDate, isNil, isNull } from '../predicate'
  * ```
  */
 export function isSameDay(date1: Date | number | string, date2?: Date | number | string): boolean {
-  if (isNil(date2)) return false
+  if (isNil(date2)) {
+    return false
+  }
 
   const s1 = toDateString(date1)
   return !isNull(s1) && s1 === toDateString(date2)
@@ -28,6 +30,8 @@ export function isSameDay(date1: Date | number | string, date2?: Date | number |
 
 function toDateString(value: Date | number | string): string | null {
   const date = isDate(value) ? value : new Date(value)
-  if (Number.isNaN(date.getTime())) return null
+  if (Number.isNaN(date.getTime())) {
+    return null
+  }
   return `${date.getUTCFullYear()}-${date.getUTCMonth()}-${date.getUTCDate()}`
 }

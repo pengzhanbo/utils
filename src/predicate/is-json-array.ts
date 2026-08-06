@@ -1,4 +1,5 @@
-import { isJSONValue } from './is-json-value'
+// oxlint-disable-next-line import/no-cycle
+import { isJSONValue } from './is-json-value.js'
 
 /**
  * Checks if a given value is a valid JSON array.

@@ -15,7 +15,9 @@
  * ```
  */
 export function capitalize(s: string): string {
-  if (!s) return s
+  if (!s) {
+    return s
+  }
   const firstCodePoint = s.codePointAt(0)!
   // oxlint-disable-next-line unicorn/number-literal-case
   const firstCharLen = firstCodePoint > 0xffff ? 2 : 1

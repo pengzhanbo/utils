@@ -1,4 +1,4 @@
-import type { Finite } from '../types/numeric'
+import type { Finite } from '../types/numeric.js'
 
 /**
  * A strongly-typed version of `Number.isFinite()`.

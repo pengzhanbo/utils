@@ -6,6 +6,6 @@
  * @module Error
  */
 
-export * from './AbortError'
-export * from './TimeoutError'
-export * from './RetryError'
+export * from './AbortError.js'
+export * from './TimeoutError.js'
+export * from './RetryError.js'

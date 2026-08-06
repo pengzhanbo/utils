@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { once } from './once'
+import { once } from './once.js'
 
 describe('functions > once', () => {
   it('should work', () => {
@@ -33,7 +33,9 @@ describe('functions > once', () => {
     let callCount = 0
     const fn = vi.fn(() => {
       callCount++
-      if (callCount === 1) throw new Error('first call failed')
+      if (callCount === 1) {
+        throw new Error('first call failed')
+      }
       return 'success'
     })
     const onceFn = once(fn)

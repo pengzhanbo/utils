@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { titleCase } from './title-case'
+import { titleCase } from './title-case.js'
 
 describe('string > titleCase', () => {
   it('should capitalize each word', () => {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { keyBy } from './key-by'
+import { keyBy } from './key-by.js'
 
 describe('array > keyBy', () => {
   it('should create an object keyed by iteratee function', () => {
@@ -102,6 +102,7 @@ describe('array > keyBy', () => {
   })
 
   it('should handle __proto__ as key without prototype pollution', () => {
+    // oxlint-disable-next-line typescript/no-unsafe-return
     const result = keyBy(['a', 'b'], () => '__proto__' as any)
     expect(Object.getOwnPropertyDescriptor(result, '__proto__')!.value).toBe('b')
   })

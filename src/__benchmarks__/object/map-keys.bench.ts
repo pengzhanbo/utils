@@ -1,7 +1,7 @@
 import { describe, bench } from 'vitest'
-import { mapKeys } from '../../object/map-keys'
+import { mapKeys } from '../../object/map-keys.js'
 
-describe('Performance > Object > MapKeys', () => {
+describe('performance > Object > MapKeys', () => {
   // MK-01: Upper-case keys / 键转大写
   bench(
     'upper-case keys | 10K keys',

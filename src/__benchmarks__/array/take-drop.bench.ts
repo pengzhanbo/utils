@@ -1,10 +1,10 @@
 import { describe, bench } from 'vitest'
-import { drop } from '../../array/drop'
-import { dropRight } from '../../array/drop-right'
-import { take } from '../../array/take'
-import { takeRight } from '../../array/take-right'
+import { dropRight } from '../../array/drop-right.js'
+import { drop } from '../../array/drop.js'
+import { takeRight } from '../../array/take-right.js'
+import { take } from '../../array/take.js'
 
-describe('Performance > Array > TakeDrop', () => {
+describe('performance > Array > TakeDrop', () => {
   // TD-01: take 10K / 截取 10K
   bench(
     'take | 10K items',

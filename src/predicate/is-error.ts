@@ -1,6 +1,6 @@
-import { T_AGGREGATE_ERROR, T_DOM_EXCEPTION, T_ERROR, T_OBJECT } from '../_internal/tags'
-import { isString } from './is-string'
-import { typeOf } from './type-of'
+import { T_AGGREGATE_ERROR, T_DOM_EXCEPTION, T_ERROR, T_OBJECT } from '../_internal/tags.js'
+import { isString } from './is-string.js'
+import { typeOf } from './type-of.js'
 
 /**
  * Check if a value is an Error object.

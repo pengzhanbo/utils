@@ -45,14 +45,15 @@ export interface SleepOptions {
  * ```
  */
 export function sleep(ms: number, { signal }: SleepOptions = {}): Promise<void> {
-  if (!Number.isFinite(ms) || ms < 0)
+  if (!Number.isFinite(ms) || ms < 0) {
     throw new RangeError('ms must be a finite non-negative number')
+  }
   return new Promise<void>((resolve, reject) => {
     let timeoutId: ReturnType<typeof setTimeout> | undefined
-    const abortError = () => {
+    const abortError = (): void => {
       reject(new DOMException('Aborted', 'AbortError'))
     }
-    const abortHandler = () => {
+    const abortHandler = (): void => {
       clearTimeout(timeoutId)
       abortError()
     }

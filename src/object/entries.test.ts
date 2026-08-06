@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { objectEntries } from './entries'
+import { objectEntries } from './entries.js'
 
 describe('object > objectEntries', () => {
   it('should work', () => {

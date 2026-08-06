@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { hasOwn } from './has-own'
+import { hasOwn } from './has-own.js'
 
 describe('object > hasOwn', () => {
   it('should be true', () => {

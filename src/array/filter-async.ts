@@ -1,4 +1,4 @@
-import { promiseParallel } from '../promise'
+import { promiseParallel } from '../promise/parallel.js'
 
 /**
  * Filters an array asynchronously using an async predicate function.
@@ -46,7 +46,7 @@ export async function filterAsync<T>(
   const result: boolean[] = await promiseParallel(
     array.map(
       (...args) =>
-        () =>
+        async () =>
           predicate(...args),
     ),
     concurrency,

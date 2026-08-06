@@ -1,5 +1,5 @@
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest'
-import { isWindow } from './is-window'
+import { isWindow } from './is-window.js'
 
 describe('predicate > isWindow', () => {
   beforeEach(() => {

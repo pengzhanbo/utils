@@ -1,3 +1,5 @@
+// oxlint-disable typescript/promise-function-async
+
 /**
  * Return a Promise with `resolve` and `reject` methods
  *

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { ObjectIterator } from './ObjectIterator'
+import { ObjectIterator } from './ObjectIterator.js'
 
 describe('object > ObjectIterator', () => {
   describe('constructor', () => {
@@ -229,7 +229,7 @@ describe('object > ObjectIterator', () => {
     })
 
     it('should handle null values', () => {
-      const result = new ObjectIterator({ a: null, b: 1 }).filter((_, v) => v !== null).toArray()
+      const result = new ObjectIterator({ a: null, b: 1 }).filter((_, v) => v != null).toArray()
       expect(result).toEqual([['b', 1]])
     })
 

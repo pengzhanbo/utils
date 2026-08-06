@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { compose } from './compose'
+import { compose } from './compose.js'
 
 describe('function > compose', () => {
   function add(a: number, b: number) {

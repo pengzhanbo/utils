@@ -1,14 +1,14 @@
 import { describe, bench } from 'vitest'
-import { shuffle } from '../../array/shuffle'
-import { generateNumberArray } from '../helpers/data-generators'
+import { shuffle } from '../../array/shuffle.js'
+import { generateNumberArray } from '../helpers/data-generators.js'
 
-describe('Performance > Array > Shuffle', () => {
+describe('performance > Array > Shuffle', () => {
   const smallArr = generateNumberArray(100)
   const mediumArr = generateNumberArray(10000)
   const largeArr = generateNumberArray(100000)
 
   bench(
-    'Shuffle | small array (100 elements)',
+    'shuffle | small array (100 elements)',
     () => {
       shuffle([...smallArr])
     },
@@ -16,7 +16,7 @@ describe('Performance > Array > Shuffle', () => {
   )
 
   bench(
-    'Shuffle | medium array (10K elements)',
+    'shuffle | medium array (10K elements)',
     () => {
       shuffle([...mediumArr])
     },
@@ -24,7 +24,7 @@ describe('Performance > Array > Shuffle', () => {
   )
 
   bench(
-    'Shuffle | large array (100K elements)',
+    'shuffle | large array (100K elements)',
     () => {
       shuffle([...largeArr])
     },

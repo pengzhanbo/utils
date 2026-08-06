@@ -19,5 +19,6 @@
  * ```
  */
 export function isNull(v: unknown): v is null {
+  // oxlint-disable-next-line eqeqeq
   return v === null
 }

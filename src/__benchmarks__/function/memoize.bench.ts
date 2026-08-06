@@ -1,26 +1,26 @@
 import { describe, bench } from 'vitest'
-import { memoize } from '../../function/memoize'
+import { memoize } from '../../function/memoize.js'
 
-describe('Performance > Function > Memoize', () => {
+describe('performance > Function > Memoize', () => {
   // M-01: Small cache with high-frequency access / 小缓存高频访问
   bench(
-    'Cache hit | maxSize=10, 1000 calls with 5 unique keys',
+    'cache hit | maxSize=10, 1000 calls with 5 unique keys',
     () => {
-      const fn = (x: number) => x * 2
+      const fn = (x: number): number => x * 2
       const memoized = memoize(fn, { maxSize: 10 })
 
       for (let i = 0; i < 1000; i++) {
-        memoized(i % 5) // Only 5 unique keys, high cache hit rate
-      }
+        memoized(i % 5)
+      } // Only 5 unique keys, high cache hit rate
     },
     { time: 2000, iterations: 100 },
   )
 
   // M-02: Large cache normal access / 大缓存正常访问
   bench(
-    'Normal access | maxSize=1000, 5000 calls with 500 unique keys',
+    'normal access | maxSize=1000, 5000 calls with 500 unique keys',
     () => {
-      const fn = (x: number) => x * 2
+      const fn = (x: number): number => x * 2
       const memoized = memoize(fn, { maxSize: 1000 })
 
       for (let i = 0; i < 5000; i++) {
@@ -32,9 +32,9 @@ describe('Performance > Function > Memoize', () => {
 
   // M-03: LRU eviction pressure test / LRU淘汰压力测试（验证O(1)优化效果）
   bench(
-    'LRU eviction pressure | maxSize=100, 20000 unique keys (forces eviction)',
+    'lRU eviction pressure | maxSize=100, 20000 unique keys (forces eviction)',
     () => {
-      const fn = (x: number) => x * 2
+      const fn = (x: number): number => x * 2
       const memoized = memoize(fn, { maxSize: 100 })
 
       // Access 20000 different keys to trigger frequent LRU eviction
@@ -47,11 +47,9 @@ describe('Performance > Function > Memoize', () => {
 
   // M-04: TTL expiration overhead / TTL过期机制开销
   bench(
-    'TTL expiration | ttl=100ms, 1000 calls',
+    'tTL expiration | ttl=100ms, 1000 calls',
     () => {
-      const fn = (x: number) => {
-        return x * 3
-      }
+      const fn = (x: number): number => x * 3
 
       const memoized = memoize(fn, { maxSize: 50, ttl: 100 })
 
@@ -64,9 +62,9 @@ describe('Performance > Function > Memoize', () => {
 
   // M-05: Custom keyResolver overhead / 自定义key生成器开销
   bench(
-    'Custom keyResolver | complex key generation',
+    'custom keyResolver | complex key generation',
     () => {
-      const fn = (obj: { a: number; b: string }) => obj.a * 2
+      const fn = (obj: { a: number; b: string }): number => obj.a * 2
       const memoized = memoize(fn, {
         maxSize: 100,
         keyResolver: (obj) => `${obj.a}_${obj.b}`,
@@ -81,9 +79,9 @@ describe('Performance > Function > Memoize', () => {
 
   // M-06: No cache baseline comparison / 无缓存基线对比
   bench(
-    'No cache baseline | raw function, 10000 calls',
+    'no cache baseline | raw function, 10000 calls',
     () => {
-      const fn = (x: number) => x * 2
+      const fn = (x: number): number => x * 2
 
       for (let i = 0; i < 10000; i++) {
         fn(i)
@@ -94,9 +92,9 @@ describe('Performance > Function > Memoize', () => {
 
   // Additional: Edge case - maxSize=0 (always evict) / 边界情况：maxSize=0
   bench(
-    'Edge case | maxSize=0 (always evict), 1000 calls',
+    'edge case | maxSize=0 (always evict), 1000 calls',
     () => {
-      const fn = (x: number) => x * 2
+      const fn = (x: number): number => x * 2
       const memoized = memoize(fn, { maxSize: 0 })
 
       for (let i = 0; i < 1000; i++) {

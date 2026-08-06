@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { deepMerge, deepMergeWithArray } from './deep-merge'
+import { deepMerge, deepMergeWithArray } from './deep-merge.js'
 
 describe('object > deepMerge', () => {
   it('should work', () => {
@@ -76,7 +76,7 @@ describe('object > deepMerge', () => {
   it('should handle objects with null prototype', () => {
     const source = Object.create(null)
     source.b = 2
-    expect(deepMerge({ a: 1 }, source as any)).toEqual({ a: 1, b: 2 })
+    expect(deepMerge({ a: 1 }, source)).toEqual({ a: 1, b: 2 })
   })
 
   it('should handle class instances as non-mergable', () => {
@@ -144,7 +144,7 @@ describe('object > deepMergeWithArray', () => {
   it('should handle objects with null prototype as mergable', () => {
     const source = Object.create(null)
     source.b = 2
-    expect(deepMergeWithArray({ a: 1 }, source as any)).toEqual({ a: 1, b: 2 })
+    expect(deepMergeWithArray({ a: 1 }, source)).toEqual({ a: 1, b: 2 })
   })
 
   it('should return target when no sources provided', () => {
@@ -180,7 +180,7 @@ describe('object > deepMergeWithArray', () => {
   })
 
   it('should not pollute prototype via __proto__ key', () => {
-    deepMerge({} as any, JSON.parse('{"__proto__": {"polluted": true}}') as any)
+    deepMerge({} as any, JSON.parse('{"__proto__": {"polluted": true}}'))
     expect(({} as any).polluted).toBeUndefined()
   })
 

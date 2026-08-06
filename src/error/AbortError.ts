@@ -14,7 +14,6 @@
  * // => AbortError: The operation was aborted
  * ```
  *
- * @augments Error
  */
 export class AbortError extends Error {
   constructor(message = 'The operation was aborted', options?: ErrorOptions) {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { zip } from './zip'
+import { zip } from './zip.js'
 
 describe('array > zip', () => {
   it('should zip arrays by index with the shortest length', () => {

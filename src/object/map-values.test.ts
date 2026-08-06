@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { mapValues } from './map-values'
+import { mapValues } from './map-values.js'
 
 describe('object > map-values', () => {
   it('should map values with a transform function', () => {

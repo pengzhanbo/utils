@@ -1,4 +1,4 @@
-import { isUndefined } from '../predicate'
+import { isUndefined } from '../predicate/is-undefined.js'
 
 /**
  * guard function that returns if val is not undefined

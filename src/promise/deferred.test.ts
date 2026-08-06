@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { deferred } from './deferred'
+import { deferred } from './deferred.js'
 
 describe('promise > deferred', () => {
   it('should return an object with promise, resolve, reject', () => {

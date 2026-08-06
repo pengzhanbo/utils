@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
-import { range } from '../array/range'
-import { random } from '../math'
-import { promiseParallel, promiseParallelSettled } from './parallel'
-import { sleep } from './sleep'
+import { range } from '../array/range.js'
+import { random } from '../math/random.js'
+import { promiseParallel, promiseParallelSettled } from './parallel.js'
+import { sleep } from './sleep.js'
 
 describe('promise > promiseParallel', () => {
   it('should throw RangeError for non-positive concurrency', () => {
@@ -14,9 +14,7 @@ describe('promise > promiseParallel', () => {
     await expect(promiseParallel([])).resolves.toEqual([])
   })
   it('should work with default', async () => {
-    await expect(promiseParallel(range(5).map((_, i) => Promise.resolve(i)))).resolves.toEqual([
-      0, 1, 2, 3, 4,
-    ])
+    await expect(promiseParallel(range(5).map(async (_, i) => i))).resolves.toEqual([0, 1, 2, 3, 4])
   })
   it('should work with all promises fulfilled', async () => {
     const start = performance.now()
@@ -36,20 +34,22 @@ describe('promise > promiseParallel', () => {
     await expect(
       promiseParallel(
         [
-          () => Promise.resolve(1),
-          () => Promise.reject(new Error('error')),
-          () => Promise.resolve(2),
+          async () => 1,
+          async () => {
+            throw new Error('error')
+          },
+          async () => 2,
         ],
         2,
       ),
-    ).rejects.toThrowError('error')
+    ).rejects.toThrow('error')
   })
 
   it('should execute sequentially with concurrency=1', async () => {
     const order: number[] = []
     await promiseParallel(
       [0, 1, 2].map(
-        (i) => () =>
+        (i) => async () =>
           new Promise<number>((resolve) => {
             order.push(i)
             resolve(i)
@@ -63,22 +63,20 @@ describe('promise > promiseParallel', () => {
   it('should work when concurrency exceeds array length', async () => {
     await expect(
       promiseParallel(
-        [0, 1, 2].map((i) => Promise.resolve(i)),
+        [0, 1, 2].map(async (i) => i),
         100,
       ),
     ).resolves.toEqual([0, 1, 2])
   })
 
   it('should work with mixed Promise values and function factories', async () => {
-    await expect(
-      promiseParallel([Promise.resolve(1), () => Promise.resolve(2)], 2),
-    ).resolves.toEqual([1, 2])
+    await expect(promiseParallel([Promise.resolve(1), async () => 2], 2)).resolves.toEqual([1, 2])
   })
 
   it('should not start remaining promises after rejection', async () => {
     const started: number[] = []
     const promises = [0, 1, 2, 3, 4].map(
-      (i) => () =>
+      (i) => async () =>
         new Promise<number>((resolve, reject) => {
           started.push(i)
           if (i === 1) {
@@ -103,7 +101,7 @@ describe('promise > promiseParallelSettled', () => {
     await expect(promiseParallelSettled([])).resolves.toEqual([])
   })
   it('should work with all promises fulfilled', async () => {
-    await expect(promiseParallelSettled(range(5).map(() => Promise.resolve(1)))).resolves.toEqual(
+    await expect(promiseParallelSettled(range(5).map(async () => 1))).resolves.toEqual(
       range(5).map(() => ({ status: 'fulfilled', value: 1 })),
     )
   })
@@ -116,7 +114,9 @@ describe('promise > promiseParallelSettled', () => {
             await sleep(i * 10)
             return i
           }),
-          () => Promise.reject(new Error('error')),
+          async () => {
+            throw new Error('error')
+          },
         ],
         4,
       ),
@@ -128,7 +128,14 @@ describe('promise > promiseParallelSettled', () => {
 
   it('should handle all promises rejected', async () => {
     const result = await promiseParallelSettled(
-      [() => Promise.reject(new Error('err1')), () => Promise.reject(new Error('err2'))],
+      [
+        async () => {
+          throw new Error('err1')
+        },
+        async () => {
+          throw new Error('err2')
+        },
+      ],
       2,
     )
     expect(result).toEqual([
@@ -141,7 +148,7 @@ describe('promise > promiseParallelSettled', () => {
     const order: number[] = []
     await promiseParallelSettled(
       [0, 1, 2].map(
-        (i) => () =>
+        (i) => async () =>
           new Promise<number>((resolve) => {
             order.push(i)
             resolve(i)

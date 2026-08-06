@@ -1,13 +1,15 @@
 import { describe, bench } from 'vitest'
-import { deepFlatten } from '../../array/deep-flatten'
+import { deepFlatten } from '../../array/deep-flatten.js'
 
-describe('Performance > Array > DeepFlatten', () => {
+describe('performance > Array > DeepFlatten', () => {
   // DF-01: Deeply nested / 深度嵌套
   bench(
     'deepFlatten | 5-level nesting (10K leaves)',
     () => {
       let arr: any[] = Array.from({ length: 10000 }, (_, i) => i)
-      for (let i = 0; i < 5; i++) arr = [arr]
+      for (let i = 0; i < 5; i++) {
+        arr = [arr]
+      }
       deepFlatten(arr)
     },
     { time: 1000, iterations: 50 },
@@ -38,7 +40,9 @@ describe('Performance > Array > DeepFlatten', () => {
     'flat(Infinity) baseline | 5-level nesting (10K leaves)',
     () => {
       let arr: any[] = Array.from({ length: 10000 }, (_, i) => i)
-      for (let i = 0; i < 5; i++) arr = [arr]
+      for (let i = 0; i < 5; i++) {
+        arr = [arr]
+      }
       arr.flat(Infinity)
     },
     { time: 1000, iterations: 50 },

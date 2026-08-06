@@ -1,15 +1,17 @@
 import { describe, expect, it } from 'vitest'
-import { sleep } from '../promise/sleep'
-import { attemptAsync } from './attempt-async'
+import { sleep } from '../promise/sleep.js'
+import { attemptAsync } from './attempt-async.js'
 
 describe('util > attemptAsync', () => {
   it('should return the result of the async function', async () => {
+    // oxlint-disable-next-line typescript/require-await
     const [error, result] = await attemptAsync(async () => 1)
     expect(error).toBeNull()
     expect(result).toBe(1)
   })
 
   it('should return the error of the async function', async () => {
+    // oxlint-disable-next-line typescript/require-await
     const [error, result] = await attemptAsync(async () => {
       throw new Error('test')
     })
@@ -39,8 +41,9 @@ describe('util > attemptAsync', () => {
   })
 
   it('should work with non-Error thrown objects', async () => {
+    // oxlint-disable-next-line typescript/require-await
     const [error, result] = await attemptAsync(async () => {
-      // eslint-disable-next-line no-throw-literal
+      // oxlint-disable-next-line no-throw-literal typescript/only-throw-error
       throw 'string error'
     })
     expect(error).toBeInstanceOf(Error)

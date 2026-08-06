@@ -1,5 +1,5 @@
-import { T_NUMBER } from '../_internal/tags'
-import { isTypeof } from './is-typeof'
+import { T_NUMBER } from '../_internal/tags.js'
+import { isTypeof } from './is-typeof.js'
 
 /**
  * Checks if the input is a number.

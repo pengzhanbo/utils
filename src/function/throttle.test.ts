@@ -1,5 +1,5 @@
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest'
-import { throttle } from './throttle'
+import { throttle } from './throttle.js'
 
 describe('function > throttle', () => {
   beforeEach(() => {
@@ -101,7 +101,7 @@ describe('function > throttle', () => {
 
   it('should preserve this context', () => {
     const context = { value: 42 }
-    const fn = vi.fn(function (this: any) {
+    const fn = vi.fn(function fn(this: any) {
       expect(this).toBe(context)
     })
     const throttled = throttle(100, fn)

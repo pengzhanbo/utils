@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isInteger } from './is-integer'
+import { isInteger } from './is-integer.js'
 
 describe('predicate > isInteger', () => {
   it('should work', () => {

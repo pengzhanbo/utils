@@ -1,7 +1,7 @@
 import { describe, bench } from 'vitest'
-import { deepEqual } from '../../object/equal'
+import { deepEqual } from '../../object/equal.js'
 
-describe('Performance > Object > DeepEqual', () => {
+describe('performance > Object > DeepEqual', () => {
   // EQ-01: Primitive comparison / 基本类型比较
   bench(
     'primitives | numbers and strings',
@@ -29,7 +29,9 @@ describe('Performance > Object > DeepEqual', () => {
     'nested objects | depth=3, width=10',
     () => {
       function genObj(d: number): any {
-        if (d <= 0) return { value: Math.random() }
+        if (d <= 0) {
+          return { value: Math.random() }
+        }
         const obj: any = {}
         for (let i = 0; i < 10; i++) {
           obj[`k_${i}`] = genObj(d - 1)
@@ -104,7 +106,9 @@ describe('Performance > Object > DeepEqual', () => {
     'deeply unequal | differ at leaf level',
     () => {
       function genObj(d: number, diff = false): any {
-        if (d <= 0) return { value: diff ? 999 : 42 }
+        if (d <= 0) {
+          return { value: diff ? 999 : 42 }
+        }
         const obj: any = {}
         for (let i = 0; i < 5; i++) {
           obj[`k_${i}`] = genObj(d - 1, diff && i === 4)

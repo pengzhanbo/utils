@@ -1,5 +1,5 @@
 import { describe, bench } from 'vitest'
-import { deepClone, shallowClone, simpleClone } from '../../object/clone'
+import { deepClone, shallowClone, simpleClone } from '../../object/clone.js'
 import {
   SMALL_OBJECT,
   MEDIUM_FLAT_OBJECT,
@@ -7,9 +7,9 @@ import {
   LARGE_ARRAY,
   SPECIAL_TYPE_OBJECT,
   CIRCULAR_OBJECT,
-} from '../helpers/fixtures'
+} from '../helpers/fixtures.js'
 
-describe('Performance > Object > Clone', () => {
+describe('performance > Object > Clone', () => {
   // DC-01: Small flat object / 小型扁平对象
   bench(
     'deepClone | small object (5 props)',
@@ -97,7 +97,7 @@ describe('Performance > Object > Clone', () => {
 
   // DC-08: vs JSON method / 与JSON方法对比
   bench(
-    'JSON.parse(JSON.stringify()) | medium flat object (100 props)',
+    'jSON.parse(JSON.stringify()) | medium flat object (100 props)',
     () => {
       JSON.parse(JSON.stringify(MEDIUM_FLAT_OBJECT))
     },
