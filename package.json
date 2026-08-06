@@ -51,8 +51,8 @@
     "http-server": "^14.1.1",
     "js-tokens": "^10.0.0",
     "nano-staged": "^1.0.2",
-    "oxfmt": "^0.61.0",
-    "oxlint": "^1.76.0",
+    "oxfmt": "^0.62.0",
+    "oxlint": "^1.77.0",
     "oxlint-tsgolint": "^7.0.2001",
     "simple-git-hooks": "^2.13.1",
     "strip-comments-strings": "^1.2.0",
@@ -73,5 +73,5 @@
     "*": "oxfmt --no-error-on-unmatched-pattern",
     "*.{js,ts}": "vitest related --run"
   },
-  "packageManager": "pnpm@11.19.0"
+  "packageManager": "pnpm@11.20.0"
 }
