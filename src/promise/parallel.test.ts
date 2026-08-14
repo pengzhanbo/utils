@@ -144,6 +144,32 @@ describe('promise > promiseParallelSettled', () => {
     ])
   })
 
+  it('should continue scheduling after a rejection', async () => {
+    const order: number[] = []
+    const result = await promiseParallelSettled(
+      [
+        async () => {
+          throw new Error('early error')
+        },
+        async () => {
+          order.push(1)
+          return 1
+        },
+        async () => {
+          order.push(2)
+          return 2
+        },
+      ],
+      1,
+    )
+    expect(order).toEqual([1, 2])
+    expect(result).toEqual([
+      { status: 'rejected', reason: new Error('early error') },
+      { status: 'fulfilled', value: 1 },
+      { status: 'fulfilled', value: 2 },
+    ])
+  })
+
   it('should execute sequentially with concurrency=1', async () => {
     const order: number[] = []
     await promiseParallelSettled(
