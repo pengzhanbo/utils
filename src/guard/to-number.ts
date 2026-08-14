@@ -1,3 +1,4 @@
+import { isNumber } from '../predicate/is-number.js'
 import { isSymbol } from '../predicate/is-symbol.js'
 
 /**
@@ -24,4 +25,33 @@ import { isSymbol } from '../predicate/is-symbol.js'
  */
 export function toNumber(v: unknown): number {
   return isSymbol(v) ? Number.NaN : Number(v)
+}
+
+/**
+ * 尝试将值转换为数字
+ *
+ * 尝试将值转换为数字，如果无法转换则返回 NaN
+ *
+ * @category Guard
+ *
+ * @param v - The value to convert. 要转换的值
+ * @returns The converted number, or NaN if conversion is not possible. 转换后的数字，如果无法转换则返回 NaN
+ *
+ * @example
+ * ```ts
+ * tryToNumber('42') // => 42
+ * tryToNumber('42.0') // => 42
+ * tryToNumber('42abc') // => 42
+ * tryToNumber('0x2A') // => 42
+ * tryToNumber('hello') // => NaN
+ * tryToNumber(undefined) // => NaN
+ * tryToNumber('abc123') // => NaN
+ * ```
+ */
+export function tryToNumber(v: unknown): number {
+  if (isSymbol(v)) {
+    return Number.NaN
+  }
+  const num = Number(v)
+  return isNumber(num) && !Number.isNaN(num) ? num : Number.parseFloat(v as string)
 }
