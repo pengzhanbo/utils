@@ -1,4 +1,5 @@
 import type { Cancel, CancelOptions, FnNoReturn } from '../_internal/types.js'
+import { assertFiniteNonNegativeNumber } from '../_internal/assert.js'
 
 /**
  * Throttle Options
@@ -112,9 +113,7 @@ export function throttle<T extends (...args: any[]) => any>(
   options: ThrottleOptions = {},
 ): FnNoReturn<T> & Cancel {
   const { noTrailing = false, noLeading = false, debounceMode } = options
-  if (!Number.isFinite(delay) || delay < 0) {
-    throw new RangeError('delay must be a finite non-negative number')
-  }
+  assertFiniteNonNegativeNumber(delay, 'delay')
   let timeoutID: ReturnType<typeof setTimeout> | undefined
   let cancelled = false
 

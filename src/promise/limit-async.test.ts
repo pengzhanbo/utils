@@ -67,4 +67,11 @@ describe('promise > limitAsync', () => {
       Promise.all([limitedCallback(1), limitedCallback(2), limitedCallback(3)]),
     ).rejects.toThrow('fail')
   })
+
+  it('should throw RangeError for non-positive concurrency', () => {
+    expect(() => limitAsync(async () => 1, 0)).toThrow(RangeError)
+    expect(() => limitAsync(async () => 1, 0)).toThrow('concurrency must be a positive integer')
+    expect(() => limitAsync(async () => 1, -1)).toThrow(RangeError)
+    expect(() => limitAsync(async () => 1, 1.5)).toThrow(RangeError)
+  })
 })

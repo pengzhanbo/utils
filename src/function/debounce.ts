@@ -1,4 +1,5 @@
 import type { Cancel, FnNoReturn } from '../_internal/types.js'
+import { assertFiniteNonNegativeNumber } from '../_internal/assert.js'
 import { throttle } from './throttle.js'
 
 /**
@@ -86,9 +87,7 @@ export function debounce<T extends (...args: any[]) => any>(
   callback: T,
   options?: DebounceOptions,
 ): FnNoReturn<T> & Cancel {
-  if (!Number.isFinite(delay) || delay < 0) {
-    throw new RangeError('delay must be a finite non-negative number')
-  }
+  assertFiniteNonNegativeNumber(delay, 'delay')
   const { atBegin = false } = options ?? {}
   return throttle(delay, callback, { debounceMode: atBegin })
 }

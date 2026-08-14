@@ -1,4 +1,4 @@
-import { isInteger } from '../predicate/is-integer.js'
+import { assertPositiveInteger } from '../_internal/assert.js'
 
 /**
  * A counting semaphore for async functions that manages available permits.
@@ -75,9 +75,7 @@ export class Semaphore {
    * ```
    */
   constructor(capacity: number) {
-    if (!isInteger(capacity) || capacity < 1) {
-      throw new RangeError('Semaphore capacity must be a positive integer')
-    }
+    assertPositiveInteger(capacity, 'Semaphore capacity')
     this.capacity = capacity
     this._available = capacity
   }

@@ -1,3 +1,5 @@
+import { assertFiniteNonNegativeNumber } from '../_internal/assert.js'
+
 const DECIMAL_UNITS = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'] as const
 const BINARY_UNITS = ['B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB'] as const
 
@@ -54,9 +56,7 @@ export interface FormatBytesOptions {
  * ```
  */
 export function formatBytes(bytes: number, options: FormatBytesOptions = {}): string {
-  if (!Number.isFinite(bytes) || bytes < 0) {
-    throw new RangeError('bytes must be a finite non-negative number')
-  }
+  assertFiniteNonNegativeNumber(bytes, 'bytes')
 
   const { precision = 1, binary = false, whitespace = false } = options
   const base = binary ? 1024 : 1000
