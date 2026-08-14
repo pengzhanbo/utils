@@ -1,5 +1,6 @@
 import { performance } from 'node:perf_hooks'
 import { describe, expect, it, vi } from 'vitest'
+import { AbortError } from '../error/AbortError.js'
 import { sleep } from './sleep.js'
 
 describe('promise > sleep', () => {
@@ -17,7 +18,7 @@ describe('promise > sleep', () => {
 
     setTimeout(() => controller.abort(), 50)
 
-    await expect(sleep(100, { signal })).rejects.toThrow(DOMException)
+    await expect(sleep(100, { signal })).rejects.toThrow(AbortError)
   })
 
   it('should not call the sleep if it is already aborted by AbortSignal', async () => {
@@ -27,7 +28,7 @@ describe('promise > sleep', () => {
 
     controller.abort()
 
-    await expect(sleep(100, { signal })).rejects.toThrow(DOMException)
+    await expect(sleep(100, { signal })).rejects.toThrow(AbortError)
 
     expect(spy).not.toHaveBeenCalled()
     spy.mockRestore()
@@ -41,7 +42,7 @@ describe('promise > sleep', () => {
 
     controller.abort()
 
-    await expect(promise).rejects.toThrow(DOMException)
+    await expect(promise).rejects.toThrow(AbortError)
 
     expect(spy).toHaveBeenCalled()
     spy.mockRestore()

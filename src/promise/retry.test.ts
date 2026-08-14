@@ -1,6 +1,7 @@
 // oxlint-disable vitest/expect-expect
 
 import { describe, expect, it, vi } from 'vitest'
+import { AbortError } from '../error/AbortError.js'
 import { TimeoutError } from '../error/TimeoutError.js'
 import { retry } from './retry.js'
 
@@ -54,7 +55,7 @@ describe('promise > retry', () => {
       const fn = vi.fn(async () => 1)
       const promise = retry(fn, { signal: controller.signal })
 
-      await expect(promise).rejects.toThrow('Aborted')
+      await expect(promise).rejects.toThrow(AbortError)
       expect(fn).not.toHaveBeenCalled()
     })
 
@@ -68,7 +69,7 @@ describe('promise > retry', () => {
       // Call the no-op cancel — should not throw
       promise.cancel()
 
-      await expect(promise).rejects.toThrow('Aborted')
+      await expect(promise).rejects.toThrow(AbortError)
       expect(fn).not.toHaveBeenCalled()
     })
 
@@ -705,7 +706,7 @@ describe('promise > retry', () => {
 
       rejectFn!(new Error('boom'))
 
-      await expect(promise).rejects.toThrow(DOMException)
+      await expect(promise).rejects.toThrow(AbortError)
     }, 10000)
 
     it('should guard handleSuccess when cancel precedes fn resolve callback', async () => {
@@ -723,7 +724,7 @@ describe('promise > retry', () => {
 
       resolveFn!('success')
 
-      await expect(promise).rejects.toThrow(DOMException)
+      await expect(promise).rejects.toThrow(AbortError)
     }, 10000)
   })
 

@@ -1,5 +1,6 @@
 import { performance } from 'node:perf_hooks'
 import { describe, expect, it, vi } from 'vitest'
+import { AbortError } from '../error/AbortError.js'
 import { TimeoutError } from '../error/TimeoutError.js'
 import { until } from './until.js'
 
@@ -61,7 +62,7 @@ describe('promise > until', () => {
 
     setTimeout(() => controller.abort(), 30)
 
-    await expect(promise).rejects.toBeInstanceOf(DOMException)
+    await expect(promise).rejects.toBeInstanceOf(AbortError)
   })
 
   it('rejects immediately if the signal is already aborted', async () => {
@@ -71,7 +72,7 @@ describe('promise > until', () => {
 
     const promise = until(() => condition(), { signal: controller.signal })
 
-    await expect(promise).rejects.toBeInstanceOf(DOMException)
+    await expect(promise).rejects.toBeInstanceOf(AbortError)
     expect(condition).not.toHaveBeenCalled()
   })
 

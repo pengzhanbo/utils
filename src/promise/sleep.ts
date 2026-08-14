@@ -1,3 +1,6 @@
+import { assertFiniteNonNegativeNumber } from '../_internal/assert.js'
+import { AbortError } from '../error/AbortError.js'
+
 export interface SleepOptions {
   /**
    * The signal to abort the sleep.
@@ -19,7 +22,7 @@ export interface SleepOptions {
  * @param options.signal - The signal to abort the sleep. / 睡眠的中止信号
  * @returns A promise that resolves after the specified delay. / 在指定延迟后解析的Promise
  *
- * @throws {DOMException} If the sleep is aborted via the signal. / 如果通过信号中止睡眠
+ * @throws {AbortError} If the sleep is aborted via the signal. / 如果通过信号中止睡眠
  *
  * @see {@link timeout} — for rejecting after a delay
  * @see {@link timeout} — 在延迟后拒绝
@@ -45,13 +48,11 @@ export interface SleepOptions {
  * ```
  */
 export function sleep(ms: number, { signal }: SleepOptions = {}): Promise<void> {
-  if (!Number.isFinite(ms) || ms < 0) {
-    throw new RangeError('ms must be a finite non-negative number')
-  }
+  assertFiniteNonNegativeNumber(ms, 'ms')
   return new Promise<void>((resolve, reject) => {
     let timeoutId: ReturnType<typeof setTimeout> | undefined
     const abortError = (): void => {
-      reject(new DOMException('Aborted', 'AbortError'))
+      reject(new AbortError())
     }
     const abortHandler = (): void => {
       clearTimeout(timeoutId)

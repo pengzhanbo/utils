@@ -1,7 +1,7 @@
 // oxlint-disable max-lines-per-function
 
 import { timestamp } from '../date/index.js'
-import { RetryError, TimeoutError } from '../error/index.js'
+import { AbortError, RetryError, TimeoutError } from '../error/index.js'
 import { isError } from '../predicate/index.js'
 
 export interface RetryOptions {
@@ -119,13 +119,13 @@ export function retry<T>(
     if (!cancelled) {
       cancelled = true
       settled = true
-      rejectFn(new DOMException('Aborted', 'AbortError'))
+      rejectFn(new AbortError())
     }
   }
 
   if (signal) {
     if (signal.aborted) {
-      return Object.assign(Promise.reject(new DOMException('Aborted', 'AbortError')), {
+      return Object.assign(Promise.reject(new AbortError()), {
         cancel: () => {},
       })
     }

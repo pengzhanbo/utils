@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
+import { AbortError } from '../error/AbortError.js'
 import { TimeoutError } from '../error/TimeoutError.js'
 import { sleep } from './sleep.js'
 import { timeout, withTimeout } from './timeout.js'
@@ -107,7 +108,7 @@ describe('promise > withTimeout', () => {
     it('should reject with AbortError when cancelled', async () => {
       const task = withTimeout(() => sleep(5000), 10000)
       task.cancel()
-      await expect(task).rejects.toThrow(DOMException)
+      await expect(task).rejects.toThrow(AbortError)
     })
 
     it('should cancel immediately without waiting for timeout', async () => {
@@ -173,7 +174,7 @@ describe('promise > withTimeout', () => {
       // Abort externally — the listener on the external signal fires finish('abort')
       controller.abort()
 
-      await expect(task).rejects.toThrow(DOMException)
+      await expect(task).rejects.toThrow(AbortError)
       expect(signalReceived).toBeDefined()
       expect(signalReceived!.aborted).toBe(true)
     })
@@ -245,7 +246,7 @@ describe('promise > withTimeout', () => {
 
       task.cancel()
 
-      await expect(task).rejects.toThrow(DOMException)
+      await expect(task).rejects.toThrow(AbortError)
       expect(signalAborted).toBe(true)
     })
   })
@@ -261,7 +262,7 @@ describe('promise > withTimeout', () => {
       // Abort while the task is still pending
       controller.abort()
 
-      await expect(task).rejects.toThrow(DOMException)
+      await expect(task).rejects.toThrow(AbortError)
     })
 
     it('should reject immediately when external signal is already aborted', async () => {
@@ -270,7 +271,7 @@ describe('promise > withTimeout', () => {
 
       await expect(
         withTimeout(() => sleep(5000), 10000, { signal: controller.signal }),
-      ).rejects.toThrow(DOMException)
+      ).rejects.toThrow(AbortError)
     })
 
     it('should reject when external signal aborted and fallback provided', async () => {
@@ -282,7 +283,7 @@ describe('promise > withTimeout', () => {
           signal: controller.signal,
           fallback: 'aborted_fallback' as any,
         }),
-      ).rejects.toThrow(DOMException)
+      ).rejects.toThrow(AbortError)
     })
 
     it('should resolve normally when external signal never fires', async () => {
@@ -301,7 +302,7 @@ describe('promise > withTimeout', () => {
         fallback: 'signal_aborted' as any,
       })
       setTimeout(() => controller.abort(), 30)
-      await expect(task).rejects.toThrow(DOMException)
+      await expect(task).rejects.toThrow(AbortError)
     })
   })
 
@@ -432,7 +433,7 @@ describe('promise > withTimeout', () => {
 
       controller.abort()
 
-      await expect(result).rejects.toThrow('Aborted')
+      await expect(result).rejects.toThrow(AbortError)
     })
 
     it('should handle cancel method', async () => {
@@ -443,7 +444,7 @@ describe('promise > withTimeout', () => {
 
       result.cancel()
 
-      await expect(result).rejects.toThrow('Aborted')
+      await expect(result).rejects.toThrow(AbortError)
     })
 
     it('should not double-settle when cancel is called after success', async () => {
@@ -461,7 +462,7 @@ describe('promise > withTimeout', () => {
 
       const result = withTimeout(async () => 'never', 5000, { signal: controller.signal })
 
-      await expect(result).rejects.toThrow('Aborted')
+      await expect(result).rejects.toThrow(AbortError)
     })
   })
 })

@@ -1,3 +1,4 @@
+import { AbortError } from '../error/AbortError.js'
 import { TimeoutError } from '../error/TimeoutError.js'
 import { sleep } from './sleep.js'
 
@@ -39,7 +40,7 @@ export interface UntilOptions {
  * @returns A promise that resolves when the condition becomes true. / 条件为 true 时解析的 promise
  *
  * @throws {RangeError} If `interval` is negative. / 如果 `interval` 为负数
- * @throws {DOMException} If the polling is aborted via the signal. / 如果通过信号中止轮询
+ * @throws {AbortError} If the polling is aborted via the signal. / 如果通过信号中止轮询
  * @throws {TimeoutError} If `timeout` elapses before the condition becomes true. / 如果条件为 true 前已超时
  *
  * @see {@link sleep} — for delaying between checks
@@ -61,7 +62,7 @@ export async function until(
   const deadline = timeoutMs == null ? Number.POSITIVE_INFINITY : Date.now() + timeoutMs
   for (;;) {
     if (signal?.aborted) {
-      throw new DOMException('Aborted', 'AbortError')
+      throw new AbortError()
     }
     if (await condition()) {
       return

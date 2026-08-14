@@ -1,3 +1,5 @@
+import { assertFiniteNonNegativeNumber } from '../_internal/assert.js'
+import { AbortError } from '../error/AbortError.js'
 import { TimeoutError } from '../error/TimeoutError.js'
 import { isKeyof, isUndefined } from '../predicate/index.js'
 import { sleep } from './sleep.js'
@@ -133,9 +135,7 @@ export function withTimeout<T>(
   ms: number,
   options: WithTimeoutOptions<T> = {},
 ): WithTimeoutResult<T> {
-  if (!Number.isFinite(ms) || ms < 0) {
-    throw new RangeError('ms must be a finite non-negative number')
-  }
+  assertFiniteNonNegativeNumber(ms, 'ms')
   const { message, signal: externalSignal } = options
 
   const controller = new AbortController()
@@ -178,7 +178,7 @@ export function withTimeout<T>(
       return _reject(new TimeoutError(message))
     }
     if (type === 'abort') {
-      return _reject(new DOMException('Aborted', 'AbortError'))
+      return _reject(new AbortError())
     }
     _reject(value)
   }
