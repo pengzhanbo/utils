@@ -25,7 +25,7 @@ jobs:
           node-version: 24
 
       - name: Install
-        run: pnpm i
+        run: pnpm ci
 
       - name: Test
         env:

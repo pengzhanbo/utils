@@ -28,6 +28,7 @@
   "scripts": {
     "build": "tsdown",
     "lint": "oxlint . --type-check --type-aware && oxfmt . --check",
+    "lint:action": "oxlint . --type-check --type-aware --format=github && oxfmt . --check",
     "format": "oxlint . --type-check --type-aware --fix && oxfmt .",
     "prepublishOnly": "pnpm run build",
     "test": "cross-env TZ=Etc/UTC vitest --coverage",

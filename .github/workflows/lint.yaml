@@ -24,7 +24,7 @@ jobs:
           node-version: 24
 
       - name: Install
-        run: pnpm i
+        run: pnpm ci
 
       - name: Lint
-        run: pnpm run lint --format=github
+        run: pnpm run lint:action
