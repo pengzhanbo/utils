@@ -57,7 +57,6 @@ function parseArgs(argv) {
 }
 
 function printHelp() {
-  // eslint-disable-next-line no-console
   console.log(`
 Benchmark Regression Detector
 
@@ -218,7 +217,6 @@ function main() {
   const currentData = loadJson(options.currentPath)
 
   if (!baselineData) {
-    // eslint-disable-next-line no-console
     console.log(
       `ℹ️  No baseline found at "${options.baselinePath}". Run "pnpm test:bench:json" first to establish baseline.`,
     )
@@ -226,7 +224,6 @@ function main() {
   }
 
   if (!currentData) {
-    // eslint-disable-next-line no-console
     console.log(
       `ℹ️  No current results found at "${options.currentPath}". Run "pnpm test:bench:json" first.`,
     )
@@ -242,13 +239,10 @@ function main() {
   const comparison = compareBenchmarks(baselineMap, currentMap, options.threshold)
   const report = generateReport(comparison, options)
 
-  // oxlint-disable-next-line typescript/no-unnecessary-condition
   if (options.outputPath) {
     writeFileSync(resolve(options.outputPath), `${report}\n`, 'utf8')
-    // eslint-disable-next-line no-console
     console.log(`Report written to ${String(options.outputPath)}`)
   } else {
-    // eslint-disable-next-line no-console
     console.log(report)
   }
 
