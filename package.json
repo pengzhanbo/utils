@@ -46,14 +46,14 @@
     "@pengzhanbo/oxc-config": "^2.9.0",
     "@pengzhanbo/tsconfig": "^2.9.0",
     "@types/node": "^26.2.0",
-    "@vitest/coverage-v8": "^4.1.10",
-    "bumpp": "^12.2.0",
+    "@vitest/coverage-v8": "^4.1.11",
+    "bumpp": "^12.2.1",
     "cross-env": "^10.1.0",
     "http-server": "^14.1.1",
     "js-tokens": "^10.0.0",
     "nano-staged": "^1.0.2",
-    "oxfmt": "^0.63.0",
-    "oxlint": "^1.78.0",
+    "oxfmt": "^0.64.0",
+    "oxlint": "^1.79.0",
     "oxlint-tsgolint": "^7.0.2001",
     "simple-git-hooks": "^2.13.1",
     "tsdown": "^0.22.14",
@@ -63,7 +63,7 @@
     "typedoc-plugin-mdn-links": "^5.1.1",
     "typedoc-plugin-missing-exports": "^4.1.4",
     "typescript": "6.0.3",
-    "vitest": "^4.1.10"
+    "vitest": "^4.1.11"
   },
   "simple-git-hooks": {
     "pre-commit": "./node_modules/.bin/nano-staged --allow-empty"
@@ -73,5 +73,5 @@
     "*": "oxfmt --no-error-on-unmatched-pattern",
     "*.{js,ts}": "vitest related --run"
   },
-  "packageManager": "pnpm@11.21.0"
+  "packageManager": "pnpm@11.22.0"
 }
