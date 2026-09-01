@@ -73,5 +73,5 @@
     "*": "oxfmt --no-error-on-unmatched-pattern",
     "*.{js,ts}": "vitest related --run"
   },
-  "packageManager": "pnpm@11.22.0"
+  "packageManager": "pnpm@11.25.0"
 }
