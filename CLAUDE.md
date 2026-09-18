@@ -14,8 +14,9 @@ pnpm lint         # Lint with oxlint (type-check + type-aware)
 pnpm format       # Format with oxfmt
 pnpm test         # Run vitest (coverage always enabled in vitest.config.ts)
 pnpm test -- src/array/uniq.test.ts  # Run a single test file
-pnpm test:bench   # Run performance benchmarks (Vitest built-in bench API)
+pnpm test:bench   # Run performance benchmarks (Vitest `bench` fixture + compare groups)
 pnpm test:bench:json  # Export benchmark results as JSON
+pnpm test:bench:baseline  # Refresh docs/benchmark-baseline.json (native baseline artifact)
 pnpm release      # bumpp + commit + push + tag (interactive)
 pnpm release:publish  # Publish to npm/JSR
 pnpm docs:dev     # Generate docs with TypeDoc in watch mode

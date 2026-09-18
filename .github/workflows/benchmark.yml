@@ -53,21 +53,10 @@ jobs:
           NODE_ENV: production
         run: pnpm run test:bench:json
 
-      - name: Check for regressions
-        id: check
-        continue-on-error: true
+      - name: Check baseline artifact
+        if: ${{ !hashFiles('docs/benchmark-baseline.json') }}
         run: |
-          if [ -f docs/benchmark-baseline.json ]; then
-            node scripts/check-benchmark.js \
-              --baseline docs/benchmark-baseline.json \
-              --current benchmark-results.json \
-              --threshold 20 \
-            || echo "::warning::Performance regression detected"
-          else
-            echo "No baseline found — saving current results as baseline"
-            mkdir -p docs
-            cp benchmark-results.json docs/benchmark-baseline.json
-          fi
+          echo "::notice::No committed baseline found — run 'pnpm test:bench:baseline' and commit docs/benchmark-baseline.json to enable native baseline comparisons."
 
       - name: Upload benchmark results
         uses: actions/upload-artifact@v7
@@ -77,7 +66,7 @@ jobs:
           retention-days: 30
 
       - name: Comment on PR
-        if: github.event_name == 'pull_request' && steps.check.outcome == 'success'
+        if: github.event_name == 'pull_request'
         uses: actions/github-script@v9
         with:
           script: |
@@ -88,15 +77,30 @@ jobs:
             if (fs.existsSync('benchmark-results.json')) {
               try {
                 const data = JSON.parse(fs.readFileSync('benchmark-results.json', 'utf8'));
-                const items = Array.isArray(data) ? data : (data.results || []);
-                
-                // Show top 5 slowest by mean time
+                const items = [];
+                for (const testResult of data.testResults || []) {
+                  for (const assertion of testResult.assertionResults || []) {
+                    for (const group of assertion.benchmarks || []) {
+                      for (const task of group.tasks || []) {
+                        // Stored baseline rows are reference-only / 基线参考行不计入排行
+                        if (task.fromStore) continue;
+                        items.push({
+                          name: group.name || assertion.fullName || '?',
+                          mean: task.latency ? task.latency.mean : 0,
+                          hz: task.throughput ? task.throughput.mean : 0,
+                        });
+                      }
+                    }
+                  }
+                }
+
+                // Show top 8 slowest by mean time
                 const sorted = [...items].sort((a, b) => (b.mean || 0) - (a.mean || 0)).slice(0, 8);
-                
+
                 body += '| Benchmark | Mean (ms) | ops/sec |\n';
                 body += '|----------|-----------|--------|\n';
                 for (const item of sorted) {
-                  const name = (item.name || item.id || '?').slice(0, 50);
+                  const name = (item.name || '?').slice(0, 50);
                   const mean = (item.mean || 0).toFixed(3);
                   const hz = item.hz ? item.hz.toFixed(0) : '-';
                   body += `| \`${name}\` | ${mean} | ${hz} |\n`;

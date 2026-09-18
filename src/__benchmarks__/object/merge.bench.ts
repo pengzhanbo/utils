@@ -1,103 +1,181 @@
-import { describe, bench } from 'vitest'
+import { describe, it } from 'vitest'
 import { deepMerge, deepMergeWithArray } from '../../object/deep-merge.js'
+import { runBenchmarks } from '../helpers/baseline.js'
 import { MERGE_WITH_ARRAY_SOURCES } from '../helpers/fixtures.js'
 
+function generateNested(depth: number): any {
+  if (depth <= 0) {
+    return { value: Math.random() }
+  }
+  const obj: any = {}
+  for (let i = 0; i < 5; i++) {
+    obj[`key_${i}`] = generateNested(depth - 1)
+  }
+  return obj
+}
+
 describe('performance > Object > DeepMerge', () => {
-  // DM-01: Two objects merge / 两对象合并
-  bench(
-    'two source objects | small (10 props each)',
-    () => {
-      const target = { a: 1, b: 2, c: 3, d: 4, e: 5 }
-      const source = { f: 6, g: 7, h: 8, i: 9, j: 10 }
-      deepMerge(target, source)
-    },
-    { time: 1000, iterations: 500 },
+  // `deepMerge` mutates its target in place, so targets are rebuilt in `beforeEach`;
+  // read-only sources and other inputs are pre-allocated outside the timed function
+  // deepMerge 会原地修改目标对象，因此目标对象在 beforeEach 中重建；
+  // 只读的源对象与其它输入在计时区间外预分配
+  const smallSource = { f: 6, g: 7, h: 8, i: 9, j: 10 }
+  const mediumSources = Array.from({ length: 5 }, (_, idx) =>
+    Object.fromEntries(Array.from({ length: 20 }, (_, i) => [`src${idx}_${i}`, idx * 10 + i])),
   )
+  const nestedSource = generateNested(5)
+  const largeSource = Object.fromEntries(
+    Array.from({ length: 1000 }, (_, i) => [`source_${i}`, { value: i * 2 }]),
+  )
+  const assignSource = Object.fromEntries(Array.from({ length: 100 }, (_, i) => [`s_${i}`, i]))
+  const conflictSource = Object.fromEntries(
+    Array.from({ length: 100 }, (_, i) => [`key_${i % 50}`, `new_value_${i}`]),
+  )
+
+  let smallTarget: Record<string, number>
+  let mediumBase: Record<string, number>
+  let nestedTarget: Record<string, any>
+  let largeTarget: Record<string, { value: number }>
+  let mergeArrayTarget: Record<PropertyKey, any>
+  let assignTarget: Record<string, number>
+  let conflictTarget: Record<string, number>
+
+  // DM-01: Two objects merge / 两对象合并
+  it('small objects, 10 props', async ({ bench }) => {
+    await runBenchmarks(
+      bench,
+      [
+        bench(
+          'two source objects',
+          {
+            beforeEach: () => {
+              smallTarget = { a: 1, b: 2, c: 3, d: 4, e: 5 }
+            },
+          },
+          () => deepMerge(smallTarget, smallSource),
+        ),
+      ],
+      { time: 1000, iterations: 500 },
+    )
+  })
 
   // DM-02: Multiple sources merge / 多源合并
-  bench(
-    'multiple sources (5) | medium objects (20 props each)',
-    () => {
-      const base = Object.fromEntries(Array.from({ length: 20 }, (_, i) => [`base_${i}`, i]))
-      const sources = Array.from({ length: 5 }, (_, idx) =>
-        Object.fromEntries(Array.from({ length: 20 }, (_, i) => [`src${idx}_${i}`, idx * 10 + i])),
-      )
-      deepMerge(base, ...sources)
-    },
-    { time: 1000, iterations: 200 },
-  )
+  it('multiple sources, medium objects', async ({ bench }) => {
+    await runBenchmarks(
+      bench,
+      [
+        bench(
+          'multiple sources (5)',
+          {
+            beforeEach: () => {
+              mediumBase = Object.fromEntries(
+                Array.from({ length: 20 }, (_, i) => [`base_${i}`, i]),
+              )
+            },
+          },
+          () => deepMerge(mediumBase, ...mediumSources),
+        ),
+      ],
+      { time: 1000, iterations: 200 },
+    )
+  })
 
   // DM-03: Deep nested merge / 深度嵌套合并
-  bench(
-    'deeply nested merge | depth=5, width=5',
-    () => {
-      function generateNested(depth: number): any {
-        if (depth <= 0) {
-          return { value: Math.random() }
-        }
-        const obj: any = {}
-        for (let i = 0; i < 5; i++) {
-          obj[`key_${i}`] = generateNested(depth - 1)
-        }
-        return obj
-      }
-
-      const target = generateNested(5)
-      const source = generateNested(5)
-      deepMerge(target, source)
-    },
-    { time: 1000, iterations: 100 },
-  )
+  it('deeply nested merge, depth=5 width=5', async ({ bench }) => {
+    await runBenchmarks(
+      bench,
+      [
+        bench(
+          'deeply nested merge',
+          {
+            beforeEach: () => {
+              nestedTarget = generateNested(5)
+            },
+          },
+          () => deepMerge(nestedTarget, nestedSource),
+        ),
+      ],
+      { time: 1000, iterations: 100 },
+    )
+  })
 
   // DM-04: Large object merge / 大型对象合并
-  bench(
-    'large objects | 1000 props each',
-    () => {
-      const target = Object.fromEntries(
-        Array.from({ length: 1000 }, (_, i) => [`target_${i}`, { value: i }]),
-      )
-      const source = Object.fromEntries(
-        Array.from({ length: 1000 }, (_, i) => [`source_${i}`, { value: i * 2 }]),
-      )
-      deepMerge(target, source)
-    },
-    { time: 2000, iterations: 50 },
-  )
+  it('large objects, 1000 props', async ({ bench }) => {
+    await runBenchmarks(
+      bench,
+      [
+        bench(
+          'large objects',
+          {
+            beforeEach: () => {
+              largeTarget = Object.fromEntries(
+                Array.from({ length: 1000 }, (_, i) => [`target_${i}`, { value: i }]),
+              )
+            },
+          },
+          () => deepMerge(largeTarget, largeSource),
+        ),
+      ],
+      { time: 2000, iterations: 50 },
+    )
+  })
 
   // DM-05: withArray mode / 数组合并模式
-  bench(
-    'deepMergeWithArray | arrays present',
-    () => {
-      deepMergeWithArray(
-        MERGE_WITH_ARRAY_SOURCES[0] as Record<PropertyKey, any>,
-        MERGE_WITH_ARRAY_SOURCES[1] as Record<PropertyKey, any>,
-        MERGE_WITH_ARRAY_SOURCES[2] as Record<PropertyKey, any>,
-      )
-    },
-    { time: 1000, iterations: 200 },
-  )
+  it('deepMergeWithArray, arrays present', async ({ bench }) => {
+    await runBenchmarks(
+      bench,
+      [
+        bench(
+          'deepMergeWithArray',
+          {
+            beforeEach: () => {
+              // Fresh copy of the mutable merge target (mirrors MERGE_WITH_ARRAY_SOURCES[0])
+              // 可变合并目标的全新副本（对应 MERGE_WITH_ARRAY_SOURCES[0]）
+              mergeArrayTarget = { arr: [1, 2], obj: { x: 1 } }
+            },
+          },
+          () =>
+            deepMergeWithArray(
+              mergeArrayTarget,
+              MERGE_WITH_ARRAY_SOURCES[1] as Record<PropertyKey, any>,
+              MERGE_WITH_ARRAY_SOURCES[2] as Record<PropertyKey, any>,
+            ),
+        ),
+      ],
+      { time: 1000, iterations: 200 },
+    )
+  })
 
-  // DM-06: vs Object.assign / 与Object.assign对比
-  bench(
-    'object.assign | shallow merge (100 props)',
-    () => {
-      const target = Object.fromEntries(Array.from({ length: 100 }, (_, i) => [`t_${i}`, i]))
-      const source = Object.fromEntries(Array.from({ length: 100 }, (_, i) => [`s_${i}`, i]))
-      Object.assign(target, source)
-    },
-    { time: 1000, iterations: 200 },
-  )
-
-  // DM-07: High conflict rate / 高冲突率场景
-  bench(
-    'high conflict rate | 50% overlapping keys',
-    () => {
-      const target = Object.fromEntries(Array.from({ length: 100 }, (_, i) => [`key_${i}`, i]))
-      const source = Object.fromEntries(
-        Array.from({ length: 100 }, (_, i) => [`key_${i % 50}`, `new_value_${i}`]),
-      )
-      deepMerge(target, source)
-    },
-    { time: 1000, iterations: 200 },
-  )
+  // DM-06 ~ DM-07: Same 100-prop scale, Object.assign baseline vs deepMerge conflict scenario
+  // DM-06 ~ DM-07: 同为 100 props 规模，Object.assign 基线与 deepMerge 冲突场景对比
+  it('object.assign vs deepMerge, 100 props', async ({ bench }) => {
+    await runBenchmarks(
+      bench,
+      [
+        bench(
+          'object.assign',
+          {
+            beforeEach: () => {
+              assignTarget = Object.fromEntries(
+                Array.from({ length: 100 }, (_, i) => [`t_${i}`, i]),
+              )
+            },
+          },
+          () => Object.assign(assignTarget, assignSource),
+        ),
+        bench(
+          'high conflict rate',
+          {
+            beforeEach: () => {
+              conflictTarget = Object.fromEntries(
+                Array.from({ length: 100 }, (_, i) => [`key_${i}`, i]),
+              )
+            },
+          },
+          () => deepMerge(conflictTarget, conflictSource),
+        ),
+      ],
+      { time: 1000, iterations: 200 },
+    )
+  })
 })

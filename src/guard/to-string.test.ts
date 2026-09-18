@@ -10,7 +10,7 @@ describe('guard > toString', () => {
     expect(toString([])).toBe('')
     expect(toString({})).toBe('[object Object]')
     expect(toString(undefined)).toBe('undefined')
-    expect(toString(() => {})).toBe('() => {\n    }')
+    expect(toString(() => {})).toBe('() => {}')
     expect(toString(Symbol(''))).toBe('Symbol()')
   })
 

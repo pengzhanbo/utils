@@ -34,7 +34,8 @@
     "test": "cross-env TZ=Etc/UTC vitest --coverage",
     "test:unit": "cross-env TZ=Etc/UTC vitest run --coverage",
     "test:bench": "cross-env TZ=Etc/UTC vitest bench",
-    "test:bench:json": "cross-env TZ=Etc/UTC vitest bench --outputJson=benchmark-results.json",
+    "test:bench:json": "cross-env TZ=Etc/UTC vitest bench --reporter=default --reporter=json --outputFile.json=benchmark-results.json",
+    "test:bench:baseline": "node -e \"require('node:fs').rmSync('docs/benchmark-baseline.json', { force: true })\" && cross-env TZ=Etc/UTC vitest bench --reporter=json --outputFile=docs/benchmark-baseline.json",
     "release:publish": "pnpm publish --provenance --access public",
     "release": "bumpp package.json jsr.json --commit \"build: publish v%s\" --push --tag --all",
     "prepare": "simple-git-hooks",
@@ -43,27 +44,27 @@
     "docs:preview": "http-server docs/dist"
   },
   "devDependencies": {
-    "@pengzhanbo/oxc-config": "^2.9.0",
-    "@pengzhanbo/tsconfig": "^2.9.0",
-    "@types/node": "^26.2.0",
-    "@vitest/coverage-v8": "^4.1.11",
-    "bumpp": "^12.2.1",
+    "@pengzhanbo/oxc-config": "^2.9.2",
+    "@pengzhanbo/tsconfig": "^2.9.2",
+    "@types/node": "^26.6.1",
+    "@vitest/coverage-v8": "^5.0.1",
+    "bumpp": "^12.3.0",
     "cross-env": "^10.1.0",
     "http-server": "^14.1.1",
     "js-tokens": "^10.0.0",
     "nano-staged": "^1.0.2",
-    "oxfmt": "^0.64.0",
-    "oxlint": "^1.79.0",
+    "oxfmt": "^0.68.0",
+    "oxlint": "^1.83.0",
     "oxlint-tsgolint": "^7.0.2001",
-    "simple-git-hooks": "^2.13.1",
-    "tsdown": "^0.22.14",
+    "simple-git-hooks": "^2.14.0",
+    "tsdown": "^0.23.0",
     "typedoc": "^0.28.20",
     "typedoc-github-theme": "^0.4.0",
     "typedoc-plugin-coverage": "^4.0.3",
     "typedoc-plugin-mdn-links": "^5.1.1",
     "typedoc-plugin-missing-exports": "^4.1.4",
     "typescript": "6.0.3",
-    "vitest": "^4.1.11"
+    "vitest": "^5.0.1"
   },
   "simple-git-hooks": {
     "pre-commit": "./node_modules/.bin/nano-staged --allow-empty"
@@ -73,5 +74,5 @@
     "*": "oxfmt --no-error-on-unmatched-pattern",
     "*.{js,ts}": "vitest related --run"
   },
-  "packageManager": "pnpm@11.22.0"
+  "packageManager": "pnpm@12.4.2"
 }

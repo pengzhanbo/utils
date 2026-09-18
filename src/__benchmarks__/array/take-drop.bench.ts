@@ -1,87 +1,43 @@
-import { describe, bench } from 'vitest'
+import { describe, it } from 'vitest'
 import { dropRight } from '../../array/drop-right.js'
 import { drop } from '../../array/drop.js'
 import { takeRight } from '../../array/take-right.js'
 import { take } from '../../array/take.js'
+import { runBenchmarks } from '../helpers/baseline.js'
 
 describe('performance > Array > TakeDrop', () => {
-  // TD-01: take 10K / 截取 10K
-  bench(
-    'take | 10K items',
-    () => {
-      const arr = Array.from({ length: 10000 }, (_, i) => i)
-      take(arr, 5000)
-    },
-    { time: 1000, iterations: 200 },
-  )
+  // Inputs are pre-allocated outside the timed function to keep GC noise out of the results
+  // 输入数据在计时区间外预分配，避免构造开销与 GC 噪声污染结果
+  const numbers10k = Array.from({ length: 10000 }, (_, i) => i)
+  const numbers10 = Array.from({ length: 10 }, (_, i) => i)
 
-  // TD-02: drop 10K / 丢弃 10K
-  bench(
-    'drop | 10K items',
-    () => {
-      const arr = Array.from({ length: 10000 }, (_, i) => i)
-      drop(arr, 5000)
-    },
-    { time: 1000, iterations: 200 },
-  )
+  // TD-01 ~ TD-04: Same 10K scale and run options, so they share one comparison table
+  // TD-01 ~ TD-04: 同为 10K 规模且运行参数相同，放在同一张对比表中
+  it('10K items, take & drop', async ({ bench }) => {
+    await runBenchmarks(
+      bench,
+      [
+        bench('take', () => take(numbers10k, 5000)),
+        bench('drop', () => drop(numbers10k, 5000)),
+        bench('takeRight', () => takeRight(numbers10k, 5000)),
+        bench('dropRight', () => dropRight(numbers10k, 5000)),
+      ],
+      { time: 1000, iterations: 200 },
+    )
+  })
 
-  // TD-03: takeRight 10K / 从末尾截取 10K
-  bench(
-    'takeRight | 10K items',
-    () => {
-      const arr = Array.from({ length: 10000 }, (_, i) => i)
-      takeRight(arr, 5000)
-    },
-    { time: 1000, iterations: 200 },
-  )
-
-  // TD-04: dropRight 10K / 从末尾丢弃 10K
-  bench(
-    'dropRight | 10K items',
-    () => {
-      const arr = Array.from({ length: 10000 }, (_, i) => i)
-      dropRight(arr, 5000)
-    },
-    { time: 1000, iterations: 200 },
-  )
-
-  // TD-05: take small / 小数组截取
-  bench(
-    'take | small array (10 items)',
-    () => {
-      const arr = Array.from({ length: 10 }, (_, i) => i)
-      take(arr, 3)
-    },
-    { time: 1000, iterations: 1000 },
-  )
-
-  // TD-06: drop small / 小数组丢弃
-  bench(
-    'drop | small array (10 items)',
-    () => {
-      const arr = Array.from({ length: 10 }, (_, i) => i)
-      drop(arr, 3)
-    },
-    { time: 1000, iterations: 1000 },
-  )
-
-  // TD-07: takeRight small / 小数组从末尾截取
-  bench(
-    'takeRight | small array (10 items)',
-    () => {
-      const arr = Array.from({ length: 10 }, (_, i) => i)
-      takeRight(arr, 3)
-    },
-    { time: 1000, iterations: 1000 },
-  )
-
-  // TD-08: dropRight small / 小数组从末尾丢弃
-  bench(
-    'dropRight | small array (10 items)',
-    () => {
-      const arr = Array.from({ length: 10 }, (_, i) => i)
-      dropRight(arr, 3)
-    },
-    { time: 1000, iterations: 1000 },
-  )
+  // TD-05 ~ TD-08: Same small scale and run options, so they share one comparison table
+  // TD-05 ~ TD-08: 同为小数组规模且运行参数相同，放在同一张对比表中
+  it('small array, take & drop', async ({ bench }) => {
+    await runBenchmarks(
+      bench,
+      [
+        bench('take', () => take(numbers10, 3)),
+        bench('drop', () => drop(numbers10, 3)),
+        bench('takeRight', () => takeRight(numbers10, 3)),
+        bench('dropRight', () => dropRight(numbers10, 3)),
+      ],
+      { time: 1000, iterations: 1000 },
+    )
+  })
 })

@@ -20,8 +20,7 @@
 | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `src/<domain>/`                | One dir per domain: `array`, `object`, `string`, `promise`, `function`, `predicate`, `guard`, `math`, `url`, `date`, `error`, `event`, `types`, `util` |
 | `src/_internal/`               | Private shared helpers (not exported publicly)                                                                                                         |
-| `src/__benchmarks__/<domain>/` | Vitest `bench()` benchmarks + `helpers/` (fixtures, data generators)                                                                                   |
-| `scripts/`                     | `check-benchmark.js` — CI benchmark regression gate (CJS, no npm wrapper)                                                                              |
+| `src/__benchmarks__/<domain>/` | Vitest `bench` fixture benchmarks + `helpers/` (fixtures, data generators)                                                                             |
 | `docs/`                        | `theme/custom.css` (hand-authored); `dist/` is entirely TypeDoc build output (cleanOutputDir)                                                          |
 | `.github/workflows/`           | test, lint, release, jsr-publish, deploy, benchmark                                                                                                    |
 
@@ -32,8 +31,9 @@ pnpm install                  # pnpm@11.18.0 pinned via packageManager
 pnpm build                    # tsdown → dist/ (ESM + dts)
 pnpm test                     # vitest --coverage (watch mode)
 pnpm test:unit                # vitest run --coverage (CI)
-pnpm test:bench               # vitest bench
+pnpm test:bench               # vitest bench (compare groups + stored baseline reference rows)
 pnpm test:bench:json          # bench → benchmark-results.json (CI)
+pnpm test:bench:baseline      # refresh docs/benchmark-baseline.json (native baseline artifact)
 pnpm lint                     # oxlint . --type-check --type-aware
 pnpm format                   # oxfmt .
 pnpm docs:dev / docs:build    # TypeDoc watch / build to docs/dist
@@ -67,8 +67,8 @@ Test/lint/format commands run with `TZ=Etc/UTC` (via `cross-env`) for determinis
 | `jsr.json`                             | JSR publish config — exports `./src/index.ts`, excludes tests/benchmarks                                                |
 | `typedoc.json`                         | Docs: category router, 4 plugins, out `docs/dist`                                                                       |
 | `shim.d.ts`                            | Ambient module for `strip-comments-strings` (build dep only, not runtime)                                               |
+| `docs/benchmark-baseline.json`         | Optional native baseline artifact (generated on demand)                                                                 |
 | `CLAUDE.md`                            | Pre-existing AI conventions doc — keep this file consistent with it                                                     |
-| `scripts/check-benchmark.js`           | Benchmark regression gate used by CI                                                                                    |
 
 ## Runtime/Tooling Preferences
 
@@ -80,10 +80,10 @@ Test/lint/format commands run with `TZ=Etc/UTC` (via `cross-env`) for determinis
 
 ## Testing & QA
 
-- **Framework**: Vitest 4, **no globals** — always `import { describe, expect, it, vi } from 'vitest'`.
+- **Framework**: Vitest 5, **no globals** — always `import { describe, expect, it, vi } from 'vitest'`.
 - **Colocation**: test files sit next to implementations, `*.test.ts` suffix, kebab-case (`src/array/range.test.ts`). ~130 test files. No `__tests__` dirs, no snapshots, no `.skip`/`.only`.
 - **Structure**: `describe('module > functionName', …)`; table-driven cases via `it.each([...])('%s => %s', …)`; standalone `it()` blocks for error paths; section divider comments `// ===== Section / 中文名 =====` in larger files.
 - **Async/errors**: `await expect(p).rejects.toThrow(TimeoutError)`, `.resolves.toBe(...)`; timers via `vi.useFakeTimers()` + `vi.advanceTimersByTime()`; mocks via `vi.fn()`/`vi.spyOn()`.
 - **Type-level tests**: `expectTypeOf<Result>().toEqualTypeOf<...>()` (see `src/types/deep.test.ts`).
 - **Coverage**: v8 provider, no thresholds configured, but CLAUDE.md convention: **every new util ships with a `.test.ts` targeting 100% coverage**; coverage uploaded to Codecov in CI.
-- **Benchmarks**: `src/__benchmarks__/<domain>/<fn>.bench.ts` using `bench(name, fn, { time, iterations })`; reusable fixtures in `src/__benchmarks__/helpers/` (`fixtures.ts` SMALL/MEDIUM/LARGE datasets, `data-generators.ts`). CI runs `test:bench:json` then `scripts/check-benchmark.js --baseline docs/benchmark-baseline.json --threshold 20` — a regression >20% vs baseline fails the build; first run creates the baseline.
+- **Benchmarks**: `src/__benchmarks__/<domain>/<fn>.bench.ts` using the test-context `bench` fixture (only available in `*.bench.ts`). Inputs are pre-allocated at `describe` scope — or rebuilt in the benchmark's `beforeEach` when the operation mutates them — and every benchmark function returns the result under test so JIT dead-code elimination cannot skip it. Benchmarks with identical `time`/`iterations` and scale are grouped into one `it` via `runBenchmarks(bench, [...], options)` from `helpers/baseline.ts`, which forwards to `bench.compare()` and — when `docs/benchmark-baseline.json` exists — appends `<label> (baseline)` reference rows read through `bench.from()`. That artifact is optional and not committed: the mechanism stays dormant (plain comparison tables, no reference rows) until someone runs `pnpm test:bench:baseline` to generate it, ideally on the CI runner since absolute numbers are machine-dependent. The CI gate is advisory either way: `test:bench:json` prints the comparison tables and the workflow only emits a notice when no baseline is committed. Reusable fixtures live in `src/__benchmarks__/helpers/` (`fixtures.ts` SMALL/MEDIUM/LARGE datasets, `data-generators.ts`).
