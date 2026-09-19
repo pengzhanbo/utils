@@ -149,4 +149,45 @@ describe('string > unescape', () => {
   it('should preserve non-entity ampersand followed by valid entity', () => {
     expect(unescape('&amp;&lt;')).toBe('&<')
   })
+
+  it('should round-trip escape and unescape with mixed content', () => {
+    const original = '<a href="https://example.com?x=1&y=2">\'quoted\' & `tick`</a>'
+    expect(unescape(escape(original))).toBe(original)
+    expect(unescape(escape('<>&"\'`'))).toBe('<>&"\'`')
+    expect(unescape(escape('plain text 123'))).toBe('plain text 123')
+  })
+
+  it('should decode named entities', () => {
+    expect(unescape('&amp;')).toBe('&')
+    expect(unescape('&lt;')).toBe('<')
+    expect(unescape('&gt;')).toBe('>')
+    expect(unescape('&quot;')).toBe('"')
+    expect(unescape('&#39;')).toBe("'")
+    expect(unescape('&#96;')).toBe('`')
+    expect(unescape('&lt;p&gt;&amp;&quot;&#39;&#96;')).toBe('<p>&"\'`')
+  })
+
+  it('should decode decimal and hexadecimal entities', () => {
+    expect(unescape('&#38;')).toBe('&')
+    expect(unescape('&#x26;')).toBe('&')
+    expect(unescape('&#X26;')).toBe('&')
+    expect(unescape('&#60;&#x3E;')).toBe('<>')
+  })
+
+  it('should preserve malformed and out-of-range entities', () => {
+    expect(unescape('&amp')).toBe('&amp')
+    expect(unescape('&abcdefghijk;')).toBe('&abcdefghijk;')
+    expect(unescape('&#x110000;')).toBe('&#x110000;')
+    expect(unescape('&#xD800;')).toBe('&#xD800;')
+    expect(unescape('&#;')).toBe('&#;')
+    expect(unescape('&#xZZ;')).toBe('&#xZZ;')
+  })
+
+  it('should handle adjacent entities and lone ampersands', () => {
+    expect(unescape('&amp;&lt;&gt;&amp;')).toBe('&<>&')
+    expect(unescape('&&lt;')).toBe('&<')
+    expect(unescape('no entities here')).toBe('no entities here')
+    expect(unescape('&amp;middle&lt;')).toBe('&middle<')
+    expect(unescape('&hello&amp;')).toBe('&hello&')
+  })
 })

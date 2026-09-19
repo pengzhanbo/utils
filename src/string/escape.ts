@@ -81,50 +81,49 @@ const htmlUnescapes: Record<string, string> = {
  * ```
  */
 export function unescape(str: string): string {
-  let result = ''
-  let i = 0
-  const len = str.length
-
-  while (i < len) {
-    if (str[i] === '&') {
-      const semi = str.indexOf(';', i + 1)
-      if (semi !== -1 && semi - i < 12) {
-        const entity = str.slice(i, semi + 1)
-        const replacement = htmlUnescapes[entity]
-        if (replacement != null) {
-          result += replacement
-          i = semi + 1
-          continue
-        }
-        if (entity[1] === '#') {
-          const content = entity.slice(2, -1)
-          let codePoint = -1
-          if (content[0] === 'x' || content[0] === 'X') {
-            const hex = content.slice(1)
-            if (RE_HEX.test(hex)) {
-              codePoint = Number.parseInt(hex, 16)
-            }
-          } else if (RE_DECIMAL.test(content)) {
-            codePoint = Number.parseInt(content, 10)
-          }
-          if (
-            codePoint >= 0 &&
-            // oxlint-disable-next-line unicorn/number-literal-case
-            codePoint <= 0x10ffff &&
-            // oxlint-disable-next-line unicorn/number-literal-case
-            (codePoint < 0xd800 || codePoint > 0xdfff)
-          ) {
-            try {
-              result += String.fromCodePoint(codePoint)
-              i = semi + 1
-              continue
-            } catch {}
-          }
-        }
-      }
-    }
-    result += str[i++]
+  let index = str.indexOf('&')
+  if (index === -1) {
+    return str
   }
 
-  return result
+  let result = ''
+  let start = 0
+  while (index !== -1) {
+    const semi = str.indexOf(';', index + 1)
+    if (semi !== -1 && semi - index < 12) {
+      const replacement = decodeEntity(str.slice(index, semi + 1))
+      if (replacement !== undefined) {
+        result += str.slice(start, index) + replacement
+        start = semi + 1
+        index = str.indexOf('&', start)
+        continue
+      }
+    }
+    index = str.indexOf('&', index + 1)
+  }
+
+  return start === 0 ? str : result + str.slice(start)
+}
+
+function decodeEntity(entity: string): string | undefined {
+  const replacement = htmlUnescapes[entity]
+  if (replacement != null) {
+    return replacement
+  }
+  if (entity[1] === '#') {
+    const content = entity.slice(2, -1)
+    let codePoint = -1
+    if (content[0] === 'x' || content[0] === 'X') {
+      const hex = content.slice(1)
+      if (RE_HEX.test(hex)) {
+        codePoint = Number.parseInt(hex, 16)
+      }
+    } else if (RE_DECIMAL.test(content)) {
+      codePoint = Number.parseInt(content, 10)
+    }
+    if (codePoint >= 0 && codePoint <= 0x10ffff && (codePoint < 0xd800 || codePoint > 0xdfff)) {
+      return String.fromCodePoint(codePoint)
+    }
+  }
+  return undefined
 }
