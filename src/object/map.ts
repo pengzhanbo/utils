@@ -1,5 +1,4 @@
 import { DANGEROUS_KEYS } from '../_internal/tags.js'
-import { isUndefined } from '../predicate/is-undefined.js'
 
 /**
  * Map key/value pairs for an object, and construct a new one
@@ -46,10 +45,14 @@ export function objectMap<K extends string, V, NK extends PropertyKey = K, NV = 
   obj: Record<K, V>,
   mapper: (key: K, value: V) => [NK, NV] | undefined,
 ): Record<NK, NV> {
-  return Object.fromEntries(
-    Object.entries(obj)
-      .map(([k, v]) => mapper(k as K, v as V))
-      .filter((entry): entry is [NK, NV] => !isUndefined(entry))
-      .filter(([k]) => !DANGEROUS_KEYS.has(k as string)),
-  ) as Record<NK, NV>
+  const entries: [NK, NV][] = []
+  const keys = Object.keys(obj)
+  for (let i = 0; i < keys.length; i++) {
+    const key = keys[i]! as K
+    const entry = mapper(key, obj[key])
+    if (entry !== undefined && !DANGEROUS_KEYS.has(entry[0] as string)) {
+      entries.push(entry)
+    }
+  }
+  return Object.fromEntries(entries) as Record<NK, NV>
 }

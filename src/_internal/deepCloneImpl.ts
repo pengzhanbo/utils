@@ -1,6 +1,8 @@
 // oxlint-disable complexity max-lines-per-function
 
 import { hasOwn } from '../object/has-own.js'
+import { isArray } from '../predicate/is-array.js'
+import { isBuffer } from '../predicate/is-buffer.js'
 import { isPrimitive } from '../predicate/is-primitive.js'
 import { isTypedArray } from '../predicate/is-typed-array.js'
 import { T_OBJECT, T_UNDEFINED } from './tags.js'
@@ -51,7 +53,7 @@ export function deepCloneImpl<T>(
     return stack.get(valueToClone) as T
   }
 
-  if (Array.isArray(valueToClone)) {
+  if (isArray(valueToClone)) {
     const len = valueToClone.length
     let isPrimitiveArray = true
     for (let i = 0; i < len; i++) {
@@ -123,8 +125,7 @@ export function deepCloneImpl<T>(
     return result as T
   }
 
-  // oxlint-disable-next-line valid-typeof
-  if (typeof Buffer !== T_UNDEFINED && Buffer.isBuffer(valueToClone)) {
+  if (isBuffer(valueToClone)) {
     const result = Buffer.from(valueToClone)
     stack.set(valueToClone, result)
     return result as T
@@ -232,11 +233,17 @@ export function copyProperties(
   depth = 0,
 ): void {
   const stringKeys = Object.keys(source)
-  const symbolKeys = getSymbols(source)
 
   for (let i = 0; i < stringKeys.length; i++) {
     copyKey(source, target, stringKeys[i]!, stack, depth)
   }
+
+  if (Object.getOwnPropertySymbols(source).length === 0) {
+    return
+  }
+
+  const symbolKeys = getSymbols(source)
+
   for (let i = 0; i < symbolKeys.length; i++) {
     copyKey(source, target, symbolKeys[i]!, stack, depth)
   }
