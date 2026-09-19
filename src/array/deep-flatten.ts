@@ -40,16 +40,28 @@ import { isArray } from '../predicate/is-array.js'
  */
 export function deepFlatten<T>(arr: readonly (T | readonly any[])[]): T[] {
   const result: T[] = []
+  flattenInto(result, arr)
+  return result
+}
 
+/**
+ * Recursively writes every non-array element of `arr` into the shared `target`
+ * array, avoiding intermediate arrays and spread-argument expansion.
+ *
+ * 将所有非数组元素递归写入共享的 `target` 数组，避免产生中间数组和展开实参。
+ *
+ * @internal
+ * @param target - The shared accumulator. 共享的累加数组
+ * @param arr - The array to read from. 要读取的数组
+ */
+function flattenInto<T>(target: T[], arr: readonly any[]): void {
   for (let i = 0; i < arr.length; i++) {
-    const value = arr[i]!
+    const value = arr[i]
     if (isArray(value)) {
-      result.push(...deepFlatten<T>(value as T[]))
+      flattenInto(target, value)
     } else {
       // Array.isArray's guard cannot exclude `readonly any[]` from the union, cast is safe here
-      result.push(value as T)
+      target.push(value as T)
     }
   }
-
-  return result
 }

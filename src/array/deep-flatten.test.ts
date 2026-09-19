@@ -57,4 +57,66 @@ describe('array > deepFlatten', () => {
     const result = deepFlatten(input)
     expect(result).toEqual([1, 2])
   })
+
+  // ===== Sparse holes / 稀疏数组空洞 =====
+  it('should emit undefined for holes at every nesting level', () => {
+    const inner: string[] = []
+    inner[1] = 'b'
+    const outer: (string | string[])[] = []
+    outer[0] = 'a'
+    outer[2] = inner
+
+    const result = deepFlatten(outer)
+
+    expect(result).toEqual(['a', undefined, undefined, 'b'])
+    // holes are materialized as dense `undefined` entries
+    expect(result).toHaveLength(4)
+    expect(1 in result).toBe(true)
+    expect(2 in result).toBe(true)
+  })
+
+  // ===== Deep nesting parity / 深层嵌套一致性 =====
+  it('should match flat(Infinity) for 5-level nesting', () => {
+    const input: unknown[] = [1, [2, ['a', [3, [4, [true]]]], []], null]
+    expect(deepFlatten(input)).toEqual(input.flat(Infinity))
+  })
+
+  // ===== Large input / 大数组 =====
+  it('should flatten 200000 elements without throwing RangeError', () => {
+    const size = 200_000
+    const inner = Array.from({ length: size }, (_, i) => i)
+    const input = [0, inner]
+
+    const result = deepFlatten(input)
+
+    expect(result).toHaveLength(size + 1)
+    expect(result[0]).toBe(0)
+    expect(result[1]).toBe(0)
+    expect(result[size]).toBe(size - 1)
+  })
+
+  // ===== Immutability / 不可变性 =====
+  it('should not mutate deeply nested input', () => {
+    const inner = [3]
+    const middle = [2, inner]
+    const input = [1, middle]
+
+    const result = deepFlatten(input)
+
+    // structural comparison
+    expect(input).toEqual([1, [2, [3]]])
+    // shallow reference comparison: nested containers stay untouched
+    expect(input[1]).toBe(middle)
+    expect(middle[1]).toBe(inner)
+    expect(inner).toEqual([3])
+    expect(result).not.toBe(input)
+  })
+
+  // ===== Mixed types / 混合类型 =====
+  it('should flatten mixed types with empty nested arrays', () => {
+    const obj = { id: 1 }
+    const input: unknown[] = [1, 'a', [true, [obj, []], [], null], []]
+
+    expect(deepFlatten(input)).toEqual([1, 'a', true, obj, null])
+  })
 })
