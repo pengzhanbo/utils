@@ -118,6 +118,36 @@ export class Semaphore {
   }
 
   /**
+   * Tries to acquire a permit without waiting.
+   *
+   * 尝试立即获取一个许可，不等待。
+   *
+   * @returns A function that releases the acquired permit, or `undefined` when no
+   * permit is available (in which case the caller should fall back to {@link acquire}).
+   * 获取成功时返回释放许可的函数；无可用许可时返回 `undefined`（调用方应回退到 {@link acquire}）。
+   *
+   * @remarks
+   * Unlike `acquire`, this method never queues and never allocates a Promise.
+   * 与 `acquire` 不同，此方法不会排队，也不会分配 Promise。
+   *
+   * @example
+   * ```ts
+   * const release = semaphore.tryAcquire()
+   * if (release) {
+   *   try { ... } finally { release() }
+   * }
+   * ```
+   */
+  tryAcquire(): (() => void) | undefined {
+    if (this._available > 0) {
+      this._available--
+      this._acquired++
+      return () => this.release()
+    }
+    return undefined
+  }
+
+  /**
    * Releases a semaphore, allowing one more operation to proceed.
    *
    * 释放一个信号量，允许另一个操作继续进行。

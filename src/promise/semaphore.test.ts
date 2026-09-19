@@ -242,4 +242,59 @@ describe('promise > Semaphore', () => {
 
     expect(order).toEqual([1, 2, 3])
   })
+
+  // ===== tryAcquire / 同步尝试获取 =====
+
+  it('should acquire a permit synchronously and restore it after release', () => {
+    const semaphore = new Semaphore(2)
+
+    const release = semaphore.tryAcquire()
+
+    expect(release).toBeTypeOf('function')
+    expect(semaphore.available).toBe(1)
+
+    release!()
+
+    expect(semaphore.available).toBe(2)
+  })
+
+  it('should return undefined without queueing when no permits are available', () => {
+    const semaphore = new Semaphore(1)
+
+    const first = semaphore.tryAcquire()
+    expect(first).toBeTypeOf('function')
+    expect(semaphore.available).toBe(0)
+
+    expect(semaphore.tryAcquire()).toBeUndefined()
+    expect(semaphore.available).toBe(0)
+
+    // no phantom waiter was queued: release simply restores the permit
+    semaphore.release()
+    expect(semaphore.available).toBe(1)
+
+    first!()
+    expect(semaphore.available).toBe(1)
+  })
+
+  it('should not jump ahead of pending acquirers', async () => {
+    const semaphore = new Semaphore(1)
+
+    await semaphore.acquire()
+
+    const spy = vi.fn()
+    void semaphore
+      .acquire()
+      .then(spy)
+      .catch(() => {})
+
+    await sleep(0)
+    expect(spy).not.toHaveBeenCalled()
+
+    // the queued waiter owns the next permit once released
+    expect(semaphore.tryAcquire()).toBeUndefined()
+
+    semaphore.release()
+    await sleep(0)
+    expect(spy).toHaveBeenCalledTimes(1)
+  })
 })
