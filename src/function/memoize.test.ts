@@ -156,6 +156,46 @@ describe('functions > memoize', () => {
     expect(fn).toHaveBeenCalledTimes(4) // cache miss
   })
 
+  it('should use a fast key to distinguish a number from its string form', () => {
+    const fn = vi.fn((x: number | string) => x)
+    const memoizedFn = memoize(fn)
+
+    memoizedFn(1)
+    memoizedFn('1')
+    memoizedFn(1)
+    memoizedFn('1')
+
+    expect(fn).toHaveBeenCalledTimes(2)
+    expect(fn).toHaveBeenNthCalledWith(1, 1)
+    expect(fn).toHaveBeenNthCalledWith(2, '1')
+  })
+
+  it('should use a fast key to distinguish a boolean from its string form', () => {
+    const fn = vi.fn((x: boolean | string) => x)
+    const memoizedFn = memoize(fn)
+
+    memoizedFn(true)
+    memoizedFn('true')
+    memoizedFn(true)
+    memoizedFn('true')
+
+    expect(fn).toHaveBeenCalledTimes(2)
+  })
+
+  it('should fall back to JSON stringified args for multiple and object args', () => {
+    const multi = vi.fn((a: number, b: number) => a + b)
+    const memoizedMulti = memoize(multi)
+    memoizedMulti(1, 2)
+    memoizedMulti(1, 2)
+    expect(multi).toHaveBeenCalledTimes(1)
+
+    const object = vi.fn((obj: { a: number }) => obj.a)
+    const memoizedObject = memoize(object)
+    memoizedObject({ a: 1 })
+    memoizedObject({ a: 1 })
+    expect(object).toHaveBeenCalledTimes(1)
+  })
+
   it('should preserve this context', () => {
     const obj = {
       multiplier: 2,
@@ -254,7 +294,6 @@ describe('functions > memoize', () => {
   })
 
   it('should work with async function', async () => {
-    // oxlint-disable-next-line typescript/require-await
     const fn = vi.fn(async (x: number) => x * 2)
     const memoizedFn = memoize(fn, { maxSize: 2 })
 

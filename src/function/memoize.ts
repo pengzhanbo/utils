@@ -1,10 +1,13 @@
 import type { Fn } from '../types/index.js'
+import { T_BOOLEAN, T_NUMBER, T_STRING } from '../_internal/tags.js'
 import { isUndefined } from '../predicate/index.js'
 
 export interface MemoizeOptions<T extends Fn = Fn> {
   /**
-   * Maximum number of cached entries.
-   * 缓存条目最大数量
+   * Maximum number of cached entries. When the limit is exceeded, the
+   * least recently used entry is evicted (LRU). Cache hits refresh the
+   * recency order.
+   * 缓存条目最大数量。超出上限时淘汰最久未使用的条目（LRU）；命中会刷新使用顺序
    * @typeParam Fn - The type of the function / 函数的类型
    * @typeParam T - The type of the function / 函数的类型
    */
@@ -15,8 +18,9 @@ export interface MemoizeOptions<T extends Fn = Fn> {
    */
   ttl?: number
   /**
-   * Custom key resolver. By default, arguments are serialized via JSON.
-   * 自定义 key 生成器。默认使用 JSON 序列化参数
+   * Custom key resolver. By default, a fast key is generated for a single
+   * `number`/`string`/`boolean` argument, and other arguments are serialized via JSON.
+   * 自定义 key 生成器。默认情况下，单个 `number`/`string`/`boolean` 参数生成快速 key，其余参数使用 JSON 序列化
    */
   keyResolver?: (...args: Parameters<T>) => string
 }
@@ -50,9 +54,9 @@ interface CacheValue {
  * @typeParam T - The type of elements in the array / 数组元素的类型
  * @param func - The function to memoize. 要记忆化的函数
  * @param options - Options for memoization. 记忆化配置
- * @param options.maxSize - Maximum number of cached entries. 缓存条目最大数量
+ * @param options.maxSize - Maximum number of cached entries. When the limit is exceeded, the least recently used entry is evicted (LRU). 缓存条目最大数量。超出上限时淘汰最久未使用的条目（LRU）
  * @param options.ttl - Time-to-live in milliseconds. If set, cache expires after this duration. 缓存有效期（毫秒）。设置后缓存将在此时间后过期
- * @param options.keyResolver - Custom key resolver. By default, arguments are serialized via JSON. 自定义 key 生成器。默认使用 JSON 序列化参数
+ * @param options.keyResolver - Custom key resolver. By default, a fast key is generated for a single `number`/`string`/`boolean` argument, and other arguments are serialized via JSON. 自定义 key 生成器。默认情况下，单个 `number`/`string`/`boolean` 参数生成快速 key，其余参数使用 JSON 序列化
  * @returns A memoized version of the function. 记忆化后的函数
  *
  * @remarks
@@ -63,14 +67,24 @@ interface CacheValue {
  * 当 `maxSize` 和 `ttl` 都未设置时，缓存会无限增长。对于长期运行的应用，
  * 强烈建议至少设置其中一个选项以防止内存泄漏。
  *
- * The default key resolver uses `JSON.stringify`, which has limitations:
+ * Eviction is **LRU** (least recently used): a cache hit promotes the entry to the
+ * most-recently-used position, and when `maxSize` is exceeded the least recently used
+ * key is evicted, so frequently accessed values stay cached.
+ *
+ * 淘汰策略为 **LRU（最近最少使用）**：命中会把条目提升为最近使用，超出 `maxSize` 时
+ * 淘汰最久未使用的 key，因此高频访问的值会保留在缓存中。
+ *
+ * The default key resolver generates a fast key (prefixed with the value type) for a single
+ * `number`/`string`/`boolean` argument; other arguments fall back to `JSON.stringify`, which
+ * has limitations:
  * - Circular references will throw `TypeError`
  * - Object property order affects the key (`{a:1,b:2}` ≠ `{b:2,a:1}`)
  * - `undefined`, functions, and Symbols are ignored or converted to `null`
  * - Cannot distinguish certain types (`JSON.stringify([1])` vs `JSON.stringify({"0":1})`)
  * Use `keyResolver` for more robust key generation.
  *
- * 默认的 key 生成器使用 `JSON.stringify`，存在以下限制：
+ * 默认的 key 生成器对单个 `number`/`string`/`boolean` 参数生成快速 key（带类型前缀）；
+ * 其余参数回退到 `JSON.stringify`，存在以下限制：
  * - 循环引用会抛出 `TypeError`
  * - 对象属性顺序影响 key（`{a:1,b:2}` ≠ `{b:2,a:1}`）
  * - `undefined`、函数和 Symbol 会被忽略或转为 `null`
@@ -94,7 +108,7 @@ interface CacheValue {
  * ```
  *
  * @example
- * With maxSize (LRU eviction when limit exceeded) / 最大缓存条目数量（LRU 缓存策略）
+ * With maxSize (LRU eviction when limit exceeded) / 最大缓存条目数量（超出上限时 LRU 淘汰）
  * ```ts
  * const fn = memoize(someExpensiveFn, { maxSize: 100 })
  * ```
@@ -135,13 +149,29 @@ export function memoize<T extends Fn>(func: T, options?: MemoizeOptions<T>): Mem
   }
 
   const cache = new Map<string, CacheValue>()
+  const maxAge = isUndefined(ttl) ? Number.POSITIVE_INFINITY : ttl
 
   const memoized = function (this: any, ...args: Parameters<T>): ReturnType<T> {
-    const key = keyResolver ? keyResolver(...args) : JSON.stringify(args)
+    let key: string
+    if (keyResolver) {
+      key = keyResolver(...args)
+    } else if (args.length === 1) {
+      const arg = args[0] as number | string | boolean
+      const type = typeof arg
+      key =
+        type === T_NUMBER || type === T_STRING || type === T_BOOLEAN
+          ? `${type[0]}:${arg}`
+          : JSON.stringify(args)
+    } else {
+      key = JSON.stringify(args)
+    }
 
     const entry = cache.get(key)
-    if (entry) {
-      if (isUndefined(ttl) || Date.now() - entry.timestamp < ttl) {
+    if (entry !== undefined) {
+      // `maxAge` is precomputed: when no TTL is configured it stays `Infinity`,
+      // so the cheap identity check skips the `Date.now()` call on the hot path.
+      if (maxAge === Number.POSITIVE_INFINITY || Date.now() - entry.timestamp < maxAge) {
+        // LRU: promote the hit to the most-recently-used position
         cache.delete(key)
         cache.set(key, entry)
         return entry.value
