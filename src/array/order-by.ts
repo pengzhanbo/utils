@@ -1,6 +1,5 @@
 import type { Arrayable } from '../types/guard.js'
 import { isFunction } from '../predicate/is-function.js'
-import { isUndefined } from '../predicate/is-undefined.js'
 import { toArray } from './to-array.js'
 
 /**
@@ -80,23 +79,51 @@ export function orderBy<T>(
     dirs.push(order === 'desc' ? -1 : 1)
   }
 
-  return arr.slice().sort((a, b): number => {
+  const len = arr.length
+
+  // Precompute the sort keys and the invalid flags for every accord, so that
+  // the comparator only reads plain arrays instead of re-running the
+  // extractors and the type checks on every comparison.
+  const keys: unknown[][] = []
+  const invalid: boolean[][] = []
+  for (let j = 0; j < keyCount; j++) {
+    const extractor = extractors[j]!
+    const values: unknown[] = Array.from({ length: len })
+    const flags: boolean[] = Array.from({ length: len })
+    for (let i = 0; i < len; i++) {
+      const value = extractor(arr[i]!)
+      values[i] = value
+      // NaN and undefined are always placed at the end.
+      flags[i] = Number.isNaN(value) || value === undefined
+    }
+    keys.push(values)
+    invalid.push(flags)
+  }
+
+  // Sort the indices (Schwartzian transform) to keep the same comparison
+  // sequence and the same stable permutation as sorting the values directly.
+  const indices: number[] = Array.from({ length: len })
+  for (let i = 0; i < len; i++) {
+    indices[i] = i
+  }
+
+  indices.sort((a, b): number => {
     for (let i = 0; i < keyCount; i++) {
-      const valueA = extractors[i]!(a)
-      const valueB = extractors[i]!(b)
-      const aIsNaN = Number.isNaN(valueA)
-      const bIsNaN = Number.isNaN(valueB)
-      const aIsUndef = isUndefined(valueA)
-      const bIsUndef = isUndefined(valueB)
-      if ((aIsNaN || aIsUndef) && (bIsNaN || bIsUndef)) {
+      const flags = invalid[i]!
+      const aIsInvalid = flags[a]!
+      const bIsInvalid = flags[b]!
+      if (aIsInvalid && bIsInvalid) {
         return 0
       }
-      if (aIsNaN || aIsUndef) {
+      if (aIsInvalid) {
         return 1
       }
-      if (bIsNaN || bIsUndef) {
+      if (bIsInvalid) {
         return -1
       }
+      const values = keys[i]!
+      const valueA = values[a]
+      const valueB = values[b]
       if (valueA! < valueB!) {
         return -dirs[i]!
       }
@@ -106,4 +133,11 @@ export function orderBy<T>(
     }
     return 0
   })
+
+  const result: T[] = Array.from({ length: len })
+  for (let i = 0; i < len; i++) {
+    result[i] = arr[indices[i]!]!
+  }
+
+  return result
 }
