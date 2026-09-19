@@ -35,9 +35,25 @@ describe('array > zip', () => {
     expect(zip([1, 2])).toEqual([[1], [2]])
   })
 
+  it('should truncate to the shortest array regardless of position', () => {
+    expect(zip([1, 2, 3], ['a', 'b'])).toEqual([
+      [1, 'a'],
+      [2, 'b'],
+    ])
+    const result = zip(['a', 'b'], [1, 2, 3], [true, false, true])
+    expect(result).toEqual([
+      ['a', 1, true],
+      ['b', 2, false],
+    ])
+    expect(result).toHaveLength(2)
+  })
+
   it('should return an empty array when any input is empty', () => {
     expect(zip([], [1, 2])).toEqual([])
     expect(zip([1, 2], [])).toEqual([])
+    expect(zip([], [])).toEqual([])
+    expect(zip([], [], [])).toEqual([])
+    expect(zip([1], [], [2])).toEqual([])
   })
 
   it('should keep object references without cloning', () => {
@@ -46,6 +62,17 @@ describe('array > zip', () => {
     const result = zip([a], [b])
     expect(result[0]![0]).toBe(a)
     expect(result[0]![1]).toBe(b)
+  })
+
+  it('should return newly allocated row arrays', () => {
+    const first = [1, 2]
+    const second = ['a', 'b']
+    const result = zip(first, second)
+    expect(result[0]).not.toBe(first)
+    expect(result[0]).not.toBe(second)
+    result[0]!.push('extra')
+    expect(first).toEqual([1, 2])
+    expect(second).toEqual(['a', 'b'])
   })
 
   it('should not mutate the input arrays', () => {

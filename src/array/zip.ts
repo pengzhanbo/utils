@@ -33,19 +33,44 @@
  * ```
  */
 export function zip(...arrays: readonly unknown[][]): unknown[][] {
-  if (arrays.length === 0) {
+  const count = arrays.length
+  if (count === 0) {
     return []
   }
 
-  const minLength = Math.min(...arrays.map((arr) => arr.length))
-  const result: unknown[][] = []
+  if (count === 1) {
+    return arrays[0]!.map((value) => [value])
+  }
 
-  for (let i = 0; i < minLength; i++) {
-    const row: unknown[] = []
-    for (let j = 0; j < arrays.length; j++) {
-      row.push(arrays[j]![i])
+  let len = arrays[0]!.length
+  for (let j = 1; j < count; j++) {
+    const size = arrays[j]!.length
+    if (size < len) {
+      len = size
     }
-    result.push(row)
+  }
+
+  if (count === 2) {
+    const a = arrays[0]!
+    const b = arrays[1]!
+    // oxlint-disable-next-line unicorn/no-new-array -- preallocate to avoid growth
+    const result: unknown[][] = new Array(len)
+    for (let i = 0; i < len; i++) {
+      result[i] = [a[i], b[i]]
+    }
+    return result
+  }
+
+  const cols = arrays
+  // oxlint-disable-next-line unicorn/no-new-array -- preallocate to avoid growth
+  const result: unknown[][] = new Array(len)
+  for (let i = 0; i < len; i++) {
+    // oxlint-disable-next-line unicorn/no-new-array -- preallocate to avoid growth
+    const row: unknown[] = new Array(count)
+    for (let j = 0; j < count; j++) {
+      row[j] = cols[j]![i]
+    }
+    result[i] = row
   }
 
   return result
