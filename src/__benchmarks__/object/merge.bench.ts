@@ -28,8 +28,10 @@ describe('performance > Object > DeepMerge', () => {
     Array.from({ length: 1000 }, (_, i) => [`source_${i}`, { value: i * 2 }]),
   )
   const assignSource = Object.fromEntries(Array.from({ length: 100 }, (_, i) => [`s_${i}`, i]))
+  // 100 distinct keys, matching `assignSource`, so both rows of the DM-06 group do equal work
+  // 100 个互不相同的键，与 `assignSource` 一致，使 DM-06 组两侧工作量对等
   const conflictSource = Object.fromEntries(
-    Array.from({ length: 100 }, (_, i) => [`key_${i % 50}`, `new_value_${i}`]),
+    Array.from({ length: 100 }, (_, i) => [`key_${i}`, `new_value_${i}`]),
   )
 
   let smallTarget: Record<string, number>
@@ -148,6 +150,8 @@ describe('performance > Object > DeepMerge', () => {
 
   // DM-06 ~ DM-07: Same 100-prop scale, Object.assign baseline vs deepMerge conflict scenario
   // DM-06 ~ DM-07: 同为 100 props 规模，Object.assign 基线与 deepMerge 冲突场景对比
+  // Both sides write 100 distinct keys, so the two rows do equal work
+  // 两侧均写入 100 个互不相同的键，工作量对等
   it('object.assign vs deepMerge, 100 props', async ({ bench }) => {
     await runBenchmarks(
       bench,

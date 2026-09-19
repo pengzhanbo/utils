@@ -201,6 +201,33 @@ describe('clone > deepClone', () => {
     expect(cloned).not.toBe(obj)
   })
 
+  it('should skip non-enumerable Symbol properties', () => {
+    const sym = Symbol('hidden')
+    const obj: any = { normal: 'prop' }
+    Object.defineProperty(obj, sym, {
+      value: { deep: 1 },
+      enumerable: false,
+      configurable: true,
+    })
+
+    const cloned = deepClone(obj)
+
+    expect(cloned.normal).toBe('prop')
+    expect(cloned[sym]).toBeUndefined()
+    expect(cloned).not.toBe(obj)
+  })
+
+  it('should handle circular references', () => {
+    const obj: any = { name: 'root' }
+    obj.self = obj
+
+    const cloned = deepClone(obj)
+
+    expect(cloned).not.toBe(obj)
+    expect(cloned.name).toBe('root')
+    expect(cloned.self).toBe(cloned)
+  })
+
   it('should clone primitive arrays efficiently', () => {
     const arr = [1, 2, 3, 4, 5]
     const cloned = deepClone(arr)

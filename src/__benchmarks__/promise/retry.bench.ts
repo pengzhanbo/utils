@@ -83,12 +83,21 @@ describe('performance > Promise > Retry', () => {
     )
   })
 
-  // RT-06: Retry with longer delay / 较长delay的重试
-  it('longer delay', async ({ bench }) => {
+  // RT-06: Retry with longer delay — scheduling latency / 较长 delay 的重试 — 调度延迟
+  //
+  // The timed region intentionally includes three 10ms `setTimeout` waits, so it
+  // measures retry scheduling latency rather than retry overhead. Do not read it
+  // as a throughput number. Iterations raised to keep the sample stable given the
+  // ~22ms per-sample mean.
+  //
+  // 计时区间刻意包含 3 次 10ms 的 `setTimeout` 等待，衡量的是重试调度延迟
+  // 而非重试本身的开销，请勿当作吞吐指标。鉴于单次采样均值约 22ms，
+  // 提高采样数以保证结果稳定。
+  it('latency: longer delay', async ({ bench }) => {
     await runBenchmarks(
       bench,
       [
-        bench('longer delay', async () => {
+        bench('latency: longer delay', async () => {
           try {
             return await retry(
               async () => {
@@ -102,7 +111,7 @@ describe('performance > Promise > Retry', () => {
           }
         }),
       ],
-      { time: 3000, iterations: 50 },
+      { time: 3000, iterations: 100 },
     )
   })
 })

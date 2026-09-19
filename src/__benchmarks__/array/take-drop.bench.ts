@@ -28,16 +28,42 @@ describe('performance > Array > TakeDrop', () => {
 
   // TD-05 ~ TD-08: Same small scale and run options, so they share one comparison table
   // TD-05 ~ TD-08: 同为小数组规模且运行参数相同，放在同一张对比表中
+  // Sub-microsecond rows, so each sample batches 1000 calls to escape the timer resolution floor
+  // 亚微秒级基准，每次采样批量执行 1000 次调用以脱离计时器分辨率下限
   it('small array, take & drop', async ({ bench }) => {
     await runBenchmarks(
       bench,
       [
-        bench('take', () => take(numbers10, 3)),
-        bench('drop', () => drop(numbers10, 3)),
-        bench('takeRight', () => takeRight(numbers10, 3)),
-        bench('dropRight', () => dropRight(numbers10, 3)),
+        bench('take', () => {
+          let acc = 0
+          for (let i = 0; i < 1000; i++) {
+            acc += take(numbers10, 3).length
+          }
+          return acc
+        }),
+        bench('drop', () => {
+          let acc = 0
+          for (let i = 0; i < 1000; i++) {
+            acc += drop(numbers10, 3).length
+          }
+          return acc
+        }),
+        bench('takeRight', () => {
+          let acc = 0
+          for (let i = 0; i < 1000; i++) {
+            acc += takeRight(numbers10, 3).length
+          }
+          return acc
+        }),
+        bench('dropRight', () => {
+          let acc = 0
+          for (let i = 0; i < 1000; i++) {
+            acc += dropRight(numbers10, 3).length
+          }
+          return acc
+        }),
       ],
-      { time: 1000, iterations: 1000 },
+      { time: 1000, iterations: 100 },
     )
   })
 })

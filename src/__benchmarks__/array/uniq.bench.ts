@@ -72,11 +72,13 @@ describe('performance > Array > Uniq', () => {
   })
 
   // UQ-08: uniqWith custom comparator / 自定义比较器
+  // Raised iterations and duration to bring the previously noisy rme (±14.69%) down
+  // 提高迭代次数与运行时长，以降低此前偏高的 rme（±14.69%）
   it('uniqWith, 1K items', async ({ bench }) => {
     await runBenchmarks(
       bench,
       [bench('uniqWith', () => uniqWith(recordArray, (a, b) => a.x === b.x))],
-      { time: 1000, iterations: 100 },
+      { time: 2000, iterations: 300 },
     )
   })
 })

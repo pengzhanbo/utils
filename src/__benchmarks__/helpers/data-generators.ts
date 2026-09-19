@@ -113,9 +113,12 @@ export function generateUserArray(length: number): Array<{
   age: number
   email: string
   createdAt: Date
+  score: number
+  department: string
 }> {
   const firstNames = ['Alice', 'Bob', 'Charlie', 'David', 'Eve', 'Frank']
   const lastNames = ['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia']
+  const departments = ['Engineering', 'Marketing', 'Sales']
 
   return generateObjectArray(length, (i) => ({
     id: i + 1,
@@ -123,6 +126,8 @@ export function generateUserArray(length: number): Array<{
     age: 18 + (i % 50),
     email: `user${i}@example.com`,
     createdAt: new Date(Date.now() - i * 86400000),
+    score: (i * 37) % 100,
+    department: departments[i % departments.length] as string,
   }))
 }
 

@@ -39,25 +39,6 @@ export const MEDIUM_NESTED_OBJECT: Record<string, any> = (() => {
 /** Medium array with 1000 elements / 中型数组（1000个元素） */
 export const MEDIUM_ARRAY: number[] = Array.from({ length: 1000 }, (_, i) => i)
 
-/** Medium user array for sorting (100 users) / 中型用户数组（用于排序测试，100个用户） */
-export const MEDIUM_USER_ARRAY: {
-  id: number
-  name: string
-  age: number
-  score: number
-  department: string
-}[] = (() => {
-  const names: string[] = ['Alice', 'Bob', 'Charlie', 'David', 'Eve']
-  const departments: string[] = ['Engineering', 'Marketing', 'Sales']
-  return Array.from({ length: 100 }, (_, i) => ({
-    id: i,
-    name: names[i % names.length] as string,
-    age: 20 + (i % 40),
-    score: Math.floor(Math.random() * 100),
-    department: departments[i % 3] as string,
-  }))
-})()
-
 // ==================== Large Datasets (for stress testing) ====================
 
 /** Large flat object with 10000 properties / 大型扁平对象（10000个属性） */

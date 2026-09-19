@@ -50,15 +50,28 @@ describe('performance > String > Template', () => {
 
   // TM-01: Short template / 简短模板
   // TM-05: No variables (fast path) / 无变量（快速路径）
-  // TM-01 + TM-05: Short inputs at the same 1K iterations / 同为短输入、同为 1K 迭代
+  // TM-01 + TM-05: Short inputs; sub-microsecond rows, so each sample batches 1000 calls to
+  // escape the timer resolution floor / 短输入；亚微秒级基准，每次采样批量执行 1000 次调用以脱离计时器分辨率下限
   it('small strings', async ({ bench }) => {
     await runBenchmarks(
       bench,
       [
-        bench('short template', () => template(SMALL_TEMPLATE, SMALL_TEMPLATE_VALUES)),
-        bench('no variables', () => template(plainString, {})),
+        bench('short template', () => {
+          let acc = 0
+          for (let i = 0; i < 1000; i++) {
+            acc += template(SMALL_TEMPLATE, SMALL_TEMPLATE_VALUES).length
+          }
+          return acc
+        }),
+        bench('no variables', () => {
+          let acc = 0
+          for (let i = 0; i < 1000; i++) {
+            acc += template(plainString, {}).length
+          }
+          return acc
+        }),
       ],
-      { time: 1000, iterations: 1000 },
+      { time: 1000, iterations: 100 },
     )
   })
 

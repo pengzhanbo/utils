@@ -4,11 +4,22 @@ import { runBenchmarks } from '../helpers/baseline.js'
 
 describe('performance > Util > FormatBytes', () => {
   // UB-01: Small bytes / 小字节数
+  // Sub-microsecond row, so each sample batches 1000 calls to escape the timer resolution floor
+  // 亚微秒级基准，每次采样批量执行 1000 次调用以脱离计时器分辨率下限
   it('small bytes', async ({ bench }) => {
-    await runBenchmarks(bench, [bench('formatBytes (small)', () => formatBytes(500))], {
-      time: 1000,
-      iterations: 500,
-    })
+    await runBenchmarks(
+      bench,
+      [
+        bench('formatBytes (small)', () => {
+          let acc = 0
+          for (let i = 0; i < 1000; i++) {
+            acc += formatBytes(500).length
+          }
+          return acc
+        }),
+      ],
+      { time: 1000, iterations: 100 },
+    )
   })
 
   // UB-02: Medium bytes decimal / 中型字节数（十进制）

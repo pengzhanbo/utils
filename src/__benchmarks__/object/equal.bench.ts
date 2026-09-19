@@ -62,17 +62,23 @@ describe('performance > Object > DeepEqual', () => {
   const deepUnequalB = generateDeepUnequal(5, true)
 
   // EQ-01: Primitive comparison / 基本类型比较
+  // Sub-microsecond row, so each sample batches 1000 rounds to escape the timer resolution floor
+  // 亚微秒级基准，每次采样批量执行 1000 轮以脱离计时器分辨率下限
   it('primitives, numbers and strings', async ({ bench }) => {
     await runBenchmarks(
       bench,
       [
         bench('primitives', () => {
-          deepEqual(42, 42)
-          deepEqual('hello', 'hello')
-          return deepEqual(true, true)
+          let acc = 0
+          for (let i = 0; i < 1000; i++) {
+            acc += deepEqual(42, 42) ? 1 : 0
+            acc += deepEqual('hello', 'hello') ? 1 : 0
+            acc += deepEqual(true, true) ? 1 : 0
+          }
+          return acc
         }),
       ],
-      { time: 1000, iterations: 1000 },
+      { time: 1000, iterations: 100 },
     )
   })
 
@@ -93,11 +99,13 @@ describe('performance > Object > DeepEqual', () => {
   })
 
   // EQ-04: Large flat object / 大型扁平对象
+  // Raised iterations and duration to bring the previously noisy rme (±22.4%) down
+  // 提高迭代次数与运行时长，以降低此前偏高的 rme（±22.4%）
   it('large flat objects, 1000 properties', async ({ bench }) => {
     await runBenchmarks(
       bench,
       [bench('large flat objects', () => deepEqual(largeFlatA, largeFlatB))],
-      { time: 1000, iterations: 100 },
+      { time: 2000, iterations: 500 },
     )
   })
 
