@@ -295,4 +295,81 @@ describe('deepEqual', () => {
 
     expect(deepEqual(obj1, obj3)).toBe(true)
   })
+
+  // ===== Set 原始值快速路径 / Set primitive fast path =====
+
+  it('should treat -0 and 0 in Sets as different', () => {
+    // 原生 `Set` 在插入时会把 `-0` 归一化为 `+0`，因此两个 Set 迭代结果都是 `+0`。
+    // Native `Set` canonicalizes `-0` to `+0` on insertion, so both iterate as `+0`.
+    expect(Object.is([...new Set([-0])][0], -0)).toBe(false)
+    expect(deepEqual(new Set([-0]), new Set([0]))).toBe(true)
+    expect(deepEqual(new Set([0]), new Set([-0]))).toBe(true)
+    expect(deepEqual(new Set([0]), new Set([0]))).toBe(true)
+    expect(deepEqual(new Set([-0]), new Set([-0]))).toBe(true)
+  })
+
+  it('should fall back to deep comparison when a Set yields -0', () => {
+    class NegativeZeroSet extends Set<number> {
+      override [Symbol.iterator](): any {
+        return [-0].values()
+      }
+    }
+
+    expect(deepEqual(new NegativeZeroSet([0]), new Set([0]))).toBe(false)
+    expect(deepEqual(new Set([0]), new NegativeZeroSet([0]))).toBe(false)
+    expect(deepEqual(new NegativeZeroSet([0]), new NegativeZeroSet([0]))).toBe(true)
+  })
+
+  it('should treat NaN in Sets as equal', () => {
+    expect(deepEqual(new Set([Number.NaN]), new Set([Number.NaN]))).toBe(true)
+    expect(deepEqual(new Set([Number.NaN]), new Set([1]))).toBe(false)
+    expect(deepEqual(new Set([1]), new Set([Number.NaN]))).toBe(false)
+  })
+
+  it('should compare Sets of primitives ignoring order', () => {
+    expect(deepEqual(new Set([1, 2, 3]), new Set([3, 2, 1]))).toBe(true)
+    expect(deepEqual(new Set(['a', 1, true]), new Set([true, 'a', 1]))).toBe(true)
+    expect(deepEqual(new Set([1, 2, 3]), new Set([1, 2, 4]))).toBe(false)
+    expect(deepEqual(new Set([1, 2, 3]), new Set([1, 2]))).toBe(false)
+  })
+
+  it('should compare Sets with mixed primitive and object elements', () => {
+    expect(deepEqual(new Set([{ a: 1 }, 2]), new Set([2, { a: 1 }]))).toBe(true)
+    expect(deepEqual(new Set([{ a: 1 }, 2]), new Set([2, { a: 2 }]))).toBe(false)
+    expect(deepEqual(new Set([{ a: 1 }, 2]), new Set([{ a: 1 }, 3]))).toBe(false)
+  })
+
+  it('should compare Sets containing circular objects without stack overflow', () => {
+    const makeCircular = (n: number) => {
+      const first: any = { a: n }
+      const second: any = { b: n }
+      first.ref = second
+      second.ref = first
+      return first
+    }
+
+    expect(deepEqual(new Set([makeCircular(1)]), new Set([makeCircular(1)]))).toBe(true)
+    expect(deepEqual(new Set([makeCircular(1)]), new Set([makeCircular(2)]))).toBe(false)
+  })
+
+  // ===== 对象自有键 / plain object own keys =====
+
+  it('should compare plain objects by own enumerable keys', () => {
+    expect(deepEqual({ a: 1, b: undefined }, { b: undefined, a: 1 })).toBe(true)
+    expect(deepEqual({ a: undefined }, { a: undefined })).toBe(true)
+    expect(deepEqual({ a: undefined }, {})).toBe(false)
+  })
+
+  it('should ignore inherited properties when comparing plain objects', () => {
+    const inherited = Object.create({ a: 1 })
+    expect(deepEqual(inherited, { a: 1 })).toBe(false)
+    expect(deepEqual({ a: 1 }, inherited)).toBe(false)
+    expect(deepEqual(Object.create({ a: 1 }), Object.create({ a: 1 }))).toBe(true)
+    expect(deepEqual(Object.create({ a: 1 }), {})).toBe(true)
+
+    const withOwn = Object.create({ a: 1 }) as Record<string, unknown>
+    withOwn.b = 2
+    expect(deepEqual(withOwn, { b: 2 })).toBe(true)
+    expect(deepEqual(withOwn, { a: 1, b: 2 })).toBe(false)
+  })
 })

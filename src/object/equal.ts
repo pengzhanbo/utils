@@ -92,12 +92,13 @@ function deepEqualWithStack(v1: any, v2: any, stack: Map<any, any>): boolean {
   }
 
   if (t1 === T_OBJECT) {
-    const keys = objectKeys(v1)
-    if (keys.length !== objectKeys(v2).length) {
+    const keys1 = objectKeys(v1)
+    const keys2 = objectKeys(v2)
+    if (keys1.length !== keys2.length) {
       return false
     }
-    for (let i = 0; i < keys.length; i++) {
-      const key = keys[i]!
+    for (let i = 0; i < keys1.length; i++) {
+      const key = keys1[i]!
       if (!hasOwn(v2, key) || !deepEqualWithStack(v1[key], v2[key], stack)) {
         return false
       }
@@ -113,8 +114,30 @@ function deepEqualWithStack(v1: any, v2: any, stack: Map<any, any>): boolean {
     if (v1.size !== v2.size) {
       return false
     }
-    const v2Items = [...v2]
+
+    // 原始值元素可走 O(1) 的 SameValueZero 命中；但 ±0 在 SameValueZero 下相等、
+    // 在 Object.is 下不等，必须回退到深比较以保持原有语义。
+    // Primitive elements hit O(1) SameValueZero lookup; ±0 differ under Object.is
+    // but not under SameValueZero, so they must fall back to deep comparison.
+    const fallbackItems: any[] = []
     for (const item of v1) {
+      const isPrimitive = item == null || (typeof item !== 'object' && typeof item !== 'function')
+      const isAmbiguousZero = typeof item === 'number' && item === 0
+      if (isPrimitive && !isAmbiguousZero) {
+        if (!v2.has(item)) {
+          return false
+        }
+      } else {
+        fallbackItems.push(item)
+      }
+    }
+
+    if (fallbackItems.length === 0) {
+      return true
+    }
+
+    const v2Items = [...v2]
+    for (const item of fallbackItems) {
       if (!v2Items.some((v2Item) => deepEqualWithStack(item, v2Item, new Map()))) {
         return false
       }
