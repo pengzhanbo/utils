@@ -26,12 +26,17 @@ import { Semaphore } from './semaphore.js'
  * {@link promiseParallel}, it does not collect a batch of tasks, and it has no
  * fast-fail behavior — when combined with `Promise.all`, every call is eventually
  * executed even if some of them reject. Under the hood it is built on
- * {@link Semaphore}.
+ * {@link Semaphore}: it takes the synchronous {@link Semaphore.tryAcquire} fast
+ * path while permits are free, avoiding an extra Promise allocation and microtask
+ * hop, and only falls back to the asynchronous {@link Semaphore.acquire} once the
+ * permits are exhausted.
  *
  * 这是调用点限流器：无论从何处调用，返回函数的每次调用都共享同一个并发预算。
  * 与 {@link promiseParallel} 不同，它不收集一批任务，也没有 fast-fail 行为——
  * 与 `Promise.all` 组合时，即使部分调用失败，所有调用最终也都会执行。
- * 底层基于 {@link Semaphore} 实现。
+ * 底层基于 {@link Semaphore} 实现：当仍有空闲许可时优先走同步的
+ * {@link Semaphore.tryAcquire} 快路径，避免额外的 Promise 分配与微任务调度，
+ * 仅在许可耗尽时才回退到异步的 {@link Semaphore.acquire}。
  *
  * @example
  * ```ts
@@ -55,11 +60,16 @@ export function limitAsync<F extends (...args: any[]) => Promise<any>>(
   const semaphore = new Semaphore(concurrency)
 
   return async function func(this: ThisType<F>, ...args: Parameters<F>): Promise<ReturnType<F>> {
-    try {
+    let release = semaphore.tryAcquire()
+    if (release === undefined) {
       await semaphore.acquire()
+      release = () => semaphore.release()
+    }
+
+    try {
       return await callback.apply(this, args)
     } finally {
-      semaphore.release()
+      release()
     }
   } as F
 }
