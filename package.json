@@ -44,27 +44,27 @@
     "docs:preview": "http-server docs/dist"
   },
   "devDependencies": {
-    "@pengzhanbo/oxc-config": "^2.9.2",
-    "@pengzhanbo/tsconfig": "^2.9.2",
-    "@types/node": "^26.6.1",
-    "@vitest/coverage-v8": "^5.0.1",
+    "@pengzhanbo/oxc-config": "^2.11.0",
+    "@pengzhanbo/tsconfig": "^2.11.0",
+    "@types/node": "^26.6.5",
+    "@vitest/coverage-v8": "^5.0.5",
     "bumpp": "^12.3.0",
     "cross-env": "^10.1.0",
     "http-server": "^14.1.1",
     "js-tokens": "^10.0.0",
     "nano-staged": "^1.0.2",
-    "oxfmt": "^0.68.0",
-    "oxlint": "^1.83.0",
-    "oxlint-tsgolint": "^7.0.2001",
+    "oxfmt": "^0.74.0",
+    "oxlint": "^1.89.0",
+    "oxlint-tsgolint": "^7.0.2004",
     "simple-git-hooks": "^2.14.0",
-    "tsdown": "^0.23.0",
+    "tsdown": "^0.23.1",
     "typedoc": "^0.28.20",
     "typedoc-github-theme": "^0.4.0",
     "typedoc-plugin-coverage": "^4.0.3",
     "typedoc-plugin-mdn-links": "^5.1.1",
     "typedoc-plugin-missing-exports": "^4.1.4",
     "typescript": "6.0.3",
-    "vitest": "^5.0.1"
+    "vitest": "^5.0.5"
   },
   "simple-git-hooks": {
     "pre-commit": "./node_modules/.bin/nano-staged --allow-empty"
@@ -74,5 +74,5 @@
     "*": "oxfmt --no-error-on-unmatched-pattern",
     "*.{js,ts}": "vitest related --run"
   },
-  "packageManager": "pnpm@12.4.2"
+  "packageManager": "pnpm@12.14.0"
 }
