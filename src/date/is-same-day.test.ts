@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { isSameDay } from './is-same-day.js'
 
 describe('date > isSameDay', () => {
@@ -62,8 +62,9 @@ describe('date > isSameDay', () => {
     expect(isSameDay(date1, date2)).toBe(true)
   })
 
-  it('should parse ISO date strings as local time consistent with Date constructor', () => {
-    expect(isSameDay('2024-01-01', new Date(2024, 0, 1))).toBe(true)
+  it('should treat date-only ISO strings as UTC instants', () => {
+    // `'2024-01-15'` 按规范解析为 UTC 午夜；与同一 UTC 时刻比较必然同天
+    expect(isSameDay('2024-01-15', new Date('2024-01-15T00:00:00Z'))).toBe(true)
   })
 
   it('should return true for leap year dates', () => {
@@ -96,7 +97,41 @@ describe('date > isSameDay', () => {
     expect(isSameDay('not-a-date', 'also-not-a-date')).toBe(false)
   })
 
-  it('should compare ISO date strings correctly with local Date objects', () => {
-    expect(isSameDay(new Date(2024, 0, 15), '2024-01-15')).toBe(true)
+  it('should compare a timestamp with a Date object of the same local day', () => {
+    const date = new Date(2024, 0, 15, 12, 0, 0)
+    expect(isSameDay(date.getTime(), date)).toBe(true)
+  })
+})
+
+// ===== Time zone / 时区语义 =====
+// 测试进程默认被固定为 `TZ=Etc/UTC`（见 vitest.config.ts），而本地日与 UTC 日只有在非 UTC 时区下
+// 才会产生差异，因此这里用 `vi.stubEnv('TZ', ...)` 临时切换时区（Node >= 16 / V8 9.4 支持运行时切换），
+// 并在 `afterEach` 中统一还原。
+describe('date > isSameDay (local time zone)', () => {
+  afterEach(() => {
+    vi.unstubAllEnvs()
+  })
+
+  it('should run on a runtime that honours runtime TZ changes', () => {
+    vi.stubEnv('TZ', 'Asia/Shanghai')
+    expect(new Date(0).getTimezoneOffset()).toBe(-480)
+  })
+
+  it('should compare the local calendar day instead of the UTC day (UTC+8)', () => {
+    vi.stubEnv('TZ', 'Asia/Shanghai')
+    // 2024-01-14T16:00:00Z === 2024-01-15 00:00 (UTC+8)
+    // 2024-01-15T15:59:00Z === 2024-01-15 23:59 (UTC+8) → 同一天（UTC 日不同）
+    expect(isSameDay('2024-01-14T16:00:00Z', '2024-01-15T15:59:00Z')).toBe(true)
+    // 2024-01-15T16:00:00Z === 2024-01-16 00:00 (UTC+8) → 跨日（UTC 日相同）
+    expect(isSameDay('2024-01-14T16:00:00Z', '2024-01-15T16:00:00Z')).toBe(false)
+  })
+
+  it('should compare the local calendar day instead of the UTC day (UTC-5)', () => {
+    vi.stubEnv('TZ', 'America/New_York')
+    // 2024-01-15T04:59:00Z === 2024-01-14 23:59 (EST) → 与 05:00Z (= 01-15 00:00) 不同天（UTC 日相同）
+    expect(isSameDay('2024-01-15T04:59:00Z', '2024-01-15T05:00:00Z')).toBe(false)
+    // 2024-01-15T05:00:00Z === 2024-01-15 00:00 (EST)
+    // 2024-01-16T04:59:00Z === 2024-01-15 23:59 (EST) → 同一天（UTC 日不同）
+    expect(isSameDay('2024-01-15T05:00:00Z', '2024-01-16T04:59:00Z')).toBe(true)
   })
 })
