@@ -75,6 +75,41 @@ describe('clone > shallowClone', () => {
     expect(clonedError.message).toBe(error.message)
     expect(clonedError.name).toBe(error.name)
   })
+
+  it('should clone AggregateError', () => {
+    const errors = [new Error('first')]
+    const error = new AggregateError(errors, 'Multiple failures', { cause: 'Unknown' })
+
+    const clonedError = shallowClone(error)
+
+    expect(clonedError).toBeInstanceOf(AggregateError)
+    expect(clonedError).not.toBe(error)
+    expect(clonedError.message).toBe('Multiple failures')
+    expect(clonedError.name).toBe('AggregateError')
+    expect(clonedError.stack).toBe(error.stack)
+    expect(clonedError.cause).toBe('Unknown')
+    // like Map/Set, the members container is new while its elements stay shared
+    expect(clonedError.errors).toEqual(errors)
+    expect(clonedError.errors).not.toBe(errors)
+    expect(clonedError.errors[0]).toBe(errors[0])
+  })
+
+  it('should clone AggregateError subclasses', () => {
+    class BatchError extends AggregateError {
+      constructor(errors: any[]) {
+        super(errors, 'batch failed')
+        this.name = 'BatchError'
+      }
+    }
+
+    const error = new BatchError([new Error('a')])
+    const clonedError = shallowClone(error)
+
+    expect(clonedError).toBeInstanceOf(BatchError)
+    expect(clonedError.name).toBe('BatchError')
+    expect(clonedError.message).toBe('batch failed')
+    expect(clonedError.errors).toEqual(error.errors)
+  })
 })
 
 describe('clone > deepClone', () => {
@@ -171,6 +206,75 @@ describe('clone > deepClone', () => {
 
     expect(clonedError.message).toBe(error.message)
     expect(clonedError.name).toBe(error.name)
+  })
+
+  it('should clone AggregateError with its members', () => {
+    const error = new AggregateError(
+      [new Error('first'), { reason: 'second' }],
+      'Multiple failures',
+    )
+
+    const clonedError = deepClone(error)
+
+    expect(clonedError).toBeInstanceOf(AggregateError)
+    expect(clonedError).toBeInstanceOf(Error)
+    expect(clonedError).not.toBe(error)
+    expect(clonedError.message).toBe('Multiple failures')
+    expect(clonedError.name).toBe('AggregateError')
+    expect(clonedError.stack).toBe(error.stack)
+    expect(clonedError.errors).toHaveLength(2)
+    expect(clonedError.errors).not.toBe(error.errors)
+    expect(clonedError.errors[0]).not.toBe(error.errors[0])
+    expect(clonedError.errors[0].message).toBe('first')
+    expect(clonedError.errors[1]).toEqual({ reason: 'second' })
+    expect(clonedError.errors[1]).not.toBe(error.errors[1])
+  })
+
+  it('should clone AggregateError cause like a plain Error', () => {
+    const cause = { reason: 'timeout', detail: { code: 504 } }
+    const error = new AggregateError([], 'aggregated', { cause })
+
+    const clonedError = deepClone(error)
+
+    expect(clonedError.cause).toEqual(cause)
+    expect(clonedError.cause).not.toBe(cause)
+    expect((clonedError.cause as typeof cause).detail).not.toBe(cause.detail)
+    // `cause` stays non-enumerable, as on a native error
+    expect(Object.keys(clonedError)).toEqual([])
+  })
+
+  it('should support circular references through AggregateError members', () => {
+    const error = new AggregateError([], 'circular')
+    error.errors.push(error)
+
+    const clonedError = deepClone(error)
+
+    expect(clonedError.errors[0]).toBe(clonedError)
+  })
+
+  it('should clone AggregateError subclasses with their extra properties', () => {
+    class BatchError extends AggregateError {
+      code: number
+
+      constructor(errors: any[], code: number) {
+        super(errors, 'batch failed')
+        this.name = 'BatchError'
+        this.code = code
+      }
+    }
+
+    const error = new BatchError([new Error('a')], 500)
+
+    const clonedError = deepClone(error)
+
+    expect(clonedError).toBeInstanceOf(BatchError)
+    expect(clonedError).toBeInstanceOf(AggregateError)
+    expect(clonedError.message).toBe('batch failed')
+    expect(clonedError.name).toBe('BatchError')
+    expect(clonedError.code).toBe(500)
+    expect(clonedError.errors).toHaveLength(1)
+    expect(clonedError.errors[0].message).toBe('a')
+    expect(clonedError.errors[0]).not.toBe(error.errors[0])
   })
 
   it('should handle objects with non-writable properties (line 185)', () => {

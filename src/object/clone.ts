@@ -110,6 +110,25 @@ export function shallowClone<T = any>(source: T): T {
     }
 
     if (isError(source)) {
+      if (source instanceof AggregateError) {
+        const newError = new AggregateError(source.errors, source.message, {
+          cause: source.cause,
+        })
+        const sourcePrototype = Object.getPrototypeOf(source)
+
+        if (Object.getPrototypeOf(newError) !== sourcePrototype) {
+          Object.setPrototypeOf(newError, sourcePrototype)
+        }
+
+        if (hasOwn(source, 'name')) {
+          newError.name = source.name
+        }
+
+        newError.stack = source.stack
+
+        return newError as T
+      }
+
       const newError = new Constructor(source.message, {
         cause: source.cause,
       }) as Error

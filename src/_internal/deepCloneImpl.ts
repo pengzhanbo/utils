@@ -185,6 +185,38 @@ export function deepCloneImpl<T>(
     return result as T
   }
 
+  if (valueToClone instanceof AggregateError) {
+    const result = new AggregateError([], valueToClone.message)
+    const prototype = Object.getPrototypeOf(valueToClone)
+
+    if (Object.getPrototypeOf(result) !== prototype) {
+      Object.setPrototypeOf(result, prototype)
+    }
+
+    stack.set(valueToClone, result)
+
+    result.errors = deepCloneImpl(valueToClone.errors, stack, depth + 1)
+
+    if (hasOwn(valueToClone, 'cause')) {
+      Object.defineProperty(result, 'cause', {
+        value: deepCloneImpl(valueToClone.cause, stack, depth + 1),
+        writable: true,
+        enumerable: false,
+        configurable: true,
+      })
+    }
+
+    if (hasOwn(valueToClone, 'name')) {
+      result.name = valueToClone.name
+    }
+
+    result.stack = valueToClone.stack
+
+    copyProperties(result, valueToClone, stack, depth)
+
+    return result as T
+  }
+
   if (valueToClone instanceof Error) {
     const result = new (valueToClone.constructor as { new (...args: any[]): Error })(
       valueToClone.message,
