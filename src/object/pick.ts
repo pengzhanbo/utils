@@ -1,3 +1,4 @@
+import { copyDataKey } from '../_internal/copy-data-key.js'
 import { hasOwn } from './has-own.js'
 import { objectKeys } from './keys.js'
 
@@ -15,11 +16,17 @@ import { objectKeys } from './keys.js'
  * @param keys - The keys to pick. 要选择的键
  * @returns A new object with only the picked properties. 仅包含所选属性的新对象
  *
+ * @remarks
+ * An own `__proto__` key is ignored, so untrusted input can neither replace the prototype of the
+ * result.
+ *
+ * 源对象自有的 `__proto__` 键会被忽略，避免不可信输入替换结果原型。
+ *
  * @example
  * ```ts
  * pick({ a: 1, b: 2 }, ['a']) // => { a: 1 }
  * ```
- * @typeParam T - The type of elements in the array / 数组元素的类型
+ * @typeParam T - The type of the source object / 源对象类型
  */
 export function pick<T extends Record<PropertyKey, any>, K extends keyof T = keyof T>(
   obj: T,
@@ -29,7 +36,7 @@ export function pick<T extends Record<PropertyKey, any>, K extends keyof T = key
 
   for (const key of keys) {
     if (hasOwn(obj, key)) {
-      res[key] = obj[key]
+      copyDataKey(res, key, obj[key])
     }
   }
 
@@ -43,10 +50,17 @@ export function pick<T extends Record<PropertyKey, any>, K extends keyof T = key
  *
  * @category Object
  *
- * @typeParam T - The type of elements in the array / 数组元素的类型
+ * @typeParam T - The type of the source object / 源对象类型
  * @param obj - The source object. 源对象
  * @param predicate - The predicate function. 谓词函数
  * @returns A new object with properties that satisfy the predicate. 满足谓词的新对象
+ *
+ * @remarks
+ * An own `__proto__` key is ignored, so untrusted input can neither replace the prototype of the
+ * result nor smuggle the key into a later `Object.assign`-style merge.
+ *
+ * 源对象自有的 `__proto__` 键会被忽略，避免不可信输入替换结果原型、或把该键带入后续
+ * `Object.assign` 式合并再次触发污染。
  *
  * @example
  * ```ts
@@ -61,7 +75,7 @@ export function pickBy<T extends Record<PropertyKey, any>>(
 
   for (const key of objectKeys(obj)) {
     if (predicate(obj[key], key)) {
-      res[key] = obj[key]
+      copyDataKey(res, key, obj[key])
     }
   }
 

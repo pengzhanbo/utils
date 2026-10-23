@@ -110,6 +110,19 @@ describe('clone > shallowClone', () => {
     expect(clonedError.message).toBe('batch failed')
     expect(clonedError.errors).toEqual(error.errors)
   })
+
+  it('should drop __proto__ when cloning a plain object', () => {
+    const source = JSON.parse('{"__proto__":{"polluted":true},"a":1,"constructor":"C"}')
+
+    const cloned = shallowClone(source)
+
+    expect(Object.getPrototypeOf(cloned)).toBe(Object.prototype)
+    expect(cloned.polluted).toBeUndefined()
+    expect(Object.prototype.hasOwnProperty.call(cloned, '__proto__')).toBe(false)
+    expect(cloned.a).toBe(1)
+    // `constructor` is an ordinary key and is still copied
+    expect(Object.getOwnPropertyDescriptor(cloned, 'constructor')!.value).toBe('C')
+  })
 })
 
 describe('clone > deepClone', () => {

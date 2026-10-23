@@ -1,4 +1,4 @@
-import { DANGEROUS_KEYS } from '../_internal/tags.js'
+import { PROTO_KEY } from '../_internal/tags.js'
 
 /**
  * Map key/value pairs for an object, and construct a new one
@@ -14,10 +14,11 @@ import { DANGEROUS_KEYS } from '../_internal/tags.js'
  * @returns A new object with transformed key/value pairs. 具有转换后键值对的新对象
  *
  * @remarks
- * Dangerous keys (`__proto__`, `constructor`, `prototype`) are silently filtered out from the result object.
+ * A mapped `__proto__` key is silently dropped, so untrusted input can neither replace the
+ * prototype of the result.
  * If the mapper function returns `undefined` for a key/value pair, that entry is removed from the result.
  *
- * 危险键（`__proto__`、`constructor`、`prototype`）会被静默过滤，不会出现在结果对象中。
+ * 映射得到的 `__proto__` 键会被静默丢弃，避免不可信输入替换结果原型。
  * 如果映射函数返回 `undefined`，则该键值对会从结果中被移除。
  *
  * @example
@@ -50,7 +51,7 @@ export function objectMap<K extends string, V, NK extends PropertyKey = K, NV = 
   for (let i = 0; i < keys.length; i++) {
     const key = keys[i]! as K
     const entry = mapper(key, obj[key])
-    if (entry !== undefined && !DANGEROUS_KEYS.has(entry[0] as string)) {
+    if (entry !== undefined && entry[0] !== PROTO_KEY) {
       entries.push(entry)
     }
   }

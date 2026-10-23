@@ -18,6 +18,27 @@ describe('object > ObjectIterator', () => {
       expect(iterator.toObject()).toEqual({})
     })
 
+    it('should drop __proto__ produced by map without prototype pollution', () => {
+      const result = new ObjectIterator({ a: 1 })
+        .map(() => ['__proto__', { polluted: true }] as const)
+        .toObject()
+
+      expect(Object.getPrototypeOf(result)).toBe(Object.prototype)
+      expect((result as any).polluted).toBeUndefined()
+      expect(Object.prototype.hasOwnProperty.call(result, '__proto__')).toBe(false)
+      expect(Object.keys(result)).toEqual([])
+    })
+
+    it('should keep constructor and prototype as ordinary keys', () => {
+      const result = new ObjectIterator({ a: 1, b: 2 })
+        .map((key) => [key === 'a' ? 'constructor' : 'prototype', key] as const)
+        .toObject()
+
+      expect(Object.getOwnPropertyDescriptor(result, 'constructor')!.value).toBe('a')
+      expect(Object.getOwnPropertyDescriptor(result, 'prototype')!.value).toBe('b')
+      expect(Object.getPrototypeOf(result)).toBe(Object.prototype)
+    })
+
     it('should not modify the original object', () => {
       const original = { a: 1, b: 2 }
       const iterator = new ObjectIterator(original)

@@ -1,3 +1,4 @@
+import { copyDataKey, copyOwnDataProperties } from '../_internal/copy-data-key.js'
 import { del } from '../_internal/reflect.js'
 import { hasOwn } from './has-own.js'
 import { objectKeys } from './keys.js'
@@ -16,18 +17,26 @@ import { objectKeys } from './keys.js'
  * @param keys - The keys to omit. 要省略的键
  * @returns A new object with the specified keys omitted. 省略了指定键的新对象
  *
+ * @remarks
+ * An own `__proto__` key is ignored, so untrusted input can neither replace the prototype of the
+ * result nor smuggle the key into a later `Object.assign`-style merge.
+ *
+ * 源对象自有的 `__proto__` 键会被忽略，避免不可信输入替换结果原型、或把该键带入后续
+ * `Object.assign` 式合并再次触发污染。
+ *
  * @example
  * ```ts
  * omit({ a: 1, b: 2 }, ['a']) // => { b: 2 }
  * ```
- * @typeParam T - The type of elements in the array / 数组元素的类型
+ * @typeParam T - The type of the source object / 源对象类型
  */
 export function omit<T extends Record<PropertyKey, any>, K extends keyof T = keyof T>(
   obj: T,
   keys: readonly K[],
 ): Omit<T, K> {
   const res = Object.create(Object.getPrototypeOf(obj) as object) as T
-  Object.assign(res, obj)
+
+  copyOwnDataProperties(res, obj)
 
   for (const key of keys) {
     if (hasOwn(obj, key)) {
@@ -45,10 +54,16 @@ export function omit<T extends Record<PropertyKey, any>, K extends keyof T = key
  *
  * @category Object
  *
- * @typeParam T - The type of elements in the array / 数组元素的类型
+ * @typeParam T - The type of the source object / 源对象类型
  * @param obj - The source object. 源对象
  * @param predicate - The predicate function. 谓词函数
  * @returns A new object without properties that satisfy the predicate. 排除满足谓词属性的新对象
+ *
+ * @remarks
+ * An own `__proto__` key is ignored, so untrusted input can neither replace the prototype of the
+ * result.
+ *
+ * 源对象自有的 `__proto__` 键会被忽略，避免不可信输入替换结果原型。
  *
  * @example
  * ```ts
@@ -63,7 +78,7 @@ export function omitBy<T extends Record<PropertyKey, any>>(
 
   for (const key of objectKeys(obj)) {
     if (!predicate(obj[key], key)) {
-      res[key] = obj[key]
+      copyDataKey(res, key, obj[key])
     }
   }
 

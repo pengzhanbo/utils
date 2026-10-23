@@ -5,7 +5,7 @@ import { isArray } from '../predicate/is-array.js'
 import { isBuffer } from '../predicate/is-buffer.js'
 import { isPrimitive } from '../predicate/is-primitive.js'
 import { isTypedArray } from '../predicate/is-typed-array.js'
-import { T_OBJECT, T_UNDEFINED } from './tags.js'
+import { PROTO_KEY, T_OBJECT, T_UNDEFINED } from './tags.js'
 
 const DEEP_CLONE_MAX_DEPTH = 1000
 
@@ -296,7 +296,7 @@ function copyKey(
   stack?: Map<any, any>,
   depth = 0,
 ): void {
-  if (key === '__proto__') {
+  if (key === PROTO_KEY) {
     return
   }
   const sourceDescriptor = Object.getOwnPropertyDescriptor(source, key)

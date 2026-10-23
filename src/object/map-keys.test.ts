@@ -43,7 +43,7 @@ describe('object > map-keys', () => {
     expect(result).toEqual({ A: 1, B: 2 })
   })
 
-  it('should create own __proto__ data property without polluting prototype', () => {
+  it('should drop __proto__ key to prevent prototype pollution', () => {
     const result = mapKeys({ a: 1 }, () => '__proto__')
     expect(Object.getOwnPropertyDescriptor(result, '__proto__')?.value).toBeUndefined()
     expect(Object.getOwnPropertyNames(result)).not.toContain('__proto__')

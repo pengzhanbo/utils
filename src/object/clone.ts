@@ -1,12 +1,4 @@
-/**
- * clone data
- *
- * 克隆数据
- *
- * @module Clone
- * @typeParam T - The type of elements in the array / 数组元素的类型
- */
-
+import { copyOwnDataProperties } from '../_internal/copy-data-key.js'
 import { deepCloneImpl } from '../_internal/deepCloneImpl.js'
 import { T_DATAVIEW, T_DATE, T_MAP, T_REGEXP, T_SET, T_UNDEFINED } from '../_internal/tags.js'
 import { isArray } from '../predicate/is-array.js'
@@ -67,9 +59,9 @@ export function simpleClone<T = any>(source: T): T {
  * @param source - The source data to clone. 要克隆的源数据
  * @returns The cloned data. 克隆后的数据
  * @remarks
- * This function preserves the prototype chain and handles Date, Map, Set, RegExp, Error, and File objects specifically by constructing new instances from the originals. Arrays, TypedArrays, ArrayBuffer, and SharedArrayBuffer are cloned via `.slice()`. Plain objects are cloned via `Object.assign` with the prototype preserved.
+ * This function preserves the prototype chain and handles Date, Map, Set, RegExp, Error, and File objects specifically by constructing new instances from the originals. Arrays, TypedArrays, ArrayBuffer, and SharedArrayBuffer are cloned via `.slice()`. Plain objects are cloned by copying their own enumerable properties onto a fresh object with the prototype preserved; an own `__proto__` key is dropped.
  *
- * 此函数会保留原型链，并针对 Date、Map、Set、RegExp、Error 和 File 对象进行特殊处理，通过构造新实例来完成克隆。数组、TypedArrays、ArrayBuffer 和 SharedArrayBuffer 通过 `.slice()` 克隆。普通对象通过 `Object.assign` 克隆并保留原型。
+ * 此函数会保留原型链，并针对 Date、Map、Set、RegExp、Error 和 File 对象进行特殊处理，通过构造新实例来完成克隆。数组、TypedArrays、ArrayBuffer 和 SharedArrayBuffer 通过 `.slice()` 克隆。普通对象通过复制自有可枚举属性到新对象来克隆并保留原型；自有的 `__proto__` 键会被丢弃。
  */
 export function shallowClone<T = any>(source: T): T {
   if (isPrimitive(source)) {
@@ -155,7 +147,9 @@ export function shallowClone<T = any>(source: T): T {
 
   /* istanbul ignore if -- @preserve */
   if (isPlainObject(source)) {
-    return Object.assign(Object.create(prototype as object), source)
+    const result = Object.create(prototype as object) as T
+    copyOwnDataProperties(result as object, source)
+    return result
   }
 
   /* istanbul ignore next -- @preserve */

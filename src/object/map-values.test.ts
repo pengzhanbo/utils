@@ -38,7 +38,7 @@ describe('object > map-values', () => {
     expect(result).toEqual({ a: 5, b: 5 })
   })
 
-  it('should create own __proto__ data property without polluting prototype', () => {
+  it('should drop __proto__ key to prevent prototype pollution', () => {
     const source = JSON.parse('{"__proto__":1}') as Record<string, number>
     const result = mapValues(source, (v) => v * 2)
     expect(Object.getOwnPropertyDescriptor(result, '__proto__')?.value).toBeUndefined()

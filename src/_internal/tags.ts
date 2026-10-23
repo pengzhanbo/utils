@@ -32,4 +32,5 @@ export const T_ERROR = 'error'
 export const T_DOM_EXCEPTION = 'domexception'
 export const T_AGGREGATE_ERROR = 'aggregateerror'
 
-export const DANGEROUS_KEYS: Set<string> = new Set(['__proto__', 'constructor', 'prototype'])
+export const PROTO_KEY = '__proto__'
+export const DANGEROUS_KEYS: Set<string> = new Set([PROTO_KEY, 'constructor', 'prototype'])

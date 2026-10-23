@@ -1,3 +1,4 @@
+import { copyDataKey } from '../_internal/copy-data-key.js'
 import { OPERATION_FILTER, OPERATION_MAP } from '../_internal/iterator.js'
 import { isFunction } from '../predicate/is-function.js'
 import { objectEntries } from './entries.js'
@@ -213,6 +214,13 @@ export class ObjectIterator<K extends string = string, V = unknown> {
    *
    * @returns The final result object. 最终结果对象
    *
+   * @remarks
+   * A `__proto__` key produced by `map()` is ignored, so untrusted input can neither replace the
+   * prototype of the result nor smuggle the key into a later `Object.assign`-style merge.
+   *
+   * `map()` 产生的 `__proto__` 键会被忽略，避免不可信输入替换结果原型、或把该键带入后续
+   * `Object.assign` 式合并再次触发污染。
+   *
    * @example
    * ```ts
    * new ObjectIterator({ a: 1, b: 2 })
@@ -223,7 +231,7 @@ export class ObjectIterator<K extends string = string, V = unknown> {
   toObject(): Record<K, V> {
     const result = {} as Record<K, V>
     for (const [key, value] of this.iterate()) {
-      result[key] = value
+      copyDataKey(result, key, value)
     }
     return result
   }
