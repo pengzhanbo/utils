@@ -171,7 +171,7 @@ importers:
         version: 2.11.0(eslint@10.10.0(jiti@2.7.0)(supports-color@7.2.0))(oxfmt@0.74.0)(oxlint-tsgolint@7.0.2004)(oxlint@1.89.0(oxlint-tsgolint@7.0.2004))
       '@pengzhanbo/tsconfig':
         specifier: ^2.11.0
-        version: 2.11.0(typescript@6.0.3)
+        version: 2.13.0(typescript@6.0.3)
       '@types/node':
         specifier: ^26.6.5
         version: 26.6.5
@@ -618,8 +618,8 @@ packages:
       oxlint: ^1.88.0
       oxlint-tsgolint: ^7.0.2004
 
-  '@pengzhanbo/tsconfig@2.11.0':
-    resolution: {integrity: sha512-pM+fqIynHMyP0wwkfSk3xwwGH1f6z9k843D/8jNsbtJYx+tiGD3gyVxBwBA2YfsMrhL1KZIj5BEGhJ6Zz+EFgQ==}
+  '@pengzhanbo/tsconfig@2.13.0':
+    resolution: {integrity: sha512-Vyjn6gCCRZQBPU/qyIFnkXOWfZa6XjIMo17oTJBY4kU/ArD3fbcWnM7HbYA8HiDW2hYWsoyE0pV3MLmr2gTYRw==}
     peerDependencies:
       typescript: '>=5.9.3'
     peerDependenciesMeta:
@@ -2076,7 +2076,7 @@ snapshots:
     transitivePeerDependencies:
       - eslint
 
-  '@pengzhanbo/tsconfig@2.11.0(typescript@6.0.3)':
+  '@pengzhanbo/tsconfig@2.13.0(typescript@6.0.3)':
     optionalDependencies:
       typescript: 6.0.3
 
