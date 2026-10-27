@@ -24,7 +24,6 @@ export function objectGet<T extends Record<PropertyKey, any>, P extends ObjectKe
   const keys = parseObjectPath(path)
   let res: Record<PropertyKey, any> = source
   for (const k of keys) {
-    // oxlint-disable-next-line typescript/no-unnecessary-condition
     res = res?.[k]
   }
 

@@ -70,6 +70,7 @@ describe('promise > createTaskTracker', () => {
     const tracker = createTaskTracker()
     let firstDone = false
     let secondDone = false
+    // oxlint-disable-next-line no-unused-vars
     const first = tracker.run(async () => {
       await sleep(20)
       firstDone = true
