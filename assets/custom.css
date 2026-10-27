@@ -1,0 +1,3 @@
+.site-menu > .tsd-navigation > .tsd-small-nested-navigation > li:last-of-type {
+  display: none;
+}
