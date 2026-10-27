@@ -44,8 +44,8 @@
     "docs:preview": "http-server docs/dist"
   },
   "devDependencies": {
-    "@pengzhanbo/oxc-config": "^2.11.0",
-    "@pengzhanbo/tsconfig": "^2.11.0",
+    "@pengzhanbo/oxc-config": "^2.14.0",
+    "@pengzhanbo/tsconfig": "^2.14.0",
     "@types/node": "^26.6.5",
     "@vitest/coverage-v8": "^5.0.5",
     "bumpp": "^12.3.0",
@@ -55,9 +55,9 @@
     "nano-staged": "^1.0.2",
     "oxfmt": "^0.74.0",
     "oxlint": "^1.89.0",
-    "oxlint-tsgolint": "^7.0.2004",
+    "oxlint-tsgolint": "^7.0.2005",
     "simple-git-hooks": "^2.14.0",
-    "tsdown": "^0.23.1",
+    "tsdown": "^0.23.2",
     "typedoc": "^0.28.20",
     "typedoc-github-theme": "^0.4.0",
     "typedoc-plugin-coverage": "^4.0.3",
@@ -74,5 +74,5 @@
     "*": "oxfmt --no-error-on-unmatched-pattern",
     "*.{js,ts}": "vitest related --run"
   },
-  "packageManager": "pnpm@12.14.0"
+  "packageManager": "pnpm@12.15.0"
 }
