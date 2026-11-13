@@ -168,7 +168,7 @@ importers:
     devDependencies:
       '@pengzhanbo/oxc-config':
         specifier: ^2.14.0
-        version: 2.14.0(eslint@10.10.0(jiti@2.7.0)(supports-color@7.2.0))(oxfmt@0.74.0)(oxlint-tsgolint@7.0.2005)(oxlint@1.89.0(oxlint-tsgolint@7.0.2005))
+        version: 2.15.0(eslint@10.10.0(jiti@2.7.0)(supports-color@7.2.0))(oxfmt@0.74.0)(oxlint-tsgolint@7.0.2005)(oxlint@1.89.0(oxlint-tsgolint@7.0.2005))
       '@pengzhanbo/tsconfig':
         specifier: ^2.14.0
         version: 2.14.0(typescript@6.0.3)
@@ -611,12 +611,12 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@pengzhanbo/oxc-config@2.14.0':
-    resolution: {integrity: sha512-OCXiaIM0bqmclh2+AlFkTE1wjtQi1RXx2h2NN7UMgbz/yqFXgr/k9xk+Nrh/CqnQG5WGziOtaVNEoKPGwp8RCQ==}
+  '@pengzhanbo/oxc-config@2.15.0':
+    resolution: {integrity: sha512-A+NNL4X86yyVo4JkHXD7Q3UKsQx2erD6H2QFp+khic59AbvL29X6+Zt8BmDWTTba82bBmke7zLNROW+W8S2Wag==}
     peerDependencies:
-      oxfmt: ^0.74.0
-      oxlint: ^1.89.0
-      oxlint-tsgolint: ^7.0.2005
+      oxfmt: ^0.78.0
+      oxlint: ^1.93.0
+      oxlint-tsgolint: ^7.0.2006
 
   '@pengzhanbo/tsconfig@2.14.0':
     resolution: {integrity: sha512-HpnovzHQIrMnFtokH1meenBaXqEf/Giwf9PVRVLTwfZzZD8/9UiDUnKyEETfPIGDM3UHrdPdUyEMR9qnv0YNbQ==}
@@ -1027,8 +1027,8 @@ packages:
     resolution: {integrity: sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==}
     engines: {node: '>=10'}
 
-  eslint-plugin-regexp@3.3.1:
-    resolution: {integrity: sha512-58bGUci/AaWAo1ETj6Lsnmy6QXwnSyVONRA805828nnqp7vrTwdaQMc02vtowmYB3A5OB3SLr3r5HgmfxX4dLg==}
+  eslint-plugin-regexp@3.3.3:
+    resolution: {integrity: sha512-bIpFf1uL9AB6MY5cDUXL2lrfuBA+/WLc1AwC+56OsHWo93zoKQ4EcAQ+wsOxq5ozLC9xfTYAb4Si+0w0Ll1hYA==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24}
     peerDependencies:
       eslint: '>=9.38.0'
@@ -2064,9 +2064,9 @@ snapshots:
   '@oxlint/binding-win32-x64-msvc@1.89.0':
     optional: true
 
-  '@pengzhanbo/oxc-config@2.14.0(eslint@10.10.0(jiti@2.7.0)(supports-color@7.2.0))(oxfmt@0.74.0)(oxlint-tsgolint@7.0.2005)(oxlint@1.89.0(oxlint-tsgolint@7.0.2005))':
+  '@pengzhanbo/oxc-config@2.15.0(eslint@10.10.0(jiti@2.7.0)(supports-color@7.2.0))(oxfmt@0.74.0)(oxlint-tsgolint@7.0.2005)(oxlint@1.89.0(oxlint-tsgolint@7.0.2005))':
     dependencies:
-      eslint-plugin-regexp: 3.3.1(eslint@10.10.0(jiti@2.7.0)(supports-color@7.2.0))
+      eslint-plugin-regexp: 3.3.3(eslint@10.10.0(jiti@2.7.0)(supports-color@7.2.0))
       oxfmt: 0.74.0
       oxlint: 1.89.0(oxlint-tsgolint@7.0.2005)
       oxlint-tsgolint: 7.0.2005
@@ -2377,7 +2377,7 @@ snapshots:
 
   escape-string-regexp@4.0.0: {}
 
-  eslint-plugin-regexp@3.3.1(eslint@10.10.0(jiti@2.7.0)(supports-color@7.2.0)):
+  eslint-plugin-regexp@3.3.3(eslint@10.10.0(jiti@2.7.0)(supports-color@7.2.0)):
     dependencies:
       '@eslint-community/eslint-utils': 4.10.1(eslint@10.10.0(jiti@2.7.0)(supports-color@7.2.0))
       '@eslint-community/regexpp': 4.12.2
